@@ -1,0 +1,30 @@
+sextractor:
+  # detect_thresh: 3 (was 10).  Phase 1 produces both image.cat AND the
+  # segmentation map that Phase 3a (GALFIT cutout) uses to identify and mask
+  # the host galaxy.  At thresh=10 faint hosts (mag ~21-22) were silently
+  # missing from the segmap, so Phase 3a was picking the nearest *other*
+  # source 30-50" away as the "host" — the GALFIT fit then ran on the wrong
+  # galaxy.  PSFEx is unaffected by this change: it has its own SAMPLE_MINSN
+  # filter (30 by default below) that keeps the PSF model built only from
+  # high-SNR clean stars.
+  detect_thresh: 3
+  analysis_thresh: 3
+  # SExtractor + DES default; was hard-coded 1e-4 (much more aggressive splitting).
+  deblend_mincont: 0.005
+  phot_apertures_px: 40.0
+  gain: 1.6
+  mag_zeropoint: 0.0
+  pixel_scale: 0.262
+  seeing_fwhm: 2.0
+  # use_weight_map: true is the default; the phase script automatically falls
+  # back to NONE if invvar.fits is absent. master_run.py also writes this
+  # explicitly based on whether --invvar was provided.
+  use_weight_map: true
+
+psfex:
+  psf_sampling: 1.0
+  psfvar_degrees: 0
+  sample_fwhm_range: "2.0,10"
+  sample_variability: 0.4
+  sample_minsn: 30
+  sample_max_ellp: 0.2

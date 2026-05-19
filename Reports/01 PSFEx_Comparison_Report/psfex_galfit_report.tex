@@ -1,0 +1,64 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{hyperref}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{2pt}
+\setlength{\LTpre}{4pt}
+\setlength{\LTpost}{4pt}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{PSFEx-Centered Inclination Analysis Report (Draft)}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{PSFEx Assessment}
+\input{tables/psfex_summary_metrics.tex}
+
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\input{tables/psfex_all_frbs_compact.tex}
+\normalsize
+
+\section{Plots}
+The $B$-band proxy used in the multiband comparison follows:
+\[
+    B = g + 0.3130\,(g-r) + 0.2271.
+\]
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.92\linewidth]{../../plots/plots_multiband_cdf/CDF_bias_multiband_rgb_bands_mc_policy.png}
+    \caption{Multi-band CDF comparison (r/g/b nulls) with FRB host Monte Carlo envelope.}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.92\linewidth]{../../plots/plots_astrophot_psf_sigma/CDF_bias_comparison_psf_sigma_updated_mc_both.png}
+    \caption{GALFIT versus AstroPhot comparison where both methods are shown with Monte Carlo uncertainty draws.}
+\end{figure}
+
+\section{GALFIT Inclination Angles}
+\input{tables/galfit_inclinations.tex}
+
+\section{Legacy Survey Inclinations vs GALFIT}
+Legacy/Tractor fields queried for host matching and shape-based inclination were \texttt{objid}, \texttt{ra}, \texttt{dec}, \texttt{type}, \texttt{flux\_r}, \texttt{sersic}, \texttt{shape\_e1}, and \texttt{shape\_e2}.
+Legacy inclination was derived from shape terms as $|e|=\sqrt{e_1^2+e_2^2}$, $q=(1-|e|)/(1+|e|)$, and $i=\cos^{-1}\!\left(\sqrt{(q^2-q_0^2)/(1-q_0^2)}\right)$ with $q_0=0.2$.
+A direct TAP schema query found \texttt{shape\_e1\_ivar} and \texttt{shape\_e2\_ivar}; we convert ivar to standard deviation with $\sigma=1/\sqrt{\mathrm{ivar}}$ and propagate to $\sigma_{i,\mathrm{LS}}$ using Monte Carlo draws in $(e_1,e_2)$ space.
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.08}
+\input{tables/legacy_vs_galfit_inclinations.tex}
+\renewcommand{\arraystretch}{1.0}
+\normalsize
+
+\end{document}

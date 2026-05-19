@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\geometry{a4paper, margin=1in}
+
+\title{Comparison: Fixed-n vs. Free-n Inclinations}
+\author{Automatic Pipeline}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Comparison Table}
+This table compares GALFIT results with $n$ fixed to 1.0 against results where $n$ is a free parameter.
+
+\begin{table}[h!]
+    \centering
+    \small
+    \begin{tabular}{l|c|cc|cc}
+    \hline
+    FRB & $n_{\text{survey}}$ & $i_{\text{fixed}}$ & $R_{e,\text{fixed}}$ & $n_{\text{free}}$ & $i_{\text{free}}$ \\
+    \hline
+    20180924B & 3.32 & 33.63 & 0.63 & 4.35 & 49.26 \\
+    20190102C & 0.50 & 80.24 & 0.99 & 0.50 & 67.14 \\
+    20190608B & 3.49 & 32.52 & 1.29 & 3.01 & 46.79 \\
+    20190714A & 0.53 & 70.75 & 1.09 & 0.50 & 69.30 \\
+    20191001A & 0.50 & 46.79 & 1.73 & 0.50 & 59.94 \\
+    20200906A & 0.75 & 77.62 & 1.63 & 0.66 & 73.70 \\
+    20210320C & 1.00 & 45.10 & 0.95 & 1.12 & 47.62 \\
+    20210410D & 1.00 & 90.00 & 0.78 & 1.38 & 90.00 \\
+    20211203C & 1.00 & 56.24 & 0.72 & 2.08 & 64.99 \\
+    20211212A & 1.14 & 32.52 & 3.41 & 1.51 & 33.63 \\
+    20220310F & 1.00 & 70.02 & 1.13 & 1.87 & 48.45 \\
+    20220509G & 2.47 & 62.11 & 2.91 & 0.50 & 71.48 \\
+    20220914A & 2.03 & 59.94 & 1.03 & 2.00 & 63.55 \\
+    20220920A & 1.00 & 31.39 & 1.80 & 1.10 & 31.39 \\
+    20221012A & 2.27 & 59.21 & 1.30 & 1.98 & 59.94 \\
+    \hline
+    \end{tabular}
+    \caption{Side-by-side comparison of fixed and free Sersic index fitting.}
+\end{table}
+
+\end{document}

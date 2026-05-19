@@ -1,0 +1,45 @@
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20220912A_flux.fits[1:46,1:40] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.01 
+Output image    : out.fits 
+
+ sersic    : (   24.84,    20.90)   19.55      5.16    0.78    0.64    36.72
+             (    0.07,     0.09)    0.03      0.20    0.09    0.03     3.30
+ sky       : [ 23.50,  20.50]   -10.55  [0.00e+00]  [0.00e+00]
+                                  4.40  [0.00e+00]  [0.00e+00]
+ Chi^2 = 548456626854.49908,  ndof = 1832
+ Chi^2/nu = 299375888.021 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20220912A_flux.fits[1:46,1:40] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.02 
+Output image    : out.fits 
+
+ sersic    : (   24.84,    20.90)   19.55      5.16    0.78    0.64    36.72
+             (    0.07,     0.09)    0.03      0.20    0.09    0.03     3.30
+ sky       : [ 23.50,  20.50]   -10.55  [0.00e+00]  [0.00e+00]
+                                  4.40  [0.00e+00]  [0.00e+00]
+ Chi^2 = 697090.95701,  ndof = 1832
+ Chi^2/nu = 380.508 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20220912A_flux.fits[1:46,1:40] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.03 
+Output image    : out.fits 
+
+ sersic    : (   24.83,    20.88)   19.48      5.42   [1.00]   0.64    36.35
+             (    0.07,     0.09)    0.02      0.21   [0.00]   0.03     3.44
+ sky       : [ 23.50,  20.50]   -14.45  [0.00e+00]  [0.00e+00]
+                                  4.16  [0.00e+00]  [0.00e+00]
+ Chi^2 = 549145269207.03589,  ndof = 1833
+ Chi^2/nu = 299588253.795 
+
+-----------------------------------------------------------------------------

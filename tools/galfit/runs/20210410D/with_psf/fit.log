@@ -1,0 +1,135 @@
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.01 
+Output image    : out.fits 
+
+ sersic    : (   19.55,    18.30)   23.93      5.99    0.64   *0.03*   73.05
+             (    3.20,     0.34)    0.34      2.06    0.47   *0.09*    6.19
+ sky       : [ 12.50,  15.50]  1.10e-03  [0.00e+00]  [0.00e+00]
+                                6.96e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 122.16723,  ndof = 712
+ Chi^2/nu = 0.172 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.02 
+Output image    : out.fits 
+
+ sersic    : (   18.83,    18.46)   24.05      3.23    1.71    0.13    70.54
+             (    0.48,     0.28)    0.11      1.01    1.11    0.22     5.01
+ sky       : [ 12.50,  15.50]  1.10e-03  [0.00e+00]  [0.00e+00]
+                                6.92e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 120.70725,  ndof = 712
+ Chi^2/nu = 0.170 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.03 
+Output image    : out.fits 
+
+ sersic    : (   18.83,    18.46)   24.05      3.23    1.71    0.13    70.54
+             (    0.48,     0.28)    0.11      1.01    1.11    0.22     5.01
+ sky       : [ 12.50,  15.50]  1.10e-03  [0.00e+00]  [0.00e+00]
+                                6.92e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 120.70725,  ndof = 712
+ Chi^2/nu = 0.170 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.04 
+Output image    : out.fits 
+
+ sersic    : (   18.83,    18.46)   24.05      3.23    1.71    0.13    70.54
+             (    0.48,     0.28)    0.11      1.01    1.11    0.22     5.01
+ sky       : [ 12.50,  15.50]  1.10e-03  [0.00e+00]  [0.00e+00]
+                                6.92e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 120.70725,  ndof = 712
+ Chi^2/nu = 0.170 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.05 
+Output image    : out.fits 
+
+ sersic    : (   18.83,    18.46)   24.05      3.23    1.71    0.13    70.54
+             (    0.48,     0.28)    0.11      1.01    1.11    0.22     5.01
+ sky       : [ 12.50,  15.50]  1.10e-03  [0.00e+00]  [0.00e+00]
+                                6.92e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 120.70725,  ndof = 712
+ Chi^2/nu = 0.170 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.06 
+Output image    : out.fits 
+
+ sersic    : (   18.85,    18.48)   23.95      4.05   [1.00]  *0.05*   70.40
+             (    0.76,     0.65)    0.25      0.64   [0.00]  *0.12*    5.94
+ sky       : [ 12.50,  15.50]  1.11e-03  [0.00e+00]  [0.00e+00]
+                                6.91e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 120.83142,  ndof = 713
+ Chi^2/nu = 0.169 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.07 
+Output image    : out.fits 
+
+ sersic    : (   18.85,    18.48)   23.95      4.05   [1.00]  *0.05*   70.40
+             (    0.76,     0.65)    0.25      0.64   [0.00]  *0.12*    5.94
+ sky       : [ 12.50,  15.50]  1.11e-03  [0.00e+00]  [0.00e+00]
+                                6.91e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 120.83142,  ndof = 713
+ Chi^2/nu = 0.169 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.08 
+Output image    : out.fits 
+
+ sersic    : (   18.85,    18.48)   23.95      4.05   [1.00]  *0.05*   70.40
+             (    0.76,     0.65)    0.25      0.64   [0.00]  *0.12*    5.94
+ sky       : [ 12.50,  15.50]  1.11e-03  [0.00e+00]  [0.00e+00]
+                                6.91e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 120.83142,  ndof = 713
+ Chi^2/nu = 0.169 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+Input image     : /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20210410D_flux.fits[1:24,1:30] 
+Init. par. file : galfit.feedme 
+Restart file    : galfit.09 
+Output image    : out.fits 
+
+ sersic    : (   18.85,    18.48)   23.95      4.05   [1.00]  *0.05*   70.40
+             (    0.76,     0.65)    0.25      0.64   [0.00]  *0.12*    5.94
+ sky       : [ 12.50,  15.50]  1.11e-03  [0.00e+00]  [0.00e+00]
+                                6.91e-05  [0.00e+00]  [0.00e+00]
+ Chi^2 = 120.83142,  ndof = 713
+ Chi^2/nu = 0.169 
+
+-----------------------------------------------------------------------------

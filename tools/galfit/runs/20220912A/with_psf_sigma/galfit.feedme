@@ -1,0 +1,37 @@
+===============================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) /mnt/c/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main/cropped_host_galaxies/20220912A_flux.fits  # Input data image (FITS file)
+B) out.fits  # Output data image block
+C) sigma.fits  # Sigma image name
+D) psf.fits  # Input PSF file
+E) 1  # PSF fine sampling factor
+F) none  # Bad pixel mask
+G) constraints.txt  # File with parameter constraints
+H) 0 46 0 40  # Image region to fit
+I) 62 56  # Size of convolution box
+J) 25.0000  # Photometric zeropoint
+K) 0.2500 0.2500  # Plate scale [arcsec/pixel]
+O) regular  # Display type
+P) 0  # Choose: 0=optimize
+
+# INITIAL FITTING PARAMETERS
+# Component number: 1
+0) sersic  # Component type
+1) 25.0800 20.7900 1 1  # position x y
+3) 19.3100 1  # Integrated magnitude
+4) 7.4500 1  # effective radius (pix)
+5) 1.0000 0  # sersic index
+6) 0.0000 0  # ----
+7) 0.0000 0  # ----
+8) 0.0000 0  # ----
+9) 0.7500 1  # Axis ratio (b/a)
+10) 35.5200 1  # Position angle
+Z) 0  # Skip this model
+
+# Component number: 2
+0) sky  # component type
+1) 0.0000 1  # Sky background
+2) 0 0  # dsky/dx
+3) 0 0  # dsky/dy
+Z) 0  # Skip this model
+================================================================================

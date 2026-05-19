@@ -1,0 +1,5 @@
+test,statistic,pvalue
+ks_2samp,0.05457541624900055,4.375368279544707e-10
+wasserstein,0.01765238416574793,
+mean_diff_legacy_minus_sdss,-0.00957840197322224,
+median_diff_legacy_minus_sdss,-0.0014200987862685865,

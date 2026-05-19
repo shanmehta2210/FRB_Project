@@ -1,0 +1,37 @@
+sextractor_psf:
+  # Detection threshold of 3 (was 10). Phase 1 still uses 10 for PSFEx star
+  # selection; Phase 2 needs to push deeper because real FRB hosts are often
+  # faint, compact galaxies that get missed at high detection thresholds. With
+  # detect_thresh=10 the brightest source within 1' frequently ended up being
+  # a foreground galaxy 30-50" away while the actual host went undetected.
+  detect_thresh: 3
+  analysis_thresh: 3
+  deblend_mincont: 0.005
+  gain: 1.6
+  mag_zeropoint: 0.0
+  pixel_scale: 0.262
+  seeing_fwhm: 2.0
+  phot_apertures_px: 40.0
+  # use_weight_map: true is the default; the phase script automatically falls
+  # back to NONE if invvar.fits is absent. master_run.py also writes this
+  # explicitly based on whether --invvar was provided.
+  use_weight_map: true
+  # Magnitude passed to AstroPath as the candidate "mag":
+  #   mag_40px | mag_psf | mag_auto   (all from the with-PSF catalog)
+  mag_mode: mag_40px
+
+astropath:
+  err_a_arcsec: 1.0     # FRB localization semi-major axis (arcsec)
+  err_b_arcsec: 1.0     # FRB localization semi-minor axis (arcsec)
+  err_theta_deg: 0.0    # localization position angle (deg, E of N)
+  p_u: 0.1              # prior probability the true host is unseen
+  filter_band: 'r'
+  # SNR_WIN uses a Gaussian-weighted WIN aperture matched to the PSF. For
+  # very compact / sub-arcsec hosts that aperture is tiny and SNR_WIN ends up
+  # well below 1 even though the source is a clean detect_thresh-σ peak.
+  # detect_thresh (Phase 2 SExtractor) already enforces the real "is this a
+  # detection?" cut; SNR_WIN is only a *measurement* SNR, so requiring
+  # SNR_WIN > 0 (i.e. just non-negative WIN flux) avoids dropping real hosts
+  # like the ones in 20200430A (SNR_WIN=0.93 at 0.05") and 20230708A
+  # (SNR_WIN=0.73 at 0.03").
+  target_snr_min: 0.0

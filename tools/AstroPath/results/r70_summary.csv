@@ -1,0 +1,2 @@
+field_id,frb_ra_deg,frb_dec_deg,loc_a_arcsec,loc_b_arcsec,loc_pa_deg,P_U,best_objid,best_mag,best_ang_size,best_posterior,best_sep_arcsec
+r70,64.3996075,7.931106,10.0,10.0,0.0,0.0223311942563395,1385,20.963,4.43,0.5064767704026423,12.27684563986975

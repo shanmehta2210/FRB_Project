@@ -1,0 +1,9 @@
+# Phase 3b defaults (master_run copies/overrides into each workdir).
+# mag_zeropoint is normally set from Phase-2 zero_points.json ("zp_aper_40px").
+plate_scale_x: 0.262
+plate_scale_y: 0.262
+mag_min: 8.0
+mag_max: 40.0
+sky_check_enabled: true
+sky_tolerance_adu: 3.0
+sky_max_retries: 1

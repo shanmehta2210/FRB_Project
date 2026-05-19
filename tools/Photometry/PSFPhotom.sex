@@ -1,0 +1,79 @@
+# PSF Photometry configuration for SExtractor
+# Generated for PSF-convolved photometry pass
+ 
+#-------------------------------- Catalog ------------------------------------
+ 
+CATALOG_NAME     PSF_photom.cat   # name of the output catalog
+CATALOG_TYPE     FITS_LDAC        # FITS_LDAC is required for PSFEx/PSF usage
+PARAMETERS_NAME  photomPSF.param  # name of the file containing catalog contents
+ 
+#------------------------------- Extraction ----------------------------------
+ 
+DETECT_TYPE      CCD            
+DETECT_MINAREA   5              
+THRESH_TYPE      RELATIVE       
+DETECT_THRESH    10              # Lowered slightly for better recovery with PSF
+ANALYSIS_THRESH  10            
+ 
+FILTER           Y              
+FILTER_NAME      default.conv   
+ 
+DEBLEND_NTHRESH  32             
+DEBLEND_MINCONT  1e-4          
+ 
+CLEAN            Y              
+CLEAN_PARAM      1.0            
+ 
+MASK_TYPE        CORRECT        
+ 
+#-------------------------------- PSF ----------------------------------------
+PSF_NAME         coadded_astrometrically_corrected_rband_r70.fits.psf # Generated PSF model
+PSF_NMAX         1               # max number of PSFs per object
+ 
+#-------------------------------- WEIGHTing ----------------------------------
+WEIGHT_TYPE      NONE     
+WEIGHT_IMAGE     weight.fits    
+WEIGHT_GAIN      Y              
+WEIGHT_THRESH                   
+                                
+#------------------------------ Photometry -----------------------------------
+PHOT_APERTURES   4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0
+PHOT_FLUXFRAC    0.5        
+PHOT_AUTOPARAMS  2.5, 3.5       
+PHOT_PETROPARAMS 2.0, 3.5       
+SATUR_KEY        SATURATE       
+SATUR_LEVEL      90000        
+ 
+MAG_ZEROPOINT    0.0            # Set to 34.3822 for calibrated values
+MAG_GAMMA        4.0            
+GAIN             1.6            
+PIXEL_SCALE      0            
+ 
+#------------------------- Star/Galaxy Separation ----------------------------
+ 
+SEEING_FWHM      2.0            
+STARNNW_NAME     default.nnw    
+ 
+#------------------------------ Background -----------------------------------
+ 
+BACK_SIZE        128            # Smaller mesh for better local background
+BACK_FILTERSIZE  3              
+ 
+BACK_TYPE        AUTO           
+BACKPHOTO_TYPE   LOCAL        
+#------------------------------ Check Image ----------------------------------
+ 
+CHECKIMAGE_TYPE  MODELS,-MODELS  # Check PSF models and residuals
+CHECKIMAGE_NAME  psf_models.fits, psf_resi.fits
+ 
+#--------------------- Memory (change with caution!) -------------------------
+NTHREADS         1		
+MEMORY_OBJSTACK  10000           
+MEMORY_PIXSTACK  5000000         
+MEMORY_BUFSIZE   1024           
+ 
+#----------------------------- Miscellaneous ---------------------------------
+ 
+VERBOSE_TYPE     NORMAL         
+WRITE_XML        N              
+XML_NAME         sex.xml        
