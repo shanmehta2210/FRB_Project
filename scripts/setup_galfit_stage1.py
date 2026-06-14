@@ -4,6 +4,8 @@ from astropy.io import fits
 from astropy.wcs import WCS
 import numpy as np
 
+from pipeline_asset_paths import frb_from_guess_filename, host_cutout_path, repo_root
+
 def to_wsl(path):
     if path is None or path == 'none': return 'none'
     if ':' in path:
@@ -78,9 +80,8 @@ def generate_feedme(outdir, imgfile, psffile, fwhm, position, mag, r_e, n, axis_
 
 
 def main():
-    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    project_root = repo_root()
     
-    img_dir_path = os.path.join(project_root, "cropped_host_galaxies")
     old_output_root = os.path.join(project_root, "Galfit")
     guesses_csv = os.path.join(project_root, "csv_archive/initial_guesses.csv")
     fwhm_csv = os.path.join(project_root, "psf_fwhm_summary.csv")
@@ -107,8 +108,8 @@ def main():
 
     for row in rows:
         filename = row['filename']
-        frb_name = filename.replace("_flux.fits", "")
-        imgfile = os.path.join(img_dir_path, filename)
+        frb_name = frb_from_guess_filename(filename)
+        imgfile = host_cutout_path(frb_name, project_root)
 
         if not os.path.exists(imgfile):
             print(f"Skipping {frb_name}: Image not found")

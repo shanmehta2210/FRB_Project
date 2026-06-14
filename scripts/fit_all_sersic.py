@@ -5,38 +5,36 @@ import subprocess
 import re
 import csv
 
-# Constants
-INPUT_DIR = "cropped_host_galaxies"
-OUTPUT_DIR = "sersic_fits_output"
+from pipeline_asset_paths import host_cutout_path, repo_root
+
 SCRIPT = "scripts/calc_inclination_sersic.py"
 OVERSAMPLING = 4
 
 def main():
+    root = repo_root()
     # Find all PSF files in the psfs directory
-    psf_files = sorted(glob.glob(os.path.join("psfs", "*_flux_psf.fits")))
+    psf_files = sorted(glob.glob(os.path.join(root, "psfs", "*_flux_psf.fits")))
     print(f"Found {len(psf_files)} PSF files to process.")
     
     results = []
+    output_dir = os.path.join(root, "sersic_fits_output")
     
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     for psf_file in psf_files:
-        # Deduce galaxy file: psfs/20220207C_flux_psf.fits -> cropped_host_galaxies/20220207C_flux.fits
-        galaxy_filename = os.path.basename(psf_file).replace("_psf.fits", ".fits")
-        galaxy_file = os.path.join(INPUT_DIR, galaxy_filename)
+        frb_name = os.path.basename(psf_file).replace("_flux_psf.fits", "")
+        galaxy_file = host_cutout_path(frb_name, root)
         
         if not os.path.exists(galaxy_file):
-            print(f"  [SKIP] Galaxy file not found for {psf_file}")
+            print(f"  [SKIP] host_cutout.fits not found for {frb_name}")
             continue
             
-        frb_name = os.path.basename(galaxy_file).replace("_flux.fits", "")
         print(f"Processing {frb_name}...")
         
-        output_plot = os.path.join(OUTPUT_DIR, f"{frb_name}_fit.png")
-        output_log = os.path.join(OUTPUT_DIR, f"{frb_name}_fit.log")
+        output_plot = os.path.join(output_dir, f"{frb_name}_fit.png")
+        output_log = os.path.join(output_dir, f"{frb_name}_fit.log")
         
-        # Build command - NO CROP, NO WCS inputs (Image is already manually cropped)
         cmd = [
             "python", SCRIPT,
             galaxy_file,
@@ -98,7 +96,7 @@ def main():
             })
 
     # Save summary CSV
-    csv_file = os.path.join(OUTPUT_DIR, "summary.csv")
+    csv_file = os.path.join(output_dir, "summary.csv")
     keys = ["FRB", "Inclination", "AxisRatio", "SersicIndex", "Reff", "Status"]
     
     with open(csv_file, "w", newline="", encoding='utf-8') as f:

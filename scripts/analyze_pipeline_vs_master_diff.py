@@ -8,10 +8,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# Keep in sync with scripts/compare_pipeline_galfit_vs_master.py
-BENCHMARK_EXCLUDED = frozenset({"20171020A", "20220509G", "20240210A"})
-
-
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -20,24 +16,11 @@ def main() -> None:
         default=Path("pipeline_vs_master_galfit_diff.csv"),
         help="Path to pipeline_vs_master_galfit_diff.csv",
     )
-    parser.add_argument(
-        "--no-benchmark-filter",
-        action="store_true",
-        help="Do not drop the default benchmark-excluded FRBs when summarising.",
-    )
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     path = args.csv if args.csv.is_absolute() else root / args.csv
 
     df = pd.read_csv(path)
-    if not args.no_benchmark_filter and "frb" in df.columns:
-        present_excluded = sorted(set(df["frb"].astype(str)) & BENCHMARK_EXCLUDED)
-        df = df[~df["frb"].isin(BENCHMARK_EXCLUDED)].reset_index(drop=True)
-        if present_excluded:
-            print(
-                f"[*] Dropped {len(present_excluded)} benchmark-excluded row(s): "
-                f"{present_excluded}"
-            )
     delta_cols = [c for c in df.columns if c.endswith("_delta")]
     n = len(df)
 
@@ -101,13 +84,14 @@ def main() -> None:
             f"median|d|={x.abs().median():.4f}  RMSE={np.sqrt((x**2).mean()):.4f}"
         )
 
-    mag_d = pd.to_numeric(df["mag_delta"], errors="coerce")
-    print()
-    print(
-        "--- mag_delta (pipeline J)=22.5; master J)=25 hosts corrected by -2.5 in "
-        "compare_pipeline_galfit_vs_master.py) ---"
-    )
-    print(f"  mean = {mag_d.mean():.3f}  median = {mag_d.median():.3f}  std = {mag_d.std(ddof=1):.3f}")
+    if "mag_delta" in df.columns:
+        mag_d = pd.to_numeric(df["mag_delta"], errors="coerce")
+        print()
+        print("--- mag_delta (omitted from current diff CSV; legacy section) ---")
+        print(
+            f"  mean = {mag_d.mean():.3f}  median = {mag_d.median():.3f}  "
+            f"std = {mag_d.std(ddof=1):.3f}"
+        )
 
     sub = df[delta_cols].apply(pd.to_numeric, errors="coerce")
     sub_nochi = sub.drop(columns=["chi2nu_delta"], errors="ignore")

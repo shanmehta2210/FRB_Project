@@ -1,0 +1,2 @@
+gr_max,n_legacy,n_scatter,match_cdf_cuts,exclude_rex,folder
+0.75,26971,15000,True,True,gr_lt_0p75

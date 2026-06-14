@@ -7,9 +7,6 @@ Coordinate semantics:
   - Later rows: if notes indicate host association is done, RA_deg/DEC_deg are host;
     otherwise they are treated as burst/signal localization centers.
 
-Crop box (xmin, xmax, ymin, ymax): copied from summary when present; empty when the
-summary row has no cutout window.
-
 survey: inferred from short `notes` tags — LS, PS1, LS+PS1, unsure, or empty when
 unknown. Original "perfect match." sample is labeled LS (Legacy imaging cutouts).
 
@@ -70,26 +67,11 @@ def infer_survey(row: pd.Series) -> str:
     if "[none (outside footprint or too faint)]" in low:
         return "unsure"
 
-    # Original 23 + workflow hosts: cropped_host_galaxies / Legacy-oriented pipeline
+    # Original 23 + workflow hosts: Legacy-oriented pipeline cutouts
     if "perfect match" in low:
         return "LS"
 
     return ""
-
-
-def _crop_values(row: pd.Series) -> tuple:
-    """Return xmin,xmax,ymin,ymax as floats or empty string when missing."""
-    out = []
-    for key in ("xmin", "xmax", "ymin", "ymax"):
-        v = row.get(key)
-        if pd.isna(v) or v == "":
-            out.append("")
-        else:
-            try:
-                out.append(float(v))
-            except (TypeError, ValueError):
-                out.append("")
-    return tuple(out)
 
 
 def main() -> None:
@@ -116,7 +98,6 @@ def main() -> None:
 
     semantics = [coord_semantics(df.iloc[i], i) for i in range(len(df))]
     surveys = [infer_survey(df.iloc[i]) for i in range(len(df))]
-    crops = [_crop_values(df.iloc[i]) for i in range(len(df))]
 
     out_df = pd.DataFrame(
         {
@@ -126,10 +107,6 @@ def main() -> None:
             "ra_hms": df["RA_hms"],
             "dec_dms": df["DEC_dms"],
             "coord_semantics": semantics,
-            "xmin": [c[0] for c in crops],
-            "xmax": [c[1] for c in crops],
-            "ymin": [c[2] for c in crops],
-            "ymax": [c[3] for c in crops],
             "survey": surveys,
             "ra_err_as": df["ra_err_as"],
             "dec_err_as": df["dec_err_as"],

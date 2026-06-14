@@ -1,0 +1,4 @@
+scenario,median_cosi,note
+observed_mag_le_21,0.5843006118148399,direct
+uniform_mag_bin_reweight_mag_le_21,0.5934867215144751,equal weight per 0.5 mag bin then median
+bin_median_composition_mag_le_21,0.5916849700608653,weighted mean of per-bin medians

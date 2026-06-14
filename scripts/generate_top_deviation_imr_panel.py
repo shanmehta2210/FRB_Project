@@ -57,7 +57,7 @@ def main() -> None:
     parser.add_argument("--galfit-run-subdir", default="with_psf_sigma", help="GALFIT run subdirectory to use (e.g., with_psf or with_psf_sigma)")
     parser.add_argument("--exclude-types", default="REX")
     parser.add_argument("--top-n", type=int, default=6)
-    parser.add_argument("--out-dir", default="plots/plots_legacy_cdf")
+    parser.add_argument("--out-dir", default="plots/plots_null")
     parser.add_argument("--tag", default="top_delta_i")
     args = parser.parse_args()
 

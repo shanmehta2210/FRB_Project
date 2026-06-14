@@ -196,19 +196,38 @@ def process_directory(input_dir, output_csv="initial_guesses.csv"):
         print("No results to save.")
 
 if __name__ == "__main__":
-    possible_dirs = [
-        "cropped_host_galaxies",
-        "../cropped_host_galaxies",
-        "/cropped_host_galaxies"
-    ]
-    
-    target_dir = None
-    for d in possible_dirs:
-        if os.path.isdir(d):
-            target_dir = d
-            break
-            
-    if target_dir:
-        process_directory(target_dir, output_csv="initial_guesses.csv")
+    import sys
+
+    root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    sys.path.insert(0, os.path.dirname(__file__))
+    from pipeline_asset_paths import iter_host_cutouts
+
+    cutouts = list(iter_host_cutouts(root))
+    if not cutouts:
+        print("No host_cutout.fits found under pipeline_scripts/Output/*_all/")
+        sys.exit(1)
+
+    results = []
+    for frb, path in cutouts:
+        basename = f"{frb}_flux.fits"
+        try:
+            guesses = get_initial_guesses(path, plot=False)
+            guesses["filename"] = basename
+            results.append(guesses)
+        except Exception as e:
+            print(f"Error processing {basename}: {e}")
+            import traceback
+            traceback.print_exc()
+
+    output_csv = os.path.join(root, "csv_archive", "initial_guesses.csv")
+    os.makedirs(os.path.dirname(output_csv), exist_ok=True)
+
+    if results:
+        keys = ["filename", "x", "y", "mag", "r_e", "n", "axis_ratio", "pa"]
+        with open(output_csv, "w", newline="") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=keys)
+            writer.writeheader()
+            writer.writerows(results)
+        print(f"Saved initial guesses to {output_csv}")
     else:
-        print("Could not find 'cropped_host_galaxies' directory.")
+        print("No results to save.")

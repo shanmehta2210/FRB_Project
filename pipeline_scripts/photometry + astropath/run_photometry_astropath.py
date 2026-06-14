@@ -164,6 +164,7 @@ from astropy.io import fits
 from astropy.table import Table
 from astropy.coordinates import SkyCoord
 from astropy.wcs import WCS
+from astropy.wcs.utils import proj_plane_pixel_scales
 from astropy.stats import sigma_clipped_stats
 from astroquery.vizier import Vizier
 import matplotlib.pyplot as plt
@@ -173,11 +174,22 @@ import matplotlib.pyplot as plt
 _ASTROPATH_PKG = "__ASTROPATH_PKG__"
 if _ASTROPATH_PKG and _ASTROPATH_PKG not in sys.path:
     sys.path.insert(0, _ASTROPATH_PKG)
+_DIAG_PKG = "__DIAG_PKG__"
+if _DIAG_PKG and _DIAG_PKG not in sys.path:
+    sys.path.insert(0, _DIAG_PKG)
 try:
     from astropath import path
 except ImportError as exc:
     print(f"Error: AstroPath package not importable from '{_ASTROPATH_PKG}': {exc}")
     sys.exit(1)
+try:
+    from field_depth import measure_field_depth
+    from pipeline_diagnostics import add_sep_arcsec, plot_candidate_geometry
+except ImportError as exc:
+    print(f"[!] Diagnostic modules not importable from '{_DIAG_PKG}': {exc}")
+    measure_field_depth = None
+    add_sep_arcsec = None
+    plot_candidate_geometry = None
 
 def get_table_from_ldac(filename, frame=1):
     if frame > 0: frame = frame * 2
@@ -195,10 +207,15 @@ def main():
     # 1. READ CONFIG
     with open(args.config, "r") as f: config = yaml.safe_load(f)
     astio = config.get("astropath", {})
+    diag_cfg = config.get("diagnostics", {})
+    do_field_depth = bool(diag_cfg.get("field_depth", True))
+    do_geometry_plots = bool(diag_cfg.get("geometry_plots", True))
     err_a = astio.get("err_a_arcsec", 1.0)
     err_b = astio.get("err_b_arcsec", 1.0)
     err_pa = astio.get("err_theta_deg", 0.0)
-    px_scale = config.get("sextractor_psf", {}).get("pixel_scale", 0.262)
+    s_conf = config.get("sextractor_psf", {})
+    px_scale = s_conf.get("pixel_scale", 0.262)
+    phot_aperture_px = s_conf.get("phot_apertures_px", 40.0)
     
     # 2. READ WCS TARGET
     with fits.open(args.image) as hdul:
@@ -213,95 +230,184 @@ def main():
 
     print(f"[*] Target FRB set to RA={target_center.ra.deg:.5f}, DEC={target_center.dec.deg:.5f}")
 
-    # 3. ZERO-POINT CALIBRATION (PS1 with SkyMapper southern fallback)
+    # Calibration catalogs cover the full image footprint (not a legacy 5.5' x 13.6' box).
+    img_center = w.pixel_to_world(x_shape / 2.0, y_shape / 2.0)
+    scales_deg = proj_plane_pixel_scales(w)
+    cal_width_arcmin = float(x_shape * scales_deg[0] * 60.0)
+    cal_height_arcmin = float(y_shape * scales_deg[1] * 60.0)
+    print(f"[*] Calibration query footprint: {cal_width_arcmin:.2f}' x {cal_height_arcmin:.2f}' "
+          f"({x_shape} x {y_shape} px, image center RA={img_center.ra.deg:.5f}, Dec={img_center.dec.deg:.5f})")
+
+    # 3. ZERO-POINT CALIBRATION (PS1 + Legacy Survey; pick survey with more matches)
     # All photometry is sourced from the with-PSF catalog (image.psf.cat). The 40-px
     # aperture is PSF-model-agnostic but is intentionally taken from the same catalog
     # as MAG_AUTO and MAG_POINTSOURCE so every magnitude has identical detection,
     # deblending, and flag context.
     #
-    # Reference catalog selection — PS1 (II/349) is preferred when available:
-    #   * full North + footprint to Dec ~ -30 deg
-    #   * deeper than SkyMapper, more r-band detections per star (Nd > 6 filter)
-    # SkyMapper DR1.1 (II/358) is the southern fallback:
-    #   * covers the full southern hemisphere; overlaps PS1 down to ~ -30 deg
-    #   * AB PSF magnitudes (rPSF) directly comparable to PS1 r
-    #   * Vizier-native cone search, ~1 s round-trip (same order as PS1 query)
-    # Both queries return an Astropy Table normalised to the schema
-    #   ['RAJ2000', 'DEJ2000', 'rmag']
-    # so the rest of the calibration code is catalog-agnostic.
-    def _query_ps1(center):
+    # PS1 (Vizier) and Legacy DR10 Tractor (NOIRLab TAP) are queried every time.
+    # After matching to clean PSF stars, we use whichever survey yields more matches
+    # (>= MIN_CAL_STARS). Ties favour PS1.
+    MIN_CAL_STARS = 3
+    MATCH_RADIUS = 0.6 * u.arcsec
+
+    def _query_ps1(center, width_arcmin, height_arcmin):
         v = Vizier(columns=['*'], column_filters={"rmag": "< 20", "Nd": "> 6"}, row_limit=-1)
-        Q = v.query_region(center, width=5.5*u.arcmin, height=13.6*u.arcmin, catalog='II/349')
+        Q = v.query_region(
+            center,
+            width=width_arcmin * u.arcmin,
+            height=height_arcmin * u.arcmin,
+            catalog='II/349',
+        )
         if not Q or len(Q[0]) == 0:
             return None, None
         return Q[0], "II/349 (PS1 DR1)"
 
-    def _query_skymapper(center):
-        # SkyMapper DR1.1: r-band PSF magnitudes; e_rPSF cut keeps only well-measured stars.
-        v = Vizier(columns=['RAICRS', 'DEICRS', 'rPSF', 'e_rPSF'],
-                   column_filters={"rPSF": "< 20", "e_rPSF": "< 0.05"}, row_limit=-1)
-        Q = v.query_region(center, width=5.5*u.arcmin, height=13.6*u.arcmin, catalog='II/358')
-        if not Q or len(Q[0]) == 0:
+    def _query_legacy(center, width_arcmin, height_arcmin):
+        try:
+            import pyvo
+        except ImportError:
+            print("[!] pyvo not available; skipping Legacy Survey calibration query")
             return None, None
-        t = Q[0]
-        # Drop masked rows so sigma_clipped_stats sees a clean float column.
-        if hasattr(t['rPSF'], 'mask'):
-            t = t[~t['rPSF'].mask]
-            if len(t) == 0:
-                return None, None
-        # Normalise columns to the PS1-style schema used downstream.
-        t.rename_columns(['RAICRS', 'DEICRS', 'rPSF'], ['RAJ2000', 'DEJ2000', 'rmag'])
-        return t, "II/358 (SkyMapper DR1.1)"
-
-    print("[*] Querying PS1 for Zero-Points...")
-    ps1_stars, cal_catalog_id = _query_ps1(target_center)
-    if ps1_stars is None:
-        print("[*] PS1 returned no stars (likely southern field). Falling back to SkyMapper DR1.1...")
-        ps1_stars, cal_catalog_id = _query_skymapper(target_center)
-    if ps1_stars is None:
-        raise RuntimeError("No PS1 or SkyMapper calibration stars found in this field")
-    print(f"[*] Calibration reference: {cal_catalog_id} ({len(ps1_stars)} candidate stars)")
-    ps1_coords = SkyCoord(ra=ps1_stars['RAJ2000'], dec=ps1_stars['DEJ2000'], frame='icrs', unit='degree')
+        ra_c = center.ra.deg
+        dec_c = center.dec.deg
+        width_deg = width_arcmin / 60.0
+        height_deg = height_arcmin / 60.0
+        ra_half = width_deg / 2.0
+        dec_half = height_deg / 2.0
+        cos_dec = np.cos(np.radians(np.clip(dec_c, -85, 85)))
+        ra_range = ra_half / cos_dec
+        ra_min = ra_c - ra_range
+        ra_max = ra_c + ra_range
+        dec_min = dec_c - dec_half
+        dec_max = dec_c + dec_half
+        if ra_min < 0:
+            ra_clause = "(ra > {:.6f} OR ra < {:.6f})".format(ra_min + 360, ra_max)
+        elif ra_max > 360:
+            ra_clause = "(ra > {:.6f} OR ra < {:.6f})".format(ra_min, ra_max - 360)
+        else:
+            ra_clause = "ra > {:.6f} AND ra < {:.6f}".format(ra_min, ra_max)
+        query = (
+            "SELECT ra, dec, flux_r FROM ls_dr10.tractor WHERE "
+            + ra_clause
+            + " AND dec > {:.6f} AND dec < {:.6f}".format(dec_min, dec_max)
+            + " AND type = 'PSF' AND fracflux_r < 0.05 AND anymask_r = 0 AND flux_r > 10"
+        )
+        try:
+            service = pyvo.dal.TAPService("https://datalab.noirlab.edu/tap")
+            raw = service.search(query).to_table()
+        except Exception as exc:
+            print("[!] Legacy Survey TAP query failed: {}".format(exc))
+            return None, None
+        if raw is None or len(raw) == 0:
+            return None, None
+        flux = np.asarray(raw['flux_r'], dtype=float)
+        ok = np.isfinite(flux) & (flux > 0)
+        if not np.any(ok):
+            return None, None
+        rmag = 22.5 - 2.5 * np.log10(flux[ok])
+        bright = rmag < 20.0
+        if not np.any(bright):
+            return None, None
+        t = Table()
+        t['RAJ2000'] = np.asarray(raw['ra'][ok][bright])
+        t['DEJ2000'] = np.asarray(raw['dec'][ok][bright])
+        t['rmag'] = rmag[bright]
+        return t, "LS DR10 Tractor (NOIRLab TAP)"
 
     cat_psf = get_table_from_ldac(args.psfcat)
-    # Calibration stars: clean PSF flag, sub-2'' FWHM (exclude extended sources)
     cat_psf_cln = cat_psf[(cat_psf['FLAGS_MODEL'] == 0) & (cat_psf['FWHM_WORLD'] < 2.0/3600.0)]
     psfCoords = SkyCoord(ra=cat_psf_cln['ALPHAWIN_J2000'], dec=cat_psf_cln['DELTAWIN_J2000'], unit='deg')
-    idx_pimg, idx_pps1, _, _ = ps1_coords.search_around_sky(psfCoords, 0.6*u.arcsec)
-    if len(idx_pimg) < 3:
-        raise RuntimeError(f"Too few PS1 calibration matches ({len(idx_pimg)}); cannot anchor ZP.")
+
+    def _match_count(ref_table):
+        if ref_table is None or len(ref_table) == 0:
+            return 0, None, None
+        ref_coords = SkyCoord(ra=ref_table['RAJ2000'], dec=ref_table['DEJ2000'], frame='icrs', unit='degree')
+        idx_pimg, idx_pref, _, _ = ref_coords.search_around_sky(psfCoords, MATCH_RADIUS)
+        return len(idx_pimg), idx_pimg, idx_pref
+
+    print("[*] Querying PS1 for calibration stars...")
+    ps1_tab, ps1_cat_id = _query_ps1(img_center, cal_width_arcmin, cal_height_arcmin)
+    n_ps1_cand = len(ps1_tab) if ps1_tab is not None else 0
+    print(f"    PS1 candidates in field: {n_ps1_cand}")
+
+    print("[*] Querying Legacy Survey DR10 (Tractor) for calibration stars...")
+    leg_tab, leg_cat_id = _query_legacy(img_center, cal_width_arcmin, cal_height_arcmin)
+    n_leg_cand = len(leg_tab) if leg_tab is not None else 0
+    print(f"    Legacy candidates in field: {n_leg_cand}")
+
+    n_ps1, idx_ps1_img, idx_ps1_ref = _match_count(ps1_tab)
+    n_leg, idx_leg_img, idx_leg_ref = _match_count(leg_tab)
+    match_arcsec = float(MATCH_RADIUS.to(u.arcsec).value)
+    print(f"[*] Matched PSF stars within {match_arcsec:.1f} arcsec: "
+          f"PS1={n_ps1}, Legacy={n_leg} (need >={MIN_CAL_STARS})")
+
+    if n_ps1 >= MIN_CAL_STARS and n_ps1 >= n_leg:
+        ref_stars, cal_catalog_id = ps1_tab, ps1_cat_id
+        idx_pimg, idx_pref = idx_ps1_img, idx_ps1_ref
+    elif n_leg >= MIN_CAL_STARS:
+        ref_stars, cal_catalog_id = leg_tab, leg_cat_id
+        idx_pimg, idx_pref = idx_leg_img, idx_leg_ref
+    else:
+        raise RuntimeError(
+            "Too few calibration matches: PS1={}, Legacy={} "
+            "(need >={} within {:.1f} arcsec).".format(
+                n_ps1, n_leg, MIN_CAL_STARS, match_arcsec)
+        )
+    print(f"[*] Using {cal_catalog_id} for ZP ({len(idx_pimg)} matched stars)")
 
     # 40-px aperture ZP — this is the ZP that goes into MAG_CALIB_APER_40PX (the magnitude
     # passed to AstroPath when mag_mode='mag_40px') and is the recommended production value.
     zp_med, _, zp_std = sigma_clipped_stats(
-        ps1_stars['rmag'][idx_pps1] - cat_psf_cln['MAG_APER'][:, 14][idx_pimg], sigma=3)
+        ref_stars['rmag'][idx_pref] - cat_psf_cln['MAG_APER'][:, 14][idx_pimg], sigma=3)
 
     # PSF model ZP — for MAG_POINTSOURCE flux estimator (PSF-fit photometry)
     zp_p_med, _, zp_p_std = sigma_clipped_stats(
-        ps1_stars['rmag'][idx_pps1] - cat_psf_cln['MAG_POINTSOURCE'][idx_pimg], sigma=3)
+        ref_stars['rmag'][idx_pref] - cat_psf_cln['MAG_POINTSOURCE'][idx_pimg], sigma=3)
 
     # Kron / MAG_AUTO ZP — independent because Kron is a different flux estimator
     zp_auto_med, _, zp_auto_std = sigma_clipped_stats(
-        ps1_stars['rmag'][idx_pps1] - cat_psf_cln['MAG_AUTO'][idx_pimg], sigma=3)
+        ref_stars['rmag'][idx_pref] - cat_psf_cln['MAG_AUTO'][idx_pimg], sigma=3)
 
     print(f"[*] Calibration Complete (N_stars={len(idx_pimg)}): "
           f"40-px ZP = {zp_med:.3f}, PSF ZP = {zp_p_med:.3f}, Auto ZP = {zp_auto_med:.3f}")
 
     # Persist ZPs as a machine-readable artefact so master_run.py can hand them
     # off as part of the 'photometry' deliverable without parsing stdout.
+    zp_payload = {
+        "n_calibration_stars": int(len(idx_pimg)),
+        "n_ps1_matches": int(n_ps1),
+        "n_legacy_matches": int(n_leg),
+        "zp_aper_40px": float(zp_med),
+        "zp_aper_40px_std": float(zp_std),
+        "zp_psf": float(zp_p_med),
+        "zp_psf_std": float(zp_p_std),
+        "zp_auto": float(zp_auto_med),
+        "zp_auto_std": float(zp_auto_std),
+        "filter_band": astio.get("filter_band", "r"),
+        "reference_catalog": cal_catalog_id,
+        "match_radius_arcsec": match_arcsec,
+    }
+    if do_field_depth and measure_field_depth is not None:
+        try:
+            from pathlib import Path as _Path
+            seg_p = _Path("segmentation_map.fits")
+            proto_p = _Path("proto_image.fits")
+            sex_p = _Path("default_psf.sex")
+            fd = measure_field_depth(
+                _Path(args.image),
+                float(zp_med),
+                seg_path=seg_p if seg_p.is_file() else None,
+                proto_path=proto_p if proto_p.is_file() else None,
+                sex_path=sex_p if sex_p.is_file() else None,
+                aperture_diameter_px=float(phot_aperture_px),
+            )
+            zp_payload["field_depth"] = fd
+            print(f"[*] Field depth (5σ @ {fd['aperture_diameter_px']} px): "
+                  f"m_lim = {fd['m_lim_5sigma_ab']} AB")
+        except Exception as exc:
+            print(f"[!] Field depth measurement failed: {exc}")
     with open("zero_points.json", "w") as zf:
-        json.dump({
-            "n_calibration_stars": int(len(idx_pimg)),
-            "zp_aper_40px": float(zp_med),
-            "zp_aper_40px_std": float(zp_std),
-            "zp_psf": float(zp_p_med),
-            "zp_psf_std": float(zp_p_std),
-            "zp_auto": float(zp_auto_med),
-            "zp_auto_std": float(zp_auto_std),
-            "filter_band": astio.get("filter_band", "r"),
-            "reference_catalog": cal_catalog_id,
-            "match_radius_arcsec": 0.6,
-        }, zf, indent=2)
+        json.dump(zp_payload, zf, indent=2)
 
     # 4. FIND & MATCH CANDIDATES (single catalog, no cross-cat alignment needed)
     psfCoords_all = SkyCoord(ra=cat_psf['ALPHAWIN_J2000'], dec=cat_psf['DELTAWIN_J2000'], unit='deg')
@@ -384,7 +490,13 @@ def main():
 
         if (not is_star) and (not bad_mag):
             candidates_for_astropath.append({
-                "objid": i, "ra": ra, "dec": dec, "mag": mag_for_path, "ang_size": ang_size, "source": mag_mode
+                "objid": i,
+                "sex_number": int(src["NUMBER"]),
+                "ra": ra,
+                "dec": dec,
+                "mag": mag_for_path,
+                "ang_size": ang_size,
+                "source": mag_mode,
             })
 
         records.append({
@@ -487,16 +599,29 @@ def main():
 
     cdf["posterior_O"] = p_oix
     cdf["posterior_U"] = p_ux
+    if add_sep_arcsec is not None:
+        cdf = add_sep_arcsec(cdf, target_center)
     best = cdf.sort_values("posterior_O", ascending=False).iloc[0]
-    sep = target_center.separation(SkyCoord(ra=best['ra'], dec=best['dec'], unit='deg')).to(u.arcsec).value
+    sep = float(best["sep_arcsec"]) if "sep_arcsec" in cdf.columns else target_center.separation(
+        SkyCoord(ra=best['ra'], dec=best['dec'], unit='deg')).to(u.arcsec).value
     
     print(f"[*] ASTROPATH SUCCESS!")
-    print(f"    Most Probable Host ObjID: {best['objid']}")
+    print(f"    Most Probable Host ObjID: {best['objid']} (SExtractor NUMBER={int(best['sex_number'])})")
     print(f"    Posterior P(O): {best['posterior_O']:.4f}")
     print(f"    Unseen P(U): {p_ux:.4f}")
     print(f"    Separation: {sep:.2f} arcsec")
 
     cdf.to_csv("astropath_posteriors.csv", index=False)
+
+    if do_geometry_plots and plot_candidate_geometry is not None:
+        try:
+            plot_candidate_geometry(
+                cdf, target_center, THETA_MAX, ".",
+                best_objid=int(best["objid"]),
+            )
+            print("[*] Wrote sep_vs_shape_r.png and sep_vs_x_max_reff.png")
+        except Exception as exc:
+            print(f"[!] Geometry diagnostic plots failed: {exc}")
 
     # 6. PLOT
     try:
@@ -771,11 +896,15 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     astropath_pkg_dir = os.path.abspath(os.path.join(script_dir, "..", "..", "tools", "AstroPath", "astropath_pkg"))
     astropath_pkg_wsl = _to_wsl_path(astropath_pkg_dir)
+    diag_pkg_wsl = _to_wsl_path(script_dir)
     if not os.path.isdir(astropath_pkg_dir):
         print(f"[!] Warning: AstroPath package directory not found at {astropath_pkg_dir} — WSL import will fail.")
 
     astro_script = os.path.join(image_dir, "_run_astrophysics_wsl.py")
-    rendered = TEMPLATE_ASTROPHYSICS.replace("__ASTROPATH_PKG__", astropath_pkg_wsl)
+    rendered = (
+        TEMPLATE_ASTROPHYSICS.replace("__ASTROPATH_PKG__", astropath_pkg_wsl)
+        .replace("__DIAG_PKG__", diag_pkg_wsl)
+    )
     with open(astro_script, "w", encoding="utf-8", newline="\n") as f: f.write(rendered)
 
     print("[Phase 2] Triggering Conda `frb_project` Environment OS Bridge")

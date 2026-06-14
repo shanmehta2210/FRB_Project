@@ -1,0 +1,13 @@
+survey,mag_limit,sample_mode,stage,n_remaining,n_dropped,mag_column,q_column,exclude_sdss_ba_floor
+sdss_v2,20.0,strict,catalog_raw,1900000,0,modelMag_r,expAB_r,False
+sdss_v2,20.0,strict,after_mag_cut,206157,1693843,modelMag_r,expAB_r,False
+sdss_v2,20.0,strict,after_sdss_ur,77550,128607,modelMag_r,expAB_r,False
+sdss_v2,20.0,strict,after_sdss_exp_lnl_winner,58422,19128,modelMag_r,expAB_r,False
+sdss_v2,20.0,strict,after_strict_ba,55679,2743,modelMag_r,expAB_r,False
+sdss_v2,20.0,strict,final_pool,55679,0,modelMag_r,expAB_r,False
+sdss_v2,21.0,strict,catalog_raw,1900000,0,modelMag_r,expAB_r,False
+sdss_v2,21.0,strict,after_mag_cut,551898,1348102,modelMag_r,expAB_r,False
+sdss_v2,21.0,strict,after_sdss_ur,242140,309758,modelMag_r,expAB_r,False
+sdss_v2,21.0,strict,after_sdss_exp_lnl_winner,169763,72377,modelMag_r,expAB_r,False
+sdss_v2,21.0,strict,after_strict_ba,159144,10619,modelMag_r,expAB_r,False
+sdss_v2,21.0,strict,final_pool,159144,0,modelMag_r,expAB_r,False

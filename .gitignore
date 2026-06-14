@@ -14,10 +14,19 @@ node_utils/node_modules/
 # Generated pipeline outputs and large data directories
 pipeline_scripts/Output/
 large_cutouts/
-cropped_host_galaxies/
 psfs/
+Archive/psfs/
 
 # All-sky catalog CSVs and oversized FITS (download separately; >50 MB)
 LS_catalog_v1_allsky_modelmr.csv
 SDSS_catalog_v1_allsky_modelmr.csv
+SDSS_catalog_v2_fullsky_modelmr.csv
+SDSS_catalog_v2_fullsky_modelmr.batch_log.csv
+SDSS_v2_fetch_cache/
+SDSS_lnl_patch_cache.csv
+SDSS_lnl_patch_cache_v2.csv
+Archive/plots_null_pre_morphology_cut/
+M49 astropath/
+R70 astropath/
+Photometry/
 tools/Photometry/photometry/data/aC0_20181013-174714-557.wcs.fits.proc.cr.fits

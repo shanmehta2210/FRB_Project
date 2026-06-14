@@ -31,8 +31,9 @@ Layout produced:
 Tool keywords -> exposed files:
     catalog    : image.cat
     psf        : proto_image.fits, image.psf
-    photometry : calibrated_photometry_results.csv, zero_points.json
-    astropath  : astropath_association.png, astropath_posteriors.csv
+    photometry : calibrated_photometry_results.csv, zero_points.json (field_depth)
+    astropath  : astropath_association.png, astropath_posteriors.csv,
+                 sep_vs_shape_r.png, sep_vs_x_max_reff.png
     galfit     : fit.log, out.fits, galfit_results.png, qa_cutout_mask.png
     all        : every artefact in the workdir except staged inputs and
                  SExtractor/PSFEx text templates.
@@ -78,7 +79,12 @@ TOOL_FILES = {
     "catalog":    ["image.cat"],
     "psf":        ["proto_image.fits", "image.psf"],
     "photometry": ["calibrated_photometry_results.csv", "zero_points.json"],
-    "astropath":  ["astropath_association.png", "astropath_posteriors.csv"],
+    "astropath":  [
+        "astropath_association.png",
+        "astropath_posteriors.csv",
+        "sep_vs_shape_r.png",
+        "sep_vs_x_max_reff.png",
+    ],
     "galfit":     ["fit.log", "out.fits", "galfit_results.png", "qa_cutout_mask.png", "sky_fit_audit.json"],
 }
 
@@ -335,9 +341,21 @@ def main():
     ap.add_argument("--p-u", type=float, default=None,
                     help="Prior probability that the true host is unseen.")
 
-    gf = parser.add_argument_group("Phase 3b / GALFIT overrides")
+    gf = parser.add_argument_group("Phase 3 / GALFIT overrides")
     gf.add_argument("--galfit-zp", type=float, default=None,
                     help="Override GALFIT J) ZP (default: zp_aper_40px from zero_points.json).")
+    gf.add_argument(
+        "--use-localization-host",
+        action="store_true",
+        default=None,
+        help="Phase 3a: always centre on --ra/--dec (CSV host), ignore AstroPath host pick.",
+    )
+    gf.add_argument(
+        "--use-astropath-host",
+        action="store_true",
+        default=None,
+        help="Phase 3a: use AstroPath posteriors when available (overrides galfit_config cutouts).",
+    )
 
     args = parser.parse_args()
 
@@ -360,7 +378,8 @@ def main():
         k: v for k, v in vars(args).items()
         if k in {"detect_thresh", "deblend_mincont", "pixel_scale", "seeing_fwhm", "gain",
                  "mag_mode", "target_snr_min", "err_a_arcsec", "err_b_arcsec",
-                 "err_theta_deg", "p_u", "galfit_zp"} and v is not None
+                 "err_theta_deg", "p_u", "galfit_zp",
+                 "use_localization_host", "use_astropath_host"} and v is not None
     }
     print("[master] -- run configuration --")
     print(f"[master]   FRB name      : {frb_name}")
@@ -401,15 +420,30 @@ def main():
     )
 
     # ---------- Phase 3a: GALFIT cutouts (best-effort) ----------
-    rc3a = run_phase(
-        "Phase 3a / GALFIT cutouts",
-        [sys.executable, PHASE3A,
-         "--image", work_dir / "image.fits",
-         "--segmap", work_dir / "segmentation_map.fits",
-         "--catalog", work_dir / "image.cat",
-         "--ra", args.ra, "--dec", args.dec,
-         "--outdir", work_dir],
-    )
+    galfit_defaults = _load_yaml(PHASE3_DEFAULT_YAML) if PHASE3_DEFAULT_YAML.is_file() else {}
+    cutouts_cfg = galfit_defaults.get("cutouts") or {}
+    use_loc_host = bool(cutouts_cfg.get("use_localization_host", False))
+    min_post = float(cutouts_cfg.get("min_astropath_posterior", 0.05))
+    if args.use_localization_host is True:
+        use_loc_host = True
+    elif args.use_astropath_host is True:
+        use_loc_host = False
+
+    phase3a_cmd = [
+        sys.executable, PHASE3A,
+        "--image", work_dir / "image.fits",
+        "--segmap", work_dir / "segmentation_map.fits",
+        "--catalog", work_dir / "image.cat",
+        "--ra", str(args.ra), "--dec", str(args.dec),
+        "--outdir", str(work_dir),
+    ]
+    if use_loc_host:
+        phase3a_cmd.append("--no-astropath-override")
+        print("[master] Phase 3a: use localization host (--ra/--dec); AstroPath posteriors ignored for centre")
+    else:
+        phase3a_cmd += ["--min-astropath-posterior", str(min_post)]
+
+    rc3a = run_phase("Phase 3a / GALFIT cutouts", phase3a_cmd)
 
     # ---------- Phase 3b: GALFIT fit (only if 3a produced cutouts) ----------
     rc3b = -1

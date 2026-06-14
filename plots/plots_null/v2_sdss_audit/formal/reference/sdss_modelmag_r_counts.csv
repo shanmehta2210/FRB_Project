@@ -1,0 +1,13 @@
+mag_lo,mag_hi,n_per_deg2_per_half_mag,source
+15.5,16.0,2.95,"Yasuda et al. 2001 Table 2 (Petrosian r*) re-mapped to modelMag_r with Δ(r*−modelMag_r)=+0.055 mag per SDSS DR7 photometry algorithms (Stoughton et al. 2002; Abazajian et al. 2009)"
+16.0,16.5,11.79,"same"
+16.5,17.0,21.72,"same"
+17.0,17.5,40.29,"same"
+17.5,18.0,69.86,"same"
+18.0,18.5,122.46,"same"
+18.5,19.0,212.70,"same"
+19.0,19.5,358.71,"same"
+19.5,20.0,570.02,"same"
+20.0,20.5,868.81,"same"
+20.5,21.0,1261.21,"same"
+21.0,21.5,1448.03,"same"

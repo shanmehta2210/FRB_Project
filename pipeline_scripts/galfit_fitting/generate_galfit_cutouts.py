@@ -60,34 +60,184 @@ def _is_stellar(cat, uid: int, class_star_max: float) -> bool:
     return cs >= class_star_max
 
 
+# Same star/galaxy cut as Phase 2 (run_photometry_astropath.py AstroPath candidates).
+_SPREAD_STAR_MAX = 0.005
+_SPREAD_SIGMA = 3.0
+
+
+def _spread_is_point_source(spread_model: float, spread_err: float) -> bool:
+    return (spread_model + _SPREAD_SIGMA * spread_err) < _SPREAD_STAR_MAX
+
+
+def _psf_catalog_path(catalog_path: str) -> str:
+    return os.path.join(os.path.dirname(os.path.abspath(catalog_path)), "image.psf.cat")
+
+
+def _load_psf_catalog(catalog_path: str):
+    """Phase 2 SExtractor catalog (SPREAD, AstroPath sex_number)."""
+    psf_path = _psf_catalog_path(catalog_path)
+    if not os.path.isfile(psf_path):
+        return None
+    return get_table_from_ldac(psf_path)
+
+
+def _load_spread_by_number(catalog_path: str) -> dict:
+    """NUMBER -> (SPREAD_MODEL, SPREADERR_MODEL) from image.psf.cat (Phase 2)."""
+    psf = _load_psf_catalog(catalog_path)
+    if psf is None or "SPREAD_MODEL" not in psf.colnames or "SPREADERR_MODEL" not in psf.colnames:
+        return {}
+    out = {}
+    for row in psf:
+        out[int(row["NUMBER"])] = (float(row["SPREAD_MODEL"]), float(row["SPREADERR_MODEL"]))
+    return out
+
+
+def _spread_for_catalog_index(idx: int, cat, spread_by_number: dict, catalog_path: str):
+    """SPREAD for a Phase-1 image.cat row, keyed by Phase-2 NUMBER when they differ."""
+    num = int(cat["NUMBER"][idx])
+    spread = spread_by_number.get(num)
+    if spread is not None:
+        return spread
+    psf = _load_psf_catalog(catalog_path)
+    if psf is None:
+        return None
+    coord = SkyCoord(
+        ra=cat["ALPHAWIN_J2000"][idx],
+        dec=cat["DELTAWIN_J2000"][idx],
+        unit="deg",
+        frame="icrs",
+    )
+    psf_coords = SkyCoord(
+        ra=psf["ALPHAWIN_J2000"], dec=psf["DELTAWIN_J2000"], unit="deg", frame="icrs"
+    )
+    seps_arcsec = coord.separation(psf_coords).arcsec
+    j = int(np.argmin(seps_arcsec))
+    if float(seps_arcsec[j]) > 0.5:
+        return None
+    return spread_by_number.get(int(psf["NUMBER"][j]))
+
+
+def _seg_number_for_psf_number(psf_number: int, cat, catalog_path: str, max_sep_arcsec: float = 1.0):
+    """Map AstroPath / Phase-2 NUMBER to Phase-1 segmentation NUMBER via sky position."""
+    if int(psf_number) in set(int(n) for n in cat["NUMBER"]):
+        return int(psf_number)
+    psf = _load_psf_catalog(catalog_path)
+    if psf is None:
+        raise SystemExit(
+            f"[Phase 3a] AstroPath sex_number={psf_number} not in image.cat and "
+            "image.psf.cat is missing."
+        )
+    sel = psf["NUMBER"] == int(psf_number)
+    if not np.any(sel):
+        raise SystemExit(
+            f"[Phase 3a] AstroPath sex_number={psf_number} not found in image.psf.cat."
+        )
+    host = SkyCoord(
+        ra=psf["ALPHAWIN_J2000"][sel][0],
+        dec=psf["DELTAWIN_J2000"][sel][0],
+        unit="deg",
+        frame="icrs",
+    )
+    cat_coords = SkyCoord(
+        ra=cat["ALPHAWIN_J2000"], dec=cat["DELTAWIN_J2000"], unit="deg", frame="icrs"
+    )
+    seps_arcsec = host.separation(cat_coords).arcsec
+    idx = int(np.argmin(seps_arcsec))
+    sep = float(seps_arcsec[idx])
+    if sep > max_sep_arcsec:
+        raise SystemExit(
+            f"[Phase 3a] AstroPath sex_number={psf_number} has no image.cat match within "
+            f"{max_sep_arcsec}\" (nearest {sep:.3f}\")."
+        )
+    seg_number = int(cat["NUMBER"][idx])
+    if seg_number != int(psf_number):
+        print(
+            f"[*] AstroPath sex_number={psf_number} (image.psf.cat) -> "
+            f"seg NUMBER={seg_number} (image.cat; {sep:.3f}\")"
+        )
+    return seg_number
+
+
+def _pick_nearest_galaxy_host(
+    target_coord: SkyCoord,
+    cat,
+    spread_by_number: dict,
+    catalog_path: str,
+    max_sep_arcsec: float,
+):
+    """Nearest SExtractor source that passes the Phase 2 SPREAD star cut.
+
+    Returns (catalog_index, objid, sep_arcsec) or raises SystemExit if none qualify.
+    """
+    if not spread_by_number:
+        raise SystemExit(
+            "[Phase 3a] Cannot apply galaxy SPREAD cut: image.psf.cat missing or lacks "
+            "SPREAD_MODEL / SPREADERR_MODEL (run Phase 2 first)."
+        )
+    cat_coords = SkyCoord(
+        ra=cat["ALPHAWIN_J2000"], dec=cat["DELTAWIN_J2000"], unit="deg", frame="icrs"
+    )
+    seps_arcsec = target_coord.separation(cat_coords).arcsec
+    for idx in np.argsort(seps_arcsec):
+        sep = float(seps_arcsec[idx])
+        if sep > max_sep_arcsec:
+            break
+        num = int(cat["NUMBER"][idx])
+        spread = _spread_for_catalog_index(idx, cat, spread_by_number, catalog_path)
+        if spread is None:
+            print(
+                f"    skip #{num}: no SPREAD in image.psf.cat ({sep:.2f}\" from target)"
+            )
+            continue
+        sm, se = spread
+        if _spread_is_point_source(sm, se):
+            print(
+                f"    skip #{num}: point source SPREAD={sm:.4f}+/-{se:.4f} "
+                f"({sep:.2f}\" from target)"
+            )
+            continue
+        return int(idx), num, sep
+    raise SystemExit(
+        f"[Phase 3a] No galaxy (SPREAD+3*SPREADERR >= {_SPREAD_STAR_MAX}) within "
+        f"{max_sep_arcsec}\" of the target position. Cannot associate FRB to a star."
+    )
+
+
 def _resolve_target_from_astropath(posteriors_csv: str, frb_ra: float,
                                    frb_dec: float, min_posterior: float):
-    """If Phase 2 produced AstroPath posteriors, return its best-host RA/Dec.
+    """If Phase 2 produced AstroPath posteriors, return its best-host sky position.
+
+    Returns (ra, dec, label, sex_number). ``sex_number`` is the SExtractor
+    ``NUMBER`` of the AstroPath candidate (Phase 2 galaxy cut already applied).
+    When ``sex_number`` is missing (older posteriors files), Phase 3a falls
+    back to nearest-galaxy matching at the AstroPath RA/Dec.
 
     Falls back to the raw FRB coords when the file is absent, unreadable, or
-    no candidate clears ``min_posterior`` — in those cases the nearest-source
-    heuristic below is the best we can do.  Keeps Phase 3a runnable on its
-    own (just pass --ra/--dec); when invoked via master_run.py with Phase 2
-    upstream, the AstroPath host wins automatically.
+    no candidate clears ``min_posterior``.
     """
     if not os.path.exists(posteriors_csv):
-        return frb_ra, frb_dec, "FRB position (no astropath_posteriors.csv next to catalog)"
+        return frb_ra, frb_dec, "FRB position (no astropath_posteriors.csv next to catalog)", None
     try:
         df = pd.read_csv(posteriors_csv)
     except Exception as exc:  # noqa: BLE001
-        return frb_ra, frb_dec, f"FRB position (posteriors read failed: {exc})"
+        return frb_ra, frb_dec, f"FRB position (posteriors read failed: {exc})", None
     if "posterior_O" not in df.columns or len(df) == 0:
-        return frb_ra, frb_dec, "FRB position (posteriors empty / wrong schema)"
+        return frb_ra, frb_dec, "FRB position (posteriors empty / wrong schema)", None
     best = df.sort_values("posterior_O", ascending=False).iloc[0]
     p_best = float(best["posterior_O"])
     if not np.isfinite(p_best) or p_best < min_posterior:
         return frb_ra, frb_dec, (
             f"FRB position (best AstroPath P(O)={p_best:.4f} < {min_posterior})"
-        )
-    return float(best["ra"]), float(best["dec"]), (
-        f"AstroPath host objid={best.get('objid','?')} "
-        f"(P(O)={p_best:.4f}, mag={float(best.get('mag', np.nan)):.2f})"
+        ), None
+    sex_number = None
+    if "sex_number" in best.index and pd.notna(best["sex_number"]):
+        sex_number = int(best["sex_number"])
+    label = (
+        f"AstroPath host objid={best.get('objid', '?')}"
+        + (f", NUMBER={sex_number}" if sex_number is not None else "")
+        + f" (P(O)={p_best:.4f}, mag={float(best.get('mag', np.nan)):.2f})"
     )
+    return float(best["ra"]), float(best["dec"]), label, sex_number
 
 
 def main():
@@ -108,6 +258,14 @@ def main():
                              "raw FRB position (default 0.05).")
     parser.add_argument("--no-astropath-override", action="store_true",
                         help="Ignore astropath_posteriors.csv and always use --ra/--dec.")
+    parser.add_argument(
+        "--max-host-sep-arcsec",
+        type=float,
+        default=5.0,
+        help="Abort if the nearest SExtractor source to the target RA/Dec is farther "
+             "than this (arcsec). Prevents fitting a noise peak when the catalog "
+             "has no detection at the secure host position.",
+    )
     parser.add_argument(
         "--host-pad",
         type=int,
@@ -179,25 +337,64 @@ def main():
     # alongside the catalog) so GALFIT always fits the same source AstroPath
     # identified; otherwise fall back to the FRB position and let the
     # nearest-source heuristic below pick a target.
+    astropath_sex_number = None
     if args.no_astropath_override:
-        target_ra, target_dec, target_src = args.ra, args.dec, "FRB position (--no-astropath-override)"
+        target_ra, target_dec, target_src = args.ra, args.dec, "localization host (--ra/--dec)"
     else:
         posteriors_path = args.astropath_posteriors or os.path.join(
             os.path.dirname(cat_path), "astropath_posteriors.csv")
-        target_ra, target_dec, target_src = _resolve_target_from_astropath(
+        target_ra, target_dec, target_src, astropath_sex_number = _resolve_target_from_astropath(
             posteriors_path, args.ra, args.dec, args.min_astropath_posterior)
     print(f"[*] Phase 3a target: {target_src} -> RA={target_ra:.6f}, Dec={target_dec:.6f}")
 
-    # Map target Coord to SExtractor NUMBER
-    target_coord = SkyCoord(ra=target_ra, dec=target_dec, unit='deg', frame='icrs')
-    cat_coords = SkyCoord(ra=cat['ALPHAWIN_J2000'], dec=cat['DELTAWIN_J2000'], unit='deg', frame='icrs')
-    
-    idx, sep, _ = target_coord.match_to_catalog_sky(cat_coords)
-    if sep.arcsec[0] > 5.0:
-        print(f"WARNING: Closest SExtractor source is {sep.arcsec[0]:.2f} arcsec away. Double check target!")
-    
-    target_objid = cat['NUMBER'][idx]
-    print(f"[*] Assured Target Host objid: {target_objid}")
+    spread_by_number = _load_spread_by_number(cat_path)
+    target_coord = SkyCoord(ra=target_ra, dec=target_dec, unit="deg", frame="icrs")
+
+    if astropath_sex_number is not None:
+        psf_number = int(astropath_sex_number)
+        spread = spread_by_number.get(psf_number)
+        if spread is None:
+            raise SystemExit(
+                f"[Phase 3a] AstroPath host sex_number={psf_number} missing from image.psf.cat."
+            )
+        sm, se = spread
+        if _spread_is_point_source(sm, se):
+            raise SystemExit(
+                f"[Phase 3a] AstroPath host sex_number={psf_number} fails galaxy SPREAD cut "
+                f"(SPREAD={sm:.4f}+/-{se:.4f})."
+            )
+        target_objid = _seg_number_for_psf_number(psf_number, cat, cat_path)
+        sel = cat["NUMBER"] == target_objid
+        host_coord = SkyCoord(
+            ra=cat["ALPHAWIN_J2000"][sel][0],
+            dec=cat["DELTAWIN_J2000"][sel][0],
+            unit="deg",
+            frame="icrs",
+        )
+        sep_arcsec = float(target_coord.separation(host_coord).arcsec)
+        print(
+            f"[*] Host pick: AstroPath sex_number={psf_number} -> seg NUMBER={target_objid} "
+            f"(SPREAD={sm:.4f}+/-{se:.4f}; {sep_arcsec:.2f}\" from association centre)"
+        )
+        print(f"[*] Assured Target Host NUMBER={target_objid}")
+    else:
+        print(
+            f"[*] Host pick: nearest galaxy within {args.max_host_sep_arcsec}\" "
+            f"(SPREAD+{_SPREAD_SIGMA}*SPREADERR >= {_SPREAD_STAR_MAX}; "
+            f"{len(spread_by_number)} sources with SPREAD in image.psf.cat)"
+        )
+        idx, target_objid, sep_arcsec = _pick_nearest_galaxy_host(
+            target_coord, cat, spread_by_number, cat_path, float(args.max_host_sep_arcsec)
+        )
+        if sep_arcsec > 1.0:
+            print(
+                f"WARNING: Host galaxy #{target_objid} is {sep_arcsec:.2f} arcsec "
+                f"from the target position."
+            )
+        print(
+            f"[*] Assured Target Host NUMBER={target_objid} "
+            f"({sep_arcsec:.2f}\" from {target_src})"
+        )
 
     print(
         "[*] Neighbor policy (per-source containment): for every seg island that "

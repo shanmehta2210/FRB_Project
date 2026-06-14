@@ -85,6 +85,32 @@ def load_sky_ref(comp_df: pd.DataFrame) -> tuple[float, str]:
     return 0.0, "fallback_zero"
 
 
+def host_audit_fields(comp_df: pd.DataFrame) -> dict:
+    """SExtractor metrics for the GALFIT host (row 0 in host_components.csv)."""
+    if comp_df.empty:
+        return {}
+    host = comp_df.iloc[0]
+    out: dict = {}
+    if "NUMBER" in host.index and pd.notna(host["NUMBER"]):
+        out["host_number"] = int(host["NUMBER"])
+    if "SNR_WIN" in host.index and pd.notna(host["SNR_WIN"]):
+        snr_win = float(host["SNR_WIN"])
+        if math.isfinite(snr_win):
+            out["snr_win"] = snr_win
+    if "FLUX_AUTO" in host.index and "FLUXERR_AUTO" in host.index:
+        flux = pd.to_numeric(host["FLUX_AUTO"], errors="coerce")
+        ferr = pd.to_numeric(host["FLUXERR_AUTO"], errors="coerce")
+        if pd.notna(flux) and pd.notna(ferr) and float(ferr) > 0:
+            snr_auto = float(flux) / float(ferr)
+            if math.isfinite(snr_auto):
+                out["snr_auto"] = snr_auto
+    if "MAG_40PX" in host.index and pd.notna(host["MAG_40PX"]):
+        mag_40 = float(host["MAG_40PX"])
+        if math.isfinite(mag_40):
+            out["mag_40px_inst"] = mag_40
+    return out
+
+
 def build_feedme_and_constraints(
     comp_df: pd.DataFrame,
     *,
@@ -316,6 +342,7 @@ def main() -> int:
     print(f"[*] Sérsic mag constraints: {mag_min:.1f} to {mag_max:.1f}")
 
     comp_df = pd.read_csv(os.path.join(wkdir, "host_components.csv"))
+    host_meta = host_audit_fields(comp_df)
     sky_ref, sky_ref_source = load_sky_ref(comp_df)
     n_sersic = len(comp_df)
     sky_comp_num = n_sersic + 1
@@ -326,6 +353,16 @@ def main() -> int:
     )
     if sky_ref_source == "fallback_zero":
         print("[!] Warning: no valid BACKGROUND in host_components.csv; sky seed is 0.")
+    if host_meta.get("snr_win") is not None:
+        print(
+            f"[*] GALFIT host #{host_meta.get('host_number', '?')}: "
+            f"SNR_WIN={host_meta['snr_win']:.3f}"
+            + (
+                f", SNR_AUTO={host_meta['snr_auto']:.3f}"
+                if host_meta.get("snr_auto") is not None
+                else ""
+            )
+        )
 
     if not ensure_proto_image(wkdir):
         return 1
@@ -373,6 +410,7 @@ def main() -> int:
             "galfit_pass1_ok": galfit_pass1_ok,
             "galfit_pass2_ok": galfit_pass2_ok,
             "failure_reason": failure_reason,
+            **host_meta,
         }
         write_sky_audit(wkdir, audit)
 

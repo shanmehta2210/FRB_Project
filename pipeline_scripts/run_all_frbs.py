@@ -10,6 +10,11 @@ the entries where ra_deg / dec_deg refer to the optical host position. Pass
 ``--include-signal`` to also process ``signal``-semantics rows (RA/Dec is
 the radio FRB position; AstroPath behaviour is less informative there).
 
+Phase 3a host centre (``master_run`` / ``galfit_config.yaml``):
+    ``--use-localization-host`` — CSV RA/Dec + nearest galaxy (SPREAD cut).
+    ``--use-astropath-host`` — AstroPath ``sex_number`` from posteriors (default
+    when ``cutouts.use_localization_host`` is false).
+
 Localisation parameters passed to master_run:
     --ra            <- ra_deg
     --dec           <- dec_deg
@@ -27,6 +32,8 @@ Usage (PowerShell):
     python pipeline_scripts/run_all_frbs.py --skip-existing
     python pipeline_scripts/run_all_frbs.py --frb 20190608B 20180924B
     python pipeline_scripts/run_all_frbs.py --dry-run
+    python pipeline_scripts/run_all_frbs.py --use-localization-host --frb 20190608B
+    python pipeline_scripts/run_all_frbs.py --use-astropath-host --frb 20221101B
 """
 import argparse
 import json
@@ -36,6 +43,14 @@ import time
 from pathlib import Path
 
 import pandas as pd
+
+try:
+    from astropy.coordinates import SkyCoord
+    import astropy.units as u
+
+    _HAS_ASTROPY = True
+except ImportError:
+    _HAS_ASTROPY = False
 
 
 PIPELINE_DIR = Path(__file__).resolve().parent
@@ -94,15 +109,44 @@ def get_localization(loc_df: pd.DataFrame, frb_name: str):
             "err_theta": err_theta, "semantics": semantics}
 
 
-def collect_summary(out_dir: Path):
+def astropath_vs_csv_sep(posteriors_path: Path, csv_ra: float, csv_dec: float):
+    """Separation (arcsec) between best AstroPath host and CSV host coords."""
+    if not _HAS_ASTROPY or not posteriors_path.is_file():
+        return None
+    try:
+        df = pd.read_csv(posteriors_path)
+        if not len(df) or "posterior_O" not in df.columns:
+            return None
+        need = {"ra_deg", "dec_deg"}
+        if not need.issubset(df.columns):
+            return None
+        best = df.sort_values("posterior_O", ascending=False).iloc[0]
+        c_csv = SkyCoord(ra=csv_ra, dec=csv_dec, unit="deg", frame="icrs")
+        c_ap = SkyCoord(ra=float(best["ra_deg"]), dec=float(best["dec_deg"]), unit="deg", frame="icrs")
+        return float(c_csv.separation(c_ap).arcsec)
+    except Exception:
+        return None
+
+
+def collect_summary(out_dir: Path, csv_ra=None, csv_dec=None):
     """Pull a few key science values from a completed run for the table."""
-    s = {"posterior": None, "zp_40px": None, "n_stars": None, "ref_cat": None}
+    s = {
+        "posterior": None,
+        "zp_40px": None,
+        "n_stars": None,
+        "ref_cat": None,
+        "sep_astropath_vs_csv_arcsec": None,
+    }
     posteriors = out_dir / "astropath_posteriors.csv"
     if posteriors.exists():
         try:
             df = pd.read_csv(posteriors)
             if len(df) and "posterior_O" in df.columns:
                 s["posterior"] = float(df["posterior_O"].max())
+            if csv_ra is not None and csv_dec is not None:
+                s["sep_astropath_vs_csv_arcsec"] = astropath_vs_csv_sep(
+                    posteriors, csv_ra, csv_dec
+                )
         except Exception:
             pass
     zp = out_dir / "zero_points.json"
@@ -146,6 +190,23 @@ def main():
                         help="Forwarded verbatim to master_run --outputs (default: all).")
     parser.add_argument("--keep-workdir", action="store_true",
                         help="Forward --keep-workdir to master_run.")
+    parser.add_argument(
+        "--use-localization-host",
+        action="store_true",
+        help="Forward to master_run: Phase 3a uses CSV host RA/Dec, not AstroPath pick.",
+    )
+    parser.add_argument(
+        "--use-astropath-host",
+        action="store_true",
+        help="Forward to master_run: Phase 3a uses AstroPath posteriors (overrides "
+             "galfit_config.yaml cutouts.use_localization_host).",
+    )
+    parser.add_argument(
+        "--list-file",
+        type=Path,
+        default=None,
+        help="FRB list: .txt (one name per line) or .csv with a 'frb' column (e.g. new_hosts_master.csv).",
+    )
     args = parser.parse_args()
 
     if not LOC_CSV.exists():
@@ -154,9 +215,20 @@ def main():
         raise SystemExit(f"[batch] large_cutouts/ not found at {CUTOUT_DIR}")
     loc_df = pd.read_csv(LOC_CSV, dtype=str).fillna("")
 
+    frb_names = list(args.frb or [])
+    if args.list_file and args.list_file.is_file():
+        if args.list_file.suffix.lower() == ".csv":
+            frb_names.extend(pd.read_csv(args.list_file)["frb"].astype(str).tolist())
+        else:
+            frb_names.extend(
+                ln.strip()
+                for ln in args.list_file.read_text().splitlines()
+                if ln.strip() and not ln.startswith("#")
+            )
+
     flux_files = sorted(CUTOUT_DIR.glob("*_flux.fits"))
-    if args.frb:
-        wanted = set(args.frb)
+    if frb_names:
+        wanted = set(frb_names)
         flux_files = [f for f in flux_files if f.stem.removesuffix("_flux") in wanted]
 
     # Tag string mirrors master_run's logic so we can pre-compute the per-FRB
@@ -194,13 +266,17 @@ def main():
         out_subdir = OUTPUT_DIR / f"{frb}_{tag}"
         if args.skip_existing and out_subdir.exists():
             print(f"{prefix} ... SKIP (Output already exists)")
-            results.append((frb, "SKIP", "exists", collect_summary(out_subdir)))
+            results.append((frb, "SKIP", "exists", collect_summary(out_subdir, loc["ra"], loc["dec"])))
             continue
 
         cmd = [sys.executable, str(MASTER),
                "--image", str(flux), "--invvar", str(invvar),
                "--ra", str(loc["ra"]), "--dec", str(loc["dec"]),
                "--outputs", *args.outputs]
+        if args.use_localization_host:
+            cmd.append("--use-localization-host")
+        if args.use_astropath_host:
+            cmd.append("--use-astropath-host")
         if loc["err_a"] is not None:
             cmd += ["--err-a-arcsec", str(loc["err_a"])]
         if loc["err_b"] is not None:
@@ -226,7 +302,7 @@ def main():
         with open(log_path, "w", encoding="utf-8") as lf:
             proc = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT)
         elapsed = time.time() - t_start
-        summary = collect_summary(out_subdir)
+        summary = collect_summary(out_subdir, loc["ra"], loc["dec"])
 
         if proc.returncode == 0:
             p_str = fmt(summary["posterior"], ".3f")
@@ -244,15 +320,16 @@ def main():
           f"{sum(1 for r in results if r[1] == 'FAIL')} fail, "
           f"{sum(1 for r in results if r[1] == 'SKIP')} skip)")
     print()
-    print(f"{'FRB':<14} {'status':<6} {'P(O)':>7} {'ZP_40':>8} {'N*':>4} "
-          f"{'ref_catalog':<24} note")
-    print("-" * 80)
+    print(f"{'FRB':<14} {'status':<6} {'P(O)':>7} {'d_host':>8} {'ZP_40':>8} {'N*':>4} "
+          f"{'ref_catalog':<20} note")
+    print("-" * 88)
     for frb, status, note, summary in results:
         p = fmt(summary.get("posterior"), ".3f")
+        sep = fmt(summary.get("sep_astropath_vs_csv_arcsec"), ".2f")
         zp = fmt(summary.get("zp_40px"), ".3f")
         n = fmt(summary.get("n_stars"))
         ref = summary.get("ref_cat") or ""
-        print(f"{frb:<14} {status:<6} {p:>7} {zp:>8} {n:>4} {ref:<24} {note}")
+        print(f"{frb:<14} {status:<6} {p:>7} {sep:>8} {zp:>8} {n:>4} {ref:<20} {note}")
 
 
 if __name__ == "__main__":

@@ -50,10 +50,12 @@ def parse_fitlog(log_path):
     return res
 
 # --- Main Configuration ---
-base_dir = r"C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main"
-crop_dir = os.path.join(base_dir, "cropped_host_galaxies")
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 psf_base_dir = os.path.join(base_dir, "psfs", "PSFEX + SExtractor", "final_center_psfs")
 runs_dir = os.path.join(base_dir, "tools", "galfit", "runs")
+
+sys.path.insert(0, os.path.join(base_dir, "scripts"))
+from pipeline_asset_paths import host_cutout_path, host_sigma_path
 
 targets = [
     "20190611B", "20190711A", "20200430A", "20220105A", "20220725A", "20221106A", 
@@ -74,8 +76,8 @@ magzero = 22.5
 
 for frb in targets:
     print(f"\n--- Processing {frb} ---")
-    img_path = os.path.join(crop_dir, f"{frb}_flux.fits")
-    sigma_path = os.path.join(crop_dir, f"{frb}_sigma.fits")
+    img_path = host_cutout_path(frb, base_dir)
+    sigma_path = host_sigma_path(frb, base_dir)
     psf_src = os.path.join(psf_base_dir, frb, f"{frb}_center_psf_25.fits")
     
     if not all(os.path.exists(p) for p in [img_path, sigma_path, psf_src]):

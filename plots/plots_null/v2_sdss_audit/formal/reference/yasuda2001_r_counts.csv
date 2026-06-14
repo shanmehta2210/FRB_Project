@@ -1,0 +1,13 @@
+mag_lo,mag_hi,N_r,n_per_deg2_per_half_mag,source
+15.5,16.0,452,1.98,"Yasuda et al. 2001 AJ 122 1104 Table 2 (northern equatorial stripe, Petrosian r*)"
+16.0,16.5,3050,10.8,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+16.5,17.0,5607,19.8,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+17.0,17.5,10532,37.3,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+17.5,18.0,18239,64.5,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+18.0,18.5,16890,113.2,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+18.5,19.0,29443,197.4,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+19.0,19.5,50206,336.5,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+19.5,20.0,80324,538.4,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+20.0,20.5,123213,825.9,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+20.5,21.0,181428,1216,"Yasuda et al. 2001 AJ 122 1104 Table 2"
+21.0,21.5,242743,1627,"Yasuda et al. 2001 AJ 122 1104 Table 2"

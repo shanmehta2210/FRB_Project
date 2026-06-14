@@ -1,0 +1,62 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\pagestyle{empty}
+\setlength{\parskip}{0pt}
+\setlength{\floatsep}{0.35em}
+\setlength{\textfloatsep}{0.45em}
+
+\newcommand{\plotpair}[4]{%
+  \begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#1}
+      \caption*{\small #2}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{#3}
+      \caption*{\small #4}
+    \end{subfigure}
+  \end{figure}
+}
+
+\newcommand{\plotsingle}[2]{%
+  \begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{#1}
+    \caption*{\small #2}
+  \end{figure}
+}
+
+\begin{document}
+\begin{center}
+  {\LARGE Pipeline null diagnostics}
+\end{center}
+\vspace{0.5em}
+
+\section{Inclination bin fractions}
+\plotsingle{figures/hist_inclination_frb_vs_sdss_v1_allsky_modelmr_inclusive.png}{FRB vs SDSS (inclusive)}
+
+\section{Inclination CDF (inclusive)}
+\plotpair{figures/null_cdf_pipeline_legacy_v1_allsky_modelmr_inclusive.png}{Legacy}{figures/null_cdf_pipeline_sdss_v1_allsky_modelmr_inclusive.png}{SDSS}
+
+\section{Inclination CDF (strict)}
+\plotpair{figures/null_cdf_pipeline_legacy_v1_allsky_modelmr_strict.png}{Legacy}{figures/null_cdf_pipeline_sdss_v1_allsky_modelmr_strict.png}{SDSS}
+
+\section{Random-host inclination test (inclusive)}
+\plotpair{figures/random_host_inclination_legacy_v1_allsky_modelmr_inclusive.png}{Legacy}{figures/random_host_inclination_sdss_v1_allsky_modelmr_inclusive.png}{SDSS}
+
+\section{$R_e$ CDF (inclusive)}
+\plotpair{figures/null_cdf_pipeline_legacy_re_v1_allsky_modelmr_inclusive.png}{Legacy}{figures/null_cdf_pipeline_sdss_re_v1_allsky_modelmr_inclusive.png}{SDSS}
+
+\section{S\'ersic $n$ CDF (inclusive)}
+\plotpair{figures/null_cdf_pipeline_legacy_n_v1_allsky_modelmr_inclusive.png}{Legacy}{figures/null_cdf_pipeline_sdss_n_v1_allsky_modelmr_inclusive.png}{SDSS}
+
+\section{Pipeline vs master GALFIT}
+\plotpair{figures/delta_inc_pipeline_vs_master.png}{$\Delta i$}{figures/delta_re_pipeline_vs_master.png}{$\Delta R_e$}
+\plotsingle{figures/delta_n_pipeline_vs_master.png}{$\Delta n$}
+
+\end{document}

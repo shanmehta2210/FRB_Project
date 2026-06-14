@@ -1,5 +1,11 @@
-# Phase 3b defaults (master_run copies/overrides into each workdir).
+# Phase 3 defaults (master_run reads cutouts block for Phase 3a; 3b uses plate_scale etc.)
 # mag_zeropoint is normally set from Phase-2 zero_points.json ("zp_aper_40px").
+cutouts:
+  # When true, Phase 3a centres on master_run --ra/--dec (localization host) and
+  # ignores astropath_posteriors.csv for the cutout target. AstroPath still runs in Phase 2.
+  use_localization_host: true
+  min_astropath_posterior: 0.05
+
 plate_scale_x: 0.262
 plate_scale_y: 0.262
 mag_min: 8.0

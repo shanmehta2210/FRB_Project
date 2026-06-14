@@ -1,0 +1,8 @@
+metric,value
+n_sample,50000.0
+frac_lnl_exp_winner,0.43798
+frac_mag_proxy_exp_winner,0.43834
+frac_fracDeV_exp,0.51864
+agreement_lnl_vs_mag_proxy,0.99876
+agreement_lnl_vs_fracDeV_lt_half,0.81334
+agreement_mag_proxy_vs_fracDeV,0.81286

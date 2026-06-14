@@ -2,7 +2,7 @@
 Full GALFIT pipeline with proper sigma maps from inverse variance images.
 
 Steps:
-1. Convert large_cutouts invvar -> sigma, crop to match cropped_host_galaxies
+1. Verify pipeline host cutouts and host_sigma.fits under pipeline_scripts/Output/
 2. Setup & run GALFIT Stage 1 (no-PSF) with sigma in C) parameter
 3. Setup & run GALFIT Stage 2 (with-PSF) using Stage 1 results as initial guesses
 4. Compile results to galfit_sigma_metrics_summary.csv
@@ -19,10 +19,18 @@ import numpy as np
 from astropy.io import fits
 from astropy.wcs import WCS
 
+from pipeline_asset_paths import (
+    frb_from_guess_filename,
+    host_cutout_path,
+    host_sigma_path,
+    iter_host_cutouts,
+    repo_root,
+)
+
 
 # ---------- path helpers ----------
 def project_root():
-    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    return repo_root()
 
 def to_wsl(path):
     if path is None or path == 'none':
@@ -40,80 +48,27 @@ def get_platescale(wcs):
 
 
 # ================================================================
-# STEP 1: Convert invvar -> sigma, crop, and save
+# STEP 1: Verify pipeline host cutouts and sigma maps
 # ================================================================
-def step1_create_cropped_sigma(root):
+def step1_check_pipeline_assets(root):
     print("\n" + "="*70)
-    print("STEP 1: Creating cropped sigma maps from inverse variance images")
+    print("STEP 1: Verify pipeline host cutouts and sigma maps")
     print("="*70)
 
-    large_dir = os.path.join(root, "large_cutouts")
-    crop_dir = os.path.join(root, "cropped_host_galaxies")
-    csv_path = os.path.join(root, "master_frb_summary.csv")
+    ready = 0
+    missing_sigma = []
+    for frb, _cutout in iter_host_cutouts(root):
+        sigma = host_sigma_path(frb, root)
+        if os.path.exists(sigma):
+            ready += 1
+        else:
+            missing_sigma.append(frb)
 
-    # Read crop coordinates
-    crops = {}
-    with open(csv_path, 'r') as f:
-        for row in csv.DictReader(f):
-            frb = row['FRB']
-            if row['xmin'] and row['xmax'] and row['ymin'] and row['ymax']:
-                crops[frb] = {
-                    'xmin': int(float(row['xmin'])),
-                    'xmax': int(float(row['xmax'])),
-                    'ymin': int(float(row['ymin'])),
-                    'ymax': int(float(row['ymax']))
-                }
-
-    created = 0
-    for frb, c in crops.items():
-        invvar_path = os.path.join(large_dir, f"{frb}_invvar.fits")
-        sigma_out = os.path.join(crop_dir, f"{frb}_sigma.fits")
-
-        if not os.path.exists(invvar_path):
-            print(f"  [SKIP] {frb}: invvar not found")
-            continue
-
-        with fits.open(invvar_path) as hdu:
-            invvar = hdu[0].data.astype(np.float64)
-            header = hdu[0].header
-
-        # Open flux image to check units (no scaling needed for nanomaggies)
-        flux_path = os.path.join(crop_dir, f"{frb}_flux.fits")
-        
-        scalar = 1.0
-
-        # sigma = scalar / sqrt(invvar), handle zeros and negatives
-        valid = invvar > 0
-        sigma = np.zeros_like(invvar)
-        sigma[valid] = scalar / np.sqrt(invvar[valid])
-        # For invalid pixels (invvar <= 0 or NaN), use a large sigma to downweight
-        sigma[~valid] = 1e10
-        sigma[np.isnan(sigma)] = 1e10
-
-        # Crop with same DS9 convention as crop_images.py
-        x1 = c['xmin'] - 1
-        x2 = c['xmax']
-        y1 = c['ymin'] - 1
-        y2 = c['ymax']
-
-        if x1 < 0 or y1 < 0 or x2 > sigma.shape[1] or y2 > sigma.shape[0]:
-            print(f"  [ERROR] {frb}: crop bounds out of range")
-            continue
-
-        cropped_sigma = sigma[y1:y2, x1:x2]
-
-        # Update WCS CRPIX
-        if 'CRPIX1' in header:
-            header['CRPIX1'] -= x1
-        if 'CRPIX2' in header:
-            header['CRPIX2'] -= y1
-
-        fits.writeto(sigma_out, cropped_sigma.astype(np.float32), header, overwrite=True)
-        created += 1
-        print(f"  [OK] {frb}: sigma map {cropped_sigma.shape} saved")
-
-    print(f"\nCreated {created} cropped sigma maps in {crop_dir}")
-    return created
+    total = ready + len(missing_sigma)
+    for frb in missing_sigma:
+        print(f"  [MISSING] {frb}: host_sigma.fits")
+    print(f"\n{ready}/{total} pipeline hosts have host_cutout.fits + host_sigma.fits")
+    return ready
 
 
 # ================================================================
@@ -124,7 +79,6 @@ def step2_setup_stage1(root):
     print("STEP 2: Setting up GALFIT Stage 1 (no-PSF) with sigma maps")
     print("="*70)
 
-    img_dir = os.path.join(root, "cropped_host_galaxies")
     runs_dir = os.path.join(root, "Galfit", "runs")
     guesses_csv = os.path.join(root, "csv_archive/initial_guesses.csv")
     fwhm_csv = os.path.join(root, "psf_fwhm_summary.csv")
@@ -146,9 +100,9 @@ def step2_setup_stage1(root):
     setup_count = 0
     for row in rows:
         filename = row['filename']
-        frb = filename.replace("_flux.fits", "")
-        imgfile = os.path.join(img_dir, filename)
-        sigma_file = os.path.join(img_dir, f"{frb}_sigma.fits")
+        frb = frb_from_guess_filename(filename)
+        imgfile = host_cutout_path(frb, root)
+        sigma_file = host_sigma_path(frb, root)
 
         if not os.path.exists(imgfile):
             print(f"  [SKIP] {frb}: flux image not found")
@@ -359,7 +313,6 @@ def step5_setup_stage2(root):
 
     runs_dir = os.path.join(root, "Galfit", "runs")
     psf_dir = os.path.join(root, "psfs", "downsampled_psfs")
-    crop_dir = os.path.join(root, "cropped_host_galaxies")
 
     frbs = sorted([d for d in os.listdir(runs_dir) if os.path.isdir(os.path.join(runs_dir, d))])
 
@@ -401,7 +354,7 @@ def step5_setup_stage2(root):
             continue
 
         # Check sigma exists
-        sigma_src = os.path.join(crop_dir, f"{frb}_sigma.fits")
+        sigma_src = host_sigma_path(frb, root)
         if not os.path.exists(sigma_src):
             print(f"  [SKIP] {frb}: sigma map not found")
             continue
@@ -570,8 +523,8 @@ def main():
     root = project_root()
     print(f"Project root: {root}")
 
-    # Step 1: Create cropped sigma maps
-    step1_create_cropped_sigma(root)
+    # Step 1: Verify pipeline host assets
+    step1_check_pipeline_assets(root)
 
     # Step 2: Setup Stage 1 feedme files
     step2_setup_stage1(root)

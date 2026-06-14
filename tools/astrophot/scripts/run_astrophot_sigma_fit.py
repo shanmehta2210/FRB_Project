@@ -22,9 +22,12 @@ def get_pixelscale(header: Any) -> float:
             return 0.258
 
 
-def load_flux_and_variance(frb_name: str, galaxy_dir: str) -> tuple[np.ndarray, np.ndarray, float]:
-    flux_path = os.path.join(galaxy_dir, f"{frb_name}_flux.fits")
-    sigma_path = os.path.join(galaxy_dir, f"{frb_name}_sigma.fits")
+def load_flux_and_variance(frb_name: str, root: str | None = None) -> tuple[np.ndarray, np.ndarray, float]:
+    flux_path = os.path.join("pipeline_scripts", "Output", f"{frb_name}_all", "host_cutout.fits")
+    sigma_path = os.path.join("pipeline_scripts", "Output", f"{frb_name}_all", "host_sigma.fits")
+    if root:
+        flux_path = os.path.join(root, flux_path)
+        sigma_path = os.path.join(root, sigma_path)
 
     with fits.open(flux_path) as hdu:
         flux_data = np.array(hdu[0].data, dtype=np.float64)
@@ -50,12 +53,23 @@ def load_psf(frb_name: str, pixelscale: float, psf_dir: str) -> ap.image.PSF_Ima
     return ap.image.PSF_Image(data=psf_data, pixelscale=pixelscale)
 
 
-def run_fit(use_psf: bool, output_csv: str, fixed_n: float | None = None) -> pd.DataFrame:
-    galaxy_dir = "cropped_host_galaxies"
-    psf_dir = "psfs/downsampled_psfs"
+def _pipeline_frb_names() -> list[str]:
+    out_root = os.path.join("pipeline_scripts", "Output")
+    if not os.path.isdir(out_root):
+        return []
+    names = []
+    for entry in sorted(os.listdir(out_root)):
+        if not entry.endswith("_all"):
+            continue
+        cutout = os.path.join(out_root, entry, "host_cutout.fits")
+        if os.path.isfile(cutout):
+            names.append(entry.replace("_all", ""))
+    return names
 
-    galaxy_files = sorted([f for f in os.listdir(galaxy_dir) if f.endswith("_flux.fits")])
-    frb_names = [f.replace("_flux.fits", "") for f in galaxy_files]
+
+def run_fit(use_psf: bool, output_csv: str, fixed_n: float | None = None) -> pd.DataFrame:
+    psf_dir = "psfs/downsampled_psfs"
+    frb_names = _pipeline_frb_names()
 
     print(f"Found {len(frb_names)} galaxies")
     print(f"Fit mode: {'with PSF' if use_psf else 'without PSF'}")
@@ -70,7 +84,7 @@ def run_fit(use_psf: bool, output_csv: str, fixed_n: float | None = None) -> pd.
         print(f"\n{'=' * 60}")
         print(f"Processing {frb_name}")
 
-        flux_data, variance_data, pixelscale = load_flux_and_variance(frb_name, galaxy_dir)
+        flux_data, variance_data, pixelscale = load_flux_and_variance(frb_name)
 
         target = ap.image.Target_Image(
             data=flux_data,

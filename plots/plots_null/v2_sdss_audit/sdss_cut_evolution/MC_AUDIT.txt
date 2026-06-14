@@ -1,0 +1,9 @@
+Production null curve: cdf_envelope(pool, n_sample=N_FRB, n_draws=10000)
+  Each draw: WITHOUT replacement, sample n_sample cos(i) values from pool, build step-function CDF, evaluate on 100-point grid; mean over 10000 draws.
+  Default N_FRB = 41 (actual per mag in mc_audit.csv).
+
+Two ways to read the plot (do not confuse):
+  cdf_at_cosi_0.5  = y-value at x=0.5  (~0.38 for mag21: fraction with cos i < 0.5)
+  x_at_cdf_0.5     = x-value where CDF crosses 0.5 (~0.58: median cos i)
+
+Subsampling 41 from 27k does NOT move cdf_at_cosi_0.5 to ~0.65; that would be mis-reading x_at_cdf_0.5 as the first quantity.

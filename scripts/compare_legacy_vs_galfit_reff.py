@@ -172,7 +172,7 @@ def main() -> None:
     out_csv = "legacy_vs_galfit_reff_comparison.csv"
     out.to_csv(out_csv, index=False)
 
-    plot_dir = "plots/plots_legacy_cdf"
+    plot_dir = "plots/plots_null"
     os.makedirs(plot_dir, exist_ok=True)
     out_png = f"{plot_dir}/legacy_vs_galfit_reff_scatter.png"
     out_pdf = f"{plot_dir}/legacy_vs_galfit_reff_scatter.pdf"

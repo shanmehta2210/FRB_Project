@@ -18,7 +18,7 @@ from null_catalog_utils import cosi_array_from_df, prepare_null_sample
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SDSS = REPO_ROOT / "SDSS_catalog_v1_allsky_modelmr.csv"
-DEFAULT_OUT_SUBDIR = "plots/plots_legacy_cdf/v1_null_plots"
+DEFAULT_OUT_SUBDIR = "plots/plots_null/v1_null_plots"
 
 np.random.seed(42)
 
@@ -98,7 +98,7 @@ def main():
     parser.add_argument("--mag-column", default="rmag")
     parser.add_argument(
         "--sample-mode",
-        choices=("strict", "inclusive"),
+        choices=("strict",),
         default="strict",
     )
     parser.add_argument("--q0", type=float, default=0.2)

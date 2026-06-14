@@ -1,0 +1,47 @@
+frb,ra_deg,dec_deg,in_cohort_46,in_batch_41_list,paired_cutout_on_disk,list_tags,cutout_status,cutout_source,cutout_layer,cutout_resampled,cutout_ok,flux_median,invvar_good_frac,validation_issues,pipeline,P_O_max,host_sep_arcsec,nearest_src_sep_arcsec,has_output_dir,has_galfit,has_posteriors,has_zero_points,batch_exit,batch_elapsed_s,batch_zp_aper_40px,batch_n_cal_stars,batch_ref_catalog,notes,updated_utc
+20121102A,82.99454166666665,33.14789722222222,True,False,True,,ok,ps1,,,,,,,host_missing,1.7245604843882732e-147,30.352234886478044,7.28,True,False,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20180301A,93.227,4.671,True,False,True,,ok,ps1,,,,,,,partial,,,,True,True,False,False,not_in_batch,,,,,on disk,2026-05-24 19:55:14 UTC
+20190523A,207.064,72.471,True,False,True,,ok,,,,,,,,complete,0.9854776879534114,0.9539658186543394,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20190614D,65.076,73.707,True,False,True,,ok,ps1,,,,,,,host_missing,,,11.49,True,False,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20201123A,263.66,-50.764,True,False,False,no_coverage,no_coverage,,,,,,,,partial,,,,True,False,False,False,skipped_no_cutout,,,,,No Legacy/PS1/DES coverage at host position; manual cutout required.,2026-05-24 19:55:14 UTC
+20201124A,77.015,26.061,True,False,True,,ok,ps1,,,,,,,partial,,,,True,True,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20220204A,274.228,69.722,True,False,True,,ok,legacy,,,,,,,host_missing,0.7269819502530037,47.61802470231601,6.09,True,False,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20220222C,203.904,-28.027,True,False,True,,ok,ps1,,,,,,,partial,,,19.22,True,False,False,False,not_in_batch,,,,,on disk,2026-05-24 19:55:14 UTC
+20220224C,166.678,-22.94,True,False,True,,ok,ps1,,,,,,,partial,,,10.14,True,False,False,False,not_in_batch,,,,,on disk,2026-05-24 19:55:14 UTC
+20220418A,219.106,70.095,True,False,True,,ok,legacy,,,,,,,complete,0.9372749048620568,1.747160675787625,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20220506D,318.045,72.827,True,False,True,,ok,ps1,,,,,,,host_missing,,,12.23,True,False,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20220717A,293.304,-19.288,True,False,True,,ok,ps1,,,,,,,complete,0.9917314515928344,1.7682077342782636,,True,True,True,True,not_in_batch,,,,,on disk,2026-05-24 19:55:14 UTC
+20220726A,73.946,69.93,True,False,True,,ok,ps1,,,,,,,host_missing,,,19.09,True,False,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20221029A,141.966,72.452,True,False,True,,ok,,,,,,,,partial,,,20.0,True,True,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20221101B,342.216,70.682,True,False,True,,ok,ps1,,,,,,,complete,0.9907451688248814,5.250671429434083,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20221113A,71.411,70.307,True,False,True,,ok,ps1,,,,,,,host_missing,,,16.96,True,False,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20221116A,21.211,72.654,True,False,True,,ok,ps1,,,,,,,partial,,,,True,True,False,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20221219A,257.63,71.627,True,False,True,,ok,legacy,,,,,,,complete,0.952880298378998,1.5615305091665583,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230124A,231.917,70.968,True,False,True,,ok,legacy,,,,,,,complete,0.994187543509118,1.5487466487027635,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230125D,150.205,-31.545,True,False,False,no_coverage,no_coverage,,,,,,,,partial,,,,True,False,False,False,skipped_no_cutout,,,,,No Legacy/PS1/DES coverage at host position; manual cutout required.,2026-05-24 19:55:14 UTC
+20230307A,177.782,71.695,True,False,True,,ok,legacy,,,,,,,complete,0.9964801131462472,1.1793941653166347,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230501A,340.027,70.922,True,False,True,,ok,ps1,,,,,,,partial,,,,True,True,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230521B,351.036,71.138,True,False,True,,ok,,,,,,,,partial,,,22.54,True,True,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230613A,356.853,-27.053,True,False,True,,ok,legacy,,,,,,,complete,0.9967531899294416,0.6325689672854734,,True,True,True,True,not_in_batch,,,,,on disk,2026-05-24 19:55:14 UTC
+20230626A,235.63,71.134,True,False,True,,ok,legacy,,,,,,,complete,0.9978771320250094,1.2436478976607865,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230628A,166.787,72.282,True,False,True,,ok,legacy,,,,,,,complete,0.916322804906482,2.29274769997429,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230712A,167.36,72.558,True,False,True,,ok,legacy,,,,,,,complete,0.9826887169128402,0.23476274761511146,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230718A,128.16191666666666,-40.45194444444445,True,False,False,no_coverage,no_coverage,,,,,,,,partial,,,,True,False,False,False,skipped_no_cutout,,,,,No Legacy/PS1/DES coverage at host position; manual cutout required.,2026-05-24 19:55:14 UTC
+20230731A,174.60145833333334,-56.79905555555556,True,False,False,no_coverage,no_coverage,,,,,,,,partial,,,,True,False,False,False,skipped_no_cutout,,,,,No Legacy/PS1/DES coverage at host position; manual cutout required.,2026-05-24 19:55:14 UTC
+20230814B,335.976,73.026,True,False,True,,ok,ps1,,,,,,,host_missing,,,7.28,True,False,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230907D,187.142,8.658,True,False,True,,ok,legacy,,,,,,,complete,0.9923567703979582,2.6693081792300517,,True,True,True,True,not_in_batch,,,,,on disk,2026-05-24 19:55:14 UTC
+20230913,305.037,70.793,True,False,True,,ok,ps1,,,,,,,partial,,,,True,True,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20230930A,10.507,41.417,True,False,False,no_coverage,no_coverage,,,,,,,,missing,,,,False,False,False,False,skipped_no_cutout,,,,,No Legacy/PS1/DES coverage at host position; manual cutout required.,2026-05-24 19:55:14 UTC
+20231020B,57.278,-37.77,True,False,True,,ok,legacy,,,,,,,complete,0.7461888227218055,0.697367396974634,,True,True,True,True,not_in_batch,,,,,on disk,2026-05-24 19:55:14 UTC
+20231120A,143.985,73.285,True,False,True,,ok,legacy,,,,,,,complete,0.9987212625270326,0.49787384557446,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20231123B,242.538,70.785,True,False,True,,ok,legacy,,,,,,,complete,0.9891182167228898,3.7574283915921747,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20231220A,123.909,73.66,True,False,True,,ok,legacy,,,,,,,complete,0.9952301858963076,1.737106158721005,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20240104A,348.874,72.821,True,False,True,,ok,,,,,,,,complete,6.190347517262477e-55,21.882441089872277,6.88,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20240119A,224.467,71.612,True,False,True,,ok,legacy,,,,,,,complete,0.3187646354620745,4.911165632677693,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20240123A,68.263,71.945,True,False,True,,ok,,,,,,,,host_missing,,,5.29,True,False,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20240203,312.621,73.9,True,False,True,,ok,ps1,,,,,,,partial,,,,True,True,False,False,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20240213A,166.168,74.075,True,False,True,,ok,legacy,,,,,,,complete,0.8388989721227641,1.195588985510338,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20240215A,268.441,70.232,True,False,True,,ok,legacy,,,,,,,complete,0.988147438120027,1.16247918687463,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20240229A,169.984,70.676,True,False,True,,ok,legacy,,,,,,,complete,0.8996403111316564,1.9414303163579993,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20240304B,182.997,11.813,True,False,True,,ok,,,,,,,,complete,9.133648902137776e-07,11.788398688800157,11.09,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC
+20250518,207.992,71.282,True,False,True,,ok,,,,,,,,complete,0.8963514983692379,3.050572419077236,,True,True,True,True,not_in_batch,,,,,,2026-05-24 19:55:14 UTC

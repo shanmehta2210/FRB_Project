@@ -1,21 +1,18 @@
 
 import os
-import glob
 import subprocess
 import sys
 
-# Define directory and file pattern
-# Use forward slashes for compatibility with DS9 (TCL interpreter)
-# IMPORTANT: Use absolute path for DATA_DIR to avoid TCL errors
-DATA_DIR = os.path.abspath("cropped_host_galaxies")
-PATTERN = "*_flux.fits"
+from pipeline_asset_paths import iter_host_cutouts, repo_root
+
+PATTERN = "host_cutout.fits"
 
 def main():
-    # Find all matching files
-    files = sorted(glob.glob(os.path.join(DATA_DIR, PATTERN)))
+    root = repo_root()
+    files = [path for _, path in iter_host_cutouts(root)]
     
     if not files:
-        print(f"No files found matching {PATTERN} in {DATA_DIR}")
+        print(f"No {PATTERN} files found under pipeline_scripts/Output/*_all/")
         return
 
     print(f"Found {len(files)} files. Opening in batches of 4.")

@@ -2,14 +2,14 @@ import os
 import sys
 import csv
 
-# Add the project root to the python path so we can import Galfit.galfit_wrap
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from Galfit.galfit_wrap import run
+from pipeline_asset_paths import host_cutout_path, repo_root
 
 def test_1x_psf():
-    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    imgfile = os.path.join(project_root, "cropped_host_galaxies", "20171020A_flux.fits")
+    project_root = repo_root()
+    imgfile = host_cutout_path("20171020A", project_root)
     psffile = os.path.join(project_root, "psfs", "downsampled_psfs", "20171020A_1x_psf.fits")
     outdir = os.path.join(project_root, "Galfit", "test_1x_psf_20171020A")
     

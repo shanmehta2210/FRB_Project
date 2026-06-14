@@ -1,12 +1,15 @@
 """
 Build SDSS DR16 null catalog (v1) for inclination CDF comparisons.
 
-Magnitude: ``rmag`` = ``cmodelMag_r`` (composite model magnitude in r band).
-Axis ratio: ``expAB_r`` (exponential disk b/a); ``best_model_ba_r`` from the deV or exp
-profile whose ``modelMag_r`` is closer (SDSS single-profile winner in r; Stoughton et al. 2002).
+Magnitude: ``rmag`` = ``cmodelMag_r`` (composite, kept for compatibility). Null CDF cuts
+use ``modelMag_r`` and ``expAB_r`` after dropping deV profile winners
+(``lnLExp_r > lnLDeV_r``).
 
 Footprint: joint Legacy∩SDSS Dec range (dec -30 to +90 deg), primary detections,
 type=GALAXY. Random sampling via chunked SQL + in-memory shuffle.
+
+For full SDSS footprint and unbiased HTM random sampling, use
+``build_sdss_null_catalog_v2.py`` (writes ``SDSS_catalog_v2_fullsky_modelmr.csv``).
 """
 
 from __future__ import annotations
@@ -29,6 +32,7 @@ from null_catalog_utils import (
     JOINT_DEC_MIN,
     MAG_LIMIT,
     Q0,
+    assign_sdss_profile_winner_columns,
     footprint_summary,
     prepare_null_sample,
 )
@@ -45,11 +49,17 @@ def _sql_chunk(ra_min: float, ra_max: float, top_n: int) -> str:
         p.cmodelMag_r AS cmodelMag_r,
         p.petroMag_r AS petroMag_r,
         p.modelMag_r AS modelMag_r,
+        p.modelMag_u AS modelMag_u,
+        p.modelMag_g AS modelMag_g,
         p.deVMag_r AS deVMag_r,
         p.expMag_r AS expMag_r,
+        p.lnLDeV_r AS lnLDeV_r,
+        p.lnLExp_r AS lnLExp_r,
         p.deVAB_r AS deVAB_r,
         p.expAB_r AS expAB_r,
         p.fracDeV_r AS fracDeV_r,
+        p.expRad_r AS expRad_r,
+        p.deVRad_r AS deVRad_r,
         p.type AS type
     FROM PhotoObj AS p
     WHERE p.ra >= {ra_min} AND p.ra < {ra_max}
@@ -105,6 +115,8 @@ def build_catalog(df: pd.DataFrame) -> pd.DataFrame:
     expab = pd.to_numeric(df["expAB_r"], errors="coerce")
     devab = pd.to_numeric(df["deVAB_r"], errors="coerce")
     model_mag = pd.to_numeric(df["modelMag_r"], errors="coerce")
+    model_mag_u = pd.to_numeric(df.get("modelMag_u"), errors="coerce")
+    model_mag_g = pd.to_numeric(df.get("modelMag_g"), errors="coerce")
     dev_mag = pd.to_numeric(df["deVMag_r"], errors="coerce")
     exp_mag = pd.to_numeric(df["expMag_r"], errors="coerce")
     frac_dev = pd.to_numeric(df["fracDeV_r"], errors="coerce")
@@ -113,6 +125,13 @@ def build_catalog(df: pd.DataFrame) -> pd.DataFrame:
     d_exp = np.abs(exp_mag - model_mag)
     use_dev = d_dev <= d_exp
     best_model_ba = np.where(use_dev, devab, expab)
+    exp_re = pd.to_numeric(df.get("expRad_r"), errors="coerce")
+    dev_re = pd.to_numeric(df.get("deVRad_r"), errors="coerce")
+    best_model_re = np.where(use_dev, dev_re, exp_re)
+    n_eff = 1.0 + 3.0 * frac_dev
+
+    ln_dev = pd.to_numeric(df.get("lnLDeV_r"), errors="coerce")
+    ln_exp = pd.to_numeric(df.get("lnLExp_r"), errors="coerce")
 
     out = pd.DataFrame(
         {
@@ -121,10 +140,22 @@ def build_catalog(df: pd.DataFrame) -> pd.DataFrame:
             "rmag": rmag,
             "petroMag_r": pd.to_numeric(df.get("petroMag_r"), errors="coerce"),
             "modelMag_r": model_mag,
+            "modelMag_u": model_mag_u,
+            "modelMag_g": model_mag_g,
+            "deVMag_r": dev_mag,
+            "expMag_r": exp_mag,
+            "lnLDeV_r": ln_dev,
+            "lnLExp_r": ln_exp,
+            "u_r": model_mag_u - model_mag,
+            "g_r": model_mag_g - model_mag,
             "expAB_r": expab,
             "deVAB_r": devab,
             "best_model_ba_r": best_model_ba,
             "fracDeV_r": frac_dev,
+            "expRad_r": exp_re,
+            "deVRad_r": dev_re,
+            "best_model_re_r": best_model_re,
+            "n_eff_r": n_eff,
             "b_a": expab,
             "sdss_type": pd.to_numeric(df.get("type"), errors="coerce"),
         }
@@ -142,6 +173,8 @@ def build_catalog(df: pd.DataFrame) -> pd.DataFrame:
         & (out["best_model_ba_r"] <= 1.0)
     )
     out = out.loc[good].copy().reset_index(drop=True)
+    if out["lnLExp_r"].notna().any():
+        out = assign_sdss_profile_winner_columns(out)
     return out
 
 

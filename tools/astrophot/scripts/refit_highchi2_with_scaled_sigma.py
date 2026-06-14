@@ -16,8 +16,8 @@ def get_pixelscale(header):
 
 
 def load_flux_sigma_pixelscale(frb_name):
-    flux_path = os.path.join("cropped_host_galaxies", f"{frb_name}_flux.fits")
-    sigma_path = os.path.join("cropped_host_galaxies", f"{frb_name}_sigma.fits")
+    flux_path = os.path.join("pipeline_scripts", "Output", f"{frb_name}_all", "host_cutout.fits")
+    sigma_path = os.path.join("pipeline_scripts", "Output", f"{frb_name}_all", "host_sigma.fits")
 
     with fits.open(flux_path) as hdu:
         flux_data = np.array(hdu[0].data, dtype=np.float64)
@@ -56,7 +56,7 @@ def main():
 
     out_rows = []
     scaling_rows = []
-    scaled_sigma_dir = "cropped_host_galaxies_sigma_scaled_highchi2"
+    scaled_sigma_dir = "tools/astrophot/results/host_sigma_scaled_highchi2"
     os.makedirs(scaled_sigma_dir, exist_ok=True)
 
     for frb_name, sigma_scale in scale_map.items():

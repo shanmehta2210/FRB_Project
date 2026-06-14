@@ -35,3 +35,8 @@ astropath:
   # like the ones in 20200430A (SNR_WIN=0.93 at 0.05") and 20230708A
   # (SNR_WIN=0.73 at 0.03").
   target_snr_min: 0.0
+
+# Phase 2 diagnostics (written into workdir on every run unless disabled)
+diagnostics:
+  geometry_plots: true   # sep_vs_shape_r.png, sep_vs_theta_max_phi.png
+  field_depth: true      # 5σ m_lim at production aperture → zero_points.json field_depth

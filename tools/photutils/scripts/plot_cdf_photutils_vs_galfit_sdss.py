@@ -208,7 +208,7 @@ def main():
     parser.add_argument("--mag-column", default="rmag")
     parser.add_argument(
         "--sample-mode",
-        choices=("strict", "inclusive"),
+        choices=("strict",),
         default="strict",
     )
     parser.add_argument("--q0", type=float, default=0.2)

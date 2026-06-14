@@ -1,0 +1,10 @@
+metric,value
+n_rows,1900000.0
+strict_mag20_pool,55679.0
+min_strict_mag20_required,50000.0
+lnL_coverage_frac,1.0
+n_duplicate_objID,0.0
+dec_min,-21.7629394378774
+dec_max,84.5019334531463
+ra_min,0.0001081344570081
+ra_max,359.999957386233

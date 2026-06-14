@@ -16,6 +16,8 @@ if str(_SCRIPTS) not in sys.path:
 
 from null_catalog_utils import (
     cosi_array_from_df,
+    LEGACY_GR_MAX_CDF,
+    SDSS_UR_MAX_CDF,
     prepare_null_sample,
 )
 
@@ -24,7 +26,7 @@ np.random.seed(42)
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SDSS = REPO_ROOT / "SDSS_catalog_v1_allsky_modelmr.csv"
 DEFAULT_LEGACY = REPO_ROOT / "LS_catalog_v1_allsky_modelmr.csv"
-DEFAULT_OUT_SUBDIR = "plots/plots_legacy_cdf/v1_null_plots"
+DEFAULT_OUT_SUBDIR = "plots/plots_null/v1_null_plots"
 
 
 def cdf_envelope(reference_vals: np.ndarray, n_sample: int, n_draws: int = 10000):
@@ -83,14 +85,19 @@ def main():
     parser.add_argument("--mag-column", default="rmag", help="Model r: rmag (SDSS) / tractor_mag_r (Legacy).")
     parser.add_argument(
         "--sample-mode",
-        choices=("strict", "inclusive"),
+        choices=("strict",),
         default="strict",
-        help="strict: q>q0 before CDF; inclusive: allow q<=q0 -> cos(i)=0.",
+        help="strict: b/a > q0 before CDF (inclusive mode removed from plots).",
+    )
+    parser.add_argument(
+        "--sdss-mag-column",
+        default="modelMag_r",
+        help="SDSS brightness column for mag cut (best single-profile r).",
     )
     parser.add_argument(
         "--sdss-q-column",
         default="expAB_r",
-        help="SDSS axis ratio: expAB_r (exponential only) or best_model_ba_r (deV vs exp winner).",
+        help="SDSS axis ratio for Hubble i (default expAB_r after lnL exp-winner cut).",
     )
     parser.add_argument("--q0", type=float, default=0.2)
     parser.add_argument("--mc-draws", type=int, default=10000)
@@ -126,11 +133,12 @@ def main():
     sdss_cut = prepare_null_sample(
         sdss,
         sample_mode=args.sample_mode,
-        mag_column=args.mag_column,
+        mag_column=args.sdss_mag_column,
         mag_limit=args.mag_limit,
         q0=args.q0,
         q_column=args.sdss_q_column,
         is_legacy=False,
+        sdss_ur_max=SDSS_UR_MAX_CDF,
     )
     legacy_cut = prepare_null_sample(
         legacy,
@@ -140,6 +148,7 @@ def main():
         q0=args.q0,
         exclude_legacy_types=args.exclude_types,
         is_legacy=True,
+        legacy_gr_max=LEGACY_GR_MAX_CDF,
     )
 
     sdss_cosi = cosi_array_from_df(sdss_cut, q_col=args.sdss_q_column, q0=args.q0)

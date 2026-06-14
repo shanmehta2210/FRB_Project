@@ -1,0 +1,3 @@
+20221101B — real host ~5.25 arcsec from CSV position; default 5 arcsec nearest-galaxy cut can miss it. Re-run with --use-astropath-host or wider --max-host-sep-arcsec if revisiting.
+
+20220501C — signal localization; trial AstroPath+GALFIT 2026-05-25 with P(O)=0.67, P(U)=0.33 (not secure). Output removed; case documented in pipeline_scripts/docs/EXCLUDED_RUNS.md. Not in pipeline_galfit_results.csv (62-host production set).

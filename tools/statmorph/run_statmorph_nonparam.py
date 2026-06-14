@@ -66,18 +66,24 @@ def make_segmap(image_sub: np.ndarray, std_bg: float) -> tuple[np.ndarray, int]:
 
 
 def run() -> pd.DataFrame:
-    galaxy_dir = "cropped_host_galaxies"
     psf_dir = "psfs/downsampled_psfs"
-    galaxy_files = sorted([f for f in os.listdir(galaxy_dir) if f.endswith("_flux.fits")])
-    frb_names = [f.replace("_flux.fits", "") for f in galaxy_files]
+    out_root = os.path.join("pipeline_scripts", "Output")
+    frb_names = []
+    if os.path.isdir(out_root):
+        for entry in sorted(os.listdir(out_root)):
+            if not entry.endswith("_all"):
+                continue
+            cutout = os.path.join(out_root, entry, "host_cutout.fits")
+            if os.path.isfile(cutout):
+                frb_names.append(entry.replace("_all", ""))
     print(f"Found {len(frb_names)} galaxies")
 
     results = []
     for frb_name in frb_names:
         print("\n", "=" * 60)
         print(f"Processing {frb_name}")
-        flux_path = os.path.join(galaxy_dir, f"{frb_name}_flux.fits")
-        sigma_path = os.path.join(galaxy_dir, f"{frb_name}_sigma.fits")
+        flux_path = os.path.join(out_root, f"{frb_name}_all", "host_cutout.fits")
+        sigma_path = os.path.join(out_root, f"{frb_name}_all", "host_sigma.fits")
         psf_path = os.path.join(psf_dir, f"{frb_name}_1x_psf.fits")
 
         image = load_image(flux_path)

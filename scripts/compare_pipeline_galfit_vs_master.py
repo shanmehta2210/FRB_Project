@@ -10,27 +10,27 @@ What it does
    — the *same* parser `build_master_frb_galfit_from_logs.py` uses, so the
    block-selection policy (sane single-sérsic, free-n-before-fixed-n refine,
    etc.) matches the published numbers.
-3. Writes `pipeline_galfit_results.csv` to the repo root with flat columns.
+3. Writes `pipeline_galfit_results.csv` to the repo root with flat columns
+   (includes `host_number`, `snr_win`, `snr_auto` from `sky_fit_audit.json` or
+   `host_components.csv` row 0).
 4. Joins on `frb` against `master_frb_galfit_from_logs.csv` (only the `_psf`
    columns — those are the only fits the new pipeline produces) and writes
    `pipeline_vs_master_galfit_diff.csv`.
 5. Prints a per-parameter summary (count, median |Δ|, std |Δ|, top-N largest
-   deviations) for **single-Sérsic** fits only.
+   deviations) for every FRB with a parsed **host** row.
 
 Comparison policy
 -----------------
+* **Host identification:** always GALFIT **component 1** — first ``sersic`` line in
+  the selected ``fit.log`` block (``sersic_component_index=0``), matching row 0 in
+  ``host_components.csv``. Neighbor Sérsics are ignored for results/deltas.
 * **Magnitude / flux** is **not** compared (pipeline uses per-field ``zp_aper_40px``;
   master uses mixed ``J)`` systems). ``mag`` is still written to
   ``pipeline_galfit_results.csv`` for reference only.
-* ``n_sersic_components`` counts fitted galaxies (no sky), from
-  ``host_components.csv`` when present. ``compare_ok`` is true only when
-  ``n_sersic_components == 1``; multi-component stamps are deblends where
-  host-vs-master shape comparison is not meaningful.
-* Summary statistics use ``compare_ok`` rows only.
-
-By default omits 20171020A, 20220509G, 20240210A from the written CSVs (use
-``--no-benchmark-exclusions`` to keep them). Parses the host as the first
-``sersic`` line (``sersic_component_index=0``), matching GALFIT component 1.
+* ``n_sersic_components`` counts fitted galaxies (no sky). ``single_sersic`` is
+  **informational only** (true when exactly one Sérsic was fit); multi-component
+  stamps still export host structural parameters (especially ``b/a`` / inclination).
+* Summary statistics include **all** matched FRBs with a parsed host.
 
 Run from the repo root:
     python scripts/compare_pipeline_galfit_vs_master.py
@@ -39,6 +39,7 @@ Run from the repo root:
 from __future__ import annotations
 
 import argparse
+import json
 import math
 import sys
 from pathlib import Path
@@ -58,9 +59,6 @@ from galfit_fitlog_parse import (  # noqa: E402  reuse the canonical parser
 )
 
 REPO_ROOT = _SCRIPT_DIR.parent
-
-# Divergent / non-comparable GALFIT logs dropped from the published benchmark table.
-EXCLUDED_FROM_BENCHMARK = frozenset({"20171020A", "20220509G", "20240210A"})
 
 MASTER_RUNS_ROOT = REPO_ROOT / "tools" / "galfit" / "runs"
 
@@ -97,9 +95,76 @@ def _split_tag(folder_name: str, tag: str) -> str | None:
     return None
 
 
-def parse_pipeline_outputs(
-    output_root: Path, tag: str, skip_frbs: frozenset[str]
-) -> pd.DataFrame:
+def _host_snr_from_components(output_dir: Path) -> dict[str, float | int | None]:
+    """Host SNR from host_components.csv row 0 (Phase 3a)."""
+    comp_path = output_dir / "host_components.csv"
+    out: dict[str, float | int | None] = {
+        "snr_win": None,
+        "snr_auto": None,
+        "host_number": None,
+    }
+    if not comp_path.is_file():
+        return out
+    try:
+        comp = pd.read_csv(comp_path, nrows=1)
+    except (OSError, ValueError):
+        return out
+    if comp.empty:
+        return out
+    host = comp.iloc[0]
+    if "NUMBER" in comp.columns and pd.notna(host["NUMBER"]):
+        out["host_number"] = int(host["NUMBER"])
+    if "SNR_WIN" in comp.columns and pd.notna(host["SNR_WIN"]):
+        snr_win = float(host["SNR_WIN"])
+        if math.isfinite(snr_win):
+            out["snr_win"] = snr_win
+    if "FLUX_AUTO" in comp.columns and "FLUXERR_AUTO" in comp.columns:
+        flux = pd.to_numeric(host["FLUX_AUTO"], errors="coerce")
+        ferr = pd.to_numeric(host["FLUXERR_AUTO"], errors="coerce")
+        if pd.notna(flux) and pd.notna(ferr) and float(ferr) > 0:
+            snr_auto = float(flux) / float(ferr)
+            if math.isfinite(snr_auto):
+                out["snr_auto"] = snr_auto
+    return out
+
+
+def _host_snr_from_audit(output_dir: Path) -> dict[str, float | int | None]:
+    """Read host SNR fields from sky_fit_audit.json, else host_components.csv."""
+    out: dict[str, float | int | None] = {
+        "snr_win": None,
+        "snr_auto": None,
+        "host_number": None,
+    }
+    audit_path = output_dir / "sky_fit_audit.json"
+    if audit_path.is_file():
+        try:
+            with audit_path.open(encoding="utf-8") as f:
+                audit = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            audit = {}
+        for key in ("snr_win", "snr_auto"):
+            val = audit.get(key)
+            if val is not None:
+                try:
+                    fval = float(val)
+                    if math.isfinite(fval):
+                        out[key] = fval
+                except (TypeError, ValueError):
+                    pass
+        hn = audit.get("host_number")
+        if hn is not None:
+            try:
+                out["host_number"] = int(hn)
+            except (TypeError, ValueError):
+                pass
+    fallback = _host_snr_from_components(output_dir)
+    for key in out:
+        if out[key] is None and fallback[key] is not None:
+            out[key] = fallback[key]
+    return out
+
+
+def parse_pipeline_outputs(output_root: Path, tag: str) -> pd.DataFrame:
     """Walk Output/<FRB>_<tag>/ and parse every fit.log we find."""
     rows: list[dict] = []
     if not output_root.is_dir():
@@ -112,17 +177,22 @@ def parse_pipeline_outputs(
         frb = _split_tag(sub.name, tag)
         if frb is None:
             continue
-        if frb in skip_frbs:
-            continue
         log_path = sub / "fit.log"
         n_sersic = count_fitted_sersic_components(sub)
+        host_snr = _host_snr_from_audit(sub)
+        snr_fields = {
+            "snr_win": _cell(host_snr["snr_win"]),
+            "snr_auto": _cell(host_snr["snr_auto"]),
+            "host_number": _cell(host_snr["host_number"]),
+        }
         if not log_path.is_file():
             rows.append({
                 "frb": frb,
                 "n_sersic_components": n_sersic if n_sersic is not None else "",
-                "compare_ok": False,
+                "single_sersic": False,
                 "fit_log_path": "",
                 "parse_strategy": "missing_fit_log",
+                **snr_fields,
                 **{k: "" for k in _METRIC_KEYS},
                 "inc": "", "inc_err": "",
             })
@@ -136,11 +206,12 @@ def parse_pipeline_outputs(
         except ValueError:
             rel_path = str(log_path).replace("\\", "/")
 
-        compare_ok = n_sersic == 1
+        single_sersic = n_sersic == 1
         row: dict = {
             "frb": frb,
             "n_sersic_components": n_sersic if n_sersic is not None else "",
-            "compare_ok": compare_ok,
+            "single_sersic": single_sersic,
+            **snr_fields,
             "fit_log_path": rel_path,
             "parse_strategy": strategy,
         }
@@ -159,8 +230,17 @@ def parse_pipeline_outputs(
         return pd.DataFrame()
 
     cols = [
-        "frb", "n_sersic_components", "compare_ok", *_METRIC_KEYS,
-        "inc", "inc_err", "parse_strategy", "fit_log_path",
+        "frb",
+        "n_sersic_components",
+        "single_sersic",
+        "host_number",
+        "snr_win",
+        "snr_auto",
+        *_METRIC_KEYS,
+        "inc",
+        "inc_err",
+        "parse_strategy",
+        "fit_log_path",
     ]
     return pd.DataFrame(rows)[cols]
 
@@ -197,7 +277,7 @@ def build_diff_table(pipeline_df: pd.DataFrame, master_df: pd.DataFrame) -> pd.D
             rename_pipeline["inc_err"] = "inc_err_pipeline"
         else:
             rename_pipeline[f"{k}_err"] = f"{k}_err_pipeline"
-    meta_cols = ["frb", "n_sersic_components", "compare_ok"]
+    meta_cols = ["frb", "n_sersic_components", "single_sersic"]
     keep_pipe_cols = [c for c in meta_cols + list(rename_pipeline.keys()) if c in pipeline_df.columns]
     pipe_slim = pipeline_df[keep_pipe_cols].copy()
     pipe_slim = pipe_slim.rename(columns=rename_pipeline)
@@ -206,8 +286,8 @@ def build_diff_table(pipeline_df: pd.DataFrame, master_df: pd.DataFrame) -> pd.D
     if diff.empty:
         return diff
 
-    if "compare_ok" in diff.columns:
-        diff["compare_ok"] = diff["compare_ok"].astype(str).str.lower().isin(
+    if "single_sersic" in diff.columns:
+        diff["single_sersic"] = diff["single_sersic"].astype(str).str.lower().isin(
             ("true", "1", "yes")
         )
 
@@ -242,23 +322,28 @@ def summarise_diff(diff: pd.DataFrame, top_n: int) -> None:
         return
 
     full_n = len(diff)
-    if "compare_ok" in diff.columns:
-        comp = diff[diff["compare_ok"]].copy()
+    if "chi2nu_pipeline" in diff.columns:
+        comp = diff[_to_numeric(diff["chi2nu_pipeline"]).notna()].copy()
+    else:
+        comp = diff.copy()
+
+    n_multi = 0
+    if "n_sersic_components" in diff.columns:
         n_comp = _to_numeric(diff["n_sersic_components"])
         n_multi = int((n_comp > 1).sum()) if n_comp is not None else 0
-        print(
-            f"[*] Comparison subset: {len(comp)} single-Sérsic FRBs "
-            f"(excluded {full_n - len(comp)} multi/missing; {n_multi} with n_sersic>1)"
-        )
-    else:
-        comp = diff
+    n_single = int(diff["single_sersic"].sum()) if "single_sersic" in diff.columns else 0
+    print(
+        f"[*] Host metrics: GALFIT component 1 (parser index 0) for all {len(comp)} FRBs "
+        f"with a parsed fit ({full_n - len(comp)} skipped: no host chi2nu). "
+        f"{n_multi} multi-Sérsic ({n_single} single-Sérsic)."
+    )
 
     if comp.empty:
-        print("[!] No single-Sérsic FRBs to compare.")
+        print("[!] No FRBs with parsed host parameters to compare.")
         return
 
     print()
-    print(f"Comparison summary (N = {len(comp)} comparable FRBs)")
+    print(f"Comparison summary (N = {len(comp)} FRBs, host component 1)")
     print("-" * 96)
     header = (
         f"{'param':>6}  {'N':>4}  {'median(d)':>12}  {'median|d|':>12}  "
@@ -345,19 +430,10 @@ def main() -> None:
         default=5,
         help="How many of the largest |Δ| per parameter to print (default: 5).",
     )
-    parser.add_argument(
-        "--no-benchmark-exclusions",
-        action="store_true",
-        help=f"Keep all FRBs (default: omit {sorted(EXCLUDED_FROM_BENCHMARK)} from outputs).",
-    )
     args = parser.parse_args()
 
-    skip = frozenset() if args.no_benchmark_exclusions else EXCLUDED_FROM_BENCHMARK
-    if skip:
-        print(f"[*] Omitting from benchmark outputs: {sorted(skip)}")
-
     print(f"[*] Parsing pipeline outputs under {args.output_root} (tag='{args.tag}')")
-    pipe_df = parse_pipeline_outputs(args.output_root, args.tag, skip)
+    pipe_df = parse_pipeline_outputs(args.output_root, args.tag)
     if pipe_df.empty:
         print("[!] No FRB folders matched — nothing to do.")
         return
@@ -377,10 +453,11 @@ def main() -> None:
         return
 
     diff.to_csv(args.out_diff_csv, index=False)
-    n_ok = int(diff["compare_ok"].sum()) if "compare_ok" in diff.columns else len(diff)
+    n_single = int(diff["single_sersic"].sum()) if "single_sersic" in diff.columns else 0
+    n_host = int(_to_numeric(diff.get("chi2nu_pipeline", pd.Series())).notna().sum())
     print(
         f"[*] Wrote {args.out_diff_csv}  ({len(diff)} matched FRBs; "
-        f"{n_ok} with compare_ok=True)"
+        f"{n_host} with host fit parsed; {n_single} single-Sérsic)"
     )
     print("[*] Deltas exclude mag/flux (per-field ZP vs legacy master conventions).")
 

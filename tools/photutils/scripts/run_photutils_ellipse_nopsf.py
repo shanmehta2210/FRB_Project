@@ -93,8 +93,13 @@ def choose_half_light_isophote(isolist):
 
 
 def fit_single_frb(frb_name, q0_value, galaxy_dir, minsma, step, maxsma_frac):
-    flux_path = os.path.join(galaxy_dir, f"{frb_name}_flux.fits")
-    sigma_path = os.path.join(galaxy_dir, f"{frb_name}_sigma.fits")
+    if galaxy_dir == "pipeline":
+        run_dir = os.path.join("pipeline_scripts", "Output", f"{frb_name}_all")
+        flux_path = os.path.join(run_dir, "host_cutout.fits")
+        sigma_path = os.path.join(run_dir, "host_sigma.fits")
+    else:
+        flux_path = os.path.join(galaxy_dir, f"{frb_name}_flux.fits")
+        sigma_path = os.path.join(galaxy_dir, f"{frb_name}_sigma.fits")
 
     if not os.path.exists(flux_path):
         return {"FRB": frb_name, "status": "missing_flux_file"}
@@ -293,9 +298,14 @@ def fit_single_frb(frb_name, q0_value, galaxy_dir, minsma, step, maxsma_frac):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Run no-PSF photutils ellipse inclination analysis on cropped FRB hosts")
+    parser = argparse.ArgumentParser(description="Run no-PSF photutils ellipse inclination analysis on pipeline host cutouts")
     parser.add_argument("--master-csv", default="master_frb_summary.csv")
-    parser.add_argument("--galaxy-dir", default="cropped_host_galaxies")
+    parser.add_argument(
+        "--galaxy-dir",
+        default="pipeline",
+        help="Use 'pipeline' for pipeline_scripts/Output/<FRB>_all/host_cutout.fits (default), "
+        "or a flat directory with legacy <FRB>_flux.fits naming",
+    )
     parser.add_argument("--out-csv", default="tools/photutils/results/photutils_ellipse_inclination_angles_nopsf.csv")
     parser.add_argument("--minsma", type=float, default=2.0)
     parser.add_argument("--step", type=float, default=0.10)
@@ -306,7 +316,7 @@ def main():
     results = []
 
     print(f"FRBs in master: {len(master)}")
-    print(f"Using cropped-only flux/sigma from: {args.galaxy_dir}")
+    print(f"Using host flux/sigma from: {args.galaxy_dir}")
 
     for _, row in master.iterrows():
         frb = str(row["FRB"])

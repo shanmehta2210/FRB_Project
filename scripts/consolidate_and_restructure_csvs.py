@@ -100,7 +100,7 @@ def compute_local_chi2_row(row):
     galfit_sigma = os.path.join('tools', 'galfit', 'runs', frb, 'with_psf_sigma', 'sigma.fits')
     ls_image = os.path.join('tools', 'legacy', 'imr_fits', frb, f'{frb}_image.fits')
     ls_model = os.path.join('tools', 'legacy', 'imr_fits', frb, f'{frb}_model.fits')
-    shared_sigma = os.path.join('cropped_host_galaxies', f'{frb}_sigma.fits')
+    shared_sigma = os.path.join('pipeline_scripts', 'Output', f'{frb}_all', 'host_sigma.fits')
 
     galfit_chi2nu_local = np.nan
     galfit_chi2nu_local_err = np.nan

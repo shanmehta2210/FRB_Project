@@ -21,7 +21,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.galfit_fitlog_parse import parse_fitlog_sky_level  # noqa: E402
+from scripts.galfit_fitlog_parse import (  # noqa: E402
+    count_fitted_sersic_components,
+    parse_fitlog_file,
+    parse_fitlog_sky_level,
+)
 OUTPUT_ROOT = REPO_ROOT / "pipeline_scripts" / "Output"
 RESULTS_CSV = REPO_ROOT / "pipeline_galfit_results.csv"
 OUT_CSV = REPO_ROOT / "pipeline_unphysical_fits_review.csv"
@@ -48,22 +52,13 @@ def _load_sky_audit(odir: Path) -> dict:
 
 
 def _parse_log_summary(log_path: Path) -> dict:
-    txt = log_path.read_text(encoding="utf-8", errors="replace")
-    blocks = [b for b in txt.split("-------------") if "sersic" in b and "Chi^2/nu" in b]
-    last = blocks[-1] if blocks else ""
-    sersic_lines = [ln for ln in last.splitlines() if ln.strip().startswith("sersic")]
-    n_sersic = len(sersic_lines) // 2 if sersic_lines else 0
-    chi_m = re.search(r"Chi\^2/nu\s*=\s*([\d.]+)", last)
-    chi2nu = float(chi_m.group(1)) if chi_m else np.nan
+    n_sersic = count_fitted_sersic_components(log_path.parent)
+    host_data, _strategy = parse_fitlog_file(str(log_path), sersic_component_index=0)
+    chi2nu = host_data.get("chi2nu", np.nan)
+    host_mag = host_data.get("mag", np.nan)
+    host_re = host_data.get("re", np.nan)
     sky_parsed = parse_fitlog_sky_level(log_path)
     sky = float(sky_parsed) if sky_parsed is not None else np.nan
-    host_mag = host_re = np.nan
-    if sersic_lines:
-        clean = sersic_lines[0].replace("(", " ").replace(")", " ").replace(",", " ")
-        parts = clean.split()
-        if len(parts) >= 9 and parts[0] == "sersic":
-            host_mag = float(parts[4])
-            host_re = float(parts[5])
     feedme = log_path.parent / "galfit.feedme"
     init_mag = np.nan
     if feedme.is_file():
@@ -135,7 +130,9 @@ def _classify_row(
 
     if log_extra.get("n_sersic", 1) > 1:
         flags.append("multi_sersic_final")
-        notes.append(f"{log_extra['n_sersic']} Sérsic components in last block (host may not be component 1)")
+        notes.append(
+            f"{log_extra['n_sersic']} Sérsic in last block — host metrics use component 1 by policy"
+        )
 
     init_mag = log_extra.get("feedme_init_mag", np.nan)
     if pd.notna(init_mag) and init_mag < 12:
@@ -205,7 +202,7 @@ def main() -> None:
             "output_dir": f"pipeline_scripts/Output/{frb}_all",
         })
 
-    # Pipeline outputs not in pipeline_galfit_results.csv (e.g. benchmark exclusions)
+    # Pipeline outputs not in pipeline_galfit_results.csv (e.g. missing fit.log)
     for odir in sorted(OUTPUT_ROOT.glob("*_all")):
         frb = odir.name.replace("_all", "")
         if frb in in_csv:
