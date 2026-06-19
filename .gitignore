@@ -13,6 +13,31 @@ node_utils/node_modules/
 
 # Generated pipeline outputs and large data directories
 pipeline_scripts/Output/
+
+# Per-phase run artifacts (FITS, catalogs, feedme, QA images) should never be
+# committed. Only the Python scripts + YAML defaults belong in the repo.
+pipeline_scripts/SExtractor + PSFEx/*.fits
+pipeline_scripts/SExtractor + PSFEx/*.cat
+pipeline_scripts/SExtractor + PSFEx/*.xml
+pipeline_scripts/SExtractor + PSFEx/default.conv
+pipeline_scripts/SExtractor + PSFEx/default.nnw
+pipeline_scripts/SExtractor + PSFEx/default.param
+pipeline_scripts/SExtractor + PSFEx/default.sex
+pipeline_scripts/SExtractor + PSFEx/default.psfex
+pipeline_scripts/photometry + astropath/*.fits
+pipeline_scripts/photometry + astropath/*.cat
+pipeline_scripts/photometry + astropath/*.png
+pipeline_scripts/photometry + astropath/*.csv
+!pipeline_scripts/photometry + astropath/photometry_astropath_config.yaml
+pipeline_scripts/galfit_fitting/*.fits
+pipeline_scripts/galfit_fitting/*.csv
+pipeline_scripts/galfit_fitting/*.png
+pipeline_scripts/galfit_fitting/*.cat
+pipeline_scripts/galfit_fitting/fit.log
+pipeline_scripts/galfit_fitting/galfit.feedme
+pipeline_scripts/galfit_fitting/galfit.[0-9]*
+pipeline_scripts/galfit_fitting/constraints.txt
+pipeline_scripts/galfit_fitting/out.fits
 large_cutouts/
 psfs/
 Archive/psfs/

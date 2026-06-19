@@ -36,10 +36,13 @@ Usage (PowerShell):
     python pipeline_scripts/run_all_frbs.py --use-astropath-host --frb 20221101B
 """
 import argparse
+import base64
+import concurrent.futures
 import json
 import subprocess
 import sys
 import time
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -153,7 +156,7 @@ def collect_summary(out_dir: Path, csv_ra=None, csv_dec=None):
     if zp.exists():
         try:
             j = json.loads(zp.read_text())
-            s["zp_40px"] = j.get("zp_aper_40px")
+            s["zp_40px"] = j.get("zp_aper") or j.get("zp_aper_40px")
             s["n_stars"] = j.get("n_calibration_stars")
             s["ref_cat"] = j.get("reference_catalog")
         except Exception:
@@ -168,6 +171,114 @@ def fmt(value, spec="", default="—"):
         return format(value, spec) if spec else str(value)
     except Exception:
         return default
+
+
+def format_eta(seconds):
+    """Human-readable duration string."""
+    s = int(round(seconds))
+    if s < 60:
+        return f"{s}s"
+    m, s = divmod(s, 60)
+    if m < 60:
+        return f"{m}m {s}s" if s else f"{m}m"
+    h, m = divmod(m, 60)
+    return f"{h}h {m}m" if m else f"{h}h"
+
+
+def _run_single_frb(cmd, out_subdir_str, log_path_str, loc_ra, loc_dec):
+    """Execute one FRB pipeline run (top-level for ProcessPoolExecutor)."""
+    out_subdir = Path(out_subdir_str)
+    log_path = Path(log_path_str)
+    out_subdir.mkdir(parents=True, exist_ok=True)
+    t_start = time.time()
+    with open(log_path, "w", encoding="utf-8") as lf:
+        proc = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT)
+    elapsed = time.time() - t_start
+    summary = collect_summary(out_subdir, loc_ra, loc_dec)
+    return proc.returncode, elapsed, summary
+
+
+def _img_to_base64(path: Path) -> str:
+    """Read an image file and return a base64-encoded data URI."""
+    data = path.read_bytes()
+    return f"data:image/png;base64,{base64.b64encode(data).decode()}"
+
+
+def generate_html_report(results, output_dir: Path, tag: str):
+    """Write pipeline_scripts/Output/batch_report.html."""
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    png_names = ["galfit_results.png", "astropath_association.png", "qa_cutout_mask.png"]
+
+    rows_html = []
+    for frb, status, note, summary in results:
+        rows_html.append(
+            f"<tr><td>{frb}</td><td>{status}</td>"
+            f"<td>{fmt(summary.get('posterior'), '.3f')}</td>"
+            f"<td>{fmt(summary.get('sep_astropath_vs_csv_arcsec'), '.2f')}</td>"
+            f"<td>{fmt(summary.get('zp_40px'), '.3f')}</td>"
+            f"<td>{fmt(summary.get('n_stars'))}</td>"
+            f"<td>{summary.get('ref_cat') or ''}</td>"
+            f"<td>{note}</td></tr>"
+        )
+
+    frb_sections = []
+    for frb, status, _note, _summary in results:
+        out_dir = output_dir / f"{frb}_{tag}"
+        if not out_dir.is_dir():
+            continue
+        images_html = []
+        for png in png_names:
+            p = out_dir / png
+            if p.is_file():
+                images_html.append(
+                    f'<div class="thumb"><img src="{_img_to_base64(p)}" '
+                    f'alt="{png}"><div class="caption">{png}</div></div>'
+                )
+        summary_json = out_dir / "pipeline_summary.json"
+        link = ""
+        if summary_json.is_file():
+            rel = summary_json.resolve()
+            link = f'<a href="file:///{rel}">pipeline_summary.json</a>'
+        if images_html or link:
+            frb_sections.append(
+                f'<div class="frb-block"><h3>{frb} [{status}]</h3>'
+                f'<div class="grid">{"".join(images_html)}</div>'
+                f'{link}</div>'
+            )
+
+    html = f"""\
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<title>Pipeline Batch Report &ndash; {now}</title>
+<style>
+  body {{ font-family: Arial, sans-serif; margin: 20px; background: #fafafa; }}
+  h1 {{ color: #333; }}
+  table {{ border-collapse: collapse; width: 100%; margin: 1em 0; }}
+  th, td {{ border: 1px solid #ccc; padding: 6px 10px; text-align: left; }}
+  th {{ background: #4a76a8; color: #fff; }}
+  tr:nth-child(even) {{ background: #eef; }}
+  .grid {{ display: flex; flex-wrap: wrap; gap: 12px; margin: 8px 0; }}
+  .thumb img {{ max-width: 340px; border: 1px solid #aaa; }}
+  .caption {{ font-size: 0.85em; color: #555; text-align: center; }}
+  .frb-block {{ margin: 1.5em 0; padding: 10px; background: #fff;
+               border: 1px solid #ddd; border-radius: 4px; }}
+</style></head><body>
+<h1>Pipeline Batch Report</h1>
+<p>Generated: {now}</p>
+<h2>Summary</h2>
+<table>
+<tr><th>FRB</th><th>Status</th><th>P(O)</th><th>d_host</th>
+    <th>ZP_40</th><th>N*</th><th>Ref catalog</th><th>Note</th></tr>
+{"".join(rows_html)}
+</table>
+<h2>FRB Details</h2>
+{"".join(frb_sections) if frb_sections else "<p>No FRB output directories found.</p>"}
+</body></html>"""
+
+    report_path = output_dir / "batch_report.html"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(html, encoding="utf-8")
+    return report_path
 
 
 def main():
@@ -190,6 +301,8 @@ def main():
                         help="Forwarded verbatim to master_run --outputs (default: all).")
     parser.add_argument("--keep-workdir", action="store_true",
                         help="Forward --keep-workdir to master_run.")
+    parser.add_argument("--condensed", action="store_true",
+                        help="Forward --condensed to master_run (summary JSON + 3 PNGs only).")
     parser.add_argument(
         "--use-localization-host",
         action="store_true",
@@ -206,6 +319,20 @@ def main():
         type=Path,
         default=None,
         help="FRB list: .txt (one name per line) or .csv with a 'frb' column (e.g. new_hosts_master.csv).",
+    )
+    parser.add_argument(
+        "--parallel", type=int, default=1, metavar="N",
+        help="Number of parallel workers (default: 1 = sequential).",
+    )
+    parser.add_argument(
+        "--no-auto-refresh", action="store_true",
+        help="Skip automatic compare_pipeline_galfit_vs_master.py run after the batch.",
+    )
+    parser.add_argument(
+        "--rerun-phase",
+        choices=["1", "2", "3a", "statmorph", "3b"],
+        default=None,
+        help="Forwarded to master_run: skip earlier phases and re-execute from this phase.",
     )
     args = parser.parse_args()
 
@@ -243,6 +370,9 @@ def main():
 
     results = []
     t0 = time.time()
+
+    # Phase 1: filter FRBs and build commands
+    tasks = []
     for i, flux in enumerate(flux_files, 1):
         frb = flux.stem.removesuffix("_flux")
         invvar = CUTOUT_DIR / f"{frb}_invvar.fits"
@@ -285,32 +415,81 @@ def main():
             cmd += ["--err-theta-deg", str(loc["err_theta"])]
         if args.keep_workdir:
             cmd.append("--keep-workdir")
+        if args.condensed:
+            cmd.append("--condensed")
+        if args.rerun_phase:
+            cmd += ["--rerun-phase", args.rerun_phase]
 
         if args.dry_run:
             print(f"{prefix} DRY: {' '.join(cmd)}")
             continue
 
-        ell = (f"err_a={fmt(loc['err_a'], '.2f')} "
-               f"err_b={fmt(loc['err_b'], '.2f')} "
-               f"pa={fmt(loc['err_theta'], '.1f')}")
-        print(f"{prefix} (ra={loc['ra']:.4f}, dec={loc['dec']:.4f}; {ell}) ... ",
-              end="", flush=True)
-
-        out_subdir.mkdir(parents=True, exist_ok=True)
         log_path = out_subdir / "master_run.log"
-        t_start = time.time()
-        with open(log_path, "w", encoding="utf-8") as lf:
-            proc = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT)
-        elapsed = time.time() - t_start
-        summary = collect_summary(out_subdir, loc["ra"], loc["dec"])
+        tasks.append((frb, cmd, out_subdir, log_path, loc, prefix))
 
-        if proc.returncode == 0:
-            p_str = fmt(summary["posterior"], ".3f")
-            print(f"OK ({elapsed:.0f}s, P={p_str}, ref={summary['ref_cat'] or '—'})")
-            results.append((frb, "OK", f"{elapsed:.0f}s", summary))
+    # Phase 2: execute tasks (parallel or sequential)
+    if not args.dry_run and tasks:
+        n_tasks = len(tasks)
+        if args.parallel > 1:
+            print(f"\n[batch] Launching {n_tasks} FRB(s) with {args.parallel} workers...")
+            with concurrent.futures.ProcessPoolExecutor(max_workers=args.parallel) as pool:
+                future_map = {}
+                for frb, cmd, out_subdir, log_path, loc, prefix in tasks:
+                    fut = pool.submit(
+                        _run_single_frb, cmd,
+                        str(out_subdir), str(log_path),
+                        loc["ra"], loc["dec"],
+                    )
+                    future_map[fut] = (frb, out_subdir, loc, prefix)
+                for fut in concurrent.futures.as_completed(future_map):
+                    frb, out_subdir, loc, prefix = future_map[fut]
+                    rc, elapsed, summary = fut.result()
+                    if rc == 0:
+                        p_str = fmt(summary["posterior"], ".3f")
+                        print(f"{prefix} ... OK ({elapsed:.0f}s, P={p_str})")
+                        results.append((frb, "OK", f"{elapsed:.0f}s", summary))
+                    else:
+                        log_rel = (out_subdir / "master_run.log").relative_to(REPO_ROOT)
+                        print(f"{prefix} ... FAIL rc={rc}  (log: {log_rel})")
+                        results.append((frb, "FAIL", f"rc={rc}", summary))
         else:
-            print(f"FAIL rc={proc.returncode}  (log: {log_path.relative_to(REPO_ROOT)})")
-            results.append((frb, "FAIL", f"rc={proc.returncode}", summary))
+            ema_elapsed = None
+            for idx, (frb, cmd, out_subdir, log_path, loc, prefix) in enumerate(tasks):
+                ell = (f"err_a={fmt(loc['err_a'], '.2f')} "
+                       f"err_b={fmt(loc['err_b'], '.2f')} "
+                       f"pa={fmt(loc['err_theta'], '.1f')}")
+                print(f"{prefix} (ra={loc['ra']:.4f}, dec={loc['dec']:.4f}; {ell}) ... ",
+                      end="", flush=True)
+
+                out_subdir.mkdir(parents=True, exist_ok=True)
+                t_start = time.time()
+                with open(log_path, "w", encoding="utf-8") as lf:
+                    proc = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT)
+                elapsed = time.time() - t_start
+                summary = collect_summary(out_subdir, loc["ra"], loc["dec"])
+
+                ema_elapsed = elapsed if ema_elapsed is None else 0.3 * elapsed + 0.7 * ema_elapsed
+                remaining = n_tasks - (idx + 1)
+                eta_part = f", ETA {format_eta(ema_elapsed * remaining)} remaining" if remaining > 0 else ""
+
+                if proc.returncode == 0:
+                    p_str = fmt(summary["posterior"], ".3f")
+                    print(f"OK ({elapsed:.0f}s{eta_part}, P={p_str}, ref={summary['ref_cat'] or '—'})")
+                    results.append((frb, "OK", f"{elapsed:.0f}s", summary))
+                else:
+                    print(f"FAIL rc={proc.returncode}{eta_part}  (log: {log_path.relative_to(REPO_ROOT)})")
+                    results.append((frb, "FAIL", f"rc={proc.returncode}", summary))
+
+    # ---- Auto-refresh: compare pipeline vs master ----
+    if not args.no_auto_refresh:
+        compare_script = REPO_ROOT / "scripts" / "compare_pipeline_galfit_vs_master.py"
+        if compare_script.is_file():
+            print("\n[batch] Auto-running compare_pipeline_galfit_vs_master.py ...")
+            try:
+                subprocess.run([sys.executable, str(compare_script)], check=False)
+                print("[batch] Compare script finished.")
+            except Exception as e:
+                print(f"[batch] Compare script failed: {e}")
 
     # ---- Summary table ----
     total_elapsed = time.time() - t0
@@ -330,6 +509,13 @@ def main():
         n = fmt(summary.get("n_stars"))
         ref = summary.get("ref_cat") or ""
         print(f"{frb:<14} {status:<6} {p:>7} {sep:>8} {zp:>8} {n:>4} {ref:<20} {note}")
+
+    # ---- HTML batch report ----
+    try:
+        report_path = generate_html_report(results, OUTPUT_DIR, tag)
+        print(f"\n[batch] HTML report: {report_path.relative_to(REPO_ROOT)}")
+    except Exception as e:
+        print(f"\n[batch] HTML report generation failed: {e}")
 
 
 if __name__ == "__main__":

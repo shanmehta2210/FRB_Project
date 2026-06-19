@@ -9,16 +9,25 @@ sextractor_psf:
   deblend_mincont: 0.005
   gain: 1.6
   mag_zeropoint: 0.0
-  pixel_scale: 0.262
+  # pixel_scale is now derived from the FITS WCS header automatically.
+  # Do NOT set it here — master_run.py and phase scripts compute it per-image.
   seeing_fwhm: 2.0
-  phot_apertures_px: 40.0
+  # Photometric aperture ladder (diameters, px) -> SExtractor PHOT_APERTURES.
+  # Must match the Phase 1 ladder so MAG_APER column indices line up between
+  # image.cat and image.psf.cat.
+  phot_apertures_px: [4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 15.0, 20.0, 25.0, 30.0, 40.0]
+  # Aperture used for the ZP + the MAG_CALIB_APER magnitude passed to
+  # AstroPath. null -> largest aperture in the list (historical default).
+  production_aperture_px: null
   # use_weight_map: true is the default; the phase script automatically falls
   # back to NONE if invvar.fits is absent. master_run.py also writes this
   # explicitly based on whether --invvar was provided.
   use_weight_map: true
   # Magnitude passed to AstroPath as the candidate "mag":
-  #   mag_40px | mag_psf | mag_auto   (all from the with-PSF catalog)
-  mag_mode: mag_40px
+  #   mag_aper | mag_psf | mag_auto   (all from the with-PSF catalog)
+  # "mag_aper" uses the production aperture (largest by default, or the one
+  # set by production_aperture_px). Legacy name "mag_40px" is accepted as alias.
+  mag_mode: mag_aper
 
 astropath:
   err_a_arcsec: 1.0     # FRB localization semi-major axis (arcsec)
@@ -26,6 +35,24 @@ astropath:
   err_theta_deg: 0.0    # localization position angle (deg, E of N)
   p_u: 0.1              # prior probability the true host is unseen
   filter_band: 'r'
+  # Candidate search radius around the FRB position (arcsec). Sources within
+  # this box are considered for AstroPath association. Also controls the
+  # astropath_association.png zoom extent and P(U) normalisation radius.
+  search_radius_arcsec: 60.0
+  # Candidate prior P(O_i) method:
+  #   "inverse"      : P(O) ~ 1/Sigma_m              (Aggarwal+2021 adopted)
+  #   "inverse_ang"  : P(O) ~ 1/(Sigma_m * R_eff)    (R_eff-weighted)
+  #   "inverse_ang2" : P(O) ~ 1/(Sigma_m * R_eff^2)  (R_eff^2-weighted)
+  #   "identical"    : all equal                      (Aggarwal+2021 conservative)
+  p_o_method: inverse
+  # Offset prior P(theta|O) PDF shape:
+  #   "exp"     : exponential e-folding at phi  (default, Aggarwal+2021)
+  #   "uniform" : flat within theta_max * phi (normalised in phi units)
+  #   "core"    : phi/(theta+phi) cored profile
+  #   "flat"    : flat in arcsec within theta_max * phi
+  theta_pdf: exp
+  theta_max: 6.0
+  theta_scale: 1.0
   # SNR_WIN uses a Gaussian-weighted WIN aperture matched to the PSF. For
   # very compact / sub-arcsec hosts that aperture is tiny and SNR_WIN ends up
   # well below 1 even though the source is a clean detect_thresh-σ peak.
@@ -38,5 +65,5 @@ astropath:
 
 # Phase 2 diagnostics (written into workdir on every run unless disabled)
 diagnostics:
-  geometry_plots: true   # sep_vs_shape_r.png, sep_vs_theta_max_phi.png
+  geometry_plots: true   # sep_vs_shape_r.png, sep_vs_x_max_reff.png
   field_depth: true      # 5σ m_lim at production aperture → zero_points.json field_depth

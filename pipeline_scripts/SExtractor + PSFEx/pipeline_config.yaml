@@ -11,10 +11,17 @@ sextractor:
   analysis_thresh: 3
   # SExtractor + DES default; was hard-coded 1e-4 (much more aggressive splitting).
   deblend_mincont: 0.005
-  phot_apertures_px: 40.0
+  # Photometric aperture ladder (diameters, px). The full list goes straight
+  # into SExtractor's PHOT_APERTURES; MAG_APER then has one column per entry.
+  phot_apertures_px: [4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 15.0, 20.0, 25.0, 30.0, 40.0]
+  # Aperture used for the zero point + production magnitude. null -> largest
+  # aperture in the list above (the historical 40 px behaviour). Set to any
+  # value in the list (e.g. 30.0) to calibrate on a different aperture.
+  production_aperture_px: null
   gain: 1.6
   mag_zeropoint: 0.0
-  pixel_scale: 0.262
+  # pixel_scale is now derived from the FITS WCS header automatically.
+  # Do NOT set it here — master_run.py and phase scripts compute it per-image.
   seeing_fwhm: 2.0
   # use_weight_map: true is the default; the phase script automatically falls
   # back to NONE if invvar.fits is absent. master_run.py also writes this
@@ -28,3 +35,6 @@ psfex:
   sample_variability: 0.4
   sample_minsn: 30
   sample_max_ellp: 0.2
+  # Stop the SAMPLE_MINSN retry ladder (30,20,10,5,3,2.5,2) once PSFEx accepts
+  # at least this many stars for the PSF model.
+  min_accepted_stars: 25

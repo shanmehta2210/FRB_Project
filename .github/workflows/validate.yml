@@ -1,0 +1,39 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml numpy astropy pandas scipy matplotlib pytest
+
+      - name: Compile pipeline_scripts/**/*.py
+        run: |
+          python -m py_compile pipeline_scripts/pipeline_shared.py
+          python -m py_compile pipeline_scripts/master_run.py
+          python -m py_compile pipeline_scripts/run_all_frbs.py
+          python -m py_compile "pipeline_scripts/SExtractor + PSFEx/run_psf_pipeline.py"
+          python -m py_compile "pipeline_scripts/photometry + astropath/field_depth.py"
+          python -m py_compile "pipeline_scripts/photometry + astropath/run_photometry_astropath.py"
+          python -m py_compile "pipeline_scripts/photometry + astropath/pipeline_diagnostics.py"
+          python -m py_compile pipeline_scripts/galfit_fitting/run_galfit_fitting.py
+          python -m py_compile pipeline_scripts/galfit_fitting/generate_galfit_cutouts.py
+          python -m py_compile pipeline_scripts/galfit_fitting/run_statmorph_pipeline.py
+
+      - name: Compile scripts/galfit_fitlog_parse.py
+        run: python -m py_compile scripts/galfit_fitlog_parse.py
+
+      - name: Run tests
+        run: python -m pytest tests/ -v

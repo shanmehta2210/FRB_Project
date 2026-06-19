@@ -1,4 +1,5 @@
 import os
+import sys
 import argparse
 
 import numpy as np
@@ -8,6 +9,11 @@ from astropy.wcs import WCS
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
 import astropy.units as u
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from pipeline_shared import get_logger  # noqa: E402
+
+log = get_logger("phase3a")
 
 def get_table_from_ldac(filename, frame=1):
     if frame > 0: frame = frame * 2
@@ -92,7 +98,8 @@ def _load_spread_by_number(catalog_path: str) -> dict:
     return out
 
 
-def _spread_for_catalog_index(idx: int, cat, spread_by_number: dict, catalog_path: str):
+def _spread_for_catalog_index(idx: int, cat, spread_by_number: dict, catalog_path: str,
+                              match_arcsec: float = 0.5):
     """SPREAD for a Phase-1 image.cat row, keyed by Phase-2 NUMBER when they differ."""
     num = int(cat["NUMBER"][idx])
     spread = spread_by_number.get(num)
@@ -112,7 +119,7 @@ def _spread_for_catalog_index(idx: int, cat, spread_by_number: dict, catalog_pat
     )
     seps_arcsec = coord.separation(psf_coords).arcsec
     j = int(np.argmin(seps_arcsec))
-    if float(seps_arcsec[j]) > 0.5:
+    if float(seps_arcsec[j]) > match_arcsec:
         return None
     return spread_by_number.get(int(psf["NUMBER"][j]))
 
@@ -151,8 +158,8 @@ def _seg_number_for_psf_number(psf_number: int, cat, catalog_path: str, max_sep_
         )
     seg_number = int(cat["NUMBER"][idx])
     if seg_number != int(psf_number):
-        print(
-            f"[*] AstroPath sex_number={psf_number} (image.psf.cat) -> "
+        log.info(
+            f"AstroPath sex_number={psf_number} (image.psf.cat) -> "
             f"seg NUMBER={seg_number} (image.cat; {sep:.3f}\")"
         )
     return seg_number
@@ -164,6 +171,7 @@ def _pick_nearest_galaxy_host(
     spread_by_number: dict,
     catalog_path: str,
     max_sep_arcsec: float,
+    psf_match_arcsec: float = 0.5,
 ):
     """Nearest SExtractor source that passes the Phase 2 SPREAD star cut.
 
@@ -183,15 +191,13 @@ def _pick_nearest_galaxy_host(
         if sep > max_sep_arcsec:
             break
         num = int(cat["NUMBER"][idx])
-        spread = _spread_for_catalog_index(idx, cat, spread_by_number, catalog_path)
+        spread = _spread_for_catalog_index(idx, cat, spread_by_number, catalog_path, psf_match_arcsec)
         if spread is None:
-            print(
-                f"    skip #{num}: no SPREAD in image.psf.cat ({sep:.2f}\" from target)"
-            )
+            log.info(f"    skip #{num}: no SPREAD in image.psf.cat ({sep:.2f}\" from target)")
             continue
         sm, se = spread
         if _spread_is_point_source(sm, se):
-            print(
+            log.info(
                 f"    skip #{num}: point source SPREAD={sm:.4f}+/-{se:.4f} "
                 f"({sep:.2f}\" from target)"
             )
@@ -306,6 +312,42 @@ def main():
         default=6,
         help="Safety cap on the expand-and-recategorise loop (default 6).",
     )
+    parser.add_argument(
+        "--mag-aper-index",
+        type=int,
+        default=-1,
+        help="Column index into MAG_APER for the production magnitude (MAG_40PX). "
+             "Negative -> use the last (largest) aperture column. master_run sets "
+             "this from the resolved aperture ladder.",
+    )
+    parser.add_argument(
+        "--psf-match-arcsec",
+        type=float,
+        default=0.5,
+        help="Sky-match tolerance (arcsec) when keying a Phase-1 image.cat row to "
+             "the Phase-2 image.psf.cat SPREAD value (default 0.5).",
+    )
+    parser.add_argument(
+        "--no-data-sigma",
+        type=float,
+        default=1.0e30,
+        help="Sigma value assigned to invvar<=0 / non-finite pixels so GALFIT "
+             "ignores them (default 1e30).",
+    )
+    parser.add_argument(
+        "--sigma-rescale-min",
+        type=float,
+        default=0.5,
+        help="Lower bound on k=sky_MAD/sigma_invvar; below this the invvar sigma "
+             "map is globally rescaled to the empirical sky noise (default 0.5).",
+    )
+    parser.add_argument(
+        "--sigma-rescale-max",
+        type=float,
+        default=2.0,
+        help="Upper bound on k=sky_MAD/sigma_invvar; above this the invvar sigma "
+             "map is globally rescaled to the empirical sky noise (default 2.0).",
+    )
     args = parser.parse_args()
 
     os.makedirs(args.outdir, exist_ok=True)
@@ -345,7 +387,7 @@ def main():
             os.path.dirname(cat_path), "astropath_posteriors.csv")
         target_ra, target_dec, target_src, astropath_sex_number = _resolve_target_from_astropath(
             posteriors_path, args.ra, args.dec, args.min_astropath_posterior)
-    print(f"[*] Phase 3a target: {target_src} -> RA={target_ra:.6f}, Dec={target_dec:.6f}")
+    log.info(f"Phase 3a target: {target_src} -> RA={target_ra:.6f}, Dec={target_dec:.6f}")
 
     spread_by_number = _load_spread_by_number(cat_path)
     target_coord = SkyCoord(ra=target_ra, dec=target_dec, unit="deg", frame="icrs")
@@ -372,32 +414,33 @@ def main():
             frame="icrs",
         )
         sep_arcsec = float(target_coord.separation(host_coord).arcsec)
-        print(
-            f"[*] Host pick: AstroPath sex_number={psf_number} -> seg NUMBER={target_objid} "
+        log.info(
+            f"Host pick: AstroPath sex_number={psf_number} -> seg NUMBER={target_objid} "
             f"(SPREAD={sm:.4f}+/-{se:.4f}; {sep_arcsec:.2f}\" from association centre)"
         )
-        print(f"[*] Assured Target Host NUMBER={target_objid}")
+        log.info(f"Assured Target Host NUMBER={target_objid}")
     else:
-        print(
-            f"[*] Host pick: nearest galaxy within {args.max_host_sep_arcsec}\" "
+        log.info(
+            f"Host pick: nearest galaxy within {args.max_host_sep_arcsec}\" "
             f"(SPREAD+{_SPREAD_SIGMA}*SPREADERR >= {_SPREAD_STAR_MAX}; "
             f"{len(spread_by_number)} sources with SPREAD in image.psf.cat)"
         )
         idx, target_objid, sep_arcsec = _pick_nearest_galaxy_host(
-            target_coord, cat, spread_by_number, cat_path, float(args.max_host_sep_arcsec)
+            target_coord, cat, spread_by_number, cat_path,
+            float(args.max_host_sep_arcsec), float(args.psf_match_arcsec),
         )
         if sep_arcsec > 1.0:
-            print(
-                f"WARNING: Host galaxy #{target_objid} is {sep_arcsec:.2f} arcsec "
+            log.warning(
+                f"Host galaxy #{target_objid} is {sep_arcsec:.2f} arcsec "
                 f"from the target position."
             )
-        print(
-            f"[*] Assured Target Host NUMBER={target_objid} "
+        log.info(
+            f"Assured Target Host NUMBER={target_objid} "
             f"({sep_arcsec:.2f}\" from {target_src})"
         )
 
-    print(
-        "[*] Neighbor policy (per-source containment): for every seg island that "
+    log.info(
+        "Neighbor policy (per-source containment): for every seg island that "
         "touches the ROI we compute frac = pixels_in_ROI / total_pixels and "
         f"decide:\n"
         f"      frac >= {args.contain_thresh:.2f}  -> fully contained: fit (or mask if stellar)\n"
@@ -409,7 +452,7 @@ def main():
     # --- Starting ROI = host seg bbox + small pad ---
     host_bbox = _bbox_of_objids(seg_map, [int(target_objid)])
     if host_bbox is None:
-        print("ERROR: Target not in segmentation map.")
+        log.error("Target not in segmentation map.")
         return
     xmin, xmax, ymin, ymax = _pad_bbox(*host_bbox, pad=int(args.host_pad), shape=seg_map.shape)
 
@@ -458,7 +501,7 @@ def main():
         if grow_bbox is None:
             break
         xmin, xmax, ymin, ymax = _pad_bbox(*grow_bbox, pad=int(args.host_pad), shape=seg_map.shape)
-        print(f"    [iter {it}] expanded ROI for {sorted(new_expanded)} -> bounds X=[{xmin}:{xmax}] Y=[{ymin}:{ymax}]")
+        log.info(f"    [iter {it}] expanded ROI for {sorted(new_expanded)} -> bounds X=[{xmin}:{xmax}] Y=[{ymin}:{ymax}]")
 
     # Final recompute of fracs in the converged ROI, so the logged number
     # matches what's actually on disk.
@@ -486,7 +529,7 @@ def main():
     fit_objids: set = {int(target_objid)}
     mask_objids: set = set()
     host_frac = converged_decisions.get(int(target_objid), ("contained", 1.0))[1]
-    print(f"    objid {int(target_objid)}: frac_in_ROI={host_frac*100:.1f}%  host -> fit")
+    log.info(f"    objid {int(target_objid)}: frac_in_ROI={host_frac*100:.1f}%  host -> fit")
     for uid, (kind, frac) in converged_decisions.items():
         if int(uid) == int(target_objid):
             continue
@@ -501,10 +544,10 @@ def main():
             else:
                 fit_objids.add(int(uid))
                 kind_lbl = "contained -> fit (galaxy)"
-        print(f"    objid {uid}: frac_in_ROI={frac*100:.1f}%  {kind_lbl}")
+        log.info(f"    objid {uid}: frac_in_ROI={frac*100:.1f}%  {kind_lbl}")
 
-    print(
-        f"[*] Final cutout: {len(fit_objids)} Sérsic component(s), "
+    log.info(
+        f"Final cutout: {len(fit_objids)} Sérsic component(s), "
         f"{len(mask_objids)} mask-only object(s); "
         f"bounds X=[{xmin}:{xmax}] Y=[{ymin}:{ymax}]"
     )
@@ -539,8 +582,9 @@ def main():
         with fits.open(invvar_path) as hdul_inv:
             inv_data = np.squeeze(hdul_inv[0].data)
             while inv_data.ndim > 2: inv_data = inv_data[0]
+        no_data_sigma = float(args.no_data_sigma)
         valid_invvar_full = np.isfinite(inv_data) & (inv_data > 0)
-        sigma_full = np.full(inv_data.shape, 1.0e30, dtype=np.float32)
+        sigma_full = np.full(inv_data.shape, no_data_sigma, dtype=np.float32)
         sigma_full[valid_invvar_full] = (1.0 / np.sqrt(inv_data[valid_invvar_full])).astype(np.float32)
         cutout_sigma = sigma_full[ymin:ymax, xmin:xmax].copy()
         invvar_cutout = inv_data[ymin:ymax, xmin:xmax]
@@ -556,23 +600,23 @@ def main():
             sigma_iv_med = float(np.median(sigma_iv_sky)) if sigma_iv_sky.size else 0.0
             if sigma_iv_med > 0 and sigma_emp > 0:
                 k = sigma_emp / sigma_iv_med
-                if (k < 0.5) or (k > 2.0):
-                    keep = cutout_sigma < 1.0e29  # don't touch flagged "no data" pixels
+                if (k < float(args.sigma_rescale_min)) or (k > float(args.sigma_rescale_max)):
+                    keep = cutout_sigma < (no_data_sigma * 0.99)  # don't touch flagged "no data" pixels
                     cutout_sigma[keep] = (cutout_sigma[keep] * np.float32(k)).astype(np.float32)
-                    print(
-                        f"[!] host_sigma scale mismatch: sigma_invvar_med={sigma_iv_med:.3g}, "
+                    log.warning(
+                        f"host_sigma scale mismatch: sigma_invvar_med={sigma_iv_med:.3g}, "
                         f"sky_MAD*1.4826={sigma_emp:.3g}, k={k:.3g} -> rescaling sigma by k "
                         f"(preserves spatial structure; only absolute scale changes)."
                     )
                 else:
-                    print(
-                        f"[*] host_sigma scale OK (k={k:.3g}; "
+                    log.info(
+                        f"host_sigma scale OK (k={k:.3g}; "
                         f"sigma_invvar={sigma_iv_med:.3g}, sky_MAD*1.4826={sigma_emp:.3g})."
                     )
             else:
-                print("[!] host_sigma scale check skipped: sigma_invvar or sigma_emp <= 0.")
+                log.warning("host_sigma scale check skipped: sigma_invvar or sigma_emp <= 0.")
         else:
-            print(f"[!] host_sigma scale check skipped: only {sky_pix.size} sky pixels available.")
+            log.warning(f"host_sigma scale check skipped: only {sky_pix.size} sky pixels available.")
 
         fits.PrimaryHDU(data=cutout_sigma, header=cutout_header).writeto(
             os.path.join(args.outdir, "host_sigma.fits"), overwrite=True)
@@ -592,9 +636,15 @@ def main():
     # 4. Output the Component Manifest for GALFIT
     comp_astropy = cat[np.isin(cat["NUMBER"], list(fit_objids))]
     
-    # Export 40px magnitude specifically (Index 14 of the standard 15-aperture array)
+    # Export the production-aperture magnitude. Column index comes from
+    # --mag-aper-index (master_run forwards the resolved ladder index); a
+    # negative or out-of-range value falls back to the last/largest aperture.
+    # The output column keeps the name MAG_40PX for downstream compatibility
+    # even when the production aperture is not literally 40 px.
     if 'MAG_APER' in comp_astropy.colnames and len(comp_astropy['MAG_APER'].shape) > 1:
-        comp_astropy['MAG_40PX'] = comp_astropy['MAG_APER'][:, 14]
+        _n_aper = comp_astropy['MAG_APER'].shape[1]
+        _ai = args.mag_aper_index if 0 <= args.mag_aper_index < _n_aper else _n_aper - 1
+        comp_astropy['MAG_40PX'] = comp_astropy['MAG_APER'][:, _ai]
         
     valid_cols = [col for col in comp_astropy.colnames if len(comp_astropy[col].shape) <= 1]
     comp_df = comp_astropy[valid_cols].to_pandas()
@@ -613,8 +663,8 @@ def main():
     comp_df['YC_CUTOUT'] = comp_df['Y_IMAGE'] - ymin
     
     comp_df.to_csv(os.path.join(args.outdir, "host_components.csv"), index=False)
-    print(
-        f"[*] Complete. {len(fit_objids)} fitted + {len(mask_objids)} masked. "
+    log.info(
+        f"Complete. {len(fit_objids)} fitted + {len(mask_objids)} masked. "
         f"Saved to {args.outdir}"
     )
 
@@ -649,9 +699,9 @@ def main():
         qa_path = os.path.join(args.outdir, "qa_cutout_mask.png")
         plt.savefig(qa_path, bbox_inches='tight', dpi=150)
         plt.close(fig)
-        print(f"[*] Visual QA Map saved to {qa_path}")
+        log.info(f"Visual QA Map saved to {qa_path}")
     except Exception as e:
-        print(f"[!] Warning: QA plotting failed: {e}")
+        log.warning(f"QA plotting failed: {e}")
 
 if __name__ == "__main__":
     main()

@@ -4,41 +4,17 @@ import yaml
 import subprocess
 import argparse
 
-TEMPLATE_CONV = """CONV NORM
-# 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.
-1 2 1
-2 4 2
-1 2 1
-"""
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from pipeline_shared import (  # noqa: E402
+    TEMPLATE_CONV,
+    TEMPLATE_NNW,
+    format_phot_apertures,
+    get_logger,
+    render_param_template,
+    resolve_apertures,
+)
 
-TEMPLATE_NNW = """NNW
-# Neural Network Weights for the SExtractor star/galaxy classifier (V1.3)
-# inputs:	9 for profile parameters + 1 for seeing.
-# outputs:	``Stellarity index'' (0.0 to 1.0)
-# Seeing FWHM range: from 0.025 to 5.5'' (images must have 1.5 < FWHM < 5 pixels)
-# Optimized for Moffat profiles with 2<= beta <= 4.
-
- 3 10 10  1
-
--1.56604e+00 -2.48265e+00 -1.44564e+00 -1.24675e+00 -9.44913e-01 -5.22453e-01  4.61342e-02  8.31957e-01  2.15505e+00  2.64769e-01
- 3.03477e+00  2.69561e+00  3.16188e+00  3.34497e+00  3.51885e+00  3.65570e+00  3.74856e+00  3.84541e+00  4.22811e+00  3.27734e+00
-
--3.22480e-01 -2.12804e+00  6.50750e-01 -1.11242e+00 -1.40683e+00 -1.55944e+00 -1.84558e+00 -1.18946e-01  5.52395e-01 -4.36564e-01 -5.30052e+00
- 4.62594e-01 -3.29127e+00  1.10950e+00 -6.01857e-01  1.29492e-01  1.42290e+00  2.90741e+00  2.44058e+00 -9.19118e-01  8.42851e-01 -4.69824e+00
--2.57424e+00  8.96469e-01  8.34775e-01  2.18845e+00  2.46526e+00  8.60878e-02 -6.88080e-01 -1.33623e-02  9.30403e-02  1.64942e+00 -1.01231e+00
- 4.81041e+00  1.53747e+00 -1.12216e+00 -3.16008e+00 -1.67404e+00 -1.75767e+00 -1.29310e+00  5.59549e-01  8.08468e-01 -1.01592e-02 -7.54052e+00
- 1.01933e+01 -2.09484e+01 -1.07426e+00  9.87912e-01  6.05210e-01 -6.04535e-02 -5.87826e-01 -7.94117e-01 -4.89190e-01 -8.12710e-02 -2.07067e+01
--5.31793e+00  7.94240e+00 -4.64165e+00 -4.37436e+00 -1.55417e+00  7.54368e-01  1.09608e+00  1.45967e+00  1.62946e+00 -1.01301e+00  1.13514e-01
- 2.20336e-01  1.70056e+00 -5.20105e-01 -4.28330e-01  1.57258e-03 -3.36502e-01 -8.18568e-02 -7.16163e+00  8.23195e+00 -1.71561e-02 -1.13749e+01
- 3.75075e+00  7.25399e+00 -1.75325e+00 -2.68814e+00 -3.71128e+00 -4.62933e+00 -2.13747e+00 -1.89186e-01  1.29122e+00 -7.49380e-01  6.71712e-01
--8.41923e-01  4.64997e+00  5.65808e-01 -3.08277e-01 -1.01687e+00  1.73127e-01 -8.92130e-01  1.89044e+00 -2.75543e-01 -7.72828e-01  5.36745e-01
--3.65598e+00  7.56997e+00 -3.76373e+00 -1.74542e+00 -1.37540e-01 -5.55400e-01 -1.59195e-01  1.27910e-01  1.91906e+00  1.42119e+00 -4.35502e+00
-
--1.70059e+00 -3.65695e+00  1.22367e+00 -5.74367e-01 -3.29571e+00  2.46316e+00  5.22353e+00  2.42038e+00  1.22919e+00 -9.22250e-01 -2.32028e+00
-
- 0.00000e+00 
- 1.00000e+00 
-"""
+log = get_logger("phase2")
 
 TEMPLATE_PARAM_PSF = """NUMBER
 VIGNET(27,27)
@@ -59,10 +35,10 @@ ELONGATION
 FLUX_MAX
 MAG_AUTO
 MAGERR_AUTO
-FLUX_APER(15)
-FLUXERR_APER(15)
-MAG_APER(15)
-MAGERR_APER(15)
+FLUX_APER({NAPER})
+FLUXERR_APER({NAPER})
+MAG_APER({NAPER})
+MAGERR_APER({NAPER})
 FLAGS
 BACKGROUND
 CLASS_STAR
@@ -116,7 +92,7 @@ WEIGHT_TYPE      {WEIGHT_TYPE}
 WEIGHT_IMAGE     {WEIGHT_IMAGE}
 WEIGHT_GAIN      Y
 
-PHOT_APERTURES   4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 15.0, 20.0, 25.0, 30.0, {PHOT_APERTURES_PX}
+PHOT_APERTURES   {PHOT_APERTURES}
 PHOT_FLUXFRAC    0.5
 PHOT_AUTOPARAMS  2.5, 3.5
 PHOT_PETROPARAMS 2.0, 3.5
@@ -191,6 +167,28 @@ except ImportError as exc:
     add_sep_arcsec = None
     plot_candidate_geometry = None
 
+# Production aperture, injected by the Phase 2 orchestrator from the resolved
+# YAML aperture ladder (default: the largest aperture). Index is the column in
+# MAG_APER / FLUX_APER; diameter (px) is used for the field-depth calculation.
+_PROD_APER_INDEX = int("__PROD_APER_INDEX__")
+_PROD_APER_DIAM = float("__PROD_APER_DIAM__")
+
+def _query_with_retry(query_fn, max_retries=3, base_delay=2.0, label="query"):
+    # Retry a query function with exponential backoff.
+    import time
+    for attempt in range(max_retries):
+        try:
+            result = query_fn()
+            return result
+        except Exception as e:
+            delay = base_delay * (2 ** attempt)
+            if attempt < max_retries - 1:
+                print(f"[!] {label} attempt {attempt+1} failed: {e}. Retrying in {delay:.0f}s...")
+                time.sleep(delay)
+            else:
+                print(f"[!] {label} failed after {max_retries} attempts: {e}")
+                raise
+
 def get_table_from_ldac(filename, frame=1):
     if frame > 0: frame = frame * 2
     return Table.read(filename, hdu=frame, format='fits')
@@ -214,21 +212,32 @@ def main():
     err_b = astio.get("err_b_arcsec", 1.0)
     err_pa = astio.get("err_theta_deg", 0.0)
     s_conf = config.get("sextractor_psf", {})
-    px_scale = s_conf.get("pixel_scale", 0.262)
-    phot_aperture_px = s_conf.get("phot_apertures_px", 40.0)
-    
-    # 2. READ WCS TARGET
+    phot_aperture_px = _PROD_APER_DIAM
+
+    # Candidate search radius (arcsec) — configurable; legacy default 60" (1 arcmin).
+    search_radius_arcsec = float(astio.get("search_radius_arcsec", 60.0))
+
+    # Candidate prior and offset prior from config (fall back to Aggarwal+2021 adopted).
+    cfg_p_o_method = astio.get("p_o_method", "inverse")
+    cfg_theta_pdf = astio.get("theta_pdf", "exp")
+    cfg_theta_max = float(astio.get("theta_max", 6.0))
+    cfg_theta_scale = float(astio.get("theta_scale", 1.0))
+
+    # 2. READ WCS TARGET + PIXEL SCALE
     with fits.open(args.image) as hdul:
         w = WCS(hdul[0].header).celestial
         x_shape = hdul[0].header['NAXIS1']
         y_shape = hdul[0].header['NAXIS2']
         if args.ra is None or args.dec is None:
-            # Parse target from WCS center
             target_center = w.pixel_to_world(x_shape / 2, y_shape / 2)
         else:
             target_center = SkyCoord(args.ra, args.dec, unit='deg', frame='icrs')
 
+    # Pixel scale from the WCS (arcsec/pixel). Always computed, never hardcoded.
+    wcs_scales_deg = proj_plane_pixel_scales(w)
+    px_scale = float(np.mean(wcs_scales_deg) * 3600.0)
     print(f"[*] Target FRB set to RA={target_center.ra.deg:.5f}, DEC={target_center.dec.deg:.5f}")
+    print(f"[*] Pixel scale from WCS: {px_scale:.6f} arcsec/px")
 
     # Calibration catalogs cover the full image footprint (not a legacy 5.5' x 13.6' box).
     img_center = w.pixel_to_world(x_shape / 2.0, y_shape / 2.0)
@@ -247,16 +256,22 @@ def main():
     # PS1 (Vizier) and Legacy DR10 Tractor (NOIRLab TAP) are queried every time.
     # After matching to clean PSF stars, we use whichever survey yields more matches
     # (>= MIN_CAL_STARS). Ties favour PS1.
+    #
+    # TODO: Add more survey options as backup reference catalogs (e.g., SDSS,
+    # 2MASS, Gaia) for fields where neither PS1 nor Legacy has coverage.
     MIN_CAL_STARS = 3
     MATCH_RADIUS = 0.6 * u.arcsec
 
     def _query_ps1(center, width_arcmin, height_arcmin):
         v = Vizier(columns=['*'], column_filters={"rmag": "< 20", "Nd": "> 6"}, row_limit=-1)
-        Q = v.query_region(
-            center,
-            width=width_arcmin * u.arcmin,
-            height=height_arcmin * u.arcmin,
-            catalog='II/349',
+        Q = _query_with_retry(
+            lambda: v.query_region(
+                center,
+                width=width_arcmin * u.arcmin,
+                height=height_arcmin * u.arcmin,
+                catalog='II/349',
+            ),
+            label="PS1 Vizier",
         )
         if not Q or len(Q[0]) == 0:
             return None, None
@@ -292,12 +307,11 @@ def main():
             + " AND dec > {:.6f} AND dec < {:.6f}".format(dec_min, dec_max)
             + " AND type = 'PSF' AND fracflux_r < 0.05 AND anymask_r = 0 AND flux_r > 10"
         )
-        try:
-            service = pyvo.dal.TAPService("https://datalab.noirlab.edu/tap")
-            raw = service.search(query).to_table()
-        except Exception as exc:
-            print("[!] Legacy Survey TAP query failed: {}".format(exc))
-            return None, None
+        service = pyvo.dal.TAPService("https://datalab.noirlab.edu/tap")
+        raw = _query_with_retry(
+            lambda: service.search(query).to_table(),
+            label="Legacy TAP",
+        )
         if raw is None or len(raw) == 0:
             return None, None
         flux = np.asarray(raw['flux_r'], dtype=float)
@@ -326,12 +340,20 @@ def main():
         return len(idx_pimg), idx_pimg, idx_pref
 
     print("[*] Querying PS1 for calibration stars...")
-    ps1_tab, ps1_cat_id = _query_ps1(img_center, cal_width_arcmin, cal_height_arcmin)
+    try:
+        ps1_tab, ps1_cat_id = _query_ps1(img_center, cal_width_arcmin, cal_height_arcmin)
+    except Exception as exc:
+        print(f"[!] PS1 Vizier query failed after all retries: {exc}. Continuing with n_ps1=0.")
+        ps1_tab, ps1_cat_id = None, None
     n_ps1_cand = len(ps1_tab) if ps1_tab is not None else 0
     print(f"    PS1 candidates in field: {n_ps1_cand}")
 
     print("[*] Querying Legacy Survey DR10 (Tractor) for calibration stars...")
-    leg_tab, leg_cat_id = _query_legacy(img_center, cal_width_arcmin, cal_height_arcmin)
+    try:
+        leg_tab, leg_cat_id = _query_legacy(img_center, cal_width_arcmin, cal_height_arcmin)
+    except Exception as exc:
+        print(f"[!] Legacy TAP query failed after all retries: {exc}. Continuing with n_legacy=0.")
+        leg_tab, leg_cat_id = None, None
     n_leg_cand = len(leg_tab) if leg_tab is not None else 0
     print(f"    Legacy candidates in field: {n_leg_cand}")
 
@@ -355,30 +377,32 @@ def main():
         )
     print(f"[*] Using {cal_catalog_id} for ZP ({len(idx_pimg)} matched stars)")
 
-    # 40-px aperture ZP — this is the ZP that goes into MAG_CALIB_APER_40PX (the magnitude
-    # passed to AstroPath when mag_mode='mag_40px') and is the recommended production value.
-    zp_med, _, zp_std = sigma_clipped_stats(
-        ref_stars['rmag'][idx_pref] - cat_psf_cln['MAG_APER'][:, 14][idx_pimg], sigma=3)
+    # Production-aperture ZP — this is the ZP that goes into MAG_CALIB_APER (the
+    # magnitude passed to AstroPath when mag_mode='mag_aper') and is the recommended
+    # production value. sigma_clipped_stats returns (mean, median, std): we adopt the
+    # sigma-clipped MEDIAN, which is robust against asymmetric reference-star outliers.
+    _, zp_med, zp_std = sigma_clipped_stats(
+        ref_stars['rmag'][idx_pref] - cat_psf_cln['MAG_APER'][:, _PROD_APER_INDEX][idx_pimg], sigma=3)
 
     # PSF model ZP — for MAG_POINTSOURCE flux estimator (PSF-fit photometry)
-    zp_p_med, _, zp_p_std = sigma_clipped_stats(
+    _, zp_p_med, zp_p_std = sigma_clipped_stats(
         ref_stars['rmag'][idx_pref] - cat_psf_cln['MAG_POINTSOURCE'][idx_pimg], sigma=3)
 
     # Kron / MAG_AUTO ZP — independent because Kron is a different flux estimator
-    zp_auto_med, _, zp_auto_std = sigma_clipped_stats(
+    _, zp_auto_med, zp_auto_std = sigma_clipped_stats(
         ref_stars['rmag'][idx_pref] - cat_psf_cln['MAG_AUTO'][idx_pimg], sigma=3)
 
     print(f"[*] Calibration Complete (N_stars={len(idx_pimg)}): "
-          f"40-px ZP = {zp_med:.3f}, PSF ZP = {zp_p_med:.3f}, Auto ZP = {zp_auto_med:.3f}")
+          f"Aper ZP = {zp_med:.3f} ({_PROD_APER_DIAM:g}px), PSF ZP = {zp_p_med:.3f}, Auto ZP = {zp_auto_med:.3f}")
 
-    # Persist ZPs as a machine-readable artefact so master_run.py can hand them
-    # off as part of the 'photometry' deliverable without parsing stdout.
     zp_payload = {
         "n_calibration_stars": int(len(idx_pimg)),
         "n_ps1_matches": int(n_ps1),
         "n_legacy_matches": int(n_leg),
-        "zp_aper_40px": float(zp_med),
-        "zp_aper_40px_std": float(zp_std),
+        "production_aperture_px": float(_PROD_APER_DIAM),
+        "pixel_scale_arcsec_px": float(px_scale),
+        "zp_aper": float(zp_med),
+        "zp_aper_std": float(zp_std),
         "zp_psf": float(zp_p_med),
         "zp_psf_std": float(zp_p_std),
         "zp_auto": float(zp_auto_med),
@@ -426,18 +450,14 @@ def main():
                   f"SNR_WIN={float(cat_psf['SNR_WIN'][nearest_idx]):.2f}). "
                   f"Real host may be below detect_thresh — double-check the field.")
 
-    in_region = seps_all < 60.0   # 1 arcmin
-    snr_min = astio.get("target_snr_min", 1.0)
+    in_region = seps_all < search_radius_arcsec
+    snr_min = astio.get("target_snr_min", 0.0)
     snr_mask = cat_psf['SNR_WIN'] > snr_min
-    # FLAGS_MODEL is intentionally NOT used to gate candidates. Extended / deblended /
-    # neighbor-affected galaxies commonly have FLAGS_MODEL > 0 and would otherwise be
-    # silently dropped before AstroPath ever sees them. FLAGS_MODEL stays strict only
-    # for the ZP star sample above.
     reg_srcs = cat_psf[in_region & snr_mask]
     n_in_region = int(np.sum(in_region))
     n_dropped_snr = int(np.sum(in_region & ~snr_mask))
-    print(f"[*] Cross-matching {len(reg_srcs)} valid candidates in a 1 arcminute radius bounds "
-          f"(within 1': {n_in_region}; dropped by SNR_WIN <= {snr_min}: {n_dropped_snr}).")
+    print(f"[*] Cross-matching {len(reg_srcs)} valid candidates within {search_radius_arcsec:.0f} arcsec "
+          f"(in region: {n_in_region}; dropped by SNR_WIN <= {snr_min}: {n_dropped_snr}).")
 
     records = []
     candidates_for_astropath = []
@@ -446,14 +466,14 @@ def main():
         ra, dec = float(src['ALPHAWIN_J2000']), float(src['DELTAWIN_J2000'])
 
         # All three calibrated magnitudes from the same row in cat_psf
-        mag_40 = float(src['MAG_APER'][14]) + float(zp_med)
+        mag_40 = float(src['MAG_APER'][_PROD_APER_INDEX]) + float(zp_med)
         mag_psf = float(src['MAG_POINTSOURCE']) + float(zp_p_med)
         mag_auto = float(src['MAG_AUTO']) + float(zp_auto_med)
         ang_size = float(src['FLUX_RADIUS']) * float(px_scale)
         spread_model = float(src['SPREAD_MODEL'])
         spread_model_err = float(src['SPREADERR_MODEL'])
 
-        mag_mode = config.get("sextractor_psf", {}).get("mag_mode", "mag_40px")
+        mag_mode = config.get("sextractor_psf", {}).get("mag_mode", "mag_aper")
         if mag_mode == "mag_psf":
             mag_for_path = mag_psf
         elif mag_mode == "mag_auto":
@@ -503,7 +523,7 @@ def main():
             "objid": i,
             "sex_number": int(src['NUMBER']),
             "RA": ra, "Dec": dec,
-            "MAG_CALIB_APER_40PX": round(mag_40, 3),
+            "MAG_CALIB_APER": round(mag_40, 3),
             "MAG_CALIB_PSF": round(mag_psf, 3),
             "MAG_CALIB_AUTO": round(mag_auto, 3),
             "FLUX_RADIUS": float(src['FLUX_RADIUS']),
@@ -531,22 +551,18 @@ def main():
     # ========================================================================
     # ASTROPATH PRIOR CONFIGURATION
     # ========================================================================
-    # All knobs that control which Bayesian prior set AstroPath evaluates live
-    # in this single block.  Defaults below reproduce the "adopted" prior set
-    # from Aggarwal et al. 2021 (PATH paper, ApJ 911 95), also defined in
-    # astropath/priors.py::load_std_priors().  Edit the values to experiment;
-    # the rest of the script does not need to be touched.
+    # All knobs are now YAML-configurable under the "astropath:" block in
+    # photometry_astropath_config.yaml.  Defaults reproduce the "adopted"
+    # prior set from Aggarwal et al. 2021 (PATH paper, ApJ 911 95).
     #
     # ---- 1. CANDIDATE PRIOR  P(O_i)  --------------------------------------
     # Per-galaxy weight before the FRB position is taken into account.
-    #   "inverse"   : raw P(O_i) ~ 1 / ang_size   (Aggarwal+2021 "adopted")
-    #   "identical" : every candidate equally likely  (Aggarwal+2021 "conservative")
-    #   "linear"    : raw P(O_i) ~ ang_size
-    #   "user"      : custom function, set astropath.priors.USR_raw_prior_Oi
+    #   "inverse"      : P(O) ~ 1/Sigma_m              (Aggarwal+2021 "adopted")
+    #   "inverse_ang"  : P(O) ~ 1/(Sigma_m * R_eff)    (R_eff-weighted)
+    #   "inverse_ang2" : P(O) ~ 1/(Sigma_m * R_eff^2)  (R_eff^2-weighted)
+    #   "identical"    : all equal                      (Aggarwal+2021 "conservative")
     # See astropath/priors.py::raw_prior_Oi.
-    P_O_METHOD = "inverse"
-    # P(U): prior probability that the true host is *unseen* (below detection
-    # limit or outside the candidate list).  0.0 disables the unseen channel.
+    P_O_METHOD = cfg_p_o_method
     P_U = astio.get("p_u", 0.1)
 
     # ---- 2. OFFSET PRIOR  P(theta | O_i)  ---------------------------------
@@ -554,40 +570,30 @@ def main():
     # each candidate's angular half-light radius phi (= ang_size, arcsec).
     # See astropath/bayesian.py::pw_Oi for the exact functional forms.
     #
-    #   "exp"     : P(theta) ~ exp(-theta / (THETA_SCALE * phi))   (default)
-    #   "uniform" : P(theta) = const inside theta < THETA_MAX * phi, else 0
-    #   "core"    : P(theta) ~ phi / (theta + phi)                 (cored)
-    THETA_PDF = "exp"
-    # THETA_MAX: truncation / integration radius, in units of phi (NOT arcsec).
-    # Aggarwal+2021 default = 6.0 for both adopted and conservative sets.
-    THETA_MAX = 6.0
-    # THETA_SCALE: only used by "exp"; multiplies phi inside the exponential.
-    # 1.0 -> e-folding length = phi (Aggarwal default).  Increase for a
-    # broader, more permissive offset prior.
-    THETA_SCALE = 1.0
+    #   "exp"     : P(theta) ~ exp(-theta / (scale * phi))   (default)
+    #   "uniform" : P(theta) = const inside theta < max * phi, else 0
+    #   "core"    : P(theta) ~ phi / (theta + phi)           (cored)
+    #   "flat"    : P(theta) = const in arcsec within max * phi
+    THETA_PDF = cfg_theta_pdf
+    THETA_MAX = cfg_theta_max
+    THETA_SCALE = cfg_theta_scale
 
     # ---- 3. POSTERIOR INTEGRATION (numerical, not statistical) ------------
-    # AstroPath's px_Oi_local sets the integration grid step in arcsec to
-    # `phi * POSTERIOR_STEP`.  When phi is large compared to the localization
-    # sigma (e.g. phi = 8" host with 0.5" ASKAP localization), the default
-    # step (0.1 * phi = 0.8") under-resolves the localization peak — the
-    # entire FRB error ellipse fits inside a single grid cell and the host
-    # likelihood collapses to ~zero.  Symptom: real, obvious hosts get
-    # posterior_O ~ 1e-5 while P(U) sits at ~1.
-    #
-    # We therefore pick POSTERIOR_STEP adaptively so that the absolute grid
-    # step satisfies  step_arcsec <= sigma_loc / 5  for every candidate, where
-    # sigma_loc is the smaller localization semi-axis.  Floor at 0.005 to
-    # keep the integration tractable for tiny localizations.
-    POSTERIOR_METHOD = "local"   # "local" | "fixed"; "local" handles wide localisations
-    POSTERIOR_RMAX   = 60.0      # max radius (arcsec) used for P(U) normalisation
+    # px_Oi_local sets grid step in arcsec = phi * POSTERIOR_STEP. Adaptive
+    # step ensures step_arcsec <= sigma_loc / 5 for all candidates, with a
+    # floor at 0.005 and ceiling at 0.1 to keep grids tractable.
+    POSTERIOR_METHOD = "local"
+    POSTERIOR_RMAX = search_radius_arcsec
 
     sigma_loc_arcsec = float(min(err_a, err_b))
     phi_max_arcsec = float(max(2.0, np.max(cdf["ang_size"].to_numpy())))
     POSTERIOR_STEP = max(0.005, min(0.1, sigma_loc_arcsec / (5.0 * phi_max_arcsec)))
+    print(f"[*] AstroPath config: P_O={P_O_METHOD}, theta_pdf={THETA_PDF}, "
+          f"theta_max={THETA_MAX}, theta_scale={THETA_SCALE}")
     print(f"[*] AstroPath integration step_size = {POSTERIOR_STEP:.4f} (phi units); "
           f"~{POSTERIOR_STEP * phi_max_arcsec:.3f} arcsec at largest candidate "
           f"(phi_max={phi_max_arcsec:.2f} arcsec, sigma_loc_min={sigma_loc_arcsec:.2f} arcsec).")
+    print(f"[*] Search radius = {search_radius_arcsec:.0f} arcsec (P(U) normalisation radius)")
     # ========================================================================
 
     mypath.init_cand_prior(P_O_method=P_O_METHOD, P_U=P_U)
@@ -635,9 +641,9 @@ def main():
 
         bx, by = w.world_to_pixel(SkyCoord(ra=best['ra'], dec=best['dec'], unit='deg'))
         cx, cy = w.world_to_pixel(target_center)
-        px_per_arcmin = 60.0 / px_scale
-        cx_min, cx_max = cx - px_per_arcmin, cx + px_per_arcmin
-        cy_min, cy_max = cy - px_per_arcmin, cy + px_per_arcmin
+        px_per_search = search_radius_arcsec / px_scale
+        cx_min, cx_max = cx - px_per_search, cx + px_per_search
+        cy_min, cy_max = cy - px_per_search, cy + px_per_search
 
         # Display stretch must be based on the *zoomed* field, not the full
         # cutout.  ZScaleInterval on a 10' image with a bright source far from
@@ -690,7 +696,7 @@ def main():
         sc = ax_scatter.scatter(cdf['mag'], cdf['posterior_O'], c=cdf['posterior_O'], cmap='viridis', s=80, edgecolor='k')
         ax_scatter.plot(best['mag'], best['posterior_O'], 'ro', markersize=15, markerfacecolor='none', markeredgewidth=2, label='Selected Host')
         plt.colorbar(sc, ax=ax_scatter, label='Posterior P(O|x)')
-        ax_scatter.set_xlabel('Calibrated 40px Aperture Magnitude')
+        ax_scatter.set_xlabel('Calibrated Production Aperture Magnitude')
         ax_scatter.set_ylabel('Posterior Probability P(O|x)')
         ax_scatter.set_title("AstroPath Posterior vs Magnitude")
         ax_scatter.grid(True, alpha=0.4)
@@ -811,84 +817,101 @@ def main():
 
     config_path = os.path.abspath(args.config)
     if not os.path.exists(config_path):
-        print(f"Error: Config file {config_path} not found.")
+        log.error(f"Config file {config_path} not found.")
         sys.exit(1)
-    print(f"[*] Phase 2 config: {config_path}")
+    log.info(f"Phase 2 config: {config_path}")
 
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
 
     # Build Template
     s_conf = config.get("sextractor_psf", {})
-    
+
+    # Aperture ladder + production aperture (YAML-configurable; default = largest).
+    apertures, prod_index, prod_diam = resolve_apertures(s_conf)
+    log.info(
+        f"Apertures (px): {format_phot_apertures(apertures)} "
+        f"| production = {prod_diam:g} px (index {prod_index})"
+    )
+
     # Check invvar for map weighting — honours use_weight_map from YAML
     use_weight_map = s_conf.get("use_weight_map", True)
     invvar_name = "invvar.fits"
     if use_weight_map and os.path.exists(os.path.join(image_dir, invvar_name)):
         weight_type = "MAP_WEIGHT"
         weight_image = invvar_name
-        print("[*] Weight map: invvar.fits found and enabled.")
+        log.info("Weight map: invvar.fits found and enabled.")
     else:
         weight_type = "NONE"
         weight_image = "NONE"
         if use_weight_map and not os.path.exists(os.path.join(image_dir, invvar_name)):
-            print("[!] Warning: use_weight_map=true but invvar.fits not found. Running without weight map.")
+            log.warning("use_weight_map=true but invvar.fits not found. Running without weight map.")
         else:
-            print("[*] Weight map disabled by config (use_weight_map=false).")
+            log.info("Weight map disabled by config (use_weight_map=false).")
 
     # Measure actual SEEING_FWHM from proto_image.fits for reliable CLASS_STAR classification.
     # The PSFEx proto_image is the 25x25 PSF stamp — moment-based FWHM is more accurate than
     # the config default and gets injected directly into SExtractor's neural-network classifier.
-    pixel_scale_cfg = s_conf.get("pixel_scale", 0.262)
+    # Compute pixel scale from WCS for the orchestrator side as well.
+    try:
+        from astropy.io import fits as _afits
+        from astropy.wcs import WCS as _WCS
+        from astropy.wcs.utils import proj_plane_pixel_scales as _ppps
+        with _afits.open(image_path) as _hdul:
+            _w = _WCS(_hdul[0].header).celestial
+            pixel_scale_cfg = float(np.mean(_ppps(_w)) * 3600.0)
+    except Exception:
+        pixel_scale_cfg = s_conf.get("pixel_scale", 0.262)
     proto_path = os.path.join(image_dir, "proto_image.fits")
     seeing_fwhm = s_conf.get("seeing_fwhm", 2.0)  # fallback
     if os.path.exists(proto_path):
         measured = measure_psf_fwhm_arcsec(proto_path, pixel_scale_cfg)
         if measured:
             seeing_fwhm = measured
-            print(f"[*] Measured SEEING_FWHM from proto_image.fits: {seeing_fwhm:.3f} arcsec")
+            log.info(f"Measured SEEING_FWHM from proto_image.fits: {seeing_fwhm:.3f} arcsec")
         else:
-            print(f"[!] FWHM measurement returned None, falling back to config: {seeing_fwhm} arcsec")
+            log.warning(f"FWHM measurement returned None, falling back to config: {seeing_fwhm} arcsec")
     else:
-        print(f"[!] proto_image.fits not found in {image_dir}, using config SEEING_FWHM={seeing_fwhm}")
+        log.warning(f"proto_image.fits not found in {image_dir}, using config SEEING_FWHM={seeing_fwhm}")
 
     deblend_mincont = float(s_conf.get("deblend_mincont", 0.005))
 
     sex_content = TEMPLATE_SEX_PSF.format(
         CATALOG_NAME=psf_catalog_name,
-        DETECT_THRESH=s_conf.get("detect_thresh", 10),
-        ANALYSIS_THRESH=s_conf.get("analysis_thresh", 10),
+        DETECT_THRESH=s_conf.get("detect_thresh", 3),
+        ANALYSIS_THRESH=s_conf.get("analysis_thresh", 3),
         DEBLEND_MINCONT=deblend_mincont,
         PSF_NAME=args.psf,
         WEIGHT_TYPE=weight_type,
         WEIGHT_IMAGE=weight_image,
-        PHOT_APERTURES_PX=s_conf.get("phot_apertures_px", 40.0),
+        PHOT_APERTURES=format_phot_apertures(apertures),
         MAG_ZEROPOINT=s_conf.get("mag_zeropoint", 0.0),
         GAIN=s_conf.get("gain", 1.6),
-        PIXEL_SCALE=s_conf.get("pixel_scale", 0.0),
+        PIXEL_SCALE=pixel_scale_cfg,
         SEEING_FWHM=seeing_fwhm,
     )
 
     path_sex = os.path.join(image_dir, "default_psf.sex")
     path_param = os.path.join(image_dir, "photomPSF.param")
     with open(path_sex, "w", newline="\n") as f: f.write(sex_content)
-    with open(path_param, "w", newline="\n") as f: f.write(TEMPLATE_PARAM_PSF)
-    
+    with open(path_param, "w", newline="\n") as f:
+        f.write(render_param_template(TEMPLATE_PARAM_PSF, len(apertures)))
+
     # Ensure standards
     with open(os.path.join(image_dir, "default.conv"), "w", newline="\n") as f: f.write(TEMPLATE_CONV)
     with open(os.path.join(image_dir, "default.nnw"), "w", newline="\n") as f: f.write(TEMPLATE_NNW)
 
-    print("[Phase 2] Executing Subprocess SExtractor with PSF Model")
+    log.info("Executing Subprocess SExtractor with PSF Model")
     try:
         cmd_sex = ["wsl", "source-extractor", image_name, "-c", "default_psf.sex"]
         subprocess.run(cmd_sex, cwd=image_dir, check=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error executing PSF Photometry: {e}")
+        log.error(f"Error executing PSF Photometry: {e}")
         sys.exit(1)
 
-    print(f"[*] Phase 2 SExtractor DEBLEND_MINCONT = {deblend_mincont}")
+    log.info(f"Phase 2 SExtractor DEBLEND_MINCONT = {deblend_mincont}")
 
-    print("[Phase 2] Generating WSL Native Conda Script")
+    log.info("Generating WSL Native Conda Script")
     # Resolve the AstroPath package path absolutely (relative to THIS orchestrator file)
     # so the WSL-side script no longer depends on cwd. The repo layout is:
     #   pipeline_scripts/photometry + astropath/run_photometry_astropath.py
@@ -898,16 +921,18 @@ def main():
     astropath_pkg_wsl = _to_wsl_path(astropath_pkg_dir)
     diag_pkg_wsl = _to_wsl_path(script_dir)
     if not os.path.isdir(astropath_pkg_dir):
-        print(f"[!] Warning: AstroPath package directory not found at {astropath_pkg_dir} — WSL import will fail.")
+        log.warning(f"AstroPath package directory not found at {astropath_pkg_dir} — WSL import will fail.")
 
     astro_script = os.path.join(image_dir, "_run_astrophysics_wsl.py")
     rendered = (
         TEMPLATE_ASTROPHYSICS.replace("__ASTROPATH_PKG__", astropath_pkg_wsl)
         .replace("__DIAG_PKG__", diag_pkg_wsl)
+        .replace("__PROD_APER_INDEX__", str(int(prod_index)))
+        .replace("__PROD_APER_DIAM__", str(float(prod_diam)))
     )
     with open(astro_script, "w", encoding="utf-8", newline="\n") as f: f.write(rendered)
 
-    print("[Phase 2] Triggering Conda `frb_project` Environment OS Bridge")
+    log.info("Triggering Conda `frb_project` Environment OS Bridge")
     coord_args = f"--ra {args.ra} --dec {args.dec}" if args.ra is not None else ""
     wsl_config_path = _to_wsl_path(config_path)
     wsl_bash_cmd = (
@@ -921,9 +946,9 @@ def main():
         subprocess.run(["wsl", "-e", "bash", "-ic", wsl_bash_cmd], cwd=image_dir, check=True)
     except subprocess.CalledProcessError as e:
         wsl_error = e
-        print(f"Error inside the Astropath WSL bridge: {e}")
+        log.error(f"Error inside the Astropath WSL bridge: {e}")
     finally:
-        print("[Phase 2] Cleaning up templates")
+        log.info("Cleaning up templates")
         for temp_file in [path_sex, path_param, os.path.join(image_dir, "default.conv"), os.path.join(image_dir, "default.nnw"), astro_script]:
             if os.path.exists(temp_file):
                 os.remove(temp_file)

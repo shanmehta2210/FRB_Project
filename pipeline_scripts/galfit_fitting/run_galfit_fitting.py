@@ -29,10 +29,17 @@ _REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
+_PIPELINE_DIR = Path(__file__).resolve().parents[1]
+if str(_PIPELINE_DIR) not in sys.path:
+    sys.path.insert(0, str(_PIPELINE_DIR))
+
 from scripts.galfit_fitlog_parse import (  # noqa: E402
     parse_fitlog_sky_level,
     sky_level_is_plausible,
 )
+from pipeline_shared import get_logger  # noqa: E402
+
+log = get_logger("phase3b")
 
 _GALFIT_CRASH_MARKERS = (
     "GALFIT crashed",
@@ -51,7 +58,7 @@ _GALFIT_ARTIFACTS = (
 
 
 def load_mag_zeropoint(wkdir: str, config: dict) -> tuple[float, str]:
-    """GALFIT J) ZP: galfit_config > zero_points.json zp_aper_40px > 22.5."""
+    """GALFIT J) ZP: galfit_config > zero_points.json zp_aper > 22.5."""
     if "mag_zeropoint" in config:
         val = float(config["mag_zeropoint"])
         if math.isfinite(val):
@@ -61,7 +68,7 @@ def load_mag_zeropoint(wkdir: str, config: dict) -> tuple[float, str]:
         try:
             with open(zp_path, encoding="utf-8") as f:
                 zp_data = json.load(f)
-            zp_val = zp_data.get("zp_aper_40px")
+            zp_val = zp_data.get("zp_aper") or zp_data.get("zp_aper_40px")
             if zp_val is not None:
                 val = float(zp_val)
                 if math.isfinite(val):
@@ -126,6 +133,7 @@ def build_feedme_and_constraints(
     sky_tolerance_adu: float,
     mag_min: float,
     mag_max: float,
+    conv_box_pad: int = 24,
 ) -> tuple[str, str]:
     sigma_line = "host_sigma.fits" if has_sigma else "none"
     feedme = f"""===============================================================================
@@ -138,7 +146,7 @@ E) 1  # PSF fine sampling factor
 F) host_mask.fits  # Bad pixel mask
 G) constraints.txt  # File with parameter constraints
 H) 1 {xmax} 1 {ymax}  # Image region to fit (1-based full image)
-I) {xmax + 24} {ymax + 24}  # Size of convolution box
+I) {xmax + conv_box_pad} {ymax + conv_box_pad}  # Size of convolution box
 J) {mag_zeropoint:.4f}  # Photometric zeropoint
 K) {plate_scale_x} {plate_scale_y}  # Plate scale [arcsec/pixel]
 O) regular  # Display type
@@ -152,8 +160,21 @@ P) 0  # Choose: 0=optimize
     for _, row in comp_df.iterrows():
         xc = row["XC_CUTOUT"]
         yc = row["YC_CUTOUT"]
-        raw_mag = row.get("MAG_40PX", row["MAG_AUTO"])
-        mag = float(raw_mag) + float(mag_zeropoint)
+        # Guard against NaN / SExtractor's 99.0 "undefined magnitude" sentinel,
+        # which would otherwise produce a NaN/out-of-range GALFIT seed and crash
+        # the fit. Prefer the production-aperture mag, then MAG_AUTO, then the
+        # midpoint of the allowed magnitude window. The chosen seed is finally
+        # clamped into [mag_min, mag_max] so it never violates the constraint.
+        seed_mag = None
+        for cand in (row.get("MAG_40PX"), row.get("MAG_AUTO")):
+            if cand is not None and pd.notna(cand):
+                cand_f = float(cand)
+                if math.isfinite(cand_f) and abs(cand_f) < 90.0:
+                    seed_mag = cand_f + float(mag_zeropoint)
+                    break
+        if seed_mag is None:
+            seed_mag = 0.5 * (float(mag_min) + float(mag_max))
+        mag = min(max(seed_mag, float(mag_min)), float(mag_max))
         re = row["FLUX_RADIUS"]
         if pd.isna(re) or re <= 0:
             re = 1.0
@@ -217,15 +238,15 @@ def ensure_proto_image(wkdir: str) -> bool:
     proto_src = os.path.join(wkdir, "..", "SExtractor + PSFEx", "proto_image.fits")
     if os.path.exists(proto_src):
         shutil.copy(proto_src, proto_dst)
-        print("[*] Synced proto_image.fits from ../SExtractor + PSFEx/.")
+        log.info("Synced proto_image.fits from ../SExtractor + PSFEx/.")
         return True
-    print(f"[!] ABORT: proto_image.fits missing — looked in {wkdir} and {os.path.dirname(proto_src)}.")
-    print("[!] Run pipeline_scripts/SExtractor + PSFEx/run_psf_pipeline.py first.")
+    log.error(f"ABORT: proto_image.fits missing — looked in {wkdir} and {os.path.dirname(proto_src)}.")
+    log.error("Run pipeline_scripts/SExtractor + PSFEx/run_psf_pipeline.py first.")
     return False
 
 
 def run_galfit(wkdir: str) -> bool:
-    print("\n[*] Running wsl galfit...")
+    log.info("Running wsl galfit...")
     log_path = os.path.join(wkdir, "fit.log")
     try:
         proc = subprocess.run(
@@ -239,17 +260,18 @@ def run_galfit(wkdir: str) -> bool:
         )
         combined = (proc.stdout or "") + (proc.stderr or "")
     except (subprocess.CalledProcessError, FileNotFoundError, OSError) as exc:
-        print(f"[!] GALFIT execution failed: {exc}")
+        log.error(f"GALFIT execution failed: {exc}")
         return False
 
+    # Raw GALFIT stdout/stderr is passed through verbatim (multi-line tool output).
     if combined.strip():
         print(combined, end="" if combined.endswith("\n") else "\n")
 
     if any(marker in combined for marker in _GALFIT_CRASH_MARKERS):
-        print("[!] GALFIT reported a crash (bad parameters / singular matrix).")
+        log.error("GALFIT reported a crash (bad parameters / singular matrix).")
         return False
     if not os.path.isfile(log_path) or os.path.getsize(log_path) == 0:
-        print("[!] GALFIT did not produce a non-empty fit.log.")
+        log.error("GALFIT did not produce a non-empty fit.log.")
         return False
     return True
 
@@ -286,16 +308,16 @@ def write_results_png(wkdir: str) -> None:
         qa_path = os.path.join(wkdir, "galfit_results.png")
         plt.savefig(qa_path, bbox_inches="tight", dpi=200)
         plt.close(fig)
-        print(f"[*] Standardized visualization saved to {qa_path}")
+        log.info(f"Standardized visualization saved to {qa_path}")
     except Exception as exc:
-        print(f"[!] Diagnostic charting skipped: {exc}")
+        log.warning(f"Diagnostic charting skipped: {exc}")
 
 
 def write_sky_audit(wkdir: str, audit: dict) -> None:
     path = os.path.join(wkdir, "sky_fit_audit.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump(audit, f, indent=2)
-    print(f"[*] Sky QA audit written to {path}")
+    log.info(f"Sky QA audit written to {path}")
 
 
 def main() -> int:
@@ -309,14 +331,14 @@ def main() -> int:
     req_files = ["host_cutout.fits", "host_mask.fits", "host_components.csv"]
     for rf in req_files:
         if not os.path.exists(os.path.join(wkdir, rf)):
-            print(f"[!] Error: Missing required file {rf} in {wkdir}")
+            log.error(f"Missing required file {rf} in {wkdir}")
             return 1
 
     has_sigma = os.path.exists(os.path.join(wkdir, "host_sigma.fits"))
     if has_sigma:
-        print("[*] host_sigma.fits found — using sigma-weighted fit.")
+        log.info("host_sigma.fits found — using sigma-weighted fit.")
     else:
-        print("[!] host_sigma.fits not found — GALFIT will generate its own sigma image.")
+        log.warning("host_sigma.fits not found — GALFIT will generate its own sigma image.")
 
     with fits.open(os.path.join(wkdir, "host_cutout.fits")) as hdul:
         ymax, xmax = hdul[0].data.shape
@@ -329,17 +351,40 @@ def main() -> int:
             if isinstance(loaded, dict):
                 config = loaded
 
-    plate_scale_x = float(config.get("plate_scale_x", 0.262))
-    plate_scale_y = float(config.get("plate_scale_y", 0.262))
+    plate_scale_x = config.get("plate_scale_x")
+    plate_scale_y = config.get("plate_scale_y")
+    if plate_scale_x is None or plate_scale_y is None:
+        image_fits = os.path.join(wkdir, "image.fits")
+        if os.path.isfile(image_fits):
+            try:
+                from astropy.io import fits as _afits
+                from astropy.wcs import WCS as _WCS
+                from astropy.wcs.utils import proj_plane_pixel_scales as _ppps
+                import numpy as _np
+                with _afits.open(image_fits) as _hdul:
+                    _w = _WCS(_hdul[0].header).celestial
+                    _scales = _ppps(_w) * 3600.0
+                    plate_scale_x = float(_scales[0])
+                    plate_scale_y = float(_scales[1])
+                log.info(f"Plate scale from WCS: {plate_scale_x:.6f} x {plate_scale_y:.6f} arcsec/px")
+            except Exception as exc:
+                log.warning(f"Could not compute plate scale from WCS: {exc}")
+                plate_scale_x, plate_scale_y = 0.262, 0.262
+        else:
+            plate_scale_x, plate_scale_y = 0.262, 0.262
+    else:
+        plate_scale_x = float(plate_scale_x)
+        plate_scale_y = float(plate_scale_y)
     mag_zeropoint, mag_zp_source = load_mag_zeropoint(wkdir, config)
     sky_check_enabled = bool(config.get("sky_check_enabled", True))
     sky_tolerance_adu = float(config.get("sky_tolerance_adu", 3.0))
     sky_max_retries = int(config.get("sky_max_retries", 1))
     mag_min = float(config.get("mag_min", 8.0))
     mag_max = float(config.get("mag_max", 40.0))
+    conv_box_pad = int(config.get("conv_box_pad", 24))
 
-    print(f"[*] GALFIT photometric zeropoint: {mag_zeropoint:.4f} (source={mag_zp_source})")
-    print(f"[*] Sérsic mag constraints: {mag_min:.1f} to {mag_max:.1f}")
+    log.info(f"GALFIT photometric zeropoint: {mag_zeropoint:.4f} (source={mag_zp_source})")
+    log.info(f"Sérsic mag constraints: {mag_min:.1f} to {mag_max:.1f}")
 
     comp_df = pd.read_csv(os.path.join(wkdir, "host_components.csv"))
     host_meta = host_audit_fields(comp_df)
@@ -347,15 +392,15 @@ def main() -> int:
     n_sersic = len(comp_df)
     sky_comp_num = n_sersic + 1
 
-    print(
-        f"[*] SExtractor sky reference: {sky_ref:.6g} ADU "
+    log.info(
+        f"SExtractor sky reference: {sky_ref:.6g} ADU "
         f"(source={sky_ref_source}, component={sky_comp_num})"
     )
     if sky_ref_source == "fallback_zero":
-        print("[!] Warning: no valid BACKGROUND in host_components.csv; sky seed is 0.")
+        log.warning("no valid BACKGROUND in host_components.csv; sky seed is 0.")
     if host_meta.get("snr_win") is not None:
-        print(
-            f"[*] GALFIT host #{host_meta.get('host_number', '?')}: "
+        log.info(
+            f"GALFIT host #{host_meta.get('host_number', '?')}: "
             f"SNR_WIN={host_meta['snr_win']:.3f}"
             + (
                 f", SNR_AUTO={host_meta['snr_auto']:.3f}"
@@ -382,10 +427,11 @@ def main() -> int:
             sky_tolerance_adu=sky_tolerance_adu,
             mag_min=mag_min,
             mag_max=mag_max,
+            conv_box_pad=conv_box_pad,
         )
         write_configs(wkdir, feedme, constraints)
         mode = "constrained" if constrain_sky else "free"
-        print(f"[*] Wrote galfit.feedme and constraints.txt (sky {mode}, seed={sky_ref:.6g} ADU)")
+        log.info(f"Wrote galfit.feedme and constraints.txt (sky {mode}, seed={sky_ref:.6g} ADU)")
 
     def _write_audit(
         *,
@@ -429,10 +475,10 @@ def main() -> int:
         sky_pass1 = parse_fitlog_sky_level(log_path, sky_ref=sky_ref)
         if sky_pass1 is not None:
             delta1 = abs(sky_pass1 - sky_ref)
-            print(f"[*] Pass 1 fit.log sky: {sky_pass1:.6g} ADU (|delta|={delta1:.6g} vs ref)")
+            log.info(f"Pass 1 fit.log sky: {sky_pass1:.6g} ADU (|delta|={delta1:.6g} vs ref)")
         else:
-            print(
-                "[!] Pass 1: no plausible sky in fit.log "
+            log.warning(
+                "Pass 1: no plausible sky in fit.log "
                 "(GALFIT may have crashed before writing a summary block)."
             )
             failure_reason = "sky_parse_failed_pass1"
@@ -449,8 +495,8 @@ def main() -> int:
 
     if need_retry:
         retried = True
-        print(
-            f"[*] Sky QA: |delta|={abs(sky_pass1 - sky_ref):.6g} ADU > {sky_tolerance_adu} — "
+        log.info(
+            f"Sky QA: |delta|={abs(sky_pass1 - sky_ref):.6g} ADU > {sky_tolerance_adu} — "
             f"retrying with +/-{sky_tolerance_adu} ADU constraint on component {sky_comp_num}"
         )
         clear_galfit_artifacts(wkdir)
@@ -460,9 +506,9 @@ def main() -> int:
             sky_pass2 = parse_fitlog_sky_level(log_path, sky_ref=sky_ref)
             if sky_pass2 is not None:
                 delta2 = abs(sky_pass2 - sky_ref)
-                print(f"[*] Pass 2 fit.log sky: {sky_pass2:.6g} ADU (|delta|={delta2:.6g} vs ref)")
+                log.info(f"Pass 2 fit.log sky: {sky_pass2:.6g} ADU (|delta|={delta2:.6g} vs ref)")
             else:
-                print("[!] Pass 2: no plausible sky in fit.log.")
+                log.warning("Pass 2: no plausible sky in fit.log.")
                 failure_reason = "sky_parse_failed_pass2"
         else:
             failure_reason = "galfit_crash_pass2"
@@ -485,19 +531,19 @@ def main() -> int:
 
     if sky_check_enabled and galfit_pass1_ok and not passed:
         if sky_final is not None and sky_level_is_plausible(sky_final, sky_ref):
-            print(
-                f"[!] SKY QA FAILED: ref={sky_ref:.6g} ADU, "
+            log.error(
+                f"SKY QA FAILED: ref={sky_ref:.6g} ADU, "
                 f"final={sky_final:.6g}, tolerance=±{sky_tolerance_adu} ADU"
             )
             failure_reason = failure_reason or "sky_out_of_tolerance"
         else:
-            print(
-                f"[!] SKY QA FAILED: ref={sky_ref:.6g} ADU, "
+            log.error(
+                f"SKY QA FAILED: ref={sky_ref:.6g} ADU, "
                 f"no usable fitted sky (reason={failure_reason or 'unknown'})"
             )
         exit_code = 1
     elif sky_check_enabled and passed:
-        print(f"[*] Sky QA passed (final sky={sky_final:.6g} ADU)")
+        log.info(f"Sky QA passed (final sky={sky_final:.6g} ADU)")
 
     _write_audit(
         sky_pass1=sky_pass1,

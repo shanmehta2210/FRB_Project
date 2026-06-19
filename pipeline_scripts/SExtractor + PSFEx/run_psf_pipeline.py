@@ -2,45 +2,20 @@ import os
 import sys
 import yaml
 import subprocess
-import shutil
 import argparse
 
-TEMPLATE_CONV = """CONV NORM
-# 3x3 ``all-ground'' convolution mask with FWHM = 2 pixels.
-1 2 1
-2 4 2
-1 2 1
-"""
+# Shared pipeline helpers (CONV/NNW templates, aperture resolution, logging).
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from pipeline_shared import (  # noqa: E402
+    TEMPLATE_CONV,
+    TEMPLATE_NNW,
+    format_phot_apertures,
+    get_logger,
+    render_param_template,
+    resolve_apertures,
+)
 
-TEMPLATE_NNW = """NNW
-# Neural Network Weights for the SExtractor star/galaxy classifier (V1.3)
-# inputs:	9 for profile parameters + 1 for seeing.
-# outputs:	``Stellarity index'' (0.0 to 1.0)
-# Seeing FWHM range: from 0.025 to 5.5'' (images must have 1.5 < FWHM < 5 pixels)
-# Optimized for Moffat profiles with 2<= beta <= 4.
-
- 3 10 10  1
-
--1.56604e+00 -2.48265e+00 -1.44564e+00 -1.24675e+00 -9.44913e-01 -5.22453e-01  4.61342e-02  8.31957e-01  2.15505e+00  2.64769e-01
- 3.03477e+00  2.69561e+00  3.16188e+00  3.34497e+00  3.51885e+00  3.65570e+00  3.74856e+00  3.84541e+00  4.22811e+00  3.27734e+00
-
--3.22480e-01 -2.12804e+00  6.50750e-01 -1.11242e+00 -1.40683e+00 -1.55944e+00 -1.84558e+00 -1.18946e-01  5.52395e-01 -4.36564e-01 -5.30052e+00
- 4.62594e-01 -3.29127e+00  1.10950e+00 -6.01857e-01  1.29492e-01  1.42290e+00  2.90741e+00  2.44058e+00 -9.19118e-01  8.42851e-01 -4.69824e+00
--2.57424e+00  8.96469e-01  8.34775e-01  2.18845e+00  2.46526e+00  8.60878e-02 -6.88080e-01 -1.33623e-02  9.30403e-02  1.64942e+00 -1.01231e+00
- 4.81041e+00  1.53747e+00 -1.12216e+00 -3.16008e+00 -1.67404e+00 -1.75767e+00 -1.29310e+00  5.59549e-01  8.08468e-01 -1.01592e-02 -7.54052e+00
- 1.01933e+01 -2.09484e+01 -1.07426e+00  9.87912e-01  6.05210e-01 -6.04535e-02 -5.87826e-01 -7.94117e-01 -4.89190e-01 -8.12710e-02 -2.07067e+01
--5.31793e+00  7.94240e+00 -4.64165e+00 -4.37436e+00 -1.55417e+00  7.54368e-01  1.09608e+00  1.45967e+00  1.62946e+00 -1.01301e+00  1.13514e-01
- 2.20336e-01  1.70056e+00 -5.20105e-01 -4.28330e-01  1.57258e-03 -3.36502e-01 -8.18568e-02 -7.16163e+00  8.23195e+00 -1.71561e-02 -1.13749e+01
- 3.75075e+00  7.25399e+00 -1.75325e+00 -2.68814e+00 -3.71128e+00 -4.62933e+00 -2.13747e+00 -1.89186e-01  1.29122e+00 -7.49380e-01  6.71712e-01
--8.41923e-01  4.64997e+00  5.65808e-01 -3.08277e-01 -1.01687e+00  1.73127e-01 -8.92130e-01  1.89044e+00 -2.75543e-01 -7.72828e-01  5.36745e-01
--3.65598e+00  7.56997e+00 -3.76373e+00 -1.74542e+00 -1.37540e-01 -5.55400e-01 -1.59195e-01  1.27910e-01  1.91906e+00  1.42119e+00 -4.35502e+00
-
--1.70059e+00 -3.65695e+00  1.22367e+00 -5.74367e-01 -3.29571e+00  2.46316e+00  5.22353e+00  2.42038e+00  1.22919e+00 -9.22250e-01 -2.32028e+00
-
-
- 0.00000e+00 
- 1.00000e+00 
-"""
+log = get_logger("phase1")
 
 TEMPLATE_PARAM = """NUMBER
 VIGNET(27,27)
@@ -64,10 +39,10 @@ MAGERR_AUTO
 FLAGS
 BACKGROUND
 CLASS_STAR
-FLUX_APER(15)
-FLUXERR_APER(15)
-MAG_APER(15)
-MAGERR_APER(15)
+FLUX_APER({NAPER})
+FLUXERR_APER({NAPER})
+MAG_APER({NAPER})
+MAGERR_APER({NAPER})
 A_IMAGE
 B_IMAGE
 THETA_IMAGE
@@ -100,7 +75,7 @@ CLEAN_PARAM      1.0
 WEIGHT_TYPE      {WEIGHT_TYPE}
 WEIGHT_IMAGE     {WEIGHT_IMAGE}
 
-PHOT_APERTURES   4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 15.0, 20.0, 25.0, 30.0, {PHOT_APERTURES_PX}
+PHOT_APERTURES   {PHOT_APERTURES}
 PHOT_FLUXFRAC    0.5
 PHOT_AUTOPARAMS  1.0,2.0
 PHOT_PETROPARAMS 1.0,2.0
@@ -184,6 +159,7 @@ XML_NAME        psfex.xml
 NTHREADS        0
 """
 
+
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     default_config = os.path.join(script_dir, "pipeline_config.yaml")
@@ -193,11 +169,14 @@ def main():
     parser.add_argument("--config", default=default_config,
                         help="Path to pipeline_config.yaml (default: alongside this script). "
                              "master_run.py writes a per-run config into the workdir and points here.")
+    parser.add_argument("--keep-templates", action="store_true",
+                        help="Keep the generated default.{sex,param,conv,nnw,psfex} files after the "
+                             "run (default: remove them; master_run deletes the whole workdir anyway).")
     args = parser.parse_args()
 
     image_path = os.path.abspath(args.image)
     if not os.path.exists(image_path):
-        print(f"Error: Image {image_path} not found.")
+        log.error(f"Image {image_path} not found.")
         sys.exit(1)
 
     image_dir = os.path.dirname(image_path)
@@ -209,24 +188,43 @@ def main():
 
     config_path = os.path.abspath(args.config)
     if not os.path.exists(config_path):
-        print(f"Error: Config file {config_path} not found.")
+        log.error(f"Config file {config_path} not found.")
         sys.exit(1)
-    print(f"[*] Phase 1 config: {config_path}")
-        
+    log.info(f"Phase 1 config: {config_path}")
+
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
-        
+
     # Read Sextractor Configs
     s_conf = config.get("sextractor", {})
-    detect_thresh = s_conf.get("detect_thresh", 10)
-    analysis_thresh = s_conf.get("analysis_thresh", 10)
-    phot_apertures_px = s_conf.get("phot_apertures_px", 40.0)
+    detect_thresh = s_conf.get("detect_thresh", 3)
+    analysis_thresh = s_conf.get("analysis_thresh", 3)
     gain = s_conf.get("gain", 1.6)
     mag_zeropoint = s_conf.get("mag_zeropoint", 0.0)
-    pixel_scale = s_conf.get("pixel_scale", 0.0)
+    pixel_scale = s_conf.get("pixel_scale")
+    if pixel_scale is None:
+        try:
+            from astropy.io import fits as _afits
+            from astropy.wcs import WCS as _WCS
+            from astropy.wcs.utils import proj_plane_pixel_scales as _ppps
+            import numpy as _np
+            with _afits.open(image_path) as _hdul:
+                _w = _WCS(_hdul[0].header).celestial
+                pixel_scale = float(_np.mean(_ppps(_w)) * 3600.0)
+            log.info(f"Pixel scale from WCS: {pixel_scale:.6f} arcsec/px")
+        except Exception:
+            pixel_scale = 0.0
+            log.warning("Could not compute pixel scale from WCS; using SExtractor default 0.0")
     seeing_fwhm = s_conf.get("seeing_fwhm", 2.0)
     deblend_mincont = float(s_conf.get("deblend_mincont", 0.005))
-    
+
+    # Aperture ladder + production aperture (YAML-configurable; default = largest).
+    apertures, prod_index, prod_diam = resolve_apertures(s_conf)
+    log.info(
+        f"Apertures (px): {format_phot_apertures(apertures)} "
+        f"| production = {prod_diam:g} px (index {prod_index})"
+    )
+
     # Read PSFEx Configs
     p_conf = config.get("psfex", {})
     psf_sampling = p_conf.get("psf_sampling", 1.0)
@@ -235,11 +233,11 @@ def main():
     sample_variability = p_conf.get("sample_variability", 0.4)
     sample_minsn = p_conf.get("sample_minsn", 30)
     sample_max_ellp = p_conf.get("sample_max_ellp", 0.2)
-    
+    min_accepted_stars = int(p_conf.get("min_accepted_stars", 25))
+
     # Render Templates
-    # 1. PARAM
-    param_content = TEMPLATE_PARAM
-    
+    param_content = render_param_template(TEMPLATE_PARAM, len(apertures))
+
     # Check for weight map — honours use_weight_map from YAML first
     use_weight_map = s_conf.get("use_weight_map", True)
     invvar_name = "invvar.fits"
@@ -247,21 +245,20 @@ def main():
     if use_weight_map and os.path.exists(invvar_path):
         weight_type = "MAP_WEIGHT"
         weight_image = invvar_name
-        print("[*] Weight map: invvar.fits found and enabled.")
+        log.info("Weight map: invvar.fits found and enabled.")
     else:
         weight_type = "NONE"
         weight_image = "NONE"
         if use_weight_map and not os.path.exists(invvar_path):
-            print("[!] Warning: use_weight_map=true but invvar.fits not found. Running without weight map.")
+            log.warning("use_weight_map=true but invvar.fits not found. Running without weight map.")
         else:
-            print("[*] Weight map disabled by config (use_weight_map=false).")
+            log.info("Weight map disabled by config (use_weight_map=false).")
 
-    # 2. SEX
     sex_content = TEMPLATE_SEX.format(
         CATALOG_NAME=catalog_name,
         DETECT_THRESH=detect_thresh,
         ANALYSIS_THRESH=analysis_thresh,
-        PHOT_APERTURES_PX=phot_apertures_px,
+        PHOT_APERTURES=format_phot_apertures(apertures),
         MAG_ZEROPOINT=mag_zeropoint,
         GAIN=gain,
         PIXEL_SCALE=pixel_scale,
@@ -270,8 +267,7 @@ def main():
         WEIGHT_TYPE=weight_type,
         WEIGHT_IMAGE=weight_image
     )
-    
-    # 3. PSFEX
+
     psfex_content = TEMPLATE_PSFEX.format(
         PSF_SAMPLING=psf_sampling,
         PSFVAR_DEGREES=psfvar_degrees,
@@ -280,33 +276,33 @@ def main():
         SAMPLE_MINSN=sample_minsn,
         SAMPLE_MAXELLIP=sample_max_ellp
     )
-    
+
     # Write to target directory
     path_conv = os.path.join(image_dir, "default.conv")
     path_nnw = os.path.join(image_dir, "default.nnw")
     path_param = os.path.join(image_dir, "default.param")
     path_sex = os.path.join(image_dir, "default.sex")
     path_psfex = os.path.join(image_dir, "default.psfex")
-    
+
     with open(path_conv, "w", newline="\n") as f: f.write(TEMPLATE_CONV)
     with open(path_nnw, "w", newline="\n") as f: f.write(TEMPLATE_NNW)
     with open(path_param, "w", newline="\n") as f: f.write(param_content)
     with open(path_sex, "w", newline="\n") as f: f.write(sex_content)
     with open(path_psfex, "w", newline="\n") as f: f.write(psfex_content)
-    
+
     try:
-        print("[+] Running SExtractor...")
+        log.info("Running SExtractor...")
         # Note: image_name is used, we run inside image_dir
         cmd_sex = ["wsl", "source-extractor", image_name, "-c", "default.sex"]
         subprocess.run(cmd_sex, cwd=image_dir, check=True)
-        
+
         # Iterative PSFEx Strategy
         snrs_to_try = [30, 20, 10, 5, 3, 2.5, 2]
         import xml.etree.ElementTree as ET
-        
+
         for snr in snrs_to_try:
-            print(f"[*] Executing PSFEx with SAMPLE_MINSN = {snr}")
-            # 3. Render dynamic PSFEX for this loop iteration
+            log.info(f"Executing PSFEx with SAMPLE_MINSN = {snr}")
+            # Render dynamic PSFEX for this loop iteration
             psfex_content = TEMPLATE_PSFEX.format(
                 PSF_SAMPLING=psf_sampling,
                 PSFVAR_DEGREES=psfvar_degrees,
@@ -316,10 +312,10 @@ def main():
                 SAMPLE_MAXELLIP=sample_max_ellp
             )
             with open(path_psfex, "w", newline="\n") as f: f.write(psfex_content)
-            
+
             cmd_psfex = ["wsl", "psfex", catalog_name, "-c", "default.psfex"]
             subprocess.run(cmd_psfex, cwd=image_dir, check=True)
-            
+
             # Parse XML to find NStars_Accepted_Total
             xml_path = os.path.join(image_dir, "psfex.xml")
             accepted_stars = 0
@@ -327,7 +323,7 @@ def main():
                 try:
                     tree = ET.parse(xml_path)
                     root = tree.getroot()
-                    
+
                     # Account for XML namespaces commonly used by VO tools
                     idx = -1
                     fields = root.findall('.//FIELD') + root.findall('.//{*}FIELD')
@@ -335,34 +331,38 @@ def main():
                         if field.attrib.get('name') == 'NStars_Accepted_Total':
                             idx = i
                             break
-                            
+
                     if idx >= 0:
                         tds = root.findall('.//TR/TD') + root.findall('.//{*}TR/{*}TD')
                         if len(tds) > idx:
                             accepted_stars = int(tds[idx].text)
                     else:
-                        print("  [!] Could not locate NStars_Accepted_Total node in XML.")
+                        log.warning("Could not locate NStars_Accepted_Total node in XML.")
                 except Exception as e:
-                    print(f"  [!] XML parsing error: {e}")
-            
-            print(f"  -> Stars Accepted: {accepted_stars}")
-            if accepted_stars >= 25:
-                print("  -> Found > 25 optimal stars! Halting iteration.")
+                    log.warning(f"XML parsing error: {e}")
+
+            log.info(f"  -> Stars Accepted: {accepted_stars}")
+            if accepted_stars >= min_accepted_stars:
+                log.info(f"  -> Found >= {min_accepted_stars} optimal stars! Halting iteration.")
                 break
             elif snr != snrs_to_try[-1]:
-                print("  -> Insufficient stars. Attempting lower SNR...")
-        
-        print(f"[+] Success! Catalog and PSF generated in {image_dir}")
-        print(f"[*] SExtractor DEBLEND_MINCONT = {deblend_mincont}")
+                log.info("  -> Insufficient stars. Attempting lower SNR...")
+
+        log.info(f"Success! Catalog and PSF generated in {image_dir}")
+        log.info(f"SExtractor DEBLEND_MINCONT = {deblend_mincont}")
 
     except subprocess.CalledProcessError as e:
-        print(f"[!] Subprocess Error: {e}")
+        log.error(f"Subprocess Error: {e}")
+        # Propagate the failure so master_run.py / callers see a non-zero exit
+        # code instead of a false-positive "Phase 1 OK".
+        sys.exit(1)
     finally:
-        # Cleanup Disabled for Inspection phase!
-        print("[*] Skipped final cleanup so intermediate templates can be manually inspected.")
-        # for p in [path_conv, path_nnw, path_param, path_sex, path_psfex]:
-        #     if os.path.exists(p):
-        #         os.remove(p)
+        if args.keep_templates:
+            log.info("Kept intermediate template files (--keep-templates).")
+        else:
+            for p in [path_conv, path_nnw, path_param, path_sex, path_psfex]:
+                if os.path.exists(p):
+                    os.remove(p)
 
 if __name__ == "__main__":
     main()

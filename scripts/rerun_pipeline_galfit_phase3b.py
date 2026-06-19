@@ -1,7 +1,7 @@
 """
 Re-run Phase 3b (GALFIT fit + sky QA) on existing pipeline Output/*_all folders.
 
-Uses each folder's zero_points.json zp_aper_40px and writes galfit_config.yaml
+Uses each folder's zero_points.json zp_aper and writes galfit_config.yaml
 before invoking run_galfit_fitting.py.
 
     python scripts/rerun_pipeline_galfit_phase3b.py
@@ -35,7 +35,7 @@ def write_galfit_config(odir: Path) -> float | None:
     zp_path = odir / "zero_points.json"
     if zp_path.is_file():
         zp_data = json.loads(zp_path.read_text(encoding="utf-8"))
-        zp = zp_data.get("zp_aper_40px")
+        zp = zp_data.get("zp_aper") or zp_data.get("zp_aper_40px")
         if zp is not None and math.isfinite(float(zp)):
             cfg["mag_zeropoint"] = float(zp)
     with open(odir / "galfit_config.yaml", "w", encoding="utf-8") as f:

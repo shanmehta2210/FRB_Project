@@ -1,0 +1,31 @@
+# Conda environment specification for 'frb_project' (WSL side).
+#
+# This environment hosts the AstroPath Bayesian host association package
+# and the Phase 2 astrophysics bridge script that runs inside WSL.
+#
+# Create:   conda env create -f environment_frb_project.yml
+# Activate: conda activate frb_project
+# Update:   conda env update -f environment_frb_project.yml --prune
+name: frb_project
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.10
+  - numpy>=1.22
+  - scipy>=1.8
+  - astropy>=5.1
+  - pandas>=1.4
+  - matplotlib>=3.5
+  - pyyaml>=6.0
+  - astroquery>=0.4.11
+  - photutils>=1.5
+  - healpy>=1.15
+  - astropy-healpix>=0.7
+  - ipython>=7.2
+  - pip
+  - pip:
+    # AstroPath installed from the repo submodule (editable install).
+    # After creating the env, run:
+    #   cd tools/AstroPath/astropath_pkg && pip install -e .
+    - pyvo>=1.4

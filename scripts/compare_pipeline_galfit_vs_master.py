@@ -24,7 +24,7 @@ Comparison policy
 * **Host identification:** always GALFIT **component 1** — first ``sersic`` line in
   the selected ``fit.log`` block (``sersic_component_index=0``), matching row 0 in
   ``host_components.csv``. Neighbor Sérsics are ignored for results/deltas.
-* **Magnitude / flux** is **not** compared (pipeline uses per-field ``zp_aper_40px``;
+* **Magnitude / flux** is **not** compared (pipeline uses per-field ``zp_aper``;
   master uses mixed ``J)`` systems). ``mag`` is still written to
   ``pipeline_galfit_results.csv`` for reference only.
 * ``n_sersic_components`` counts fitted galaxies (no sky). ``single_sersic`` is

@@ -22,6 +22,8 @@ from null_catalog_utils import (  # noqa: E402
     cosi_array_from_df,
     filter_sdss_drop_dev_winners,
     filter_sdss_ur,
+    hubble_cosi_from_ba,
+    prepare_null_inclusive_color_base,
     prepare_null_strict_color_base,
     read_sdss_null_catalog,
 )
@@ -32,6 +34,9 @@ REF_DIR = OUT_DIR / "reference"
 MODELMAG_REF_CSV = REF_DIR / "sdss_modelmag_r_counts.csv"
 YASUDA_CSV = REF_DIR / "yasuda2001_r_counts.csv"
 MAG_LIMITS = (19.0, 20.0, 21.0, 22.0)
+MAG_CUT = 21.0
+Q_MIN_GRID = (0.05, 0.10, 0.15, 0.20)
+HUBBLE_Q0_FIXED = 0.2
 # Typical r* − modelMag_r offset for SDSS pipeline galaxies (late-type mix).
 PETRO_TO_MODELMAG_DELTA = 0.055
 
@@ -115,7 +120,14 @@ def weighted_median(values: np.ndarray, weights: np.ndarray) -> float:
     return float(v[min(idx, len(v) - 1)])
 
 
-def mag_bin_table(mag: np.ndarray, cosi: np.ndarray, step: float = 0.5) -> pd.DataFrame:
+def mag_bin_table(
+    mag: np.ndarray,
+    y: np.ndarray,
+    step: float = 0.5,
+    min_n: int = 30,
+    median_col: str = "median_cosi",
+    mean_col: str = "mean_cosi",
+) -> pd.DataFrame:
     rows = []
     lo = 15.0
     while lo < 28.0:
@@ -125,7 +137,7 @@ def mag_bin_table(mag: np.ndarray, cosi: np.ndarray, step: float = 0.5) -> pd.Da
         else:
             mask = (mag > lo) & (mag <= hi)
         n = int(mask.sum())
-        if n < 30:
+        if n < min_n:
             lo = hi
             continue
         rows.append(
@@ -133,13 +145,32 @@ def mag_bin_table(mag: np.ndarray, cosi: np.ndarray, step: float = 0.5) -> pd.Da
                 "mag_lo": lo,
                 "mag_hi": hi,
                 "n": n,
-                "median_cosi": float(np.median(cosi[mask])),
-                "mean_cosi": float(np.mean(cosi[mask])),
+                median_col: float(np.median(y[mask])),
+                mean_col: float(np.mean(y[mask])),
                 "frac_pool": n / len(mag),
             }
         )
         lo = hi
     return pd.DataFrame(rows)
+
+
+def cosi_fixed_q0_clip(ba: np.ndarray, q0: float = HUBBLE_Q0_FIXED) -> np.ndarray:
+    """Hubble cos(i) with fixed q0; q < q0 maps to cos(i)=0 (edge-on pileup)."""
+    ba = np.asarray(ba, dtype=float)
+    return np.array([hubble_cosi_from_ba(v, q0=q0) for v in ba], dtype=float)
+
+
+def load_strict_pool(q_min: float, df: pd.DataFrame) -> pd.DataFrame:
+    """ur + lnL exp-wins + expAB_r > q_min (full production pool, no mag cut)."""
+    return prepare_null_strict_color_base(
+        df,
+        mag_column="modelMag_r",
+        q0=q_min,
+        q_column="expAB_r",
+        is_legacy=False,
+        sdss_ur_max=SDSS_UR_MAX_CDF,
+        sdss_exp_winner_only=True,
+    )
 
 
 def load_pools() -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -473,6 +504,281 @@ def plot_joint_panel(bins: pd.DataFrame, out_png: Path) -> None:
     plt.close(fig)
 
 
+def plot_mag_bin_panel(
+    bins: pd.DataFrame,
+    out_png: Path,
+    y_col: str,
+    ylabel: str,
+    title: str,
+    ref_y: float | None = None,
+    ref_label: str | None = None,
+) -> None:
+    x = 0.5 * (bins["mag_lo"] + bins["mag_hi"])
+    fig, ax1 = plt.subplots(figsize=(9, 5))
+    ax1.plot(x, bins[y_col], "o-", color="C0", label=ylabel)
+    if ref_y is not None:
+        ax1.axhline(ref_y, color="0.5", ls=":", label=ref_label or f"ref {ref_y}")
+    ax1.set_xlabel("modelMag_r")
+    ax1.set_ylabel(ylabel, color="C0")
+    ax1.tick_params(axis="y", labelcolor="C0")
+    ax2 = ax1.twinx()
+    ax2.plot(x, bins["frac_pool"], "s--", color="C1", alpha=0.8, label="N(m) fraction")
+    ax2.set_ylabel("pool fraction per bin", color="C1")
+    ax2.tick_params(axis="y", labelcolor="C1")
+    ax1.set_title(title)
+    fig.tight_layout()
+    fig.savefig(out_png, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+
+
+def plot_cosi_qmin_overlay(
+    long_bins: pd.DataFrame,
+    out_png: Path,
+    label_col: str,
+    title: str,
+) -> None:
+    fig, ax = plt.subplots(figsize=(9, 5))
+    groups = list(long_bins.groupby(label_col))
+    for i, (key, grp) in enumerate(groups):
+        x = 0.5 * (grp["mag_lo"] + grp["mag_hi"])
+        label = grp["line_label"].iloc[0] if "line_label" in grp.columns else str(key)
+        ax.plot(x, grp["median_cosi"], "o-", label=label, color=f"C{i}")
+    ax.axhline(0.5, color="0.5", ls=":", label="isotropic 0.5")
+    ax.set_xlabel("modelMag_r")
+    ax.set_ylabel("median cos(i)")
+    ax.set_title(title)
+    ax.set_ylim(0, 1.05)
+    ax.legend(fontsize=8)
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(out_png, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+
+
+def load_ba_pool_morphology(df: pd.DataFrame) -> pd.DataFrame:
+    """u-r + lnL exp-wins; all finite expAB_r in [0, 1] (no b/a > q0 cut)."""
+    return prepare_null_inclusive_color_base(
+        df,
+        mag_column="modelMag_r",
+        q0=Q0,
+        q_column="expAB_r",
+        is_legacy=False,
+        sdss_ur_max=SDSS_UR_MAX_CDF,
+        sdss_exp_winner_only=True,
+    )
+
+
+def plot_ba_cosi_strict_comparison(
+    ba_bins: pd.DataFrame,
+    cosi_bins: pd.DataFrame,
+    out_png: Path,
+    q0: float = HUBBLE_Q0_FIXED,
+) -> pd.DataFrame:
+    """
+    Overlay median expAB_r vs median cos(i) on the strict production pool.
+
+    For strictly increasing Hubble mapping and q > q0, median(cos i) equals
+    hubble(median expAB_r) per bin — same shape, offset vertical level.
+    """
+    merged = ba_bins.merge(
+        cosi_bins[["mag_lo", "mag_hi", "median_cosi"]],
+        on=["mag_lo", "mag_hi"],
+        how="inner",
+    )
+    merged["median_cosi_from_median_ba"] = merged["median_expAB_r"].apply(
+        lambda q: hubble_cosi_from_ba(float(q), q0=q0)
+    )
+    merged["delta_ba_minus_cosi"] = merged["median_expAB_r"] - merged["median_cosi"]
+    merged["delta_cosi_vs_hubble_median_ba"] = (
+        merged["median_cosi"] - merged["median_cosi_from_median_ba"]
+    )
+
+    x = 0.5 * (merged["mag_lo"] + merged["mag_hi"])
+    fig, (ax1, ax2) = plt.subplots(
+        2, 1, figsize=(9, 7), sharex=True, gridspec_kw={"height_ratios": [2, 1]}
+    )
+    ax1.plot(x, merged["median_expAB_r"], "o-", color="C0", label="median expAB_r")
+    ax1.plot(x, merged["median_cosi"], "s-", color="C1", label="median cos(i)")
+    ax1.plot(
+        x,
+        merged["median_cosi_from_median_ba"],
+        "x--",
+        color="C1",
+        alpha=0.5,
+        label=f"Hubble(median b/a), q₀={q0:g}",
+    )
+    ax1.set_ylabel("median value")
+    ax1.set_title(
+        f"Strict pool: median expAB_r vs median cos(i) (q₀={q0:g}); "
+        "Hubble is monotonic → same bin shape, lower cos(i)"
+    )
+    ax1.legend(fontsize=8)
+    ax1.grid(True, alpha=0.3)
+    ax1.set_ylim(0, 1.05)
+
+    ax2.plot(x, merged["delta_ba_minus_cosi"], "o-", color="C2")
+    ax2.axhline(0, color="0.5", ls=":")
+    ax2.set_xlabel("modelMag_r")
+    ax2.set_ylabel("median b/a − median cos(i)")
+    ax2.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(out_png, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    return merged
+
+
+def plot_ba_mag_bins(
+    pool: pd.DataFrame,
+    out_csv: Path,
+    out_png: Path,
+    title: str,
+    pool_label: str,
+) -> pd.DataFrame:
+    """Median raw expAB_r per 0.5 mag bin — no Hubble transform."""
+    mag = pd.to_numeric(pool["modelMag_r"], errors="coerce").to_numpy()
+    ba = pd.to_numeric(pool["expAB_r"], errors="coerce").to_numpy()
+    ok = np.isfinite(mag) & np.isfinite(ba)
+    mag = mag[ok]
+    ba = ba[ok]
+    bins = mag_bin_table(
+        mag,
+        ba,
+        median_col="median_expAB_r",
+        mean_col="mean_expAB_r",
+    )
+    bins.insert(0, "pool", pool_label)
+    bins.insert(1, "pool_n", len(mag))
+    bins.to_csv(out_csv, index=False)
+    plot_mag_bin_panel(
+        bins,
+        out_png,
+        y_col="median_expAB_r",
+        ylabel="median expAB_r",
+        title=title,
+    )
+    return bins
+
+
+def run_ba_mag_bin_plots(df: pd.DataFrame, out_dir: Path) -> None:
+    """Three median expAB_r panels: full catalog, ur+lnL, ur+lnL+strict b/a."""
+    print("C0: median expAB_r per mag bin (raw SDSS column)...")
+
+    mag_all = pd.to_numeric(df["modelMag_r"], errors="coerce")
+    ba_all = pd.to_numeric(df["expAB_r"], errors="coerce")
+    ok = mag_all.notna() & ba_all.notna() & (ba_all >= 0) & (ba_all <= 1)
+    full_pool = df.loc[ok, ["modelMag_r", "expAB_r"]].copy()
+
+    plot_ba_mag_bins(
+        full_pool,
+        out_dir / "ba_per_mag_bin.csv",
+        out_dir / "ba_mag_joint_panel.png",
+        title="median expAB_r vs modelMag_r (full v2 catalog, no cuts)",
+        pool_label="full_catalog",
+    )
+
+    morph = load_ba_pool_morphology(df)
+    plot_ba_mag_bins(
+        morph,
+        out_dir / "ba_per_mag_bin_ur_lnl.csv",
+        out_dir / "ba_mag_joint_panel_ur_lnl.png",
+        title=(
+            f"median expAB_r vs modelMag_r (u-r < {SDSS_UR_MAX_CDF:g}, "
+            "lnLExp_r > lnLDeV_r; all b/a)"
+        ),
+        pool_label="ur_lnl_exp_wins",
+    )
+
+    strict = load_strict_pool(q_min=HUBBLE_Q0_FIXED, df=df)
+    strict_ba_bins = plot_ba_mag_bins(
+        strict,
+        out_dir / "ba_per_mag_bin_strict.csv",
+        out_dir / "ba_mag_joint_panel_strict.png",
+        title=(
+            f"median expAB_r vs modelMag_r (u-r, lnL exp-wins, expAB_r > {HUBBLE_Q0_FIXED:g})"
+        ),
+        pool_label="ur_lnl_strict_ba",
+    )
+
+    mag = pd.to_numeric(strict["modelMag_r"], errors="coerce").to_numpy()
+    cosi = cosi_array_from_df(strict, q_col="expAB_r", q0=HUBBLE_Q0_FIXED)
+    strict_cosi_bins = mag_bin_table(mag, cosi)
+    cmp_df = plot_ba_cosi_strict_comparison(
+        strict_ba_bins,
+        strict_cosi_bins,
+        out_dir / "ba_cosi_strict_overlay.png",
+        q0=HUBBLE_Q0_FIXED,
+    )
+    cmp_df.to_csv(out_dir / "ba_cosi_strict_comparison.csv", index=False)
+
+
+def run_qmin_diagnostics(df: pd.DataFrame, out_dir: Path) -> None:
+    """cos(i) q_min sensitivity plots on the full production pool."""
+    print("C: cos(i) q_min sensitivity plots...")
+
+    run_ba_mag_bin_plots(df, out_dir)
+    for q_min in Q_MIN_GRID:
+        pool = load_strict_pool(q_min=q_min, df=df)
+        pool_n = len(pool)
+        mag = pd.to_numeric(pool["modelMag_r"], errors="coerce").to_numpy()
+        cosi = cosi_fixed_q0_clip(
+            pd.to_numeric(pool["expAB_r"], errors="coerce").to_numpy(),
+            q0=HUBBLE_Q0_FIXED,
+        )
+        bins = mag_bin_table(mag, cosi)
+        for _, row in bins.iterrows():
+            clip_rows.append(
+                {
+                    "q_min": q_min,
+                    "hubble_q0": HUBBLE_Q0_FIXED,
+                    "line_label": f"q_min={q_min:g}, q₀={HUBBLE_Q0_FIXED:g}",
+                    "pool_n": pool_n,
+                    **row.to_dict(),
+                }
+            )
+
+    clip_df = pd.DataFrame(clip_rows)
+    clip_df.to_csv(out_dir / "cosi_per_mag_bin_fixed_q0_clip.csv", index=False)
+    plot_cosi_qmin_overlay(
+        clip_df,
+        out_dir / "cosi_mag_bin_fixed_q0_clip.png",
+        label_col="q_min",
+        title=(
+            "median cos(i) per mag bin (full pool); "
+            f"vary q_min, Hubble q₀={HUBBLE_Q0_FIXED:g} fixed, q<q₀→edge-on"
+        ),
+    )
+
+    strict_rows: list[dict] = []
+    for q_min in Q_MIN_GRID:
+        pool = load_strict_pool(q_min=q_min, df=df)
+        pool_n = len(pool)
+        mag = pd.to_numeric(pool["modelMag_r"], errors="coerce").to_numpy()
+        cosi = cosi_array_from_df(pool, q_col="expAB_r", q0=q_min)
+        bins = mag_bin_table(mag, cosi)
+        for _, row in bins.iterrows():
+            strict_rows.append(
+                {
+                    "q_min": q_min,
+                    "hubble_q0": q_min,
+                    "line_label": f"q_min=q₀={q_min:g}",
+                    "pool_n": pool_n,
+                    **row.to_dict(),
+                }
+            )
+
+    strict_df = pd.DataFrame(strict_rows)
+    strict_df.to_csv(out_dir / "cosi_per_mag_bin_joint_strict.csv", index=False)
+    plot_cosi_qmin_overlay(
+        strict_df,
+        out_dir / "cosi_mag_bin_joint_strict.png",
+        label_col="q_min",
+        title=(
+            "median cos(i) per mag bin (full pool); "
+            "q_min = Hubble q₀ varied jointly (strict pool)"
+        ),
+    )
+
+
 def write_report_stub(out_md: Path, hyp: pd.DataFrame) -> None:
     """Do not overwrite the narrative FORMAL_COSI_AUDIT.md if it already exists."""
     if out_md.exists():
@@ -524,6 +830,8 @@ def main() -> None:
     plot_cut_survival(surv, args.out_dir / "cut_survival_vs_mag.png")
     plot_joint_panel(bins, args.out_dir / "cosi_mag_joint_panel.png")
     bins.to_csv(args.out_dir / "cosi_per_mag_bin.csv", index=False)
+
+    run_qmin_diagnostics(df, args.out_dir)
 
     write_report_stub(args.out_dir / "FORMAL_COSI_AUDIT.md", hyp)
 

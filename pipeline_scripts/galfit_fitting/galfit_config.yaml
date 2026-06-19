@@ -1,15 +1,26 @@
 # Phase 3 defaults (master_run reads cutouts block for Phase 3a; 3b uses plate_scale etc.)
-# mag_zeropoint is normally set from Phase-2 zero_points.json ("zp_aper_40px").
+# mag_zeropoint is normally set from Phase-2 zero_points.json ("zp_aper").
+# plate_scale_x/y are derived from the FITS WCS header at runtime and injected
+# by master_run.py into the workdir copy.  Do NOT set them here.
 cutouts:
   # When true, Phase 3a centres on master_run --ra/--dec (localization host) and
   # ignores astropath_posteriors.csv for the cutout target. AstroPath still runs in Phase 2.
   use_localization_host: true
   min_astropath_posterior: 0.05
+  # Sigma-map handling for Phase 3a (forwarded to generate_galfit_cutouts.py).
+  # Sigma assigned to invvar<=0 / non-finite pixels so GALFIT ignores them:
+  no_data_sigma: 1.0e30
+  # Global invvar-sigma rescale triggers when k = sky_MAD*1.4826 / sigma_invvar
+  # falls outside [min, max] (fixes unit-mismatched Legacy Survey invvar frames):
+  sigma_rescale_min: 0.5
+  sigma_rescale_max: 2.0
+  # Sky-match tolerance (arcsec) when keying an image.cat row to image.psf.cat SPREAD:
+  psf_match_arcsec: 0.5
 
-plate_scale_x: 0.262
-plate_scale_y: 0.262
 mag_min: 8.0
 mag_max: 40.0
+# Padding (px) added to the fit region on each axis for GALFIT's convolution box (I)).
+conv_box_pad: 24
 sky_check_enabled: true
 sky_tolerance_adu: 3.0
 sky_max_retries: 1

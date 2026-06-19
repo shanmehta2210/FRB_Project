@@ -126,7 +126,27 @@ Over 18–20.5 the strict-pool shape tracks both the **full catalog** and the **
 
 Petrosian-only Yasuda counts remain in `reference/yasuda2001_r_counts.csv` for historical comparison.
 
-### 3.7 Cut survival vs mag (`cut_survival_vs_mag.csv`, `.png`)
+### 3.7 Median expAB_r per mag bin (`ba_per_mag_bin*.csv`, `ba_mag_joint_panel*.png`)
+
+Median **raw PhotoObj `expAB_r`** per 0.5 mag bin — **no Hubble mapping**. Three cut variants:
+
+| Variant | Files | Cuts |
+|---------|-------|------|
+| Full catalog | `ba_per_mag_bin.csv`, `ba_mag_joint_panel.png` | None (finite b/a only) |
+| Morphology | `ba_per_mag_bin_ur_lnl.csv`, `ba_mag_joint_panel_ur_lnl.png` | u-r + lnL exp-wins; all b/a |
+| Strict | `ba_per_mag_bin_strict.csv`, `ba_mag_joint_panel_strict.png` | + `expAB_r > 0.2` |
+
+**Provenance:** [`EXPAB_R_BA_PLOTS.md`](EXPAB_R_BA_PLOTS.md). **Faint-bin interpretation:** [`THREE_PLOT_DEEP_ANALYSIS.md`](THREE_PLOT_DEEP_ANALYSIS.md) §2.
+
+### 3.8 cos(i) with fixed Hubble q₀ = 0.2 and edge-on clip (`cosi_per_mag_bin_fixed_q0_clip.csv`, `cosi_mag_bin_fixed_q0_clip.png`)
+
+Four curves vary **`q_min`**; Hubble **q₀ = 0.2** fixed; `q ≤ 0.2 → cos(i) = 0`. Median cos(i) hits **0** when >50% of a bin is clipped — **not** because `q > 0.2` galaxies are absent. See [`THREE_PLOT_DEEP_ANALYSIS.md`](THREE_PLOT_DEEP_ANALYSIS.md) §3.
+
+### 3.9 cos(i) with joint strict q_min = q₀ (`cosi_per_mag_bin_joint_strict.csv`, `cosi_mag_bin_joint_strict.png`)
+
+`q_min = q₀` varied jointly; no clip pileup. Production line matches §3.3. Faint bins still contain galaxies with `q > 0.2` (e.g. N ≈ 1,800 at mag 23–23.5). See [`THREE_PLOT_DEEP_ANALYSIS.md`](THREE_PLOT_DEEP_ANALYSIS.md) §4.
+
+### 3.10 Cut survival vs mag (`cut_survival_vs_mag.csv`, `.png`)
 
 From the 1.9M catalog, fraction passing each cut vs mag bin:
 
@@ -210,6 +230,13 @@ When comparing FRB hosts to nulls, match **the same mag cut and cuts** and inter
 | `mag_counts_sky_validation.csv` / `mag_counts_comparison.png` | N(m) sky validation (pool vs catalog vs literature) |
 | `cut_survival_vs_mag.csv` / `.png` | Cut efficiency vs mag |
 | `cosi_mag_joint_panel.png` | cos(i) and N(m) vs mag |
+| `ba_per_mag_bin.csv` / `ba_mag_joint_panel.png` | Median raw expAB_r (full v2 catalog) |
+| `ba_per_mag_bin_ur_lnl.csv` / `ba_mag_joint_panel_ur_lnl.png` | + u-r, lnL exp-wins; all b/a |
+| `ba_per_mag_bin_strict.csv` / `ba_mag_joint_panel_strict.png` | + expAB_r > 0.2 |
+| `EXPAB_R_BA_PLOTS.md` | SDSS expAB_r provenance and cut definitions |
+| `cosi_per_mag_bin_fixed_q0_clip.csv` / `cosi_mag_bin_fixed_q0_clip.png` | Vary q_min, fixed Hubble q₀=0.2, edge-on clip |
+| `cosi_per_mag_bin_joint_strict.csv` / `cosi_mag_bin_joint_strict.png` | Joint q_min = q₀ strict overlay |
+| `THREE_PLOT_DEEP_ANALYSIS.md` | Detailed interpretation of plots 1–3 (floor, clip, selection) |
 | `reference/sdss_modelmag_r_counts.csv` | modelMag_r sky counts (Yasuda + Stoughton offset) |
 | `reference/yasuda2001_r_counts.csv` | Petrosian r* counts (Yasuda 2001 Table 2) |
 

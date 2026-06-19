@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import math
+import os
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -12,10 +14,8 @@ from astropy.io import fits
 from astropy.stats import sigma_clipped_stats
 from astropy.wcs import WCS
 
-DEFAULT_APERTURE_DIAMS_PX = [
-    4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 15.0, 20.0, 25.0, 30.0, 40.0,
-]
-PRODUCTION_APERTURE_INDEX = 14
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from pipeline_shared import DEFAULT_APERTURE_DIAMS_PX  # noqa: E402
 
 
 def parse_phot_apertures_from_sex(sex_path: Path | None) -> list[float]:
@@ -48,8 +48,11 @@ def measure_sky_sigma(image_path: Path, seg_path: Path | None) -> float:
     mad = float(np.nanmedian(np.abs(sky_pixels - med)))
     sigma_sky = 1.4826 * mad
     if sigma_sky < 0.1:
-        sigma_sky, _, _ = sigma_clipped_stats(sky_pixels, sigma=3.0)
-        sigma_sky = float(sigma_sky)
+        # sigma_clipped_stats returns (mean, median, std) — we need the std.
+        finite = sky_pixels[np.isfinite(sky_pixels)]
+        if finite.size:
+            _, _, sigma_sky = sigma_clipped_stats(finite, sigma=3.0)
+            sigma_sky = float(sigma_sky)
     return max(float(sigma_sky), 0.1)
 
 
@@ -85,14 +88,14 @@ def production_aperture_diameter_px(
     if config_diam is not None and config_diam > 0:
         return float(config_diam)
     apertures = parse_phot_apertures_from_sex(sex_path)
-    if len(apertures) > PRODUCTION_APERTURE_INDEX:
-        return float(apertures[PRODUCTION_APERTURE_INDEX])
-    return 40.0
+    if apertures:
+        return float(max(apertures))
+    return float(max(DEFAULT_APERTURE_DIAMS_PX))
 
 
 def measure_field_depth(
     image_path: Path,
-    zp_aper_40px: float,
+    zp_aper: float,
     *,
     seg_path: Path | None = None,
     proto_path: Path | None = None,
@@ -108,12 +111,12 @@ def measure_field_depth(
     diam = production_aperture_diameter_px(aperture_diameter_px, sex_path)
     px_scale = pixel_scale_from_wcs(image_path)
     sigma_sky = measure_sky_sigma(image_path, seg_path)
-    m_lim, flux5, area = m_lim_5sigma_aperture(zp_aper_40px, sigma_sky, diam)
+    m_lim, flux5, area = m_lim_5sigma_aperture(zp_aper, sigma_sky, diam)
     seeing = measure_seeing_fwhm_arcsec(proto_path, px_scale) if proto_path else float("nan")
 
     return {
         "m_lim_5sigma_ab": round(m_lim, 3),
-        "zp_aper_40px": round(float(zp_aper_40px), 6),
+        "zp_aper": round(float(zp_aper), 6),
         "sigma_sky_adu_per_pix": round(sigma_sky, 4),
         "aperture_diameter_px": diam,
         "aperture_area_pix2": round(area, 1),

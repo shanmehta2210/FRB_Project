@@ -135,7 +135,7 @@ def parse_batch_log(path: Path) -> tuple[dict[str, dict], str]:
                 "batch_table_status": status,
                 "batch_table_P_O": p_o,
                 "batch_table_d_host": d_host,
-                "batch_table_zp_aper_40px": zp,
+                "batch_table_zp_aper": zp,
                 "batch_table_n_cal_stars": n_cal,
                 "batch_table_ref_catalog": ref,
                 "batch_table_note": note.strip(),
@@ -229,7 +229,7 @@ def _reconstruct_batch_text_from_df(df: pd.DataFrame) -> str:
             continue
         frb = r["frb"]
         elapsed = r.get("batch_elapsed_s", "")
-        zp = r.get("batch_zp_aper_40px", "")
+        zp = r.get("batch_zp_aper") or r.get("batch_zp_aper_40px", "")
         ncal = r.get("batch_n_cal_stars", "")
         ref = r.get("batch_ref_catalog", "")
         p_o = r.get("P_O_max", "")
@@ -363,7 +363,7 @@ def build_master() -> tuple[pd.DataFrame, str]:
                 "has_zero_points": live["has_zero_points"],
                 "batch_exit": batch_exit,
                 "batch_elapsed_s": batch.get("batch_elapsed_s"),
-                "batch_zp_aper_40px": batch.get("batch_table_zp_aper_40px", ""),
+                "batch_zp_aper": batch.get("batch_table_zp_aper") or batch.get("batch_table_zp_aper_40px", ""),
                 "batch_n_cal_stars": batch.get("batch_table_n_cal_stars", ""),
                 "batch_ref_catalog": batch.get("batch_table_ref_catalog")
                 or batch.get("batch_log_ref_catalog", ""),
