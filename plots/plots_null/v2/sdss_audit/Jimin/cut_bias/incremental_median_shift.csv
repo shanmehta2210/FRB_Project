@@ -1,0 +1,6 @@
+stage,n_strict,median_cosi,delta_median_vs_prev
+gal+mag+lnL,24222,0.5523,0.0
++lnLStar<-10,19442,0.5491,-0.0033
++nnAvgZ>0,19423,0.5491,0.0
++score>0.8 (=Jimin V2),16551,0.5484,-0.0007
++fracDeV=0 (=Jimin V1),8445,0.5458,-0.0026

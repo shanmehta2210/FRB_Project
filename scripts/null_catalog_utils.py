@@ -15,6 +15,7 @@ Sample modes:
 from __future__ import annotations
 
 import math
+from pathlib import Path
 from typing import Iterable
 
 import numpy as np
@@ -30,13 +31,47 @@ SDSS_BA_FLOOR_MIN = 0.05
 JOINT_DEC_MIN = -30.0
 JOINT_DEC_MAX = 90.0
 
-# SDSS v2 full imaging footprint (no joint Dec clip); HTM random sampling.
-SDSS_CATALOG_V2_DEFAULT = "SDSS_catalog_v2_fullsky_modelmr.csv"
+# All survey null / morph catalogs live under repo-root ``catalog/``.
+# Paths below are relative to the repo root (scripts run from there).
+CATALOG_DIRNAME = "catalog"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+CATALOG_DIR = REPO_ROOT / CATALOG_DIRNAME
+
+# SDSS v1/v2 PhotoObj null catalogs.
+SDSS_CATALOG_V1_DEFAULT = f"{CATALOG_DIRNAME}/SDSS_catalog_v1_allsky_modelmr.csv"
+SDSS_CATALOG_V2_DEFAULT = f"{CATALOG_DIRNAME}/SDSS_catalog_v2_fullsky_modelmr.csv"
+SDSS_LNL_PATCH_CACHE_DEFAULT = f"{CATALOG_DIRNAME}/SDSS_lnl_patch_cache.csv"
 SDSS_HTM_PRIME = 37
 SDSS_HTM_MASK = 0x000000000000FFFF
 SDSS_MIN_STRICT_MAG20_POOL = 50_000
 SDSS_MAG20_LIMIT = 20.0
 SDSS_LNL_COVERAGE_MIN = 0.95
+
+# Legacy v1 (joint Dec) and v2 (full LS footprint, Tractor type=EXP only, ~2M).
+LS_CATALOG_V1_DEFAULT = f"{CATALOG_DIRNAME}/LS_catalog_v1_allsky_modelmr.csv"
+LS_CATALOG_V2_EXP_DEFAULT = f"{CATALOG_DIRNAME}/LS_catalog_v2_fullsky_exp.csv"
+LS_V2_EXP_TARGET_ROWS = 2_000_000
+
+# DES Y1 morph (Tarsitano+2018) and HSC Kawinwanichakij+2021 samples.
+DES_Y1_MORPH_SAMPLE_DEFAULT = f"{CATALOG_DIRNAME}/DES_y1_morph_sample_500k.csv"
+DES_Y1_MORPH_EXP_DEFAULT = f"{CATALOG_DIRNAME}/DES_y1_morph_exp_analogue.csv"
+HSC_KAWIN_SAMPLE_DEFAULT = f"{CATALOG_DIRNAME}/HSC_kawinwanichakij_sample_500k.csv"
+HSC_KAWIN_EXP_DEFAULT = f"{CATALOG_DIRNAME}/HSC_kawinwanichakij_exp_analogue.csv"
+
+# Free-n single-Sérsic EXP analogue window (around exponential n=1).
+EXP_ANALOGUE_N_MIN = 0.4
+EXP_ANALOGUE_N_MAX = 1.5
+
+
+def catalog_path(name_or_rel: str | Path) -> Path:
+    """Resolve a catalog filename or relative path under ``catalog/`` (or absolute)."""
+    p = Path(name_or_rel)
+    if p.is_absolute():
+        return p
+    if p.parts and p.parts[0] == CATALOG_DIRNAME:
+        return REPO_ROOT / p
+    return CATALOG_DIR / p.name
+
 
 # SDSS u-r color cuts for diagnostics (Strateva et al. 2001 uses u*-r* ~ 2.22).
 UR_CUTS_DEFAULT = (3.5, 2.2, 1.5)
@@ -91,6 +126,43 @@ def hubble_cosi_from_ba(b_over_a: float, q0: float = Q0) -> float:
     if val > 1:
         return 1.0
     return math.sqrt(val)
+
+
+# Unterborn & Ryden 2008 (ApJ 687, 976): r-band dimming for bright exponential disks.
+UNTERBORN_DELTA_M_COEFF = 1.27
+
+
+def delta_m_unterborn(q: np.ndarray | float, *, coeff: float = UNTERBORN_DELTA_M_COEFF) -> np.ndarray:
+    """Inclination dimming Δm_r = coeff (log10 q)^2; q clamped to (0, 1]."""
+    qa = np.asarray(q, dtype=float)
+    out = np.full(qa.shape, np.nan, dtype=float)
+    ok = np.isfinite(qa) & (qa > 0.0) & (qa <= 1.0)
+    out[ok] = coeff * (np.log10(qa[ok]) ** 2)
+    return out if out.ndim else float(out)
+
+
+def face_on_mag(
+    mag: np.ndarray | float,
+    q: np.ndarray | float,
+    *,
+    coeff: float = UNTERBORN_DELTA_M_COEFF,
+) -> np.ndarray:
+    """Face-on magnitude m^f = m - Δm(q) (Unterborn & Ryden A1)."""
+    m = np.asarray(mag, dtype=float)
+    dm = delta_m_unterborn(q, coeff=coeff)
+    return m - dm
+
+
+def edge_on_mag(
+    mag: np.ndarray | float,
+    q: np.ndarray | float,
+    *,
+    q_edge: float = Q0,
+    coeff: float = UNTERBORN_DELTA_M_COEFF,
+) -> np.ndarray:
+    """Magnitude if viewed at q_edge: m_edge = m^f + Δm(q_edge)."""
+    m_f = face_on_mag(mag, q, coeff=coeff)
+    return m_f + float(delta_m_unterborn(q_edge, coeff=coeff))
 
 
 def resolve_mag_column(df: pd.DataFrame, mag_column: str) -> str:

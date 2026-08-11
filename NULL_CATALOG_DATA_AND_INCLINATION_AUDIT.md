@@ -22,7 +22,7 @@
 
 ## 2. Data download — exact sources
 
-### 2.1 SDSS DR16 (`SDSS_catalog_v1_allsky_modelmr.csv`)
+### 2.1 SDSS DR16 (`catalog/SDSS_catalog_v1_allsky_modelmr.csv`)
 
 | Item | Value |
 |------|--------|
@@ -30,7 +30,7 @@
 | **Table** | `PhotoObj` (alias `p`) |
 | **Build script** | `scripts/build_sdss_null_catalog.py` |
 | **Patch lnL** | `scripts/patch_sdss_profile_winner.py` + `scripts/merge_lnl_patch_into_sdss.py` |
-| **Cache** | `SDSS_lnl_patch_cache.csv` (optional re-merge) |
+| **Cache** | `catalog/SDSS_lnl_patch_cache.csv` (optional re-merge) |
 
 **Per-RA chunk SQL** (12 bins, `TOP` 50k–80k per bin, `type=3` GALAXY, `clean=1`):
 
@@ -76,7 +76,7 @@ Implemented in `sdss_exp_wins_lnl_mask()` / `filter_sdss_drop_dev_winners()` in 
 
 ---
 
-### 2.2 Legacy Survey DR10 (`LS_catalog_v1_allsky_modelmr.csv`)
+### 2.2 Legacy Survey DR10 (`catalog/LS_catalog_v1_allsky_modelmr.csv`)
 
 | Item | Value |
 |------|--------|
@@ -185,6 +185,8 @@ So **strict b/a alone does not** move the median off 0.5 for a true isotropic po
 - ~**38%** have `expAB_r ≤ 0.2` → Hubble maps many to **cos(i) ≈ 0**.
 - Median cos(i) over **all** galaxies ≈ 0.26 (edge-on pile-up in projected shape).
 
+**v2 mag-bin detail:** [`plots/plots_null/v2/sdss_audit/formal/THREE_PLOT_DEEP_ANALYSIS.md`](plots/plots_null/v2/sdss_audit/formal/THREE_PLOT_DEEP_ANALYSIS.md) §2; raw `expAB_r` plots in [`formal/EXPAB_R_BA_PLOTS.md`](plots/plots_null/v2/sdss_audit/formal/EXPAB_R_BA_PLOTS.md).
+
 ### 5.2 Why mag &lt; 20 looks “face-on”
 
 - Bright subsample median **expAB_r ≈ 0.57** → median cos(i) ≈ **0.55** (close to uniform **before** strict b/a).
@@ -249,6 +251,23 @@ python scripts/plot_null_mag_cut_cdfs.py --mag-limits 20 21 22
 
 Outputs: `cosi_cdf_audit/stage_summary_mag20.csv`, `cosi_cdf_audit/cdf_curves_mag20.csv`.
 
+### 9.1 v2 formal mag-bin diagnostics
+
+Full write-up: [`plots/plots_null/v2/sdss_audit/formal/FORMAL_COSI_AUDIT.md`](plots/plots_null/v2/sdss_audit/formal/FORMAL_COSI_AUDIT.md).
+
+```bash
+python scripts/audit_sdss_v2_cosi_formal.py
+```
+
+| Output family | Purpose |
+|---------------|---------|
+| `ba_mag_joint_panel*.png` | Median **raw** `expAB_r` (no Hubble); full / ur+lnL / strict cuts |
+| `ba_cosi_strict_overlay.png` | Strict pool: median b/a vs median cos(i) |
+| `cosi_mag_bin_fixed_q0_clip.png` | Vary `q_min`, fixed q₀=0.2, edge-on clip |
+| `cosi_mag_bin_joint_strict.png` | `q_min = q₀` varied jointly |
+
+Supporting docs: `formal/EXPAB_R_BA_PLOTS.md`, `formal/THREE_PLOT_DEEP_ANALYSIS.md`.
+
 ---
 
 ## 10. Recommendations (if you want CDF nearer “uniform”)
@@ -271,3 +290,49 @@ Outputs: `cosi_cdf_audit/stage_summary_mag20.csv`, `cosi_cdf_audit/cdf_curves_ma
 ---
 
 *This document supersedes informal assumptions that the black “Uniform” diagonal is the expected outcome for the morphology-cut null. It is the expected outcome for **isotropic cos(i)** only.*
+
+---
+
+## Appendix A — v1 cut order, funnel sizes, column quick reference
+
+Merged from the former `plots/plots_null/v1_null_cdf_inclination/diagnostics/NULL_CATALOG_AND_CDF_METHOD.md` (now a stub). Machine-readable funnel: `plots/plots_null/v1_null_cdf_inclination/diagnostics/cut_funnel.csv` (`python scripts/audit_and_plot_null_v1_diagnostics.py --full`). Pre-morphology-cut plots: `Archive/plots_null_pre_morphology_cut/`.
+
+### A.1 Catalog files (v1 on disk)
+
+| File | Build script | Rows |
+|------|----------------|------|
+| `catalog/SDSS_catalog_v1_allsky_modelmr.csv` | `scripts/build_sdss_null_catalog.py` | ~501,885 |
+| `catalog/LS_catalog_v1_allsky_modelmr.csv` | `scripts/build_legacy_catalog_csv.py` | 500,000 |
+
+Footprint: RA 0–360°, Dec **−30° to +90°**. Cuts applied at plot time in `scripts/null_catalog_utils.py`.
+
+### A.2 Cut order (CDF pools)
+
+1. Magnitude (`mag <= limit`)
+2. Colour — SDSS \(u-r < 2.3\); Legacy \(g-r < 0.75\)
+3. SDSS: drop deV winners (`lnLExp_r > lnLDeV_r`); shape **`expAB_r` only**
+4. Legacy: drop `REX`, `DEV`; keep `EXP` or \(0.75 \le n \le 2\); shape `expAB_r`
+5. Strict: \(b/a > 0.2\)
+
+Hubble \(q_0 = 0.2\). FRB hosts: `pipeline_galfit_results.csv`; mag + GALFIT \(b/a > 0.2\); no host colour cut.
+
+### A.3 Funnel — m &lt; 21 (post morphology)
+
+| Survey | After mag | After color | After morphology | After \(b/a>0.2\) | **Final** |
+|--------|-----------|-------------|------------------|-------------------|-----------|
+| Legacy | 43,113 | 5,980 (g−r) | 4,577 (EXP∪n) | 4,374 | **4,374** |
+| SDSS | 156,343 | 29,844 (u−r + lnL exp) | — | 27,474 | **27,474** |
+
+SDSS lnL patch matches ~77% of catalog rows; unmatched rows drop at exp-winner. Legacy CDF pool at m&lt;21 is &lt; 5,000 after morphology.
+
+### A.4 Column quick reference
+
+| Column | Survey | CDF use |
+|--------|--------|---------|
+| `modelMag_r` | SDSS | Mag cut |
+| `expAB_r` | SDSS / Legacy | Shape / Hubble \(i\) |
+| `lnLExp_r`, `lnLDeV_r`, `model_winner_is_exp` | SDSS | Profile winner |
+| `tractor_mag_r` | Legacy | Mag cut |
+| `rdVrad`, `tractor_type` | Legacy | Sérsic \(n\) / EXP·REX·DEV |
+
+**Changelog (v1 method):** 2026-05-27 late-type morphology cuts; 2026-07-21 folded into this canonical audit.

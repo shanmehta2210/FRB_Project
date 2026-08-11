@@ -84,7 +84,7 @@ def main():
     
     old_output_root = os.path.join(project_root, "Galfit")
     guesses_csv = os.path.join(project_root, "csv_archive/initial_guesses.csv")
-    fwhm_csv = os.path.join(project_root, "psf_fwhm_summary.csv")
+    fwhm_csv = os.path.join(project_root, "Archive", "csv", "psf", "psf_fwhm_summary.csv")
 
     # Read FWHMs
     fwhm_dict = {}

@@ -1,6 +1,7 @@
 import os
 import sys
 import argparse
+import json
 
 import numpy as np
 import pandas as pd
@@ -10,8 +11,11 @@ from astropy.coordinates import SkyCoord
 from astropy.table import Table
 import astropy.units as u
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _HERE)
+sys.path.insert(0, os.path.dirname(_HERE))
 from pipeline_shared import get_logger  # noqa: E402
+from sersic_init import effective_re_px  # noqa: E402
 
 log = get_logger("phase3a")
 
@@ -28,6 +32,27 @@ def _pad_bbox(xmin, xmax, ymin, ymax, pad, shape):
         int(max(ymin - pad, 0)),
         int(min(ymax + pad, ny)),
     )
+
+
+def _clamp_bbox_around_center(xmin, xmax, ymin, ymax, cx, cy, max_side, shape):
+    """If either side exceeds max_side, replace with a max_side window centred on (cx, cy)."""
+    if max_side <= 0:
+        return xmin, xmax, ymin, ymax
+    ny_img, nx_img = shape
+    nx, ny = xmax - xmin, ymax - ymin
+    if nx <= max_side and ny <= max_side:
+        return xmin, xmax, ymin, ymax
+    half = max_side // 2
+    icx, icy = int(round(float(cx))), int(round(float(cy)))
+    xmin = max(0, icx - half)
+    ymin = max(0, icy - half)
+    xmax = min(nx_img, xmin + max_side)
+    ymax = min(ny_img, ymin + max_side)
+    if xmax - xmin < max_side:
+        xmin = max(0, xmax - max_side)
+    if ymax - ymin < max_side:
+        ymin = max(0, ymax - max_side)
+    return xmin, xmax, ymin, ymax
 
 
 def _bbox_of_objids(seg_map, objids):
@@ -66,6 +91,163 @@ def _is_stellar(cat, uid: int, class_star_max: float) -> bool:
     return cs >= class_star_max
 
 
+def _pixel_dist_from_host(cat, host_uid: int, uid: int) -> float:
+    """Separation in pixels between two SExtractor NUMBER entries."""
+    hsel = cat["NUMBER"] == int(host_uid)
+    usel = cat["NUMBER"] == int(uid)
+    if not np.any(hsel) or not np.any(usel):
+        return float("inf")
+    hx = float(cat["X_IMAGE"][hsel][0])
+    hy = float(cat["Y_IMAGE"][hsel][0])
+    ux = float(cat["X_IMAGE"][usel][0])
+    uy = float(cat["Y_IMAGE"][usel][0])
+    return float(np.hypot(ux - hx, uy - hy))
+
+
+def _catalog_row_for_number(cat, number: int):
+    """Return the first astropy table row for SExtractor NUMBER, or None."""
+    sel = cat["NUMBER"] == int(number)
+    if not np.any(sel):
+        return None
+    return cat[sel][0]
+
+
+def _grow_roi_for_fit_ids(seg_map, fit_ids, host_pad: int, max_side: int, shape):
+    """Pad union bbox of fit_ids; return new bounds or None if growth blocked."""
+    grow_bbox = _bbox_of_objids(seg_map, list(fit_ids))
+    if grow_bbox is None:
+        return None
+    gxmin, gxmax, gymin, gymax = _pad_bbox(
+        *grow_bbox, pad=int(host_pad), shape=shape
+    )
+    nx, ny = gxmax - gxmin, gymax - gymin
+    if max_side > 0 and (nx > max_side or ny > max_side):
+        return None
+    return gxmin, gxmax, gymin, gymax
+
+
+def resolve_neighbor_re_roi(
+    seg_map,
+    cat,
+    host_uid: int,
+    *,
+    host_pad: int = 20,
+    re_sep_factor: float = 3.0,
+    max_roi_iterations: int = 8,
+    max_cutout_side: int = 512,
+    neighbor_class_star_max: float = 0.75,
+    spread_by_number=None,
+    catalog_path: str = "",
+    psf_match_arcsec: float = 0.5,
+):
+    """Build ROI + fit/mask sets via host_pad and re_sep_factor × Re_neighbor.
+
+    For every non-host seg island that clips the ROI:
+      - stars / point-like SPREAD → mask (never expand)
+      - sep(host, neighbor) > re_sep_factor × Re_neighbor → mask
+      - else → jointly fit; grow ROI so all fit members have host_pad around them
+
+    Returns
+    -------
+    xmin, xmax, ymin, ymax, fit_objids, mask_objids, decisions
+        decisions maps uid -> (kind, detail) for logging/tests.
+        kind in {"host", "fit", "mask_far", "mask_star", "mask_spread", "mask_nocat"}.
+    """
+    host_uid = int(host_uid)
+    host_bbox = _bbox_of_objids(seg_map, [host_uid])
+    if host_bbox is None:
+        raise ValueError(f"Host NUMBER={host_uid} not in segmentation map")
+
+    xmin, xmax, ymin, ymax = _pad_bbox(
+        *host_bbox, pad=int(host_pad), shape=seg_map.shape
+    )
+    fit_objids = {host_uid}
+    mask_objids: set = set()
+    decisions: dict = {host_uid: ("host", 1.0)}
+    if spread_by_number is None:
+        spread_by_number = {}
+
+    max_iters = max(1, int(max_roi_iterations))
+    max_side = int(max_cutout_side)
+    factor = float(re_sep_factor)
+
+    for it in range(1, max_iters + 1):
+        touching = _ids_touching_roi(
+            seg_map, xmin, xmax, ymin, ymax, drop=[]
+        )
+        new_expanded: set = set()
+        for uid in sorted(touching):
+            uid = int(uid)
+            if uid == host_uid:
+                continue
+            if uid in fit_objids or uid in mask_objids:
+                continue
+
+            stellar = _is_stellar(cat, uid, float(neighbor_class_star_max))
+            spread = _spread_for_seg_number(
+                uid, cat, spread_by_number, catalog_path, float(psf_match_arcsec)
+            )
+            point_like = (
+                spread is not None
+                and _spread_is_point_source(spread[0], spread[1])
+            )
+            if stellar or point_like:
+                mask_objids.add(uid)
+                decisions[uid] = (
+                    "mask_star" if stellar else "mask_spread",
+                    0.0,
+                )
+                continue
+
+            row = _catalog_row_for_number(cat, uid)
+            if row is None:
+                mask_objids.add(uid)
+                decisions[uid] = ("mask_nocat", 0.0)
+                continue
+
+            re_n = effective_re_px(row)
+            sep = _pixel_dist_from_host(cat, host_uid, uid)
+            thresh = factor * re_n
+            if sep > thresh:
+                mask_objids.add(uid)
+                decisions[uid] = ("mask_far", sep / re_n if re_n > 0 else float("inf"))
+            else:
+                fit_objids.add(uid)
+                decisions[uid] = ("fit", sep / re_n if re_n > 0 else 0.0)
+                new_expanded.add(uid)
+
+        if not new_expanded:
+            break
+
+        grown = _grow_roi_for_fit_ids(
+            seg_map, fit_objids, int(host_pad), max_side, seg_map.shape
+        )
+        if grown is None:
+            # Cap / missing bbox: keep current ROI; demote brand-new expanders
+            # that still aren't fully coverable under the side limit.
+            log.warning(
+                f"    [iter {it}] ROI growth blocked (max_cutout_side={max_side} "
+                f"or empty bbox); new expanders {sorted(new_expanded)} stay "
+                "in fit set with current bounds (overlapping pixels only)."
+            )
+            break
+        xmin, xmax, ymin, ymax = grown
+        log.info(
+            f"    [iter {it}] expanded ROI for {sorted(new_expanded)} "
+            f"-> bounds X=[{xmin}:{xmax}] Y=[{ymin}:{ymax}]"
+        )
+
+    # Any leftover touching IDs not yet classified → mask (safety net).
+    for uid in _ids_touching_roi(seg_map, xmin, xmax, ymin, ymax, drop=[]):
+        uid = int(uid)
+        if uid in fit_objids or uid in mask_objids:
+            continue
+        mask_objids.add(uid)
+        decisions[uid] = ("mask_far", -1.0)
+
+    return xmin, xmax, ymin, ymax, fit_objids, mask_objids, decisions
+
+
 # Same star/galaxy cut as Phase 2 (run_photometry_astropath.py AstroPath candidates).
 _SPREAD_STAR_MAX = 0.005
 _SPREAD_SIGMA = 3.0
@@ -100,11 +282,11 @@ def _load_spread_by_number(catalog_path: str) -> dict:
 
 def _spread_for_catalog_index(idx: int, cat, spread_by_number: dict, catalog_path: str,
                               match_arcsec: float = 0.5):
-    """SPREAD for a Phase-1 image.cat row, keyed by Phase-2 NUMBER when they differ."""
-    num = int(cat["NUMBER"][idx])
-    spread = spread_by_number.get(num)
-    if spread is not None:
-        return spread
+    """SPREAD for a Phase-1 image.cat row from Phase-2 image.psf.cat via sky position.
+
+    Phase-1 NUMBER and Phase-2 NUMBER are independent SExtractor indices; never
+    key solely by NUMBER (see _seg_number_for_psf_number).
+    """
     psf = _load_psf_catalog(catalog_path)
     if psf is None:
         return None
@@ -124,10 +306,29 @@ def _spread_for_catalog_index(idx: int, cat, spread_by_number: dict, catalog_pat
     return spread_by_number.get(int(psf["NUMBER"][j]))
 
 
+def _spread_for_seg_number(
+    seg_number: int,
+    cat,
+    spread_by_number: dict,
+    catalog_path: str,
+    match_arcsec: float = 0.5,
+):
+    """SPREAD for a Phase-1 image.cat / segmentation NUMBER (sky-match to Phase 2)."""
+    sel = cat["NUMBER"] == int(seg_number)
+    if not np.any(sel):
+        return None
+    idx = int(np.where(sel)[0][0])
+    return _spread_for_catalog_index(
+        idx, cat, spread_by_number, catalog_path, match_arcsec
+    )
+
+
 def _seg_number_for_psf_number(psf_number: int, cat, catalog_path: str, max_sep_arcsec: float = 1.0):
-    """Map AstroPath / Phase-2 NUMBER to Phase-1 segmentation NUMBER via sky position."""
-    if int(psf_number) in set(int(n) for n in cat["NUMBER"]):
-        return int(psf_number)
+    """Map AstroPath / Phase-2 NUMBER to Phase-1 segmentation NUMBER via sky position.
+
+    image.psf.cat (Phase 2) and image.cat (Phase 1) NUMBER fields are independent
+    SExtractor run indices — never assume they refer to the same source.
+    """
     psf = _load_psf_catalog(catalog_path)
     if psf is None:
         raise SystemExit(
@@ -163,6 +364,46 @@ def _seg_number_for_psf_number(psf_number: int, cat, catalog_path: str, max_sep_
             f"seg NUMBER={seg_number} (image.cat; {sep:.3f}\")"
         )
     return seg_number
+
+
+def _pick_host_at_target_pixel(
+    w: WCS,
+    target_coord: SkyCoord,
+    seg_map,
+    cat,
+    spread_by_number: dict,
+    catalog_path: str,
+    psf_match_arcsec: float = 0.5,
+):
+    """Return image.cat NUMBER under the target sky position (preferred for CSV hosts)."""
+    xp, yp = w.world_to_pixel(target_coord)
+    ix = int(round(float(np.squeeze(xp))))
+    iy = int(round(float(np.squeeze(yp))))
+    ny, nx = seg_map.shape
+    if not (0 <= ix < nx and 0 <= iy < ny):
+        return None
+    seg_id = int(seg_map[iy, ix])
+    if seg_id <= 0:
+        return None
+    sel = cat["NUMBER"] == seg_id
+    if not np.any(sel):
+        return None
+    idx = int(np.where(sel)[0][0])
+    spread = _spread_for_catalog_index(
+        idx, cat, spread_by_number, catalog_path, psf_match_arcsec
+    )
+    if spread is None:
+        return None
+    if _spread_is_point_source(*spread):
+        return None
+    host_coord = SkyCoord(
+        ra=cat["ALPHAWIN_J2000"][idx],
+        dec=cat["DELTAWIN_J2000"][idx],
+        unit="deg",
+        frame="icrs",
+    )
+    sep_arcsec = float(target_coord.separation(host_coord).arcsec)
+    return int(idx), int(seg_id), sep_arcsec
 
 
 def _pick_nearest_galaxy_host(
@@ -276,41 +517,61 @@ def main():
         "--host-pad",
         type=int,
         default=20,
-        help="Initial padding (px) added on each side of the host segmentation "
-             "bbox to build the starting ROI (default 20).",
+        help="Padding (px) on each side of every jointly-fitted galaxy's "
+             "segmentation bbox when building / growing the ROI (default 20).",
     )
     parser.add_argument(
-        "--contain-thresh",
+        "--re-sep-factor",
         type=float,
-        default=0.95,
-        help="A source whose seg pixels are at least this fraction inside the "
-             "current ROI is treated as fully contained and gets fitted as a "
-             "Sérsic (default 0.95).",
-    )
-    parser.add_argument(
-        "--expand-thresh",
-        type=float,
-        default=0.50,
-        help="A source whose seg pixels are at least this fraction inside the "
-             "current ROI (but below --contain-thresh) is 'largely filled': the "
-             "ROI grows to contain it fully and it is then fitted. Below this, "
-             "the source is treated as a fringe and only the in-frame pixels "
-             "are masked (default 0.50).",
+        default=3.0,
+        help="Mask a clipping neighbor galaxy when the host–neighbor centroid "
+             "separation exceeds this factor times the neighbor's FLUX_RADIUS "
+             "Re seed (same recipe as the GALFIT re initial guess). Otherwise "
+             "expand the ROI to give both a --host-pad boundary and jointly "
+             "fit (default 3.0).",
     )
     parser.add_argument(
         "--neighbor-class-star-max",
         type=float,
-        default=0.90,
+        default=0.75,
         help="SExtractor CLASS_STAR >= this: source is treated as a point "
              "source and goes to the bad-pixel mask instead of being fitted as "
-             "a Sérsic (default 0.90). Affects both contained and largely-filled "
-             "categories.",
+             "a Sérsic (default 0.75).",
     )
     parser.add_argument(
         "--max-roi-iterations",
         type=int,
-        default=6,
-        help="Safety cap on the expand-and-recategorise loop (default 6).",
+        default=8,
+        help="Safety cap on the expand-and-recategorise loop (default 8).",
+    )
+    parser.add_argument(
+        "--max-fit-components",
+        type=int,
+        default=25,
+        help="Maximum Sérsic components in the cutout (host always kept). "
+             "Excess neighbor galaxies are masked instead of fitted (default 25). "
+             "Set 0 to disable the cap.",
+    )
+    parser.add_argument(
+        "--max-cutout-side",
+        type=int,
+        default=512,
+        help="Maximum cutout width or height in pixels; stops ROI expansion when "
+             "the bbox would exceed this (default 512). Set 0 to disable.",
+    )
+    parser.add_argument(
+        "--host-only-min-bbox-side",
+        type=int,
+        default=400,
+        help="When the host seg bbox max side exceeds this (px), fit only the host "
+             "and mask all neighbors (0 = disable; default 400).",
+    )
+    parser.add_argument(
+        "--host-only-min-elongation",
+        type=float,
+        default=3.0,
+        help="When the host ELONGATION exceeds this, fit only the host and mask "
+             "neighbors (default 3.0).",
     )
     parser.add_argument(
         "--mag-aper-index",
@@ -392,43 +653,98 @@ def main():
     spread_by_number = _load_spread_by_number(cat_path)
     target_coord = SkyCoord(ra=target_ra, dec=target_dec, unit="deg", frame="icrs")
 
-    if astropath_sex_number is not None:
-        psf_number = int(astropath_sex_number)
-        spread = spread_by_number.get(psf_number)
-        if spread is None:
-            raise SystemExit(
-                f"[Phase 3a] AstroPath host sex_number={psf_number} missing from image.psf.cat."
+    max_astropath_host_sep = min(float(args.max_host_sep_arcsec), 2.0)
+    tried_astropath_fallback = False
+    while True:
+        if astropath_sex_number is not None:
+            psf_number = int(astropath_sex_number)
+            spread = spread_by_number.get(psf_number)
+            if spread is None:
+                raise SystemExit(
+                    f"[Phase 3a] AstroPath host sex_number={psf_number} missing from image.psf.cat."
+                )
+            sm, se = spread
+            if _spread_is_point_source(sm, se):
+                raise SystemExit(
+                    f"[Phase 3a] AstroPath host sex_number={psf_number} fails galaxy SPREAD cut "
+                    f"(SPREAD={sm:.4f}+/-{se:.4f})."
+                )
+            target_objid = _seg_number_for_psf_number(psf_number, cat, cat_path)
+            sel = cat["NUMBER"] == target_objid
+            host_coord = SkyCoord(
+                ra=cat["ALPHAWIN_J2000"][sel][0],
+                dec=cat["DELTAWIN_J2000"][sel][0],
+                unit="deg",
+                frame="icrs",
             )
-        sm, se = spread
-        if _spread_is_point_source(sm, se):
-            raise SystemExit(
-                f"[Phase 3a] AstroPath host sex_number={psf_number} fails galaxy SPREAD cut "
-                f"(SPREAD={sm:.4f}+/-{se:.4f})."
-            )
-        target_objid = _seg_number_for_psf_number(psf_number, cat, cat_path)
-        sel = cat["NUMBER"] == target_objid
-        host_coord = SkyCoord(
-            ra=cat["ALPHAWIN_J2000"][sel][0],
-            dec=cat["DELTAWIN_J2000"][sel][0],
-            unit="deg",
-            frame="icrs",
-        )
-        sep_arcsec = float(target_coord.separation(host_coord).arcsec)
-        log.info(
-            f"Host pick: AstroPath sex_number={psf_number} -> seg NUMBER={target_objid} "
-            f"(SPREAD={sm:.4f}+/-{se:.4f}; {sep_arcsec:.2f}\" from association centre)"
-        )
-        log.info(f"Assured Target Host NUMBER={target_objid}")
-    else:
+            sep_arcsec = float(target_coord.separation(host_coord).arcsec)
+            if sep_arcsec > max_astropath_host_sep:
+                log.warning(
+                    f"AstroPath sex_number={psf_number} -> seg NUMBER={target_objid} is "
+                    f"{sep_arcsec:.2f}\" from the association centre "
+                    f"(>{max_astropath_host_sep:.1f}\") — picking nearest galaxy at AstroPath RA/Dec"
+                )
+                idx, target_objid, sep_arcsec = _pick_nearest_galaxy_host(
+                    target_coord, cat, spread_by_number, cat_path,
+                    float(args.max_host_sep_arcsec), float(args.psf_match_arcsec),
+                )
+                log.info(
+                    f"Host pick: nearest galaxy at AstroPath centre -> seg NUMBER={target_objid} "
+                    f"({sep_arcsec:.2f}\" from {target_src})"
+                )
+            else:
+                log.info(
+                    f"Host pick: AstroPath sex_number={psf_number} -> seg NUMBER={target_objid} "
+                    f"(SPREAD={sm:.4f}+/-{se:.4f}; {sep_arcsec:.2f}\" from association centre)"
+                )
+            log.info(f"Assured Target Host NUMBER={target_objid}")
+            break
+
         log.info(
             f"Host pick: nearest galaxy within {args.max_host_sep_arcsec}\" "
             f"(SPREAD+{_SPREAD_SIGMA}*SPREADERR >= {_SPREAD_STAR_MAX}; "
             f"{len(spread_by_number)} sources with SPREAD in image.psf.cat)"
         )
-        idx, target_objid, sep_arcsec = _pick_nearest_galaxy_host(
-            target_coord, cat, spread_by_number, cat_path,
-            float(args.max_host_sep_arcsec), float(args.psf_match_arcsec),
-        )
+        seg_pick = None
+        if args.no_astropath_override:
+            seg_pick = _pick_host_at_target_pixel(
+                w, target_coord, seg_map, cat, spread_by_number, cat_path,
+                float(args.psf_match_arcsec),
+            )
+            if seg_pick is not None:
+                idx, target_objid, sep_arcsec = seg_pick
+                log.info(
+                    f"Host pick: seg map at target pixel -> image.cat NUMBER={target_objid} "
+                    f"({sep_arcsec:.2f}\" from {target_src})"
+                )
+        if seg_pick is None:
+            try:
+                idx, target_objid, sep_arcsec = _pick_nearest_galaxy_host(
+                    target_coord, cat, spread_by_number, cat_path,
+                    float(args.max_host_sep_arcsec), float(args.psf_match_arcsec),
+                )
+            except SystemExit:
+                if (
+                    not args.no_astropath_override
+                    or tried_astropath_fallback
+                ):
+                    raise
+                tried_astropath_fallback = True
+                posteriors_path = args.astropath_posteriors or os.path.join(
+                    os.path.dirname(cat_path), "astropath_posteriors.csv")
+                ap_ra, ap_dec, ap_src, ap_sex = _resolve_target_from_astropath(
+                    posteriors_path, args.ra, args.dec, args.min_astropath_posterior)
+                if ap_sex is None:
+                    raise
+                log.warning(
+                    "Localization host (--ra/--dec): no galaxy within "
+                    f"{args.max_host_sep_arcsec}\" — falling back to AstroPath host ({ap_src})"
+                )
+                target_ra, target_dec, target_src = ap_ra, ap_dec, ap_src
+                target_coord = SkyCoord(ra=target_ra, dec=target_dec, unit="deg", frame="icrs")
+                astropath_sex_number = ap_sex
+                continue
+
         if sep_arcsec > 1.0:
             log.warning(
                 f"Host galaxy #{target_objid} is {sep_arcsec:.2f} arcsec "
@@ -438,113 +754,107 @@ def main():
             f"Assured Target Host NUMBER={target_objid} "
             f"({sep_arcsec:.2f}\" from {target_src})"
         )
+        break
 
     log.info(
-        "Neighbor policy (per-source containment): for every seg island that "
-        "touches the ROI we compute frac = pixels_in_ROI / total_pixels and "
-        f"decide:\n"
-        f"      frac >= {args.contain_thresh:.2f}  -> fully contained: fit (or mask if stellar)\n"
-        f"      frac >= {args.expand_thresh:.2f}  -> largely filled : expand ROI to contain it, then fit/mask\n"
-        f"      frac >  0.0                       -> small fringe   : mask in-frame pixels only (no ROI grow)\n"
-        f"      no overlap                        -> ignored entirely"
+        "Neighbor policy (Re-separation): start from host seg bbox + "
+        f"{int(args.host_pad)} px pad; for every seg island that clips the ROI:\n"
+        f"      star / point-like SPREAD          -> mask (never expand)\n"
+        f"      sep > {float(args.re_sep_factor):.2f} × Re_neighbor  -> mask "
+        "(Re = FLUX_RADIUS GALFIT seed)\n"
+        f"      sep <= {float(args.re_sep_factor):.2f} × Re_neighbor -> jointly fit; "
+        f"grow ROI so every fit member has a {int(args.host_pad)} px pad\n"
+        "      Host is always GALFIT component 1"
     )
 
-    # --- Starting ROI = host seg bbox + small pad ---
     host_bbox = _bbox_of_objids(seg_map, [int(target_objid)])
     if host_bbox is None:
         log.error("Target not in segmentation map.")
         return
-    xmin, xmax, ymin, ymax = _pad_bbox(*host_bbox, pad=int(args.host_pad), shape=seg_map.shape)
+    target_px, target_py = w.world_to_pixel(target_coord)
+    target_px = float(np.squeeze(target_px))
+    target_py = float(np.squeeze(target_py))
 
-    contain_thresh = float(args.contain_thresh)
-    expand_thresh = float(args.expand_thresh)
-    cstar_lim = float(args.neighbor_class_star_max)
+    try:
+        xmin, xmax, ymin, ymax, fit_objids, mask_objids, decisions = (
+            resolve_neighbor_re_roi(
+                seg_map,
+                cat,
+                int(target_objid),
+                host_pad=int(args.host_pad),
+                re_sep_factor=float(args.re_sep_factor),
+                max_roi_iterations=int(args.max_roi_iterations),
+                max_cutout_side=int(args.max_cutout_side),
+                neighbor_class_star_max=float(args.neighbor_class_star_max),
+                spread_by_number=spread_by_number,
+                catalog_path=cat_path,
+                psf_match_arcsec=float(args.psf_match_arcsec),
+            )
+        )
+    except ValueError as exc:
+        log.error(str(exc))
+        return
 
-    # State maps so we have a clean record per source.
-    decisions: dict = {}   # uid -> ("contained" | "expanded" | "fringe", frac)
-    # Host is always fitted by construction; flag as contained 1.0.
-    decisions[int(target_objid)] = ("contained", 1.0)
+    # Host is ALWAYS fitted as a Sérsic — even if CLASS_STAR / SPREAD disagree.
+    fit_objids.add(int(target_objid))
+    mask_objids.discard(int(target_objid))
 
-    # Expand-and-recategorise loop. We only grow the ROI; we never shrink it.
-    # Termination: when no new island gets promoted from fringe -> expanded.
-    max_iters = max(1, int(args.max_roi_iterations))
-    for it in range(1, max_iters + 1):
-        touching = _ids_touching_roi(seg_map, xmin, xmax, ymin, ymax, drop=[int(target_objid)])
-        new_expanded: set = set()
-        for uid in sorted(touching):
-            total = int(np.sum(seg_map == uid))
-            if total <= 0:
-                continue
-            in_roi = int(np.sum(seg_map[ymin:ymax, xmin:xmax] == uid))
-            frac = in_roi / float(total)
-            prev = decisions.get(uid)
-            if frac >= contain_thresh:
-                decisions[uid] = ("contained", frac)
-            elif frac >= expand_thresh:
-                decisions[uid] = ("expanded", frac)
-                if prev is None or prev[0] == "fringe":
-                    new_expanded.add(uid)
-            else:
-                # Only register as fringe if we haven't already classified it
-                # as something stronger in a previous iteration.
-                if prev is None or prev[0] == "fringe":
-                    decisions[uid] = ("fringe", frac)
-
-        if not new_expanded:
-            break
-
-        # Grow ROI so every "expanded" source is fully inside, then re-pad with
-        # the host pad so we leave room for the model wings.
-        expanded_ids = [u for u, (k, _) in decisions.items() if k == "expanded"]
-        grow_ids = set(expanded_ids) | {int(target_objid)}
-        grow_bbox = _bbox_of_objids(seg_map, list(grow_ids))
-        if grow_bbox is None:
-            break
-        xmin, xmax, ymin, ymax = _pad_bbox(*grow_bbox, pad=int(args.host_pad), shape=seg_map.shape)
-        log.info(f"    [iter {it}] expanded ROI for {sorted(new_expanded)} -> bounds X=[{xmin}:{xmax}] Y=[{ymin}:{ymax}]")
-
-    # Final recompute of fracs in the converged ROI, so the logged number
-    # matches what's actually on disk.
-    converged_decisions: dict = {int(target_objid): ("contained", 1.0)}
-    for uid in _ids_touching_roi(seg_map, xmin, xmax, ymin, ymax, drop=[int(target_objid)]):
-        total = int(np.sum(seg_map == uid))
-        if total <= 0:
-            continue
-        in_roi = int(np.sum(seg_map[ymin:ymax, xmin:xmax] == uid))
-        frac = in_roi / float(total)
-        if frac >= contain_thresh:
-            converged_decisions[uid] = ("contained", frac)
-        elif frac >= expand_thresh:
-            # Should not normally happen post-convergence (we expanded for these),
-            # but if the host pad + image edge clipped the bbox we may still see
-            # one. Treat the same way: try to fit, else mask depending on type.
-            converged_decisions[uid] = ("contained", frac)
+    kind_labels = {
+        "host": "host -> fit",
+        "fit": "near (sep<=factor*Re_n) -> fit",
+        "mask_far": "far (sep>factor*Re_n) -> mask",
+        "mask_star": "stellar -> mask",
+        "mask_spread": "point SPREAD -> mask",
+        "mask_nocat": "no catalog row -> mask",
+    }
+    for uid in sorted(decisions.keys()):
+        kind, detail = decisions[uid]
+        lbl = kind_labels.get(kind, kind)
+        if kind in ("fit", "mask_far") and detail is not None and detail >= 0:
+            log.info(f"    objid {uid}: sep/Re_n={float(detail):.2f}  {lbl}")
         else:
-            converged_decisions[uid] = ("fringe", frac)
+            log.info(f"    objid {uid}: {lbl}")
 
-    # Split into action groups. The host is ALWAYS fitted as a Sérsic — even if
-    # SExtractor's CLASS_STAR happens to be >= cstar_lim. The whole purpose of
-    # Phase 3a is to model the FRB host, so we never drop it into the mask just
-    # because the star/galaxy classifier disagrees.
-    fit_objids: set = {int(target_objid)}
-    mask_objids: set = set()
-    host_frac = converged_decisions.get(int(target_objid), ("contained", 1.0))[1]
-    log.info(f"    objid {int(target_objid)}: frac_in_ROI={host_frac*100:.1f}%  host -> fit")
-    for uid, (kind, frac) in converged_decisions.items():
-        if int(uid) == int(target_objid):
-            continue
-        stellar = _is_stellar(cat, int(uid), cstar_lim)
-        if kind == "fringe":
-            mask_objids.add(int(uid))
-            kind_lbl = "fringe -> mask"
-        else:
-            if stellar:
-                mask_objids.add(int(uid))
-                kind_lbl = "contained -> mask (stellar)"
-            else:
-                fit_objids.add(int(uid))
-                kind_lbl = "contained -> fit (galaxy)"
-        log.info(f"    objid {uid}: frac_in_ROI={frac*100:.1f}%  {kind_lbl}")
+    max_fit = int(args.max_fit_components)
+    if max_fit > 0 and len(fit_objids) > max_fit:
+        host_id = int(target_objid)
+        extras = sorted(
+            fit_objids - {host_id},
+            key=lambda u: _pixel_dist_from_host(cat, host_id, u),
+        )
+        keep_extras = extras[: max(0, max_fit - 1)]
+        drop = set(extras) - set(keep_extras)
+        fit_objids = {host_id} | set(keep_extras)
+        mask_objids |= drop
+        log.warning(
+            f"Capped fit components at {max_fit} (host + {len(keep_extras)} neighbors); "
+            f"masked {len(drop)} galaxy(ies) that would otherwise be fitted."
+        )
+
+    host_sel = cat["NUMBER"] == int(target_objid)
+    host_elong = 1.0
+    host_bbox_w = host_bbox[1] - host_bbox[0]
+    host_bbox_h = host_bbox[3] - host_bbox[2]
+    if np.any(host_sel) and "ELONGATION" in cat.colnames:
+        host_elong = float(cat[host_sel][0]["ELONGATION"])
+    min_bbox_side = int(args.host_only_min_bbox_side)
+    min_elong = float(args.host_only_min_elongation)
+    extended_host = (
+        (min_bbox_side > 0 and max(host_bbox_w, host_bbox_h) >= min_bbox_side)
+        or (min_elong > 0 and host_elong >= min_elong)
+    )
+    host_only_galfit = False
+    if extended_host:
+        all_touching = _ids_touching_roi(seg_map, xmin, xmax, ymin, ymax, drop=[])
+        n_fit_before = len(fit_objids)
+        fit_objids = {int(target_objid)}
+        mask_objids = (mask_objids | all_touching) - {int(target_objid)}
+        host_only_galfit = True
+        log.warning(
+            f"Extended host (bbox {host_bbox_w}x{host_bbox_h}px, elong={host_elong:.2f}): "
+            f"host-only GALFIT — dropped {n_fit_before - 1} neighbor component(s), "
+            f"masking {len(mask_objids)} seg object(s)."
+        )
 
     log.info(
         f"Final cutout: {len(fit_objids)} Sérsic component(s), "
@@ -663,6 +973,21 @@ def main():
     comp_df['YC_CUTOUT'] = comp_df['Y_IMAGE'] - ymin
     
     comp_df.to_csv(os.path.join(args.outdir, "host_components.csv"), index=False)
+    cutout_meta = {
+        "host_number": int(target_objid),
+        "extended_host": bool(extended_host),
+        "host_only_galfit": bool(host_only_galfit),
+        "host_elongation": float(host_elong),
+        "host_bbox_px": [int(host_bbox_w), int(host_bbox_h)],
+        "cutout_bounds": [int(xmin), int(xmax), int(ymin), int(ymax)],
+        "n_fit_components": int(len(fit_objids)),
+        "n_mask_objects": int(len(mask_objids)),
+        "host_pad": int(args.host_pad),
+        "re_sep_factor": float(args.re_sep_factor),
+        "neighbor_policy": "re_separation",
+    }
+    with open(os.path.join(args.outdir, "cutout_meta.json"), "w", encoding="utf-8") as f:
+        json.dump(cutout_meta, f, indent=2)
     log.info(
         f"Complete. {len(fit_objids)} fitted + {len(mask_objids)} masked. "
         f"Saved to {args.outdir}"
@@ -684,7 +1009,12 @@ def main():
         if not target_df.empty:
              axes[0].scatter(target_df['XC_CUTOUT'], target_df['YC_CUTOUT'], s=200, facecolors='none', edgecolors='lime', lw=2)
              axes[0].text(target_df['XC_CUTOUT'].iloc[0], target_df['YC_CUTOUT'].iloc[0]-5, "Host", color='lime', ha='center', va='top')
-             
+        # CSV / association centre (may differ from SExtractor centroid on extended hosts)
+        tx_cut = target_px - xmin
+        ty_cut = target_py - ymin
+        axes[0].scatter([tx_cut], [ty_cut], s=80, marker='+', c='yellow', lw=2)
+        axes[0].text(tx_cut, ty_cut + 8, "Target", color='yellow', ha='center', va='bottom', fontsize=9)
+
         neighbor_df = comp_df[comp_df['NUMBER'] != target_objid]
         if not neighbor_df.empty:
              axes[0].scatter(neighbor_df['XC_CUTOUT'], neighbor_df['YC_CUTOUT'], s=100, facecolors='none', edgecolors='dodgerblue', lw=2)

@@ -8,6 +8,8 @@ Examples:
   python cutout_download.py 20180301A --force
   python cutout_download.py --scan          # rebuild registry from files on disk
   python cutout_download.py --list          # print registry
+  python cutout_download.py 20190110C \\
+      --csv CHIME/frb_localizations.csv --out-dir CHIME/large_cutouts
 """
 
 from __future__ import annotations
@@ -54,6 +56,17 @@ REGISTRY_COLS = [
     "downloaded_utc",
     "status",
 ]
+
+
+def apply_paths(*, catalog: Path | None = None, out_dir: Path | None = None) -> None:
+    """Override localization CSV and cutout output directory (e.g. CHIME side project)."""
+    global CUTOUT_DIR, LOC_CSV, REGISTRY, AUDIT_CSV
+    if out_dir is not None:
+        CUTOUT_DIR = Path(out_dir)
+        REGISTRY = CUTOUT_DIR / "cutout_registry.csv"
+        AUDIT_CSV = CUTOUT_DIR / "coverage_audit.csv"
+    if catalog is not None:
+        LOC_CSV = Path(catalog)
 
 
 def _ts() -> str:
@@ -313,6 +326,18 @@ def main():
     parser.add_argument("--scan", action="store_true", help="Rebuild registry from disk")
     parser.add_argument("--list", action="store_true", help="Show registry")
     parser.add_argument(
+        "--csv",
+        type=Path,
+        default=None,
+        help="Localization CSV (default: master_frb_localization.csv)",
+    )
+    parser.add_argument(
+        "--out-dir",
+        type=Path,
+        default=None,
+        help="Cutout output directory (default: large_cutouts/)",
+    )
+    parser.add_argument(
         "--preflight-only",
         action="store_true",
         help="Run probes only; do not download",
@@ -323,6 +348,9 @@ def main():
         help="Skip probes and try every tier (slow)",
     )
     args = parser.parse_args()
+
+    apply_paths(catalog=args.csv, out_dir=args.out_dir)
+    CUTOUT_DIR.mkdir(parents=True, exist_ok=True)
 
     df = load_registry()
 

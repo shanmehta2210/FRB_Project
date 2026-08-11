@@ -9,7 +9,7 @@ Footprint: joint Legacy∩SDSS Dec range (dec -30 to +90 deg), primary detection
 type=GALAXY. Random sampling via chunked SQL + in-memory shuffle.
 
 For full SDSS footprint and unbiased HTM random sampling, use
-``build_sdss_null_catalog_v2.py`` (writes ``SDSS_catalog_v2_fullsky_modelmr.csv``).
+``build_sdss_null_catalog_v2.py`` (writes ``catalog/SDSS_catalog_v2_fullsky_modelmr.csv``).
 """
 
 from __future__ import annotations
@@ -37,7 +37,7 @@ from null_catalog_utils import (
     prepare_null_sample,
 )
 
-DEFAULT_OUT = "SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_OUT = "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
 MIN_STRICT_POOL = 10_000
 
 
@@ -223,6 +223,7 @@ def main() -> None:
             "Increase --top or --ra-bins."
         )
 
+    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     catalog.to_csv(args.out, index=False)
     print(f"Wrote: {args.out} ({len(catalog)} rows, strict pool={len(strict)})")
 

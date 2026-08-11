@@ -1,0 +1,9 @@
+sample,ba_column,n_sql,n_strict,median_cosi
+vizier_all_rPmag_lt22_deVAB,rdVell (=deVAB_r),19739,14682,0.4755
+vizier_rPmag_le_21_deVAB,rdVell (=deVAB_r),9284,8369,0.5404
+vizier_rmag_le_21_deVAB,rdVell (=deVAB_r),9903,8828,0.5328
+vizier_rmag_12_21_deVAB,rdVell (=deVAB_r),9903,8828,0.5328
+jimin_v1_in_cone_expAB,expAB_r,1208,1112,0.5229
+jimin_v2_in_cone_expAB,expAB_r,2299,2146,0.5406
+matched_v2_deVAB,rdVell,2299,1998,0.4998
+matched_v2_expAB,expAB_r,2299,2146,0.5406

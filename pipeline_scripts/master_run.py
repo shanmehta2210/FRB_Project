@@ -1,12 +1,18 @@
 """
 Master orchestrator for the FRB host pipeline.
 
-Runs all pipeline phases (SExtractor + PSFEx, Photometry + AstroPath,
+Runs the pipeline phases (SExtractor + PSFEx, Photometry + AstroPath,
 optional Statmorph, GALFIT cutouts + fit) end to end against a staged copy of
 the user-supplied flux / inverse-variance FITS pair.
 
 Execution modes:
-    Full run (default)   — all phases execute sequentially.
+    Full run (default)   — all phases execute sequentially (--outputs all).
+    --outputs <tools>    — run ONLY the phases the requested tools depend on
+                           and expose only their files. Dependency chain:
+                             catalog / psf        -> Phase 1
+                             photometry/astropath -> Phases 1 + 2
+                             statmorph            -> Phases 1 + 2 + 3a + statmorph
+                             galfit               -> Phases 1 + 2 + 3a + 3b
     --rerun-phase <N>    — skip phases before <N>; requires an existing workdir
                            with prior-phase outputs (useful for tweaking GALFIT
                            without re-running SExtractor + photometry).
@@ -101,15 +107,34 @@ PHASE3_DEFAULT_YAML = PIPELINE_DIR / "galfit_fitting" / "galfit_config.yaml"
 TOOL_FILES = {
     "catalog":    ["image.cat"],
     "psf":        ["proto_image.fits", "image.psf"],
-    "photometry": ["calibrated_photometry_results.csv", "zero_points.json"],
+    "photometry": ["calibrated_photometry_results.csv", "zero_points.json",
+                   "reference_photometry.json"],
     "astropath":  [
         "astropath_association.png",
         "astropath_posteriors.csv",
         "sep_vs_shape_r.png",
         "sep_vs_x_max_reff.png",
     ],
-    "galfit":     ["fit.log", "out.fits", "galfit_results.png", "qa_cutout_mask.png", "sky_fit_audit.json"],
+    "galfit":     ["fit.log", "out.fits", "galfit_results.png", "qa_cutout_mask.png",
+                   "sky_fit_audit.json", "reference_photometry.json"],
     "statmorph":  ["statmorph_results.json"],
+}
+
+# Phases each --outputs keyword depends on. Only the union of the phases
+# required by the requested outputs is executed; everything else is skipped.
+# Notes on the dependency chain:
+#   * every tool needs Phase 1 (catalog / PSF model / segmentation map);
+#   * astropath and photometry are both produced by the Phase 2 bridge;
+#   * Phase 3a needs Phase 2's image.psf.cat for the SPREAD galaxy cut and
+#     (in AstroPath mode) astropath_posteriors.csv for the host pick;
+#   * statmorph and 3b both consume Phase 3a cutouts.
+TOOL_PHASES = {
+    "catalog":    {"1"},
+    "psf":        {"1"},
+    "photometry": {"1", "2"},
+    "astropath":  {"1", "2"},
+    "statmorph":  {"1", "2", "3a", "statmorph"},
+    "galfit":     {"1", "2", "3a", "3b"},
 }
 
 # Condensed mode emits only these files (fast re-inspection without the full
@@ -380,6 +405,13 @@ def write_galfit_config(work_dir: Path, args, plate_scale: float | None = None) 
                     zp_source = "zero_points.json"
             except (json.JSONDecodeError, TypeError, ValueError):
                 pass
+        if "mag_zeropoint" not in cfg:
+            from pipeline_shared import header_mag_zeropoint_from_fits
+
+            zp_hdr = header_mag_zeropoint_from_fits(work_dir / "image.fits")
+            if zp_hdr is not None:
+                cfg["mag_zeropoint"] = float(zp_hdr)
+                zp_source = "image.fits header"
 
     path = work_dir / "galfit_config.yaml"
     with open(path, "w", encoding="utf-8") as f:
@@ -389,7 +421,7 @@ def write_galfit_config(work_dir: Path, args, plate_scale: float | None = None) 
     if mag_zp is not None:
         log.info(f"GALFIT mag_zeropoint={mag_zp:.4f} (source={zp_source or 'galfit_config.yaml'})")
     else:
-        log.info("GALFIT mag_zeropoint: not set (Phase 3b will use zero_points.json or 22.5)")
+        log.info("GALFIT mag_zeropoint: not set (Phase 3b will use zero_points.json, FITS header, or 22.5)")
     return path
 
 
@@ -400,10 +432,13 @@ def run_phase(label: str, cmd, cwd: Path | None = None) -> int:
     cwd_str = f"  (cwd={cwd})" if cwd else ""
     log.info(f"$ {cmd_str}{cwd_str}")
     try:
+        # stdin is closed for the whole phase subtree so no child process
+        # (including WSL tools like GALFIT) can ever hang on console input.
         proc = subprocess.run(
             [str(c) for c in cmd],
             cwd=str(cwd) if cwd else None,
             check=False,
+            stdin=subprocess.DEVNULL,
         )
         rc = proc.returncode
     except Exception as e:  # launch-side errors (file missing, permissions, ...)
@@ -606,6 +641,13 @@ def build_pipeline_summary(
         "statmorph": statmorph_results,
         "galfit_host": galfit,
     }
+
+    # Trusted external r-band magnitude for the host (LS DR10 / PS1). Embeds
+    # reference_photometry.json (written earlier in main()) and sets
+    # galfit_host.mag_final{,_err,_source}: GALFIT mag when the pipeline ZP is
+    # trusted, reference-survey mag when Phase 2 calibration failed.
+    from reference_photometry import attach_reference_photometry
+    attach_reference_photometry(summary, work_dir)
     return summary
 
 
@@ -632,7 +674,10 @@ def main():
     parser.add_argument("--dec", type=float, required=True, help="Host Dec [deg].")
     parser.add_argument(
         "--outputs", nargs="+", default=["all"],
-        help="One or more of: " + ", ".join(sorted(TOOL_FILES)) + ", all. Default: all.",
+        help="One or more of: " + ", ".join(sorted(TOOL_FILES)) + ", all. Default: all. "
+             "Selects both which files are exposed AND which phases execute: only "
+             "the phases the requested outputs depend on are run (e.g. "
+             "'--outputs astropath' runs Phases 1 + 2 and skips cutouts/statmorph/GALFIT).",
     )
     parser.add_argument("--frb-name", default=None,
                         help="Override the auto-derived FRB tag.")
@@ -693,6 +738,13 @@ def main():
         default=None,
         help="Phase 3a: use AstroPath posteriors when available (overrides galfit_config cutouts).",
     )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=None,
+        help="Override output root (default: pipeline_scripts/Output). "
+             "Writes <output-dir>/<frb>_<tag>/.",
+    )
 
     args = parser.parse_args()
 
@@ -710,9 +762,20 @@ def main():
     tag = "all" if is_all else "_".join(chosen)
     frb_name = args.frb_name or derive_frb_name(image_path)
 
-    out_dir = OUTPUT_DIR / f"{frb_name}_{tag}"
+    # Phases required by the requested outputs. Execution (not just file
+    # collection) is selective: e.g. `--outputs astropath` runs Phase 1
+    # (SExtractor + PSFEx) and Phase 2 (PSF-aware SExtractor + calibration +
+    # AstroPath) because AstroPath needs them, but skips 3a/statmorph/3b.
+    required_phases: set[str] = set()
+    for tool in chosen:
+        required_phases |= TOOL_PHASES[tool]
+
+    out_root = args.output_dir.resolve() if args.output_dir else OUTPUT_DIR
+    out_dir = out_root / f"{frb_name}_{tag}"
     work_dir = out_dir / ".workdir"
-    out_dir.mkdir(parents=True, exist_ok=True)
+    # NOTE: out_dir is created only after the --dry-run early exit below, so
+    # dry runs never leave an Output/<FRB>_<tag>/ shell behind (stray folders
+    # pollute pipeline_galfit_results.csv).
 
     rerun = args.rerun_phase
     rerun_order = ["1", "2", "3a", "statmorph", "3b"]
@@ -727,6 +790,7 @@ def main():
     log.info("-- run configuration --")
     log.info(f"  FRB name      : {frb_name}")
     log.info(f"  Outputs (tag) : {tag} (is_all={is_all})")
+    log.info(f"  Phases to run : {[p for p in rerun_order if p in required_phases]}")
     log.info(f"  Output folder : {out_dir}")
     log.info(f"  Workdir       : {work_dir}")
     log.info(f"  Image         : {image_path}")
@@ -745,11 +809,41 @@ def main():
     # WCS containment check (non-fatal warning)
     validate_wcs_containment(image_path, args.ra, args.dec)
 
+    def _required(phase_id: str) -> bool:
+        """True if the requested --outputs need this phase at all."""
+        return phase_id in required_phases
+
     def _should_run(phase_id: str) -> bool:
-        """Return True if this phase should execute given --rerun-phase."""
+        """True if this phase should execute given --outputs and --rerun-phase."""
+        if not _required(phase_id):
+            return False
         if rerun is None:
             return True
         return rerun_order.index(phase_id) >= rerun_order.index(rerun)
+
+    def _skip_reason(phase_id: str) -> str:
+        """Log label for a phase that will not execute."""
+        return "not required by --outputs" if not _required(phase_id) else "--rerun-phase"
+
+    # ---- Dry-run mode: print commands and exit BEFORE any staging so no
+    # Output/<FRB>_<tag>/ shell is ever created by a dry run ----
+    if args.dry_run:
+        log.info("DRY RUN — commands that would execute:")
+        for phase_id, label, script in (
+            ("1", "Phase 1", PHASE1),
+            ("2", "Phase 2", PHASE2),
+            ("3a", "Phase 3a", PHASE3A),
+            ("statmorph", "Statmorph", PHASE_STATMORPH),
+            ("3b", "Phase 3b", PHASE3B),
+        ):
+            if _should_run(phase_id):
+                log.info(f"  {label}: {sys.executable} {script} ...")
+            else:
+                log.info(f"  {label}: SKIPPED ({_skip_reason(phase_id)})")
+        log.info("Exiting (--dry-run).")
+        return
+
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     # Stage inputs (skip for rerun to preserve existing workdir)
     if rerun is None:
@@ -784,18 +878,10 @@ def main():
         log.warning("Could not compute pixel scale from WCS. SExtractor will use its internal default.")
     galfit_defaults = _load_yaml(PHASE3_DEFAULT_YAML) if PHASE3_DEFAULT_YAML.is_file() else {}
 
-    # ---- Dry-run mode: print commands and exit ----
-    if args.dry_run:
-        log.info("DRY RUN — commands that would execute:")
-        log.info(f"  Phase 1: {sys.executable} {PHASE1} ...")
-        log.info(f"  Phase 2: {sys.executable} {PHASE2} ...")
-        log.info(f"  Phase 3a: {sys.executable} {PHASE3A} ...")
-        log.info(f"  Statmorph: {sys.executable} {PHASE_STATMORPH} ...")
-        log.info(f"  Phase 3b: {sys.executable} {PHASE3B} ...")
-        log.info("Exiting (--dry-run).")
-        return
-
     # ---------- Phase 1: SExtractor + PSFEx (hard dependency) ----------
+    # Phase 1 is required by every --outputs keyword, so it is only ever
+    # skipped via --rerun-phase (in which case the workdir must already
+    # contain its outputs — verified below).
     rc1 = 0
     if _should_run("1"):
         rc1 = run_phase("Phase 1 / SExtractor + PSFEx",
@@ -804,12 +890,12 @@ def main():
         if rc1 != 0:
             raise SystemExit("[master] Phase 1 failed; pipeline cannot continue.")
     else:
-        log.info("Phase 1: SKIPPED (--rerun-phase)")
+        log.info(f"Phase 1: SKIPPED ({_skip_reason('1')})")
     for f in ("image.cat", "image.psf", "proto_image.fits", "segmentation_map.fits"):
         if not (work_dir / f).exists():
             raise SystemExit(f"[master] Phase 1 did not produce expected file: {f}")
 
-    # ---------- Phase 2: Photometry + AstroPath (best-effort) ----------
+    # ---------- Phase 2: Photometry + AstroPath ----------
     rc2 = 0
     if _should_run("2"):
         rc2 = run_phase(
@@ -821,7 +907,8 @@ def main():
             cwd=work_dir,
         )
     else:
-        log.info("Phase 2: SKIPPED (--rerun-phase)")
+        rc2 = -1 if not _required("2") else 0
+        log.info(f"Phase 2: SKIPPED ({_skip_reason('2')})")
 
     # ---------- Phase 3a: GALFIT cutouts (best-effort) ----------
     cutouts_cfg = galfit_defaults.get("cutouts") or {}
@@ -846,20 +933,30 @@ def main():
         ("--sigma-rescale-min", "sigma_rescale_min"),
         ("--sigma-rescale-max", "sigma_rescale_max"),
         ("--psf-match-arcsec", "psf_match_arcsec"),
+        ("--host-pad", "host_pad"),
+        ("--re-sep-factor", "re_sep_factor"),
+        ("--neighbor-class-star-max", "neighbor_class_star_max"),
+        ("--max-roi-iterations", "max_roi_iterations"),
+        ("--max-fit-components", "max_fit_components"),
+        ("--max-cutout-side", "max_cutout_side"),
+        ("--host-only-min-bbox-side", "host_only_min_bbox_side"),
+        ("--host-only-min-elongation", "host_only_min_elongation"),
     ):
         if cfg_key in cutouts_cfg and cutouts_cfg[cfg_key] is not None:
             phase3a_cmd += [cli_flag, str(cutouts_cfg[cfg_key])]
     if use_loc_host:
         phase3a_cmd.append("--no-astropath-override")
-        log.info("Phase 3a: use localization host (--ra/--dec); AstroPath posteriors ignored for centre")
     else:
         phase3a_cmd += ["--min-astropath-posterior", str(min_post)]
 
     rc3a = 0
     if _should_run("3a"):
+        if use_loc_host:
+            log.info("Phase 3a: use localization host (--ra/--dec); AstroPath posteriors ignored for centre")
         rc3a = run_phase("Phase 3a / GALFIT cutouts", phase3a_cmd)
     else:
-        log.info("Phase 3a: SKIPPED (--rerun-phase)")
+        rc3a = -1 if not _required("3a") else 0
+        log.info(f"Phase 3a: SKIPPED ({_skip_reason('3a')})")
 
     # ---------- Phase Statmorph: non-parametric morphology (best-effort) ----------
     # Runs AFTER cutouts are generated but BEFORE GALFIT fitting, so its
@@ -880,7 +977,9 @@ def main():
         else:
             log.info("Statmorph: script not found, skipping.")
     elif not _should_run("statmorph"):
-        log.info("Statmorph: SKIPPED (--rerun-phase)")
+        log.info(f"Statmorph: SKIPPED ({_skip_reason('statmorph')})")
+    else:
+        log.warning("Statmorph: skipped (no host_cutout.fits from Phase 3a).")
 
     # ---------- Phase 3b: GALFIT fit (only if 3a produced cutouts) ----------
     rc3b = -1
@@ -894,7 +993,30 @@ def main():
         else:
             log.warning("Skipping Phase 3b: Phase 3a outputs not available.")
     else:
-        log.info("Phase 3b: SKIPPED (--rerun-phase)")
+        log.info(f"Phase 3b: SKIPPED ({_skip_reason('3b')})")
+
+    # ---------- Reference photometry (always queried, best-effort) ----------
+    # External r-band magnitude for the host from LS DR10 Tractor (PS1 DR1
+    # fallback outside the LS footprint). Queried regardless of Phase 2
+    # success so a failed zero-point calibration never loses the host mag:
+    # downstream, galfit_host.mag_final substitutes this value whenever the
+    # pipeline ZP is missing or unreliable. Network failure is non-fatal.
+    try:
+        from reference_photometry import fetch_reference_photometry
+
+        ref = fetch_reference_photometry(
+            work_dir, fallback_ra=args.ra, fallback_dec=args.dec
+        )
+        if ref.get("status") == "ok":
+            log.info(
+                f"Reference photometry: {ref['survey']} r={ref['mag']} "
+                f"(err={ref.get('mag_err')}, sep={ref.get('sep_arcsec')}\", "
+                f"coords from {ref.get('coord_source')})"
+            )
+        else:
+            log.warning(f"Reference photometry unavailable: {ref.get('status')}")
+    except Exception as e:
+        log.warning(f"Reference photometry query failed: {type(e).__name__}: {e}")
 
     # ---------- Consolidated summary ----------
     summary = build_pipeline_summary(
@@ -923,7 +1045,10 @@ def main():
             shutil.copy2(summary_src, out_dir / "pipeline_summary.json")
             collected.append("pipeline_summary.json")
 
-    log.info(f"Phase exit codes: 1={rc1}, 2={rc2}, 3a={rc3a}, 3b={rc3b}")
+    log.info(
+        f"Phase exit codes: 1={rc1}, 2={rc2}, 3a={rc3a}, "
+        f"statmorph={rc_statmorph}, 3b={rc3b} (-1 = not run)"
+    )
     log.info(f"Collected ({len(collected)}): {collected}")
     if missing:
         log.warning(f"Missing  ({len(missing)}): {missing}")
@@ -938,6 +1063,27 @@ def main():
 
     if not collected:
         raise SystemExit("[master] No requested outputs were produced (all phases failed?).")
+
+    # Completeness gate: every explicitly requested deliverable must come from
+    # a phase that succeeded. Full runs must finish GALFIT cutouts + fit;
+    # partial Phase 1–2 success is not OK. (Statmorph stays best-effort even
+    # when requested — it is skipped gracefully when the package is missing.)
+    if is_all and (rc3a != 0 or rc3b != 0):
+        raise SystemExit(
+            f"[master] Incomplete pipeline: phase3a={rc3a}, phase3b={rc3b} "
+            "(GALFIT deliverables missing)."
+        )
+    if not is_all:
+        if "galfit" in chosen and (rc3a != 0 or rc3b != 0):
+            raise SystemExit(
+                f"[master] --outputs galfit requested but phase3a={rc3a}, "
+                f"phase3b={rc3b} (GALFIT deliverables missing)."
+            )
+        if ("astropath" in chosen or "photometry" in chosen) and rc2 != 0:
+            raise SystemExit(
+                f"[master] --outputs {'/'.join(t for t in ('photometry', 'astropath') if t in chosen)} "
+                f"requested but Phase 2 exited with code {rc2}."
+            )
 
 
 if __name__ == "__main__":

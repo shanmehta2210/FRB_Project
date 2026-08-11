@@ -251,7 +251,7 @@ def plot_mc_sensitivity(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--sdss-csv", default=str(REPO / "SDSS_catalog_v1_allsky_modelmr.csv"))
+    parser.add_argument("--sdss-csv", default=str(REPO / "catalog/SDSS_catalog_v1_allsky_modelmr.csv"))
     parser.add_argument(
         "--final-mag-limits",
         type=float,

@@ -19,7 +19,7 @@ if str(_SCRIPTS) not in sys.path:
 
 from null_catalog_utils import cosi_array_from_df, hubble_cosi_from_ba, prepare_null_sample
 
-DEFAULT_SDSS = REPO_ROOT / "SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_SDSS = REPO_ROOT / "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
 DEFAULT_OUT_SUBDIR = "plots/plots_astrophot_psf_sigma/v1_allsky_modelmr"
 
 random.seed(42)

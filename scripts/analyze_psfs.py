@@ -146,7 +146,7 @@ def main():
             "Avg_FWHM": avg_fwhm
         })
         
-    csv_file = "psf_fwhm_summary.csv"
+    csv_file = "Archive/csv/psf/psf_fwhm_summary.csv"
     keys = ["FRB", "FWHM_0", "FWHM_45", "FWHM_90", "FWHM_135", "Avg_FWHM"]
     with open(csv_file, "w", newline='') as f:
         writer = csv.DictWriter(f, fieldnames=keys)

@@ -8,10 +8,11 @@ and produces, for one FRB position:
 3. non-parametric morphology (statmorph: CAS + Gini-M₂₀),
 4. a GALFIT Sérsic decomposition of the most-probable host.
 
-A single orchestrator (`master_run.py`) drives all five phases under a clean
-`Output/` tree, exposing only the deliverables you ask for. The phase scripts
-are designed to be runnable on their own as well, so any stage can be redone
-without touching the others.
+A single orchestrator (`master_run.py`) drives the phases under a clean
+`Output/` tree. `--outputs` selects both **which phases execute** (with
+automatic dependency resolution — e.g. `astropath` runs Phases 1–2 only) and
+**which files are exposed**. The phase scripts are designed to be runnable on
+their own as well, so any stage can be redone without touching the others.
 
 Every run also writes a **consolidated `pipeline_summary.json`** that merges
 all per-phase JSON artefacts (zero points, field depth, sky QA, parsed GALFIT
@@ -42,6 +43,14 @@ python pipeline_scripts/master_run.py `
     --ra  334.02040578312 `
     --dec  -7.89886810526581 `
     --outputs all
+
+# AstroPath only (runs Phases 1 + 2; skips cutouts / statmorph / GALFIT)
+python pipeline_scripts/master_run.py `
+    --image  large_cutouts/20190608B_flux.fits `
+    --invvar large_cutouts/20190608B_invvar.fits `
+    --ra  334.02040578312 `
+    --dec  -7.89886810526581 `
+    --outputs astropath
 
 # Condensed output (quick re-inspection: 1 JSON + 3 PNGs)
 python pipeline_scripts/master_run.py `
@@ -76,13 +85,83 @@ pipeline_scripts/Output/20190608B_all/
 
 RA/Dec for any FRB in the project lives in `master_frb_localization.csv`.
 
-### Production `Output/` (62 hosts)
+### Production `Output/` (64 hosts)
 
-`pipeline_scripts/Output/<FRB>_all/` is reserved for the **62** FRBs listed in
-`pipeline_galfit_results.csv` (each folder has a parseable `fit.log` from a
-production host association). Do **not** leave experimental or low-confidence
-runs in that tree — record them in
+`pipeline_scripts/Output/<FRB>_all/` holds exactly the **64** hosts that are
+*confirmed correct*: published host localization, a parseable `fit.log` /
+`chi2nu`, and a current-policy Phase 3a ROI. `pipeline_galfit_results.csv` and
+`production_confirmed_lit_hosts.csv` are both 64 rows and must stay in sync —
+verify with:
+
+```powershell
+python scripts/audit_production_outputs.py   # folders == results == cohort, 0 unconfirmed
+```
+
+Everything else is out of the production tree:
+
+| Removed | Where it went | Why |
+|---------|---------------|-----|
+| `20240304B` | deleted (inputs kept in `large_cutouts/`) | z = 2.148, host undetected — [`docs/EXCLUDED_RUNS.md`](docs/EXCLUDED_RUNS.md) |
+| `20210214G`, `20230913`, `20240104A`, `20240203`, `20250518` | `Output/_unconfirmed/<FRB>_all/` | no published host lit — [`docs/WEAK_ASSOCIATIONS_PRODUCTION67.md`](docs/WEAK_ASSOCIATIONS_PRODUCTION67.md) |
+
+`_unconfirmed/` sits outside the production glob (the comparison script only
+walks direct `Output/*_all` children), so those stale fits cannot leak into the
+results table. Nothing was deleted — move a folder back up and re-run it if its
+host gets published.
+
+Hosts whose Phase 2 zero-point failed carry a corrected magnitude in `mag_final`
+(see Reference photometry, §4 Phase 3b). Do **not** leave failed or no-`fit.log`
+trials in that tree — record them in
 [`docs/EXCLUDED_RUNS.md`](docs/EXCLUDED_RUNS.md) instead.
+
+**Association quality.** The five quarantined hosts lack published host
+literature *and* pipeline AstroPath \(P(O)>0.95\): `20210214G` (signal
+semantics, no host paper) and `20230913` / `20240104A` / `20240203` / `20250518`
+(Verdi+2025 *in prep.* only). Rebuild the cohort list with:
+
+```powershell
+python scripts/build_confirmed_lit_cohort.py   # -> production_confirmed_lit_hosts.csv (64 rows)
+```
+
+**Phase 3a neighbor ROI (2026-08-02):** containment-fraction thresholds
+(`contain_thresh` / `expand_thresh`) were **removed**. Neighbors that clip the
+ROI are masked if `sep > re_sep_factor × Re_neighbor` (default **3**; Re =
+`FLUX_RADIUS` via `galfit_fitting/sersic_init.effective_re_px`, shared with
+Phase 3b), else the stamp grows so every jointly fitted galaxy has
+`host_pad` (default **20** px). Stars always masked; host is always GALFIT
+component 1.
+
+#### Refreshing production after a policy change
+
+```powershell
+# 1. rebuild the 65-host confirmed-literature cohort
+python scripts/build_confirmed_lit_cohort.py
+
+# 2. re-run it (see the --outputs warning below)
+python pipeline_scripts/run_all_frbs.py `
+  --list-file production_confirmed_lit_hosts.csv `
+  --outputs all `
+  --use-localization-host
+
+# 3. in a second shell, validate each host as it lands
+python scripts/watch_production_batch.py `
+  --list-file production_confirmed_lit_hosts.csv `
+  --since-epoch <unix ts taken just before step 2>
+```
+
+> **Use `--outputs all`, never `--outputs galfit`, for production refreshes.**
+> The batch tag is derived from `--outputs`, so `--outputs galfit` writes to
+> `Output/<FRB>_galfit/` and copies only the reduced GALFIT deliverable set
+> (`master_run.collect()` with `is_all=False`) — `cutout_meta.json`,
+> `host_components.csv` and the cutouts are left behind in `.workdir`, and the
+> production `<FRB>_all/` trees are never touched. The batch still prints `OK`,
+> so the mistake is silent.
+
+`watch_production_batch.py` polls each `Output/<FRB>_all/pipeline_summary.json`
+and emits one line per host — `[watch] PASS <frb>` or `[watch] BROKEN <frb>
+<reasons>` — checking deliverable presence, non-zero `phase_exit_codes`, a
+parseable `chi2nu`, `neighbor_policy == "re_separation"`, and host = component 1.
+Failures surface within ~20 s instead of at the end of the batch.
 
 Refresh the metrics table after batch changes:
 
@@ -132,12 +211,25 @@ wsl -e bash -ic "conda activate frb_project && python -c 'import astropath; prin
 
 ## 3. `master_run.py` — orchestrator
 
-Runs all five sub-phases (1 → 2 → 3a → statmorph → 3b); only the **collection
-step** is selective. Before any phase runs, **input validation** checks RA/Dec
-bounds (0 ≤ RA < 360, −90 ≤ Dec ≤ 90) and verifies the target falls within the
-FITS WCS footprint (warning if outside). Use `--rerun-phase` to skip earlier
-phases on an existing workdir, or `--dry-run` to preview commands without
-executing.
+Runs the sub-phases (1 → 2 → 3a → statmorph → 3b) **selectively**: `--outputs`
+determines both which files are exposed *and* which phases execute. Only the
+phases the requested outputs depend on are run:
+
+| `--outputs` keyword | Phases executed |
+|---|---|
+| `catalog`, `psf` | 1 |
+| `photometry`, `astropath` | 1 → 2 |
+| `statmorph` | 1 → 2 → 3a → statmorph |
+| `galfit` | 1 → 2 → 3a → 3b |
+| `all` (default) | 1 → 2 → 3a → statmorph → 3b |
+
+Multiple keywords take the union of their phases (e.g.
+`--outputs astropath galfit` runs everything except statmorph). Before any
+phase runs, **input validation** checks RA/Dec bounds (0 ≤ RA < 360,
+−90 ≤ Dec ≤ 90) and verifies the target falls within the FITS WCS footprint
+(warning if outside). Use `--rerun-phase` to skip earlier phases on an
+existing workdir, or `--dry-run` to preview the commands (and phase
+selection) without executing.
 
 ### Required arguments
 | Flag | Meaning |
@@ -149,13 +241,14 @@ executing.
 | Flag | Default | Meaning |
 |---|---|---|
 | `--invvar PATH` | none | inverse-variance FITS; enables weight-mapped SExtractor and a real GALFIT sigma map. `use_weight_map` automatically flips to `false` when this flag is omitted |
-| `--outputs ...` | `all` | one or more of `catalog psf photometry astropath galfit statmorph all` |
+| `--outputs ...` | `all` | one or more of `catalog psf photometry astropath galfit statmorph all`; drives **phase execution** as well as file collection (see phase table above) |
 | `--condensed` | off | emit only `pipeline_summary.json` + the three diagnostic PNGs (quick re-inspection without the full catalog / FITS weight) |
 | `--frb-name STR` | derived from filename | overrides the output folder name |
+| `--output-dir PATH` | `pipeline_scripts/Output` | override the output root; writes `<output-dir>/<frb>_<tag>/` |
 | `--keep-workdir` | off | retains `<output>/.workdir/` for debugging |
 | `--rerun-phase {1,2,3a,statmorph,3b}` | off | skip earlier phases; re-execute from this phase onward. Requires an existing workdir (`--keep-workdir` from a prior run) |
 | `--dry-run` | off | print the commands that would be executed, then exit |
-| `--use-localization-host` | off | Phase 3a centres on `--ra`/`--dec` (CSV host); ignores AstroPath host pick. Phase 2 still runs. |
+| `--use-localization-host` | *(YAML default already on)* | Force Phase 3a to centre on `--ra`/`--dec` (CSV host). Repo `galfit_config.yaml` already sets `cutouts.use_localization_host: true`, so this is the effective default without the flag |
 | `--use-astropath-host` | off | Force AstroPath posteriors for Phase 3a (overrides `galfit_config.yaml` `cutouts.use_localization_host`) |
 
 ### Optional — YAML overrides
@@ -195,7 +288,8 @@ python pipeline_scripts/master_run.py `
 catalog    : image.cat
 psf        : proto_image.fits, image.psf
 photometry : calibrated_photometry_results.csv, zero_points.json
-astropath  : astropath_association.png, astropath_posteriors.csv
+astropath  : astropath_association.png, astropath_posteriors.csv,
+             sep_vs_shape_r.png, sep_vs_x_max_reff.png
 statmorph  : statmorph_results.json
 galfit     : fit.log, out.fits, galfit_results.png, qa_cutout_mask.png, sky_fit_audit.json
 all        : every artefact in the workdir except staged inputs and SExtractor/PSFEx text templates
@@ -220,11 +314,18 @@ keywords (e.g. `photometry_galfit`).
 `SExtractor + PSFEx/run_psf_pipeline.py`
 
 * Inputs: `image.fits` (+ optional `invvar.fits`).
-* Runs SExtractor in dual-image mode, then PSFEx with iterative `SAMPLE_MINSN`
+* Runs SExtractor (single detection image, optional `MAP_WEIGHT` from invvar),
+  then PSFEx with iterative `SAMPLE_MINSN`
   retries (ladder `30, 20, 10, 5, 3, 2.5, 2`; stops as soon as ≥ `min_accepted_stars`
   stars are accepted — configurable in `pipeline_config.yaml`, default 25)
   so a PSF is still recovered on faint fields. Catalog name
   is hard-coded to `image.cat`.
+* **WSL invocation:** `wsl source-extractor` / `wsl psfex` with stdin closed.
+  Exit 0 alone is not enough — the script verifies `image.cat`, `image.psf`,
+  `proto_image.fits`, and `segmentation_map.fits` exist before succeeding.
+  Missing `wsl` on PATH exits with a clear error (not a traceback).
+* If the PSFEx ladder exhausts below `min_accepted_stars`, a warning is logged
+  and the last PSF model is kept (downstream phases still run).
 * **Aperture ladder** is YAML-configurable (`sextractor.phot_apertures_px`,
   default 15 diameters from 4–40 px). The production aperture
   (`sextractor.production_aperture_px`, default null = largest) determines
@@ -271,7 +372,10 @@ keywords (e.g. `photometry_galfit`).
      `≤ σ_loc / 5` for every candidate (necessary because `px_Oi_local`
      scales the grid by candidate `φ`).
   5. WSL bridge errors are propagated: a Phase-2 failure exits 1 so
-     `master_run.py` does not silently report Phase 2 as OK.
+     `master_run.py` does not silently report Phase 2 as OK. The bridge
+     command shell-quotes every path (safe with spaces in directory names).
+     After a 0 exit, Phase 2 also verifies `calibrated_photometry_results.csv`
+     and `zero_points.json` exist before declaring success.
 * Outputs: `calibrated_photometry_results.csv`, `zero_points.json` (includes
   **`field_depth`** block: 5σ `m_lim_5sigma_ab` at the production aperture),
   `astropath_posteriors.csv` (includes `sep_arcsec`),
@@ -304,13 +408,14 @@ All prior knobs are now **YAML-configurable** under `astropath:` in
 
 * Inputs: `image.fits` (+ `invvar.fits`), `segmentation_map.fits`,
   `image.cat`, FRB RA/Dec.
-* **Target selection (AstroPath override)**: By default Phase 3a looks for
-  `astropath_posteriors.csv` and centres on the highest `posterior_O` host if it
-  clears `min_astropath_posterior` (default `0.05` in
-  `galfit_config.yaml` → `cutouts:`). Set `cutouts.use_localization_host: true`
-  or pass `master_run.py --use-localization-host` to always use `--ra`/`--dec`
-  (the secure host position from `master_frb_localization.csv` for
-  `coord_semantics=host` rows). AstroPath still runs in Phase 2 for cross-check.
+* **Target selection**: Repo default is **localization host** —
+  `cutouts.use_localization_host: true` in `galfit_config.yaml`, so Phase 3a
+  centres on `--ra`/`--dec` (secure CSV host) and ignores
+  `astropath_posteriors.csv` for the cutout centre. Pass
+  `master_run.py --use-astropath-host` (or set `use_localization_host: false`)
+  to centre on the highest `posterior_O` host when it clears
+  `min_astropath_posterior` (default `0.05`). AstroPath still runs in Phase 2
+  for cross-check either way.
 
   Config (`galfit_config.yaml`):
   ```yaml
@@ -321,6 +426,14 @@ All prior knobs are now **YAML-configurable** under `astropath:` in
     sigma_rescale_min: 0.5        # rescale gate lower bound
     sigma_rescale_max: 2.0        # rescale gate upper bound
     psf_match_arcsec: 0.5         # sky-match tolerance for SPREAD lookup
+    host_pad: 20
+    re_sep_factor: 3.0          # mask if sep > factor × Re_neighbor
+    neighbor_class_star_max: 0.75
+    max_roi_iterations: 8
+    max_fit_components: 25
+    max_cutout_side: 512
+    host_only_min_bbox_side: 400
+    host_only_min_elongation: 3.0
   ```
 
   CLI flags (direct Phase 3a or via `master_run`):
@@ -328,7 +441,8 @@ All prior knobs are now **YAML-configurable** under `astropath:` in
   --astropath-posteriors PATH
   --min-astropath-posterior FLOAT
   --no-astropath-override           # localization host (--ra/--dec)
-  --use-localization-host           # master_run only
+  --use-localization-host           # master_run only (YAML default already true)
+  --use-astropath-host              # master_run only (override YAML to AstroPath pick)
   --mag-aper-index INT              # production aperture column (master_run sets automatically)
   --psf-match-arcsec FLOAT
   --no-data-sigma FLOAT
@@ -340,28 +454,37 @@ All prior knobs are now **YAML-configurable** under `astropath:` in
   When AstroPath mode is active, Phase 3a re-checks SPREAD on that Phase-2 ID,
   then **maps to Phase 1 `image.cat` / segmentation `NUMBER` by sky position**
   (the two passes can assign different IDs to the same galaxy). With
-  `--use-localization-host`, Phase 3a walks
+  localization-host mode, Phase 3a walks
   sources by separation from the CSV position and picks the nearest galaxy
   passing `SPREAD_MODEL + 3·SPREADERR_MODEL ≥ 0.005` within
   `--max-host-sep-arcsec`; the run aborts if none qualify — FRBs are never
   associated to stars.
-* **Neighbor handling — by containment, not radius.** Starting from
-  `ROI = host_seg_bbox + --host-pad` (default 20 px), every other seg
-  island that touches the ROI is categorised by
-  `frac = pixels_in_ROI / total_pixels`:
 
-  | frac vs thresholds | category | action |
-  |---|---|---|
-  | `frac ≥ --contain-thresh` (default `0.95`) | **fully contained** | fit as a Sérsic *(or mask if `CLASS_STAR ≥ --neighbor-class-star-max`)* |
-  | `--expand-thresh ≤ frac < --contain-thresh` (default `0.50`) | **largely filled** | grow the ROI to include the source's pixels, then fit (or mask if stellar) |
-  | `0 < frac < --expand-thresh` | **fringe** | mask the in-frame pixels only; ROI does **not** grow |
-  | `frac == 0` | **out of frame** | ignored |
+  **Catalog NUMBER rule:** Phase 1 (`image.cat`, segmentation map) and Phase 2
+  (`image.psf.cat`) each run SExtractor independently — **`NUMBER` is not a
+  stable cross-phase ID**. Any lookup that joins the two catalogs (host SPREAD
+  cut, neighbor point-source masking, AstroPath `sex_number` → seg ID) must
+  sky-match within `--psf-match-arcsec` (default 0.5″). Direct
+  `spread_by_number[image.cat NUMBER]` is wrong and can misclassify hosts
+  (e.g. CHIME `20201124A`, fixed 2025-06).
+* **Neighbor handling — Re-separation (not containment fraction).** Starting from
+  `ROI = host_seg_bbox + --host-pad` (default **20** px), every other seg
+  island that **clips** the ROI is evaluated:
 
-  The expand-and-recategorise loop iterates up to `--max-roi-iterations`
-  (default 6). Sources are never picked up just because they are nearby in
-  pixel space — they must actually project into the ROI. The FRB host is
-  **always** added to the fit set first and never masked, even if
-  `CLASS_STAR` would otherwise classify it stellar.
+  | condition | action |
+  |---|---|
+  | `CLASS_STAR ≥ --neighbor-class-star-max` (default **0.75**) or point-like SPREAD | **mask** (never expand) |
+  | `sep(host, neighbor) > --re-sep-factor × Re_neighbor` (default factor **3.0**) | **mask** |
+  | `sep ≤ factor × Re_neighbor` | **jointly fit**; grow ROI so every fit member has a `--host-pad` boundary |
+
+  `Re_neighbor` is the ordinary GALFIT `re` seed (`FLUX_RADIUS`, floored at 1.0)
+  from Phase-1 `image.cat` — same recipe as Phase 3b (`sersic_init.effective_re_px`).
+  The expand loop iterates up to `--max-roi-iterations` (default **8**). Caps:
+  `--max-fit-components` (25), `--max-cutout-side` (512). Very extended hosts
+  (`bbox ≥ host_only_min_bbox_side` or `ELONGATION ≥ host_only_min_elongation`)
+  switch to host-only fitting (neighbors masked). The FRB host is **always**
+  GALFIT component 1 and never masked, even if `CLASS_STAR` would otherwise
+  classify it stellar.
 * Outputs:
   * `host_cutout.fits` — flux stamp.
   * `host_sigma.fits` — `1 / sqrt(invvar)` with `invvar ≤ 0` or non-finite
@@ -380,7 +503,7 @@ All prior knobs are now **YAML-configurable** under `astropath:` in
     components, so GALFIT's component 1 is always the host.
   * `qa_cutout_mask.png` — visual QA of the cutout + mask.
 
-### Phase Statmorph — non-parametric morphology (new)
+### Phase Statmorph — non-parametric morphology
 `galfit_fitting/run_statmorph_pipeline.py`
 
 * Runs **after** Phase 3a (cutout generation) and **before** Phase 3b (GALFIT).
@@ -401,11 +524,16 @@ All prior knobs are now **YAML-configurable** under `astropath:` in
 * **Hard abort** if `proto_image.fits` is missing (exit 1).
 * **Photometric ZP:** `mag_zeropoint` resolved as workdir `galfit_config.yaml`
   → `zero_points.json` **`zp_aper`** (production aperture calibration from
-  Phase 2) → fallback 22.5. `master_run.py` sets this automatically after
-  Phase 2; override with `--galfit-zp` on the orchestrator CLI.
+  Phase 2) → **`image.fits` header** (`HIERARCH FPA.ZP` on PS1 stacks, etc. via
+  `pipeline_shared.header_mag_zeropoint_from_fits`) → fallback 22.5.
+  `master_run.py` sets this automatically after Phase 2 (including header
+  fallback when Phase 2 fails); override with `--galfit-zp` on the orchestrator CLI.
 * **Initial magnitude:** guards against NaN / SExtractor's 99.0 sentinel via
-  cascade fallback `MAG_40PX → MAG_AUTO → midpoint(mag_min, mag_max)`, then
-  clamps into `[mag_min, mag_max]`.
+  cascade fallback `MAG_40PX → MAG_AUTO → midpoint(mag_min, mag_max)` (for
+  extended / highly elongated hosts the order is `MAG_AUTO → MAG_40PX` first),
+  then clamps into `[mag_min, mag_max]`. Logs a **warning** when the seed is
+  clamped (often means wrong `mag_zeropoint` on PS1/Legacy frames with
+  `MAG_ZEROPOINT=0` in SExtractor).
 * **PA convention:** `pa = THETA_IMAGE − 90°` (SExtractor +x → GALFIT +y).
 * **Per-component constraints:** `n ∈ [0.5, 6.0]`, `re ∈ [1.5, 100.0]`,
   **`mag ∈ [8, 40]`** (wide AB band at `J)`; tunable via `mag_min` / `mag_max` in
@@ -414,21 +542,79 @@ All prior knobs are now **YAML-configurable** under `astropath:` in
   `conv_box_pad` is configurable (default 24 px) in `galfit_config.yaml`.
 * **Sky QA (two-pass):**
   1. Seed global sky from SExtractor `BACKGROUND` on host row 0 in
-     `host_components.csv` (ADU).
-  2. Run GALFIT (pass 1, sky free). **Crash detection:** if WSL output contains
-     `GALFIT crashed` / `Singular Matrix`, or `fit.log` is empty, pass 1 is marked
-     failed — **no** pass-2 retry (retries are only for parsed sky drift, not crashes).
+     `host_components.csv` (ADU), unless that disagrees with the cutout median
+     (`host_cutout.fits` + unmasked `host_mask.fits`) — then use **`cutout_median`**.
+  2. Run GALFIT (pass 1, sky free). Every input file named in the feedme is
+     verified to exist **before** launch (GALFIT would otherwise drop into an
+     interactive "try again:" prompt); the subprocess runs with **stdin
+     closed** and a **1-hour wall-clock timeout** so it can never hang the
+     pipeline. Stale `fit.log` / `out.fits` / `galfit.NN` files are removed
+     first so success detection can't be fooled by artifacts of an earlier
+     run. **Success detection:** pass 1 is OK when `fit.log` and `out.fits`
+     exist and stdout lacks `GALFIT crashed` / `Singular Matrix`. GALFIT
+     **3.0.x on modern glibc** may exit non-zero (`free(): invalid pointer`,
+     exit code 6) **after** a good fit; the pipeline treats that as success
+     when artifacts are present.
   3. Parse fitted sky from the last **sane** `fit.log` block (`Chi^2/nu < 10⁶`);
      reject unphysical levels (e.g. blow-ups to ±10⁴ ADU when the seed is ~10⁻⁴).
-  4. If `|sky_fit − sky_ref| > sky_tolerance_adu` (default **3 ADU**), clear
-     artifacts and rerun with `{sky_comp} 1 −tol tol` in `constraints.txt` (pass 2).
+  4. If `|sky_fit − sky_ref| > sky_tolerance_adu` (default **3 ADU**) **and** the
+     delta is not huge compared to the seed (large deltas skip pass 2 — constraining
+     would break the fit when the seed is unreliable), clear artifacts and rerun with
+     `{sky_comp} 1 −tol tol` in `constraints.txt` (pass 2).
   5. Write `sky_fit_audit.json` (`sky_ref_adu`, `sky_pass1_adu`, `sky_pass2_adu`,
      `galfit_pass1_ok`, `galfit_pass2_ok`, `failure_reason`, `passed`).
-     Exit **1** if GALFIT crashes, sky cannot be parsed, or QA still fails after
-     `sky_max_retries` (default 1).
+     Exit **1** if GALFIT truly crashes (no artifacts / crash markers), sky cannot
+     be parsed, or QA still fails after `sky_max_retries` (default 1).
 * Outputs: `galfit.feedme`, `constraints.txt`, `galfit.01`, `fit.log`,
   `out.fits` (data | model | residual), `galfit_results.png`,
   `sky_fit_audit.json`.
+
+### Reference photometry (external r-band mag, always queried)
+`reference_photometry.py`
+
+A failed Phase 2 zero-point calibration no longer costs the host: GALFIT still
+runs with the fallback `J)` ZP (its `fit.log` mag is then wrong, but re/n/b_a/PA
+and inclination are unaffected), and after the fit phases `master_run.py`
+**always** queries a trusted external survey at the host position
+(`host_components.csv` row 0 → best AstroPath candidate → FRB localization):
+
+1. **Legacy Surveys DR10 Tractor** (NOIRLab TAP) — model `flux_r` → AB mag,
+   error from `flux_ivar_r`; nearest source in 3″, non-PSF types preferred;
+2. **PS1 DR1** (VizieR `II/349`) — Kron `rKmag`/`e_rKmag` (PSF `rmag` fallback)
+   when the field is outside the LS DR10 footprint.
+
+Result is written to `reference_photometry.json` and embedded in
+`pipeline_summary.json`; `galfit_host` gains **`mag_final` / `mag_final_err` /
+`mag_final_source`** with this cascade:
+
+1. `reference_LS_DR10` / `reference_PS1_DR1` — preferred when the pipeline ZP
+   is untrusted **or** GALFIT `mag_err > 1.0`: survey r mag replaces the
+   GALFIT mag;
+2. `galfit_calibrated_zp` — pipeline ZP trusted (`zp_aper` finite,
+   `zp_aper_std` ≤ 1.0 mag) **and** `mag_err ≤ 1.0`: GALFIT mag as-is;
+3. `galfit_rescaled_zp_psf` / `galfit_rescaled_zp_auto` — no survey match, but
+   an independent pipeline ZP (`zp_psf` / `zp_auto`) has scatter ≤ 1.0 mag
+   **and** `mag_err ≤ 1.0`: GALFIT mag rescaled by `(zp_alt − J)` (the feedme
+   zeropoint GALFIT ran with), error broadened by the ZP scatter;
+4. `unavailable` — no survey match and no trusted/rescaled ZP (or
+   `mag_err > 1` with nowhere to fall back): `mag_final` empty. These hosts
+   are listed under
+   [`docs/WEAK_ASSOCIATIONS_PRODUCTION67.md`](docs/WEAK_ASSOCIATIONS_PRODUCTION67.md)
+   §A and must not enter mag-dependent analysis.
+
+`pipeline_galfit_results.csv` carries the same policy in `zp_ok`, `ref_survey`,
+`ref_mag`, `ref_mag_err`, `ref_sep_arcsec`, `mag_final`, `mag_final_err`,
+`mag_final_source` — **use `mag_final`, not `mag`, for science**. Network
+failure is non-fatal (`status` records the reason). Note the high-dec DSA-110
+plane fields (`20240104A`, `20230913`, `20221116A`) are outside the Legacy
+Surveys footprint (LS DR9/DR10 have zero sources there) and their hosts are
+below / missing from the PS1 DR1 catalog, so no reference match exists — they
+are the current `unavailable` set. Backfill existing folders:
+
+```powershell
+python pipeline_scripts/reference_photometry.py --backfill            # all Output/*_all
+python pipeline_scripts/reference_photometry.py --backfill --frb 20230913 --force
+```
 
 **Phase 3b only (no Phases 1–2):**
 
@@ -563,9 +749,10 @@ point for new analysis code.
 ## 6. Pipeline logic flowchart
 
 High-level data flow and **decision gates** (checks that can branch, retry,
-or abort). For a single FRB, `master_run.py` always runs
-Phases 1 → 2 → 3a → statmorph → 3b when prerequisites succeed; only the
-**file collection** step is selective (`--outputs`).
+or abort). For a single FRB, `master_run.py` runs the phases required by
+`--outputs` (default `all` = Phases 1 → 2 → 3a → statmorph → 3b); phases not
+needed by the requested outputs are skipped entirely (see the phase table in
+§3), and the file collection step exposes only the requested deliverables.
 
 ```mermaid
 flowchart TB
@@ -582,7 +769,7 @@ flowchart TB
   end
 
   subgraph P1["Phase 1 — SExtractor + PSFEx"]
-    P1A["SExtractor dual-image detection"]
+    P1A["SExtractor detection (+ optional weight map)"]
     P1B{"invvar provided?"}
     P1C["Weight map ON in SExtractor"]
     P1D["Weight map OFF"]
@@ -632,33 +819,32 @@ flowchart TB
   end
 
   subgraph P3A["Phase 3a — Cutouts"]
-    P3A0{"astropath_posteriors.csv?"}
+    P3A0{"use_localization_host?"}
     P3A1["Centre on max posterior_O ≥ 0.05"]
     P3A2["Centre on CLI RA Dec"]
-    P3A3["ROI = host seg bbox + pad"]
-    P3A4["For each neighbor seg in ROI"]
-    P3A5{"frac in ROI"}
-    P3A6["frac≥0.95 → fit Sérsic"]
-    P3A7["0.5≤frac<0.95 → expand ROI"]
-    P3A8["0<frac<0.5 → mask pixels"]
-    P3A9{"CLASS_STAR ≥ 0.9?"}
-    P3A10["Mask neighbor not fit"]
+    P3A3["ROI = host seg bbox + pad 20 px"]
+    P3A4["For each neighbor seg clipping ROI"]
+    P3A5{"star or point SPREAD?"}
+    P3A6["Mask never expand"]
+    P3A7{"sep > re_sep_factor × Re_neighbor?"}
+    P3A8["Mask far neighbor"]
+    P3A9["Joint fit + grow ROI with pad"]
     P3A11["host_components.csv host row 0 first"]
     P3A12{"σ_invvar vs sky MAD"}
     P3A13["Rescale host_sigma × k if outside gate"]
     P3A14["host_cutout host_mask host_sigma qa_cutout_mask"]
     P3A1a["Use posteriors sex_number + SPREAD check"]
     P3A2a["Nearest galaxy to RA Dec within 5 arcsec"]
-    P3A0 -->|yes| P3A1 --> P3A1a --> P3A3
-    P3A0 -->|no| P3A2 --> P3A2a --> P3A3
+    P3A0 -->|no / --use-astropath-host| P3A1 --> P3A1a --> P3A3
+    P3A0 -->|yes (repo default)| P3A2 --> P3A2a --> P3A3
     P3A3 --> P3A4 --> P3A5
-    P3A5 --> P3A6
-    P3A5 --> P3A7
-    P3A5 --> P3A8
-    P3A6 --> P3A9
-    P3A7 --> P3A9
-    P3A9 -->|stellar| P3A10
-    P3A9 -->|galaxy| P3A11
+    P3A5 -->|yes| P3A6
+    P3A5 -->|no| P3A7
+    P3A7 -->|yes| P3A8
+    P3A7 -->|no| P3A9
+    P3A6 --> P3A11
+    P3A8 --> P3A11
+    P3A9 --> P3A11
     P3A11 --> P3A12 --> P3A13 --> P3A14
   end
 
@@ -710,25 +896,27 @@ flowchart TB
 | Step | Feeds forward |
 |------|----------------|
 | Phase 1 `image.cat` + `segmentation_map` | Phase 2 re-photometry; Phase 3a cutout geometry |
+| Phase 1 ↔ Phase 2 `NUMBER` | **Never assume equal** — sky-match within `psf_match_arcsec` for SPREAD and AstroPath→seg mapping |
 | Phase 1 `proto_image.fits` | Phase 2 seeing; **required** Phase 3b PSF convolution |
-| Phase 2 `zero_points.json` | Phase 3b `mag_zeropoint` via `galfit_config.yaml` |
+| Phase 2 `zero_points.json` | Phase 3b `mag_zeropoint` via `galfit_config.yaml` (or FITS header if Phase 2 failed) |
 | Phase 2 `astropath_posteriors.csv` | Phase 3a target = same host as association |
 | Phase 3a `host_components.csv` | Phase 3b Sérsic seeds + sky `BACKGROUND` reference |
 | Phase 3a `host_sigma.fits` | Phase 3b χ² weighting (optional if absent); Statmorph weightmap |
 | Phase 3a `host_cutout.fits` | Statmorph input; Phase 3b GALFIT data |
 | Phase 1 `proto_image.fits` | Statmorph PSF (optional); Phase 3b PSF convolution |
 | Statmorph `statmorph_results.json` | Folded into `pipeline_summary.json`; future: inform GALFIT config |
-| All phases | `pipeline_summary.json` (consolidated by `master_run.py` after Phase 3b) |
+| Whatever ran | `pipeline_summary.json` (consolidated by `master_run.py` after the last executed phase; skipped phases appear as exit code −1) |
 
 **Failure / skip behaviour**
 
 | Gate | On failure |
 |------|------------|
 | Phase 1 | `master_run` **stops** (hard dependency) |
-| Phase 2 | logged non-zero; collection may still run partial outputs |
+| Phase 2 | full runs: logged non-zero, collection may still run partial outputs. `--outputs photometry`/`astropath` runs: **exit 1** (the requested deliverable failed) |
 | Phase 3a | skipped if Phase 2 failed badly; needs catalog + segmap |
 | Statmorph | best-effort: skipped if `statmorph` not installed or cutout missing; does **not** block Phase 3b |
-| Phase 3b | skipped if no `host_cutout.fits`; **exit 1** if proto missing, GALFIT crashes, or sky QA fails |
+| Phase 3b | skipped if no `host_cutout.fits`; **exit 1** if proto missing, GALFIT crashes/times out, or sky QA fails |
+| Not-required phases | skipped up front (`--outputs` phase selection); recorded as exit code −1 in `pipeline_summary.json` |
 | Input validation | RA/Dec out of bounds → hard abort; WCS pixel outside footprint → warning only |
 | `run_all_frbs.py` | skips FRBs with `coord_semantics != host` unless `--include-signal` |
 
@@ -737,14 +925,17 @@ ASCII summary (same logic, no Mermaid renderer needed):
 ```
 [flux.fits + invvar?] → master_run stages .workdir
     → validate RA/Dec bounds + WCS containment
-    → Phase 1: SExtractor → PSFEx (retry MINSN) → cat, PSF, segmap
-    → Phase 2: PSF cat → PS1|Legacy ZP (retry-wrapped) → star/galaxy cut → AstroPath
-    → write galfit_config (zp_aper)
-    → Phase 3a: AstroPath host → containment ROI loop → σ scale check → cutouts
-    → Statmorph: CAS + Gini-M₂₀ on host cutout (best-effort)
-    → Phase 3b: proto check → GALFIT (NaN-safe seed) → sky QA [retry?] → fit.log
-    → build pipeline_summary.json (incl. re_arcsec, MC inclination, PSF metrics, statmorph)
-    → collect → Output/<FRB>_<tag>/
+    → resolve --outputs → required phase set (skip the rest)
+    → Phase 1 (if needed): SExtractor → PSFEx (retry MINSN; verify cat/PSF/proto/segmap)
+    → Phase 2 (if needed): PSF cat → PS1|Legacy ZP → star/galaxy cut → AstroPath
+                           (WSL bridge; verify photometry deliverables)
+    → write galfit_config (zp_aper) when Phase 3b will run
+    → Phase 3a (if needed): host pick → Re-separation ROI → σ scale → cutouts
+    → Statmorph (if needed): CAS + Gini-M₂₀ (best-effort)
+    → Phase 3b (if needed): feedme input pre-check → wsl galfit (stdin closed,
+                           1 h timeout) → sky QA [retry?] → fit.log
+    → build pipeline_summary.json (skipped phases = exit −1)
+    → collect requested files → Output/<FRB>_<tag>/
 ```
 
 ---
@@ -755,7 +946,7 @@ ASCII summary (same logic, no Mermaid renderer needed):
 |---|---|---|
 | `SExtractor + PSFEx/pipeline_config.yaml` | 1 | `sextractor.{detect_thresh, deblend_mincont, gain, seeing_fwhm, use_weight_map, phot_apertures_px, production_aperture_px}`, `psfex.{psf_sampling, sample_minsn, sample_max_ellp, min_accepted_stars}` |
 | `photometry + astropath/photometry_astropath_config.yaml` | 2 | `sextractor_psf.*` (mirrors phase-1, plus `mag_mode`, `phot_apertures_px`, `production_aperture_px`), `astropath.{err_a_arcsec, err_b_arcsec, err_theta_deg, p_u, p_o_method, theta_pdf, theta_max, theta_scale, search_radius_arcsec, target_snr_min, filter_band}` |
-| `galfit_fitting/galfit_config.yaml` | 3a+3b | `cutouts.{use_localization_host, min_astropath_posterior, no_data_sigma, sigma_rescale_min, sigma_rescale_max, psf_match_arcsec}`, `mag_min`/`mag_max` (8–40), `conv_box_pad` (24), `sky_check_enabled`, `sky_tolerance_adu`, `sky_max_retries` |
+| `galfit_fitting/galfit_config.yaml` | 3a+3b | `cutouts.{use_localization_host, min_astropath_posterior, no_data_sigma, sigma_rescale_min/max, psf_match_arcsec, host_pad, re_sep_factor, neighbor_class_star_max, max_roi_iterations, max_fit_components, max_cutout_side, host_only_*}`, `mag_min`/`mag_max` (8–40), `conv_box_pad` (24), `sky_check_enabled`, `sky_tolerance_adu`, `sky_max_retries` |
 | `environment_frb_project.yml` | — | Conda env spec for `frb_project` (WSL side) |
 
 Each `master_run.py` invocation gets its own copy in `<output>/.workdir/`
@@ -887,7 +1078,8 @@ python pipeline_scripts/run_all_frbs.py
 ```
 
 * Reads `master_frb_localization.csv` and runs `master_run.py` for every
-  FRB with `<FRB>_flux.fits` (+ optional `_invvar.fits`) in `large_cutouts/`.
+  FRB with **both** `<FRB>_flux.fits` and `<FRB>_invvar.fits` in
+  `large_cutouts/` (missing invvar → skip).
 * Pulls `major_sigma_as`, `minor_sigma_as`, `pa_deg` for the error ellipse;
   falls back to a 1 ″ × 1 ″ circle otherwise.
 * By default, only runs FRBs whose `coord_semantics` is `host`.
@@ -898,8 +1090,12 @@ python pipeline_scripts/run_all_frbs.py
 * **HTML report:** After the batch, writes `Output/batch_report.html` with a
   summary table, embedded PNG thumbnails, and links to each `pipeline_summary.json`.
 * **Auto-refresh:** Automatically runs `scripts/compare_pipeline_galfit_vs_master.py`
-  after the batch to update `pipeline_galfit_results.csv` (suppress with
-  `--no-auto-refresh`).
+  after a real batch to update `pipeline_galfit_results.csv` (suppress with
+  `--no-auto-refresh`; never runs under `--dry-run`).
+* **Validation:** Unknown `--outputs` keywords fail once up front; `--list-file`
+  must exist and (for CSV) contain a `frb` column. Output-folder tags match
+  `master_run` normalization (lowercase, deduped, sorted) so `--skip-existing`
+  stays consistent.
 
 Useful flags:
 
@@ -907,14 +1103,14 @@ Useful flags:
 |---|---|
 | `--frb FRB [FRB …]` | restrict to a specific subset |
 | `--skip-existing` | skip FRBs whose output folder already contains the target deliverables |
-| `--outputs ...` | forwarded to `master_run.py` (default `all`) |
+| `--outputs ...` | forwarded to `master_run.py` (default `all`); drives phase execution as well as file collection |
 | `--condensed` | forwarded to `master_run.py` (JSON + 3 PNGs only) |
 | `--include-signal` | also run rows where `coord_semantics != host` |
 | `--use-localization-host` | Phase 3a uses CSV host coords; AstroPath still runs in Phase 2 |
-| `--list-file PATH` | `.txt` (one FRB/line) or `.csv` with `frb` column (`new_hosts_master.csv`) |
+| `--list-file PATH` | `.txt` (one FRB/line) or `.csv` with a `frb` column (`new_hosts_master.csv`); missing file / missing column → hard abort |
 | `--keep-workdir` | forward `--keep-workdir` to `master_run.py` |
 | `--rerun-phase {1,2,3a,statmorph,3b}` | forwarded to `master_run.py`; re-execute from this phase onward |
-| `--dry-run` | print what would be run without executing |
+| `--dry-run` | print what would be run without executing (skips auto-refresh) |
 | `--parallel N` | run N FRBs concurrently (default 1 = sequential) |
 | `--no-auto-refresh` | suppress automatic `pipeline_galfit_results.csv` refresh after batch |
 
@@ -926,6 +1122,14 @@ python pipeline_scripts/run_all_frbs.py `
     --use-localization-host `
     --include-signal `
     --skip-existing
+```
+
+Quick batch AstroPath-only (Phases 1–2 only; no GALFIT):
+
+```powershell
+python pipeline_scripts/run_all_frbs.py `
+    --outputs astropath `
+    --frb 20190608B 20180924B
 ```
 
 Quick batch re-inspection (condensed output):
@@ -945,10 +1149,11 @@ most fail AstroPath (P(O) ≪ 0.05) or lack cutouts. A trial on **20220501C**
 `Output/`** — not in `pipeline_galfit_results.csv`. Details:
 [`docs/EXCLUDED_RUNS.md`](docs/EXCLUDED_RUNS.md).
 
-**New-host cohort (46 FRBs):** `new_hosts_master.csv` / `.md`; batch with
-`--use-localization-host` for secure host coords; cutout ladder Legacy → PS1 → DES
-(`scripts/cutout_download.py`). Diagnostics: combined Legacy+SDSS inclination CDF
-(`mag21/legacy_sdss_strict_combined/`), SDSS u−r color-cut mag vs b/a panels.
+**New-host cohort (46 FRBs):** `new_hosts_master.csv` / `.md`; Phase 3a already
+defaults to CSV host coords (`use_localization_host: true`); cutout ladder
+Legacy → PS1 → DES (`scripts/cutout_download.py`). Diagnostics: combined
+Legacy+SDSS inclination CDF (`mag21/legacy_sdss_strict_combined/`), SDSS u−r
+color-cut mag vs b/a panels.
 
 ---
 
@@ -982,31 +1187,36 @@ including multi-Sérsic deblends. Neighbor components are not used for science c
 |---|---|---|
 | `Too few calibration matches: PS1=…, Legacy=…` | crowded field / extinction / both surveys missed | check Legacy TAP + PS1 coverage; ensure `pyvo` is installed in WSL |
 | `Vizier/TAP query failed after 3 retries` | network outage or service downtime | pipeline degrades gracefully (0 matches); re-run later when the service is restored |
-| `Phase 2 OK` but `calibrated_photometry_results.csv` missing | should not occur; would indicate a WSL bridge silent failure | look at the WSL stderr block above the `[Phase 2] Cleaning up templates` line; the script is set to `sys.exit(1)` on bridge errors |
-| GALFIT wedges into pegged values (huge n, R_e at constraint) | `proto_image.fits` missing or wrong `mag_zeropoint` / seed | re-run Phase 1; ensure `galfit_config.yaml` has `zp_aper`; check `MAG_APER + ZP` in feedme |
-| `GALFIT crashed` / `failure_reason: galfit_crash_pass1` | too many Sérsics, bad seeds, or parameters hitting box edge | inspect `fit.log` and `host_components.csv`; check `mag` constraints; see `tasks.md` **P7** for ROI extension rework |
+| `Phase 2 OK` but `calibrated_photometry_results.csv` missing | should not occur; Phase 2 now verifies deliverables after the bridge and exits 1 if they are absent | look at the WSL stderr block above the Phase 2 cleanup line; re-run Phase 2 with `--keep-workdir` |
+| GALFIT wedges into pegged values (huge n, R_e at constraint) | `proto_image.fits` missing or wrong `mag_zeropoint` / seed | re-run Phase 1; ensure `galfit_config.yaml` has `zp_aper` or FITS-header ZP; check `MAG_APER + ZP` in feedme; watch for **mag seed clamped** warnings |
+| Compact GALFIT model + huge residuals (χ²/ν ≫ 2) | wrong `J)` ZP (e.g. default 22.5 on PS1 with header ZP ≈ 25) → mag pegged at `mag_min` | fix Phase 2 calibration or rely on header ZP fallback; re-run Phase 3b |
+| `GALFIT crashed` / `failure_reason: galfit_crash_pass1` | too many Sérsics, bad seeds, parameters at box edge, or **no** `fit.log`/`out.fits` | inspect `fit.log`; if artifacts exist but audit says crash, update pipeline (GALFIT 3.0.x glibc teardown) |
+| `free(): invalid pointer` / exit code 6 in log but `fit.log` OK | GALFIT 3.0.x teardown on modern glibc (fit may still be valid) | pipeline accepts when `fit.log` + `out.fits` exist; check χ²/ν and residuals |
 | `sky_pass1_adu: null` but ref looks fine | GALFIT exited before a summary block (often same crash) | not a sky-tolerance issue — check `galfit_pass1_ok` in `sky_fit_audit.json` |
 | `SKY QA FAILED` / `sky_out_of_tolerance` | parsed sky drifted > 3 ADU from SExtractor `BACKGROUND` | inspect `sky_fit_audit.json` and residuals; pass 2 applies ±3 ADU constraint |
 | Huge χ²/ν in `fit.log` but model looks fine | `host_sigma` not rescaled (old run) | re-run Phase 3a+3b or full pipeline; look for `host_sigma scale mismatch` log line |
 | `RuntimeError: Bad theta PDF` from AstroPath | `THETA_PDF` set to a value not in `{exp, uniform, core}` | edit the prior block |
 | `subprocess could not start` from master | WSL not enabled or tool not on the WSL `PATH` | re-run the sanity-check commands in §2 |
+| `GALFIT exceeded the 3600s wall-clock limit` | GALFIT stuck on an interactive prompt (missing feedme input) or a pathological fit | check the pre-launch "inputs missing" log line; inspect the cutout / seeds |
+| `'wsl' was not found on PATH` | WSL not installed or not on the Windows `PATH` | install WSL; verify `wsl source-extractor -v`, `wsl psfex -v`, `wsl galfit` |
 
 ---
 
 ## 15. Tests and CI
 
-Unit tests live in `tests/` and target the pure-function modules:
+Unit tests live in `scripts/tests/` and target the pure-function modules:
 
 | Test file | Module under test | Coverage |
 |---|---|---|
-| `test_pipeline_shared.py` | `pipeline_shared.py` | `resolve_apertures`, `format_phot_apertures`, `render_param_template`, `get_logger` |
+| `test_pipeline_shared.py` | `pipeline_shared.py` | `resolve_apertures`, `format_phot_apertures`, `render_param_template`, `get_logger`, `header_mag_zeropoint_from_fits` |
 | `test_galfit_fitlog_parse.py` | `galfit_fitlog_parse.py` | `inclination_from_b_a`, `inclination_err_from_b_a_err`, `parse_fitlog_block` |
 | `test_field_depth.py` | `field_depth.py` | `m_lim_5sigma_aperture`, `production_aperture_diameter_px` |
+| `test_generate_galfit_cutouts_catalog.py` | `generate_galfit_cutouts.py` | Phase 1↔Phase 2 SPREAD sky-match (not shared `NUMBER`) |
 
 Run locally:
 
 ```powershell
-python -m pytest tests/ -v
+python -m pytest scripts/tests/ -v
 ```
 
 A GitHub Actions workflow (`.github/workflows/validate.yml`) runs on push/PR
@@ -1020,17 +1230,17 @@ suite on Python 3.11.
 ```
 pipeline_scripts/
     pipeline_shared.py                     # shared templates, apertures, logging
-    master_run.py                          # orchestrator
+    master_run.py                          # orchestrator (--outputs drives phase execution)
     run_all_frbs.py                        # batch driver
     environment_frb_project.yml            # conda env spec (WSL frb_project)
     README.md                              # this file
 
     SExtractor + PSFEx/
-        run_psf_pipeline.py
+        run_psf_pipeline.py                # Phase 1 (WSL; verifies cat/PSF/proto/segmap)
         pipeline_config.yaml
 
     photometry + astropath/
-        run_photometry_astropath.py        # Phase 2; AstroPath prior block lives here
+        run_photometry_astropath.py        # Phase 2; WSL AstroPath bridge + deliverable checks
         photometry_astropath_config.yaml
         field_depth.py                     # 5σ limiting magnitude helper
         pipeline_diagnostics.py            # diagnostic plot helpers
@@ -1038,12 +1248,13 @@ pipeline_scripts/
     galfit_fitting/
         generate_galfit_cutouts.py         # Phase 3a (AstroPath-aware target picker)
         run_statmorph_pipeline.py          # Phase Statmorph (CAS, Gini-M20)
-        run_galfit_fitting.py              # Phase 3b (sky QA, per-field ZP)
-        galfit_config.yaml                 # defaults (mag limits, sky QA, plate scale, cutout tuning)
+        run_galfit_fitting.py              # Phase 3b (feedme pre-check, timeout, sky QA)
+        galfit_config.yaml                 # defaults (mag limits, sky QA, cutout tuning)
 
     docs/
         PIPELINE_AUDIT.md                  # code audit findings + resolved items
         EXCLUDED_RUNS.md                   # runs excluded from production Output/
+        WEAK_ASSOCIATIONS_PRODUCTION67.md  # 5 weak associations still inside the 67
 
     Output/                                # produced runs go here (gitignored)
 
@@ -1053,12 +1264,12 @@ scripts/
     analyze_pipeline_vs_master_diff.py     # summary statistics on the diff CSV
     rerun_pipeline_galfit_phase3b.py       # Phase 3b-only refresh on Output/*_all
     flag_pipeline_unphysical_fits.py       # heuristic QA CSV
-
-tests/
-    test_pipeline_shared.py                # unit tests for pipeline_shared.py
-    test_galfit_fitlog_parse.py            # unit tests for galfit_fitlog_parse.py
-    test_field_depth.py                    # unit tests for field_depth.py
+    tests/
+        test_pipeline_shared.py            # unit tests for pipeline_shared.py
+        test_galfit_fitlog_parse.py        # unit tests for galfit_fitlog_parse.py
+        test_field_depth.py                # unit tests for field_depth.py
+        test_generate_galfit_cutouts_catalog.py
 
 .github/workflows/
-    validate.yml                           # CI: compile check + pytest
+    validate.yml                           # CI: compile check + pytest scripts/tests/
 ```

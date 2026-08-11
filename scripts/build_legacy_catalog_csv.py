@@ -33,7 +33,7 @@ from null_catalog_utils import (
 
 TAP_URL = "https://datalab.noirlab.edu/tap"
 TABLE = "ls_dr10.tractor"
-DEFAULT_OUT = "LS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_OUT = "catalog/LS_catalog_v1_allsky_modelmr.csv"
 MIN_STRICT_POOL = 10_000
 
 
@@ -290,6 +290,7 @@ def main() -> None:
             "Increase --top or check footprint cuts."
         )
 
+    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     catalog.to_csv(args.out, index=False)
     print(f"Wrote: {args.out} ({len(catalog)} rows, strict pool={len(strict)})")
 

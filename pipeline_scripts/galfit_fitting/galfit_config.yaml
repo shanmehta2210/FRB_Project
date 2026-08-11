@@ -3,7 +3,7 @@
 # plate_scale_x/y are derived from the FITS WCS header at runtime and injected
 # by master_run.py into the workdir copy.  Do NOT set them here.
 cutouts:
-  # When true, Phase 3a centres on master_run --ra/--dec (localization host) and
+  # When true, Phase 3a centres on master_run --ra/--dec (CSV host coords) and
   # ignores astropath_posteriors.csv for the cutout target. AstroPath still runs in Phase 2.
   use_localization_host: true
   min_astropath_posterior: 0.05
@@ -16,6 +16,18 @@ cutouts:
   sigma_rescale_max: 2.0
   # Sky-match tolerance (arcsec) when keying an image.cat row to image.psf.cat SPREAD:
   psf_match_arcsec: 0.5
+  # Phase 3a ROI / neighbor policy (see generate_galfit_cutouts.py --help):
+  # Start from host seg bbox + host_pad; for every galaxy that clips the ROI,
+  # mask if host–neighbor centroid sep > re_sep_factor × Re_neighbor (FLUX_RADIUS
+  # GALFIT seed), else expand so every jointly-fitted galaxy has host_pad.
+  host_pad: 20
+  re_sep_factor: 3.0
+  neighbor_class_star_max: 0.75
+  max_roi_iterations: 8
+  max_fit_components: 25
+  max_cutout_side: 512
+  host_only_min_bbox_side: 400
+  host_only_min_elongation: 3.0
 
 mag_min: 8.0
 mag_max: 40.0

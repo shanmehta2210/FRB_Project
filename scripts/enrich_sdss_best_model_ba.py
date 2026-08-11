@@ -28,8 +28,8 @@ if str(_SCRIPTS) not in sys.path:
 
 from null_catalog_utils import JOINT_DEC_MAX, JOINT_DEC_MIN
 
-DEFAULT_IN = "SDSS_catalog_v1_allsky_modelmr.csv"
-DEFAULT_OUT = "SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_IN = "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_OUT = "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
 
 
 def _sql_chunk(ra_min: float, ra_max: float, top_n: int) -> str:

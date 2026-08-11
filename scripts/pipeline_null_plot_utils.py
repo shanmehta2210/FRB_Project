@@ -15,7 +15,11 @@ from scipy import interpolate
 
 from null_catalog_utils import (
     LEGACY_GR_MAX_CDF,
+    LS_CATALOG_V1_DEFAULT,
     Q0,
+    REPO_ROOT,
+    SDSS_CATALOG_V1_DEFAULT,
+    SDSS_CATALOG_V2_DEFAULT,
     SDSS_UR_MAX_CDF,
     assign_values_to_bin_edges,
     cosi_array_from_df,
@@ -33,12 +37,11 @@ from null_catalog_utils import (
     re_arcsec_from_sdss_df,
 )
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_PIPELINE = REPO_ROOT / "pipeline_galfit_results.csv"
 DEFAULT_LOC = REPO_ROOT / "master_frb_localization.csv"
-DEFAULT_SDSS = REPO_ROOT / "SDSS_catalog_v1_allsky_modelmr.csv"
-DEFAULT_SDSS_V2 = REPO_ROOT / "SDSS_catalog_v2_fullsky_modelmr.csv"
-DEFAULT_LEGACY = REPO_ROOT / "LS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_SDSS = REPO_ROOT / SDSS_CATALOG_V1_DEFAULT
+DEFAULT_SDSS_V2 = REPO_ROOT / SDSS_CATALOG_V2_DEFAULT
+DEFAULT_LEGACY = REPO_ROOT / LS_CATALOG_V1_DEFAULT
 
 PLATE_SCALE_DEFAULT = 0.262
 PLATE_SCALE_BY_FRB: dict[str, float] = {

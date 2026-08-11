@@ -35,7 +35,7 @@ OUT_DIR = (
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--sdss-csv", default="SDSS_catalog_v1_allsky_modelmr.csv")
+    parser.add_argument("--sdss-csv", default="catalog/SDSS_catalog_v1_allsky_modelmr.csv")
     parser.add_argument("--mag-limit", type=float, default=21.0)
     args = parser.parse_args()
 

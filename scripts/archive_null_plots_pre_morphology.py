@@ -20,7 +20,7 @@ from pathlib import Path
 _REPO = Path(__file__).resolve().parents[1]
 PLOTS_NULL = _REPO / "plots" / "plots_null"
 ARCHIVE_ROOT = _REPO / "Archive" / "plots_null_pre_morphology_cut"
-TEST_RESULTS = _REPO / "test_results.md"
+TEST_RESULTS = _REPO / "Archive" / "reports" / "test_results.md"
 
 # Subdirs that must not remain after a successful archive+recreate.
 LEGACY_SUBDIRS = (

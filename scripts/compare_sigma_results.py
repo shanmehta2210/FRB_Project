@@ -4,7 +4,7 @@ def load_csv(path):
     with open(path) as f:
         return {row['FRB']: row for row in csv.DictReader(f)}
 
-old = load_csv('galfit_metrics_summary.csv')
+old = load_csv('Archive/csv/galfit/galfit_metrics_summary.csv')
 sig = load_csv('galfit_sigma_metrics_summary.csv')
 
 def safe(v):

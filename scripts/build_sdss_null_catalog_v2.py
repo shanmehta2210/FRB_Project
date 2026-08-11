@@ -380,6 +380,7 @@ def main() -> None:
             footprint_summary(catalog, "SDSS v2 full")
             if catalog["objID"].duplicated().any():
                 raise SystemExit("[!] Duplicate objID in final catalog.")
+            Path(args.out).parent.mkdir(parents=True, exist_ok=True)
             catalog.to_csv(args.out, index=False)
             print(f"Wrote: {args.out} ({len(catalog)} rows, strict_mag20_pool={pool_pre})")
             return
@@ -440,6 +441,7 @@ def main() -> None:
     if catalog["objID"].duplicated().any():
         raise SystemExit("[!] Duplicate objID in final catalog.")
 
+    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     catalog.to_csv(args.out, index=False)
     print(f"Wrote: {args.out} ({len(catalog)} rows, strict_mag20_pool={pool_n})")
 

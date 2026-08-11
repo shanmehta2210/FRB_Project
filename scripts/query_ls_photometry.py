@@ -73,8 +73,8 @@ def query_ls_source(
     }
 
 def main():
-    input_file = "Photometry/target_region_photometry.csv"
-    output_file = "Photometry/photometry_ls_comparison.csv"
+    input_file = "tools/Photometry/target_region_photometry.csv"
+    output_file = "tools/Photometry/photometry_ls_comparison.csv"
     
     if not os.path.exists(input_file):
         print(f"Input file {input_file} not found.")

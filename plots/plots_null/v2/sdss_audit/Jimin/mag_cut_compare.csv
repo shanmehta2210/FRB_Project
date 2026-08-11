@@ -1,0 +1,5 @@
+mag_cut,variant,n_sql,n_strict,median_cosi
+model,v1_fracDev0_and_lnL,9120,8445,0.5458
+model,v2_lnL_exp,17657,16551,0.5484
+petro,v1_fracDev0_and_lnL,8668,8054,0.5498
+petro,v2_lnL_exp,17138,16117,0.5506

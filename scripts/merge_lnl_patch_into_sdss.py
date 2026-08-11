@@ -64,9 +64,9 @@ def merge_patch(base: pd.DataFrame, patch: pd.DataFrame) -> pd.DataFrame:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--in-csv", default="SDSS_catalog_v1_allsky_modelmr.csv")
-    parser.add_argument("--patch-csv", default="SDSS_lnl_patch_cache.csv")
-    parser.add_argument("--out-csv", default="SDSS_catalog_v1_allsky_modelmr.csv")
+    parser.add_argument("--in-csv", default="catalog/SDSS_catalog_v1_allsky_modelmr.csv")
+    parser.add_argument("--patch-csv", default="catalog/SDSS_lnl_patch_cache.csv")
+    parser.add_argument("--out-csv", default="catalog/SDSS_catalog_v1_allsky_modelmr.csv")
     args = parser.parse_args()
 
     base = pd.read_csv(args.in_csv)

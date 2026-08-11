@@ -158,8 +158,8 @@ def read_fits_2d(path: Path) -> np.ndarray:
 
 def main():
     repo_root = Path(__file__).resolve().parents[1]
-    summary_path = repo_root / "psf_fwhm_summary.csv"
-    compact_path = repo_root / "psf_constant_comparison.csv"
+    summary_path = repo_root / "Archive" / "csv" / "psf" / "psf_fwhm_summary.csv"
+    compact_path = repo_root / "Archive" / "csv" / "psf" / "psf_constant_comparison.csv"
     epsf_root = repo_root / "psfs"
     psfex_root = repo_root / "psfs" / "PSFEx + SExtractor" / "final_center_psfs"
 

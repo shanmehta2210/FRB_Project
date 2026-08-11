@@ -34,6 +34,9 @@ def plot_candidate_geometry(
     out_dir: Path | str = ".",
     *,
     title_prefix: str = "",
+    show_title: bool = True,
+    concise_legend: bool = False,
+    base_fontsize: float = 11,
     best_objid: int | None = None,
     x_max_lines: tuple[tuple[float, str, str], ...] | None = None,
 ) -> tuple[Path, Path]:
@@ -61,14 +64,16 @@ def plot_candidate_geometry(
         best = df[df["objid"] == best_objid].iloc[0]
 
     prefix = f"{title_prefix}: " if title_prefix else ""
+    legend_fs = base_fontsize if concise_legend else base_fontsize - 2
+    tick_fs = base_fontsize if concise_legend else base_fontsize - 1
     plt.rcParams.update(
         {
-            "font.size": 11,
-            "axes.labelsize": 11,
-            "axes.titlesize": 12,
-            "legend.fontsize": 9,
-            "xtick.labelsize": 10,
-            "ytick.labelsize": 10,
+            "font.size": base_fontsize,
+            "axes.labelsize": base_fontsize,
+            "axes.titlesize": base_fontsize + 1,
+            "legend.fontsize": legend_fs,
+            "xtick.labelsize": tick_fs,
+            "ytick.labelsize": tick_fs,
         }
     )
 
@@ -85,7 +90,12 @@ def plot_candidate_geometry(
         linewidths=0.2,
     )
     cbar = plt.colorbar(sc, ax=ax, label=r"$m_r$ (AB)")
-    cbar.ax.tick_params(labelsize=10)
+    cbar.ax.tick_params(labelsize=tick_fs)
+    best_label = (
+        f"best host (objid {int(best['objid'])})"
+        if not concise_legend
+        else f"M49 (objid {int(best['objid'])})"
+    )
     ax.scatter(
         best["sep_arcsec"],
         best["ang_size"],
@@ -93,14 +103,18 @@ def plot_candidate_geometry(
         facecolors="none",
         edgecolors="red",
         linewidths=2,
-        label=f"best host (objid {int(best['objid'])})",
+        label=best_label,
         zorder=5,
     )
-    ax.scatter(0, 0, marker="+", s=80, c="lime", linewidths=2, label="FRB", zorder=6)
 
     sep_max = max(float(df["sep_arcsec"].max()) * 1.02, 1.0)
     sep_grid = np.linspace(0, sep_max, 200)
     for xmax, color, ls in x_max_lines:
+        line_label = (
+            rf"$\mathrm{{sep}}={xmax:g}\,R_{{\mathrm{{eff}}}}$"
+            if concise_legend
+            else rf"$x_{{\max}}={xmax:g}$ ($\mathrm{{sep}}={xmax:g}\,R_{{\mathrm{{eff}}}}$)"
+        )
         ax.plot(
             sep_grid,
             sep_grid / xmax,
@@ -108,15 +122,16 @@ def plot_candidate_geometry(
             color=color,
             lw=1.2,
             alpha=0.7,
-            label=rf"$x_{{\max}} R_{{\mathrm{{eff}}}} = \mathrm{{sep}}$ ({xmax:g}$\times R_{{\mathrm{{eff}}}}$)",
+            label=line_label,
         )
 
     ax.set_xlabel("Separation from FRB position (arcsec)")
     ax.set_ylabel(r"$R_{\mathrm{eff}}$ (arcsec)")
-    ax.set_title(f"{prefix}offset vs. galaxy size")
-    ax.legend(loc="upper right", fontsize=9)
+    if show_title:
+        ax.set_title(f"{prefix}offset vs. galaxy size")
+    ax.legend(loc="upper right", fontsize=legend_fs)
     ax.grid(True, alpha=0.3)
-    ax.set_xlim(left=-1)
+    ax.set_xlim(left=0)
     ax.set_ylim(bottom=0)
     fig.tight_layout()
     out1 = out_dir / "sep_vs_shape_r.png"
@@ -157,7 +172,8 @@ def plot_candidate_geometry(
     )
     ax2.set_xlabel("Separation from FRB (arcsec)")
     ax2.set_ylabel(r"$x_{\max} \times R_{\mathrm{eff}}$ (arcsec)")
-    ax2.set_title(f"{prefix}PATH viability at $x_{{\\max}}$ = {theta_max:g}")
+    if show_title:
+        ax2.set_title(f"{prefix}PATH viability at $x_{{\\max}}$ = {theta_max:g}")
     ax2.legend(loc="upper left", fontsize=9)
     ax2.grid(True, alpha=0.3)
     ax2.set_xlim(0, lim)

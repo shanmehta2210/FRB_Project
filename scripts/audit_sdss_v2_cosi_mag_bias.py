@@ -25,7 +25,7 @@ from null_catalog_utils import (
 )
 from pipeline_null_plot_utils import DEFAULT_SDSS_V2, REPO_ROOT
 
-OUT = REPO_ROOT / "plots" / "plots_null" / "v2_sdss_audit" / "cosi_mag_bias_audit.csv"
+OUT = REPO_ROOT / "plots" / "plots_null" / "v2" / "sdss_audit" / "cosi_mag_bias_audit.csv"
 
 
 def pool_stats(sub: pd.DataFrame, q_col: str = "expAB_r") -> dict:

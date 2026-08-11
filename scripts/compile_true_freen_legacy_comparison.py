@@ -69,10 +69,10 @@ def parse_unrestrained_fitlog(log_path):
 def main():
     root = "."
     runs_dir = os.path.join(root, "tools/galfit/runs")
-    master_path = os.path.join(root, "galfit_vs_legacy_master.csv")
+    master_path = os.path.join(root, "Archive", "csv", "galfit", "galfit_vs_legacy_master.csv")
     
     if not os.path.exists(master_path):
-        print("Error: galfit_vs_legacy_master.csv not found.")
+        print("Error: Archive/csv/galfit/galfit_vs_legacy_master.csv not found.")
         return
 
     master = pd.read_csv(master_path)
@@ -120,7 +120,7 @@ def main():
         })
 
     out = pd.DataFrame(rows)
-    out_path = "galfit_vs_legacy_quick_read.csv"
+    out_path = os.path.join(root, "Archive", "csv", "galfit", "galfit_vs_legacy_quick_read.csv")
     out.to_csv(out_path, index=False)
     print(f"Saved {len(rows)} rows to {out_path}")
 

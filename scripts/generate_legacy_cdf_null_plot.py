@@ -20,7 +20,7 @@ if str(_SCRIPTS) not in sys.path:
 from null_catalog_utils import hubble_cosi_from_ba, prepare_null_sample
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_LEGACY = REPO_ROOT / "LS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_LEGACY = REPO_ROOT / "catalog/LS_catalog_v1_allsky_modelmr.csv"
 DEFAULT_OUT_SUBDIR = "plots/plots_null/v1_null_plots"
 
 random.seed(42)

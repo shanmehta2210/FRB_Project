@@ -185,7 +185,7 @@ def new_row_from_tex(tex: TexRow) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--tex", type=Path, default=Path("new_confident_hosts.txt"))
+    parser.add_argument("--tex", type=Path, default=Path("Archive/notes/new_confident_hosts.txt"))
     parser.add_argument("--csv", type=Path, default=Path("master_frb_localization.csv"))
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()

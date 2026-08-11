@@ -81,7 +81,7 @@ def step2_setup_stage1(root):
 
     runs_dir = os.path.join(root, "Galfit", "runs")
     guesses_csv = os.path.join(root, "csv_archive/initial_guesses.csv")
-    fwhm_csv = os.path.join(root, "psf_fwhm_summary.csv")
+    fwhm_csv = os.path.join(root, "Archive", "csv", "psf", "psf_fwhm_summary.csv")
 
     # Read FWHMs
     fwhm_dict = {}

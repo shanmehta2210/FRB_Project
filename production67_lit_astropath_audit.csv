@@ -1,0 +1,68 @@
+frb,coord_semantics,has_published_lit_cite,verdi_only_inprep,citation,lit_P_host_tex,in_tex_table,pipeline_best_posterior_O,pipeline_posterior_U,astropath_source,passes_astropath_0.95
+20171020A,host,True,False,"Li et al. 2023, PASA 40, 29",0.98,True,,,,False
+20180924B,host,True,False,"Bannister et al. 2019, Science 365, 565 (doi:10.1126/science.aaw5903)",1.0,True,,,,False
+20190102C,host,True,False,"Heintz et al. 2020, ApJ 903, 152 (doi:10.3847/1538-4357/abb6fb)",1.0,True,,,,False
+20190523A,host,True,False,"Ravi et al. 2019, Nature 572, 352 (doi:10.1038/s41586-019-1389-7)",0.8407,True,,,,False
+20190608B,host,True,False,"Chittidi et al. 2021, ApJ 922, 173 (doi:10.3847/1538-4357/ac2818)",1.0,True,,,,False
+20190611B,host,True,False,"Gordon et al. 2023, ApJ 952, 122 (doi:10.3847/1538-4357/ace5aa)",1.0,True,,,,False
+20190711A,host,True,False,"Kumar et al. 2021, MNRAS 500, 2525 (doi:10.1093/mnras/staa3436)",1.0,True,,,,False
+20190714A,host,True,False,"Heintz et al. 2020, ApJ 903, 152 (doi:10.3847/1538-4357/abb6fb)",1.0,True,,,,False
+20191001A,host,True,False,"Bhandari et al. 2020, ApJL 901, L20 (doi:10.3847/2041-8213/abb462)",0.9995,True,,,,False
+20200430A,host,True,False,"Gordon et al. 2023, ApJ 952, 122 (doi:10.3847/1538-4357/ace5aa)",1.0,True,,,,False
+20200906A,host,True,False,"Bhandari et al. 2022, AJ 163, 69 (doi:10.3847/1538-3881/ac3aec)",1.0,True,,,,False
+20210214G,signal,False,False,,,False,0.7143146602291265,0.285685339769659,pipeline_scripts\Output\20210214G_all\astropath_posteriors.csv,False
+20210320C,host,True,False,"Gordon et al. 2023, ApJ 952, 122 (doi:10.3847/1538-4357/ace5aa)",1.0,True,,,,False
+20210410D,host,True,False,"Caleb et al. 2023, MNRAS 524, 2064 (doi:10.1093/mnras/stad1839)",0.9957,True,,,,False
+20210807D,host,True,False,"Gordon et al. 2023, ApJ 952, 122 (doi:10.3847/1538-4357/ace5aa)",0.999,True,,,,False
+20211127I,host,True,False,"Gordon et al. 2023, ApJ 952, 122 (doi:10.3847/1538-4357/ace5aa)",0.9998,True,,,,False
+20211203C,host,True,False,"Gordon et al. 2023, ApJ 952, 122 (doi:10.3847/1538-4357/ace5aa)",1.0,True,,,,False
+20211212A,host,True,False,"Gordon et al. 2023, ApJ 952, 122 (doi:10.3847/1538-4357/ace5aa)",1.0,True,,,,False
+20220105A,host,True,False,"Gordon et al. 2023, ApJ 952, 122 (doi:10.3847/1538-4357/ace5aa)",1.0,True,,,,False
+20220207C,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.97,True,,,,False
+20220307B,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.983,True,,,,False
+20220310F,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.97,True,,,,False
+20220319D,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",,False,,,,False
+20220418A,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.974,True,,,,False
+20220509G,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.97,True,,,,False
+20220717A,host,True,False,"Rajwade et al. 2024, MNRAS 532, 3881 (doi:10.1093/mnras/stae1652)",0.97,True,,,,False
+20220725A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",1.0,True,,,,False
+20220825A,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.993,True,,,,False
+20220912A,host,True,False,"Ravi et al. 2023, ApJL 949, L3 (doi:10.3847/2041-8213/acc4b6)",0.95,True,,,,False
+20220914A,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.974,True,,,,False
+20220920A,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.985,True,,,,False
+20221012A,host,True,False,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)",0.996,True,,,,False
+20221101B,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.987,True,,,,False
+20221106A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",0.9446,True,,,,False
+20221116A,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.943,True,,,,False
+20221219A,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.996,True,,,,False
+20230124A,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.999,True,,,,False
+20230307A,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.968,True,,,,False
+20230526A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",1.0,True,,,,False
+20230613A,host,True,False,"Pastor-Marazuela et al. 2026, MNRAS 545, f2144 (doi:10.1093/mnras/staf2144)",0.999,True,,,,False
+20230626A,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.999,True,,,,False
+20230628A,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.953,True,,,,False
+20230708A,host,True,False,"Muller et al. 2026, ApJ 1001, 118 (doi:10.3847/1538-4357/ae5060)",,False,,,,False
+20230712A,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.995,True,,,,False
+20230902A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",1.0,True,,,,False
+20230907D,host,True,False,"Pastor-Marazuela et al. 2026, MNRAS 545, f2144 (doi:10.1093/mnras/staf2144)",0.942,True,,,,False
+20230913,host,False,True,Verdi+2025 (in prep.),0.94,True,,,,False
+20230930A,host,True,False,"Anna-Thomas et al. 2025, ApJ 993, 221 (doi:10.3847/1538-4357/ae1014)",0.9994,True,,,,False
+20231020B,host,True,False,"Pastor-Marazuela et al. 2026, MNRAS 545, f2144 (doi:10.1093/mnras/staf2144)",0.998,True,,,,False
+20231120A,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.987,True,,,,False
+20231123B,host,True,False,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",0.908,True,,,,False
+20231220A,host,True,False,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",0.996,True,,,,False
+20231226A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",1.0,True,,,,False
+20240104A,host,False,True,Verdi+2025 (in prep.),0.99,True,6.1903475172624774e-55,1.0,pipeline_scripts\Output\20240104A_all\astropath_posteriors.csv,False
+20240119A,host,True,False,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",0.984,True,,,,False
+20240201A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",1.0,True,,,,False
+20240203,host,False,True,Verdi+2025 (in prep.; not in Hussaini et al. 2025),0.996,True,,,,False
+20240208A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",,False,,,,False
+20240210A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",1.0,True,,,,False
+20240213A,host,True,False,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",0.995,True,,,,False
+20240215A,host,True,False,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",0.998,True,,,,False
+20240229A,host,True,False,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",0.997,True,,,,False
+20240304A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",,False,,,,False
+20240304B,host,True,False,"Caleb et al. 2025, arXiv:2508.01648 (doi:10.48550/arXiv.2508.01648)",0.975,True,,,,False
+20240310A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",0.9884,True,,,,False
+20240318A,host,True,False,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",,False,,,,False
+20250518,host,False,True,Verdi+2025 (in prep.),0.99,True,0.8963514983692379,0.10364850163076209,pipeline_scripts\Output\20250518_all\astropath_posteriors.csv,False

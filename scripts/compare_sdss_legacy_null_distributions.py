@@ -24,8 +24,8 @@ from null_catalog_utils import (
 np.random.seed(42)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SDSS = REPO_ROOT / "SDSS_catalog_v1_allsky_modelmr.csv"
-DEFAULT_LEGACY = REPO_ROOT / "LS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_SDSS = REPO_ROOT / "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_LEGACY = REPO_ROOT / "catalog/LS_catalog_v1_allsky_modelmr.csv"
 DEFAULT_OUT_SUBDIR = "plots/plots_null/v1_null_plots"
 
 
@@ -80,7 +80,7 @@ def main():
     parser.add_argument("--sdss-csv", default=str(DEFAULT_SDSS))
     parser.add_argument("--legacy-csv", default=str(DEFAULT_LEGACY))
     parser.add_argument("--master-summary", default="master_frb_summary.csv")
-    parser.add_argument("--galfit-csv", default="galfit_metrics_summary.csv")
+    parser.add_argument("--galfit-csv", default="Archive/csv/galfit/galfit_metrics_summary.csv")
     parser.add_argument("--mag-limit", type=float, default=21.0)
     parser.add_argument("--mag-column", default="rmag", help="Model r: rmag (SDSS) / tractor_mag_r (Legacy).")
     parser.add_argument(

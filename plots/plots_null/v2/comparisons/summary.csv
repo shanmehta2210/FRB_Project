@@ -1,0 +1,10 @@
+survey,scaled,mag_limit,n,median_cosi
+LS,True,20.0,24486,0.6163
+DES,False,20.0,6197,0.6472
+HSC,False,20.0,2503,0.5871
+LS,True,21.0,137274,0.5728
+DES,False,21.0,21789,0.6239
+HSC,False,21.0,11789,0.5849
+LS,True,22.0,522951,0.537
+DES,False,22.0,60456,0.6284
+HSC,False,22.0,36789,0.5763

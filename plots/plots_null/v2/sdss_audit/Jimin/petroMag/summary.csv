@@ -1,0 +1,3 @@
+variant,label,mag_cut,mag_sql,n_sql,n_strict,median_cosi,top_truncated,top_n,q0,frac_v2_with_fracDev0
+v1_fracDev0_and_lnL,V1: fracDeV=0 AND lnLExp wins (historical),petro,p.petroMag_r BETWEEN 12 AND 21,8668,8054,0.5498,False,,0.2,
+v2_lnL_exp,V2: lnLExp wins only,petro,p.petroMag_r BETWEEN 12 AND 21,17138,16117,0.5506,False,,0.2,0.5058

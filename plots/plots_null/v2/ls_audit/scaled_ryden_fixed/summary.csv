@@ -1,0 +1,4 @@
+mag_limit,n_pure_a1,median_cosi_pure_a1,n_ceil_a1,median_cosi_ceiling_a1,median_cosi_scaled_a1_ref
+20.0,35130,0.438,34340,0.5747,0.5271
+21.0,185477,0.4122,184142,0.5524,0.5094
+22.0,641099,0.4058,639380,0.5478,0.5062

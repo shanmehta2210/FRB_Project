@@ -50,12 +50,21 @@ import pandas as pd
 _SCRIPT_DIR = Path(__file__).resolve().parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
+_PIPELINE_DIR = _SCRIPT_DIR.parent / "pipeline_scripts"
+if str(_PIPELINE_DIR) not in sys.path:
+    sys.path.insert(0, str(_PIPELINE_DIR))
 
 from galfit_fitlog_parse import (  # noqa: E402  reuse the canonical parser
     count_fitted_sersic_components,
     inclination_err_from_b_a_err,
     inclination_from_b_a,
     parse_fitlog_file,
+)
+from reference_photometry import (  # noqa: E402
+    final_host_mag,
+    galfit_zp_used,
+    load_photometry,
+    pipeline_zp_ok,
 )
 
 REPO_ROOT = _SCRIPT_DIR.parent
@@ -164,6 +173,51 @@ def _host_snr_from_audit(output_dir: Path) -> dict[str, float | int | None]:
     return out
 
 
+def _reference_mag_fields(output_dir: Path, galfit_mag, galfit_mag_err) -> dict:
+    """Reference-survey mag + final-mag substitution for one Output folder.
+
+    ``mag_final`` is the GALFIT magnitude when the pipeline zero-point is
+    trusted, otherwise the LS DR10 / PS1 reference magnitude stored by
+    ``pipeline_scripts/reference_photometry.py`` (run automatically by
+    master_run.py; backfill older folders with ``--backfill``).
+    """
+    ref = None
+    ref_path = output_dir / "reference_photometry.json"
+    if ref_path.is_file():
+        try:
+            ref = json.loads(ref_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            ref = None
+    if ref is None:
+        summary_path = output_dir / "pipeline_summary.json"
+        if summary_path.is_file():
+            try:
+                summary = json.loads(summary_path.read_text(encoding="utf-8"))
+                ref = summary.get("reference_photometry")
+            except (json.JSONDecodeError, OSError):
+                pass
+
+    # pipeline_summary.json photometry section, or zero_points.json for
+    # pre-summary Output folders.
+    photometry = load_photometry(output_dir)
+
+    ref_ok = isinstance(ref, dict) and ref.get("status") == "ok"
+    mag_final, mag_final_err, source = final_host_mag(
+        photometry, ref, galfit_mag, galfit_mag_err,
+        zp_used=galfit_zp_used(output_dir),
+    )
+    return {
+        "zp_ok": pipeline_zp_ok(photometry),
+        "ref_survey": _cell(ref.get("survey")) if ref_ok else "",
+        "ref_mag": _cell(ref.get("mag")) if ref_ok else "",
+        "ref_mag_err": _cell(ref.get("mag_err")) if ref_ok else "",
+        "ref_sep_arcsec": _cell(ref.get("sep_arcsec")) if ref_ok else "",
+        "mag_final": _cell(mag_final),
+        "mag_final_err": _cell(mag_final_err),
+        "mag_final_source": source,
+    }
+
+
 def parse_pipeline_outputs(output_root: Path, tag: str) -> pd.DataFrame:
     """Walk Output/<FRB>_<tag>/ and parse every fit.log we find."""
     rows: list[dict] = []
@@ -195,6 +249,7 @@ def parse_pipeline_outputs(output_root: Path, tag: str) -> pd.DataFrame:
                 **snr_fields,
                 **{k: "" for k in _METRIC_KEYS},
                 "inc": "", "inc_err": "",
+                **_reference_mag_fields(sub, None, None),
             })
             continue
 
@@ -224,6 +279,7 @@ def parse_pipeline_outputs(output_root: Path, tag: str) -> pd.DataFrame:
         row["inc_err"] = (
             _cell(inclination_err_from_b_a_err(ba, be)) if ba is not None else ""
         )
+        row.update(_reference_mag_fields(sub, data.get("mag"), data.get("mag_err")))
         rows.append(row)
 
     if not rows:
@@ -239,6 +295,14 @@ def parse_pipeline_outputs(output_root: Path, tag: str) -> pd.DataFrame:
         *_METRIC_KEYS,
         "inc",
         "inc_err",
+        "zp_ok",
+        "ref_survey",
+        "ref_mag",
+        "ref_mag_err",
+        "ref_sep_arcsec",
+        "mag_final",
+        "mag_final_err",
+        "mag_final_source",
         "parse_strategy",
         "fit_log_path",
     ]

@@ -1,4 +1,5 @@
 import os
+import shlex
 import sys
 import yaml
 import subprocess
@@ -904,9 +905,23 @@ def main():
     log.info("Executing Subprocess SExtractor with PSF Model")
     try:
         cmd_sex = ["wsl", "source-extractor", image_name, "-c", "default_psf.sex"]
-        subprocess.run(cmd_sex, cwd=image_dir, check=True)
+        subprocess.run(cmd_sex, cwd=image_dir, check=True, stdin=subprocess.DEVNULL)
     except subprocess.CalledProcessError as e:
         log.error(f"Error executing PSF Photometry: {e}")
+        sys.exit(1)
+    except FileNotFoundError:
+        log.error(
+            "Could not launch WSL: 'wsl' was not found on PATH. Install WSL and ensure "
+            "'wsl source-extractor -v' works (see README §2)."
+        )
+        sys.exit(1)
+    except OSError as e:
+        log.error(f"Could not launch SExtractor subprocess: {e}")
+        sys.exit(1)
+
+    psf_catalog_path = os.path.join(image_dir, psf_catalog_name)
+    if not os.path.isfile(psf_catalog_path) or os.path.getsize(psf_catalog_path) == 0:
+        log.error(f"SExtractor exited 0 but did not produce a non-empty {psf_catalog_name}.")
         sys.exit(1)
 
     log.info(f"Phase 2 SExtractor DEBLEND_MINCONT = {deblend_mincont}")
@@ -935,18 +950,34 @@ def main():
     log.info("Triggering Conda `frb_project` Environment OS Bridge")
     coord_args = f"--ra {args.ra} --dec {args.dec}" if args.ra is not None else ""
     wsl_config_path = _to_wsl_path(config_path)
+    # shlex.quote guards every embedded path/name against spaces and shell
+    # metacharacters (the repo itself has directories with spaces in them).
     wsl_bash_cmd = (
         f"conda activate frb_project && python _run_astrophysics_wsl.py "
-        f"--image {image_name} --psfcat {psf_catalog_name} "
-        f"--config '{wsl_config_path}' {coord_args}"
+        f"--image {shlex.quote(image_name)} --psfcat {shlex.quote(psf_catalog_name)} "
+        f"--config {shlex.quote(wsl_config_path)} {coord_args}"
     )
-    
-    wsl_error = None
+
+    wsl_error: str | None = None
     try:
-        subprocess.run(["wsl", "-e", "bash", "-ic", wsl_bash_cmd], cwd=image_dir, check=True)
+        subprocess.run(
+            ["wsl", "-e", "bash", "-ic", wsl_bash_cmd],
+            cwd=image_dir,
+            check=True,
+            stdin=subprocess.DEVNULL,
+        )
     except subprocess.CalledProcessError as e:
-        wsl_error = e
+        wsl_error = f"bridge exited with code {e.returncode}"
         log.error(f"Error inside the Astropath WSL bridge: {e}")
+    except FileNotFoundError:
+        wsl_error = "'wsl' not found on PATH"
+        log.error(
+            "Could not launch the WSL bridge: 'wsl' was not found on PATH. "
+            "Install WSL and ensure the frb_project conda env exists (see README §2)."
+        )
+    except OSError as e:
+        wsl_error = str(e)
+        log.error(f"Could not launch the WSL bridge: {e}")
     finally:
         log.info("Cleaning up templates")
         for temp_file in [path_sex, path_param, os.path.join(image_dir, "default.conv"), os.path.join(image_dir, "default.nnw"), astro_script]:
@@ -957,6 +988,20 @@ def main():
     # exit code instead of a false-positive "Phase 2 OK".
     if wsl_error is not None:
         sys.exit(1)
+
+    # The bridge exiting 0 must mean the Phase 2 deliverables actually exist —
+    # guard against silent in-bridge failures (e.g. killed mid-write).
+    bridge_outputs = ["calibrated_photometry_results.csv", "zero_points.json"]
+    missing_outputs = [
+        f for f in bridge_outputs if not os.path.isfile(os.path.join(image_dir, f))
+    ]
+    if missing_outputs:
+        log.error(
+            "WSL bridge exited 0 but Phase 2 outputs are missing: "
+            f"{', '.join(missing_outputs)}. Treating Phase 2 as failed."
+        )
+        sys.exit(1)
+    log.info("Phase 2 complete: photometry + AstroPath outputs verified.")
 
 if __name__ == "__main__":
     main()

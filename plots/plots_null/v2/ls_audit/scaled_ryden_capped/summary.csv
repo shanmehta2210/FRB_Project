@@ -1,0 +1,4 @@
+mag_limit,n,median_cosi_capped,median_cosi_scaled,max_cdf_diff_vs_scaled
+20.0,25274,0.5361,0.6163,0.1371
+21.0,138605,0.5173,0.5728,0.1356
+22.0,524666,0.4952,0.537,0.1487

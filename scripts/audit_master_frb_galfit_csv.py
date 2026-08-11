@@ -93,7 +93,7 @@ def close(a, b, tol: float = 5e-4) -> bool:
 
 def main() -> None:
     master_path = _ROOT / "master_frb_galfit_from_logs.csv"
-    new16_path = _ROOT / "new_16_frbs_galfit_results.csv"
+    new16_path = _ROOT / "Archive" / "csv" / "galfit" / "new_16_frbs_galfit_results.csv"
 
     df = pd.read_csv(master_path)
     issues: list[tuple] = []

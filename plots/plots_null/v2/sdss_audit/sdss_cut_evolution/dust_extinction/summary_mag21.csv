@@ -1,0 +1,4 @@
+mode,cut,n,median_cosi,median_ba,median_delta_m
+raw_m_obs,modelMag_r <= 21,159144,0.5843,0.6064,0.0599
+a1_m_face,m^f = m - 1.27(log10 q)^2 <= 21,182937,0.5423,0.5677,0.0768
+a1_added_only,m^f<=21 but m_obs>21 (dust-rescued edge-ons),23793,0.267,0.3293,0.2955

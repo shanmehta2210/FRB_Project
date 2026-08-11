@@ -1,0 +1,88 @@
+# Is the uniform Ryden cos(i) CDF a real result? No — it is (nearly) tautological
+
+Short answer: this is **not** overfitting (4 params fit to a full histogram), but the
+near-diagonal `cos(i)` CDF is **not** independent evidence that LS orientations are
+isotropic. Uniformity is an **assumed input** of the method, recovered because the b/a
+fit is decent. From b/a alone, intrinsic shape and orientation are degenerate.
+
+## Why the literature says so
+
+Both papers **assume random (isotropic) orientation** as an input, then fit the intrinsic
+3D shape distribution to the observed b/a histogram:
+
+- Ryden (2004) and Padilla & Strauss (2008): draw shapes (`gamma`, `eps`) from the trial
+  distribution, view at a **random** `(theta, phi)`, project with Binney (1985) eqs 12-15,
+  and `chi2`-match `N_model(b/a)` to `N(b/a)`.
+- Lambas, Maddox & Loveday lineage (astro-ph/9709069): "any statistical approach to
+  determine true axial ratios ... is valid only if ... galaxies are randomly oriented in
+  space." Isotropy is a **premise**, never a result.
+
+So `P_model(cos i)` is uniform **by construction** (`E0 = 0`).
+
+## Why our recovered CDF must come out uniform
+
+We sample per galaxy `cos(i) ~ P_model(cos i | b/a)`, so
+
+    P_rec(cos i) = INT P_model(cos i | q) P_obs(q) dq.
+
+The model conditional satisfies `INT P_model(cos i | q) P_model(q) dq = P_model(cos i) = uniform`.
+The shape fit forces `P_obs(q) ~= P_model(q)`, hence `P_rec -> uniform`. The diagonal is
+guaranteed by the fit; it carries almost no power to test isotropy.
+
+## Numerical proof (`circularity_check.png`, `verify_ryden_circularity.py`)
+
+KS statistic of the sampled `cos(i)` vs uniform:
+
+| Test | b/a fed to sampler | KS vs uniform |
+|------|--------------------|--------------:|
+| [0] model marginal `cos(theta)` | — | 0.001 |
+| [2] tautology floor | b/a drawn **from the model** | 0.011 |
+| [1] our result | **observed** LS b/a | 0.042 |
+| [3] counter-control | observed b/a reweighted to round | 0.083 |
+
+- [1] sits right above the [2] tautology floor → the observed CDF is essentially the
+  guaranteed-uniform answer plus a small b/a fit residual.
+- The b/a fit itself is only fair: `KS(observed, model b/a) = 0.182`. That 18% b/a
+  mismatch collapses to just a 4% deviation in `cos(i)` — the marginalization over the
+  broad `P(cos i | q)` **washes out** the data, i.e. very low power.
+- [3] confirms the CDF is not literally frozen (data can move it), but nothing in the
+  method can distinguish anisotropy from a different shape distribution.
+
+## What this means for the project
+
+1. **Do not report** the Ryden `cos(i)` CDF as "LS is consistent with isotropic." It is
+   circular — isotropy was assumed.
+2. The **legitimate** Ryden/Padilla product is the fitted **shape distribution**
+   (`gamma`, `eps`, and Padilla `E0`) and the per-galaxy posterior `P(cos i | b/a)`.
+   For a **single** FRB host with measured b/a, that posterior is genuine, useful
+   information (it is not marginalized back into the assumed uniform).
+3. The **ad-hoc scaled** CDF curves away from the diagonal precisely because it is a
+   deterministic transform `cos i = f(b/a)` that assumes a single thin-disk shape and
+   does **not** marginalize over an isotropic model — so its shape reflects the real b/a
+   distribution (contaminated by the fixed-shape assumption), not a baked-in answer.
+4. A real anisotropy test needs information **beyond** b/a (e.g. an independent
+   inclination proxy, kinematics, or a fixed external shape prior).
+
+## Resolution: one knob = shape-vs-inclination attribution (`null_options_compare.png`)
+
+The whole family of methods differs only in **how much of the observed b/a spread is
+attributed to intrinsic shape vs to inclination**:
+
+| Method | Shape assumption | median cos(i), mag21 | KS vs uniform |
+|--------|------------------|---------------------:|--------------:|
+| A: scaled (Hubble thin-disk) | all disks circular (delta-fn) | 0.455 | 0.229 |
+| C: Ryden **fixed-lit** (2004) | literature scatter, frozen | 0.466 | 0.115 |
+| C': Padilla fixed-lit (2008) | literature + dust, frozen | 0.459 | 0.164 |
+| B: Ryden **refit-to-LS** | shapes fit to LS itself | 0.512 | 0.013 |
+
+- A attributes 0% to shape (over-attributes to inclination) -> strongest curve.
+- B lets shapes absorb 100% of the b/a structure -> uniform (circular).
+- **C freezes literature shapes -> curved, intermediate, physically motivated.**
+  It is the honest generalisation of "scaled" (scaled = C in the delta-function limit).
+
+**Recommended null pipeline for FRBs:** freeze the shape model at literature values
+(do NOT refit to the sample being converted), apply the identical `P(cos i | b/a)`
+sampler to BOTH the null galaxies and the FRB hosts, and compare FRB vs null-galaxy
+CDF (two-sample KS/AD) — never FRB vs the uniform diagonal. Run both `scaled` (A) and
+`fixed-lit` (C) and confirm the FRB result is robust to the choice (A has more power,
+C is less biased). Generated by `scripts/ryden_null_options.py`.

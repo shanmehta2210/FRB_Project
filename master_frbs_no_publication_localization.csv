@@ -1,0 +1,14 @@
+frb,coord_semantics,survey,status,major_sigma_as,minor_sigma_as,ra_err_as,dec_err_as,has_maj_min_ellipse,exclude_class,literature_note,best_citation
+20230913,host,DSA-110,pending,,,,,False,verdi_inprep,"TeX + master cite Verdi+2025 only; no ADS/arXiv Verdi FRB paper found as of 2026-07-21",Verdi+2025
+20240104A,host,DSA-110,pending,,,,,False,verdi_inprep,"TeX Verdi+2025 only; not in Law/Sharma/Connor/Hussaini published tables",Verdi+2025
+20250518,host,DSA-110,pending,,,,,False,verdi_inprep,"TeX Verdi+2025 only; no published host paper found",Verdi+2025
+20240203,host,DSA-110,pending,,,,,False,verdi_inprep,"TeX Verdi+2025; master previously mis-cited Hussaini 2025 (FRB absent from that table)",Verdi+2025
+20200627A,signal,LS,pending,,,,,False,no_published_host,"Shannon+2025: burst too wide for voltage download; multi-beam only (~arcmin); no host",Shannon et al. 2025 PASA (discovery only)
+20210214G,signal,LS,pending,,,,,False,no_published_host,"Shannon+2025: pulsar-check obs; voltage download disabled; multi-beam only; no host",Shannon et al. 2025 PASA (discovery only)
+20210809C,signal,unsure,pending,,,,,False,no_published_host,"Shannon+2025: too wide for voltage download; not in 10-s visibilities; multi-beam only",Shannon et al. 2025 PASA (discovery only)
+20220531A,signal,LS,pending,,,,,False,no_published_host,"Shannon+2025: bandpass cal; voltages uncalibratable; no interferometric localization attempted",Shannon et al. 2025 PASA (discovery only)
+20230521A,signal,LS+PS1,pending,,,,,False,no_published_host,"Shannon+2025: burst width failed voltage-download criteria; multi-beam only",Shannon et al. 2025 PASA (discovery only)
+20231006A,signal,LS,pending,,,,,False,no_published_host,"Shannon+2025: incomplete voltage download; no further localization attempted",Shannon et al. 2025 PASA (discovery only)
+20210407E,signal,PS1,pending,0.89,0.53,0.7,0.76,True,precise_loc_no_host,"Shannon+2025: interferometric loc OK; deep imaging+IFS — no host found (n/h)",Shannon et al. 2025 PASA
+20210912A,signal,LS+PS1,pending,0.44,0.43,0.44,0.43,True,precise_loc_no_host,"Marnoch+2023 MNRAS: PATH P(U|x)~1; host unseen despite deep VLT imaging",Marnoch et al. 2023 MNRAS; Shannon et al. 2025
+20230731A,signal,unsure,can't find their images for now we'll work on them later,0.56,0.55,0.55,0.56,True,precise_loc_no_secure_host,"Shannon+2025: interferometric loc; VLT R no coincident galaxy; faint K source; no spectroscopy; redshift pending",Shannon et al. 2025 PASA

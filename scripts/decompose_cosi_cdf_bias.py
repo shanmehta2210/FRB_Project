@@ -81,7 +81,7 @@ def main() -> None:
 
     # --- SDSS catalog stages ---
     df = read_sdss_null_catalog(
-        Path(__file__).resolve().parents[1] / "SDSS_catalog_v1_allsky_modelmr.csv"
+        Path(__file__).resolve().parents[1] / "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
     )
     stages: list[tuple[str, pd.DataFrame]] = [("catalog_all", df)]
     s = apply_mag_cut(df, mag_column="modelMag_r", limit=MAG)

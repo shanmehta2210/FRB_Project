@@ -68,11 +68,11 @@ from null_catalog_utils import (
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-DEFAULT_LEGACY = REPO_ROOT / "LS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_LEGACY = REPO_ROOT / "catalog/LS_catalog_v1_allsky_modelmr.csv"
 
-DEFAULT_SDSS = REPO_ROOT / "SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_SDSS = REPO_ROOT / "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
 
-DEFAULT_SDSS_V2 = REPO_ROOT / "SDSS_catalog_v2_fullsky_modelmr.csv"
+DEFAULT_SDSS_V2 = REPO_ROOT / "catalog/SDSS_catalog_v2_fullsky_modelmr.csv"
 
 # Post-morphology Legacy CDF pool at m<21 is ~4.4k (see legacy_morphology diagnostic).
 

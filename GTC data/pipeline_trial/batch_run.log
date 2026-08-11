@@ -1,0 +1,37 @@
+[batch] 13 FRB(s) to process; outputs=['all']
+[batch] localization table: C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\master_frb_localization.csv
+[batch] outputs root      : C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output
+
+[12/13] 20230930A ... SKIP (Output already exists)
+[ 1/13] 20210117A (ra=339.9792, dec=-16.1514; err_a=0.42 err_b=0.42 pa=73.1) ... FAIL rc=1, ETA 6m 40s remaining  (log: pipeline_scripts\Output\20210117A_all\master_run.log)
+[ 2/13] 20210214G (ra=6.9300, dec=-5.8322; err_a=— err_b=— pa=—) ... OK (39s, ETA 6m 13s remaining, P=0.714, ref=II/349 (PS1 DR1))
+[ 3/13] 20210809C (ra=271.1571, dec=1.3289; err_a=— err_b=— pa=—) ... FAIL rc=1, ETA 6m 43s remaining  (log: pipeline_scripts\Output\20210809C_all\master_run.log)
+[ 4/13] 20220204A (ra=274.2280, dec=69.7220; err_a=— err_b=— pa=—) ... FAIL rc=1, ETA 8m 36s remaining  (log: pipeline_scripts\Output\20220204A_all\master_run.log)
+[ 5/13] 20220506D (ra=318.0450, dec=72.8270; err_a=— err_b=— pa=—) ... FAIL rc=1, ETA 6m 12s remaining  (log: pipeline_scripts\Output\20220506D_all\master_run.log)
+[ 6/13] 20221116A (ra=21.2110, dec=72.6540; err_a=— err_b=— pa=—) ... OK (50s, ETA 5m 12s remaining, P=0.973, ref=II/349 (PS1 DR1))
+[ 7/13] 20230501A (ra=340.0270, dec=70.9220; err_a=— err_b=— pa=—) ... FAIL rc=1, ETA 3m 53s remaining  (log: pipeline_scripts\Output\20230501A_all\master_run.log)
+[ 8/13] 20230521A (ra=327.7513, dec=-2.3861; err_a=— err_b=— pa=—) ... FAIL rc=1, ETA 2m 50s remaining  (log: pipeline_scripts\Output\20230521A_all\master_run.log)
+[ 9/13] 20230521B (ra=351.0360, dec=71.1380; err_a=— err_b=— pa=—) ... FAIL rc=1, ETA 1m 56s remaining  (log: pipeline_scripts\Output\20230521B_all\master_run.log)
+[10/13] 20230814B (ra=335.9760, dec=73.0260; err_a=— err_b=— pa=—) ... FAIL rc=1, ETA 1m 17s remaining  (log: pipeline_scripts\Output\20230814B_all\master_run.log)
+[11/13] 20230913 (ra=305.0370, dec=70.7930; err_a=— err_b=— pa=—) ... OK (41s, ETA 39s remaining, P=—, ref=—)
+[13/13] 20240203 (ra=312.6210, dec=73.9000; err_a=— err_b=— pa=—) ... OK (33s, P=—, ref=—)
+
+[batch] finished in 534s (4 ok, 8 fail, 1 skip)
+
+FRB            status    P(O)   d_host    ZP_40   N* ref_catalog          note
+----------------------------------------------------------------------------------------
+20230930A      SKIP         —        —        —    —                      exists
+20210117A      FAIL     0.000        —   21.635   58 II/349 (PS1 DR1)     rc=1
+20210214G      OK       0.714        —   21.840   40 II/349 (PS1 DR1)     39s
+20210809C      FAIL     0.000        —   32.584 1557 II/349 (PS1 DR1)     rc=1
+20220204A      FAIL     0.727        —   22.564   95 II/349 (PS1 DR1)     rc=1
+20220506D      FAIL         —        —        —    —                      rc=1
+20221116A      OK       0.973        —   29.886    3 II/349 (PS1 DR1)     50s
+20230501A      FAIL         —        —        —    —                      rc=1
+20230521A      FAIL     0.000        —   21.628  107 II/349 (PS1 DR1)     rc=1
+20230521B      FAIL         —        —        —    —                      rc=1
+20230814B      FAIL         —        —        —    —                      rc=1
+20230913       OK           —        —        —    —                      41s
+20240203       OK           —        —        —    —                      33s
+
+[batch] HTML report: pipeline_scripts\Output\batch_report.html

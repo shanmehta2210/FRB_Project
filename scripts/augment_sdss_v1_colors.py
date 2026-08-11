@@ -26,7 +26,7 @@ if str(_SCRIPTS) not in sys.path:
 
 from null_catalog_utils import JOINT_DEC_MAX, JOINT_DEC_MIN  # noqa: E402
 
-DEFAULT_CSV = "SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_CSV = "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
 MATCH_ARCSEC = 1.0
 
 

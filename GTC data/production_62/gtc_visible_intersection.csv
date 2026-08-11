@@ -1,0 +1,4 @@
+frb,gtc_tiers,gtc_reasons,P_O_max,host_offset_arcsec,lit_P_host,in_confident_hosts_table,in_cohort_46,galfit_ok_for_assoc,gtc_assoc_downgraded,mag_ab,chi2nu,inc_deg,b_a,n_sersic,snr_win,unphys_tier,unphys_flags,tier_c_note,gtc_n_pass_nights,gtc_pass_fraction,gtc_visible,coord_semantics,dec_deg,updated_utc
+20220307B,B,degenerate_depth_snr,0.9993355597386716,0.7470214699689695,0.983,True,False,False,False,19.86,0.968,52.43,0.63,1,49.376762,A_degenerate,sky_qa_failed,,31,1.0,True,host,72.192,2026-06-24 11:36:07 UTC
+20220912A,B,degenerate_depth_snr,0.999299508181964,0.0032190542478328934,0.95,True,False,False,False,19.52,0.943,52.43,0.63,1,53.29874,A_degenerate,bad_sky,,31,1.0,True,host,48.7066182681479,2026-06-24 11:36:07 UTC
+20220319D,A,host_offset_gt2as,0.9910075774073848,9.214567266888052,,False,False,False,False,15.88,1.552,35.7441,0.82,3,499.1199,A_degenerate,multi_sersic_final;n_at_ceiling;non_sane_parser_block,,2,0.065,True,host,71.03525,2026-06-24 11:36:07 UTC

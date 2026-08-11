@@ -2,7 +2,7 @@
 """
 Audit SDSS v2 null catalog: footprint, deduplication, strict mag20 pool.
 
-Writes outputs under plots/plots_null/v2_sdss_audit/.
+Writes outputs under plots/plots_null/v2/sdss_audit/.
 
 Run from repo root::
 
@@ -38,7 +38,7 @@ from null_catalog_utils import (
 )
 from pipeline_null_plot_utils import DEFAULT_SDSS, DEFAULT_SDSS_V2, REPO_ROOT
 
-OUT_ROOT = REPO_ROOT / "plots" / "plots_null" / "v2_sdss_audit"
+OUT_ROOT = REPO_ROOT / "plots" / "plots_null" / "v2" / "sdss_audit"
 
 
 def _load_batch_log(v2_csv: Path) -> pd.DataFrame | None:

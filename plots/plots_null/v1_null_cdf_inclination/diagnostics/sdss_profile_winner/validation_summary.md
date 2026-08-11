@@ -1,6 +1,6 @@
 # SDSS profile winner validation
 
-Sample: 50000 rows from `SDSS_catalog_v1_allsky_modelmr.csv`.
+Sample: 50000 rows from `catalog/SDSS_catalog_v1_allsky_modelmr.csv`.
 
 ## Primary rule
 

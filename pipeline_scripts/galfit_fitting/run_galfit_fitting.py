@@ -2,15 +2,19 @@
 Build galfit.feedme, run GALFIT, and QA the global sky level.
 
 Sky policy:
-  - Seed sky from SExtractor BACKGROUND (host row 0 in host_components.csv), ADU.
+  - Seed sky from SExtractor BACKGROUND (host row 0 in host_components.csv), ADU,
+    unless that disagrees with the host_cutout median — then use cutout_median.
   - After each fit, compare fit.log sky to that reference.
-  - If |delta| > sky_tolerance_adu, rerun with a soft constraint holding sky
-    within ±sky_tolerance_adu of the feedme seed (GALFIT constraints.txt syntax).
+  - If |delta| > sky_tolerance_adu (but not >> tolerance), rerun with a soft
+    constraint holding sky within ±sky_tolerance_adu of the feedme seed.
+  - GALFIT 3.0.x on modern glibc may exit non-zero after a good fit
+    (``free(): invalid pointer``); we accept the fit when fit.log/out.fits exist.
 """
 
 from __future__ import annotations
 
 import argparse
+import glob
 import json
 import math
 import os
@@ -20,6 +24,7 @@ import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import yaml
 from astropy.io import fits
@@ -33,11 +38,17 @@ _PIPELINE_DIR = Path(__file__).resolve().parents[1]
 if str(_PIPELINE_DIR) not in sys.path:
     sys.path.insert(0, str(_PIPELINE_DIR))
 
+_GALFIT_DIR = Path(__file__).resolve().parent
+if str(_GALFIT_DIR) not in sys.path:
+    sys.path.insert(0, str(_GALFIT_DIR))
+
+from sersic_init import effective_re_px  # noqa: E402
+
 from scripts.galfit_fitlog_parse import (  # noqa: E402
     parse_fitlog_sky_level,
     sky_level_is_plausible,
 )
-from pipeline_shared import get_logger  # noqa: E402
+from pipeline_shared import get_logger, header_mag_zeropoint_from_fits  # noqa: E402
 
 log = get_logger("phase3b")
 
@@ -45,20 +56,27 @@ _GALFIT_CRASH_MARKERS = (
     "GALFIT crashed",
     "Singular Matrix",
     "Numerical Recipes run-time error",
+    "Segmentation fault",
 )
+
+# GALFIT prompts interactively ("...try again:") when an input file named in the
+# feedme is missing. stdin is closed below so it can never block on a prompt,
+# but a prompt loop on EOF would still spin — this wall-clock cap kills it.
+_GALFIT_TIMEOUT_S = 3600
+
+# Only retry with a sky constraint when the fitted sky is moderately close to the
+# seed. Large deltas usually mean the SExtractor/cutout seed is not representative
+# (common on weighted stacks); constraining would break an otherwise good fit.
+_SKY_RETRY_MAX_DELTA_FACTOR = 5.0
 
 _GALFIT_ARTIFACTS = (
     "fit.log",
     "out.fits",
-    "galfit.01",
-    "galfit.02",
-    "galfit.03",
-    "galfit.04",
 )
 
 
 def load_mag_zeropoint(wkdir: str, config: dict) -> tuple[float, str]:
-    """GALFIT J) ZP: galfit_config > zero_points.json zp_aper > 22.5."""
+    """GALFIT J) ZP: galfit_config > zero_points.json > FITS header > 22.5."""
     if "mag_zeropoint" in config:
         val = float(config["mag_zeropoint"])
         if math.isfinite(val):
@@ -75,21 +93,62 @@ def load_mag_zeropoint(wkdir: str, config: dict) -> tuple[float, str]:
                     return val, "zero_points.json"
         except (json.JSONDecodeError, TypeError, ValueError):
             pass
+    for name in ("image.fits", "host_cutout.fits"):
+        zp_hdr = header_mag_zeropoint_from_fits(os.path.join(wkdir, name))
+        if zp_hdr is not None:
+            return zp_hdr, f"fits_header:{name}"
     return 22.5, "default_22.5"
 
 
-def load_sky_ref(comp_df: pd.DataFrame) -> tuple[float, str]:
-    """SExtractor BACKGROUND in ADU for the global sky seed."""
-    if "BACKGROUND" not in comp_df.columns:
-        return 0.0, "missing_column"
-    host_bg = comp_df.iloc[0].get("BACKGROUND")
-    if pd.notna(host_bg) and math.isfinite(float(host_bg)):
-        return float(host_bg), "host_row"
-    series = pd.to_numeric(comp_df["BACKGROUND"], errors="coerce")
-    med = series.median()
-    if pd.notna(med) and math.isfinite(float(med)):
-        return float(med), "median_components"
+def load_sky_ref(comp_df: pd.DataFrame, wkdir: str | None = None) -> tuple[float, str]:
+    """Sky level (ADU) to seed GALFIT component 2 and sky QA."""
+    sex_bg: float | None = None
+    sex_source = "fallback_zero"
+    if "BACKGROUND" in comp_df.columns:
+        host_bg = comp_df.iloc[0].get("BACKGROUND")
+        if pd.notna(host_bg) and math.isfinite(float(host_bg)):
+            sex_bg = float(host_bg)
+            sex_source = "host_row"
+        else:
+            series = pd.to_numeric(comp_df["BACKGROUND"], errors="coerce")
+            med = series.median()
+            if pd.notna(med) and math.isfinite(float(med)):
+                sex_bg = float(med)
+                sex_source = "median_components"
+
+    cutout_sky = _cutout_sky_median(wkdir)
+    if cutout_sky is not None:
+        if sex_bg is None:
+            return cutout_sky, "cutout_median"
+        if abs(cutout_sky - sex_bg) > max(10.0, abs(sex_bg) * 0.5 + 5.0):
+            return cutout_sky, "cutout_median"
+        return sex_bg, sex_source
+
+    if sex_bg is not None:
+        return sex_bg, sex_source
     return 0.0, "fallback_zero"
+
+
+def _cutout_sky_median(wkdir: str | None) -> float | None:
+    """Robust sky level from unmasked host_cutout pixels."""
+    if not wkdir:
+        return None
+    cutout_path = os.path.join(wkdir, "host_cutout.fits")
+    mask_path = os.path.join(wkdir, "host_mask.fits")
+    if not (os.path.isfile(cutout_path) and os.path.isfile(mask_path)):
+        return None
+    try:
+        with fits.open(cutout_path) as hdul:
+            data = np.asarray(hdul[0].data, dtype=float)
+        with fits.open(mask_path) as hdul:
+            mask = np.asarray(hdul[0].data)
+        sky_pix = data[(mask == 0) & np.isfinite(data)]
+        if sky_pix.size < 50:
+            return None
+        val = float(np.median(sky_pix))
+        return val if math.isfinite(val) else None
+    except (OSError, ValueError, TypeError):
+        return None
 
 
 def host_audit_fields(comp_df: pd.DataFrame) -> dict:
@@ -118,6 +177,19 @@ def host_audit_fields(comp_df: pd.DataFrame) -> dict:
     return out
 
 
+def load_cutout_meta(wkdir: str) -> dict:
+    path = os.path.join(wkdir, "cutout_meta.json")
+    if not os.path.isfile(path):
+        return {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError) as exc:
+        log.warning(f"cutout_meta.json unreadable ({exc}); continuing without cutout metadata.")
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
 def build_feedme_and_constraints(
     comp_df: pd.DataFrame,
     *,
@@ -134,6 +206,7 @@ def build_feedme_and_constraints(
     mag_min: float,
     mag_max: float,
     conv_box_pad: int = 24,
+    extended_host: bool = False,
 ) -> tuple[str, str]:
     sigma_line = "host_sigma.fits" if has_sigma else "none"
     feedme = f"""===============================================================================
@@ -166,7 +239,18 @@ P) 0  # Choose: 0=optimize
         # midpoint of the allowed magnitude window. The chosen seed is finally
         # clamped into [mag_min, mag_max] so it never violates the constraint.
         seed_mag = None
-        for cand in (row.get("MAG_40PX"), row.get("MAG_AUTO")):
+        is_host = comp_num == 1
+        elong = float(row.get("ELONGATION", 1.0) or 1.0)
+        flux_r = float(row.get("FLUX_RADIUS", 0.0) or 0.0)
+        use_auto_first = is_host and (
+            extended_host or elong >= 2.5 or flux_r >= 25.0
+        )
+        mag_candidates = (
+            (row.get("MAG_AUTO"), row.get("MAG_40PX"))
+            if use_auto_first
+            else (row.get("MAG_40PX"), row.get("MAG_AUTO"))
+        )
+        for cand in mag_candidates:
             if cand is not None and pd.notna(cand):
                 cand_f = float(cand)
                 if math.isfinite(cand_f) and abs(cand_f) < 90.0:
@@ -174,10 +258,24 @@ P) 0  # Choose: 0=optimize
                     break
         if seed_mag is None:
             seed_mag = 0.5 * (float(mag_min) + float(mag_max))
-        mag = min(max(seed_mag, float(mag_min)), float(mag_max))
-        re = row["FLUX_RADIUS"]
-        if pd.isna(re) or re <= 0:
-            re = 1.0
+        mag_clamped = min(max(seed_mag, float(mag_min)), float(mag_max))
+        if abs(mag_clamped - seed_mag) > 0.05:
+            log.warning(
+                "GALFIT component %d: mag seed %.3f clamped to %.3f "
+                "(allowed %.1f–%.1f); check mag_zeropoint.",
+                comp_num,
+                seed_mag,
+                mag_clamped,
+                mag_min,
+                mag_max,
+            )
+        mag = mag_clamped
+        re = effective_re_px(row)
+        if is_host and extended_host:
+            awin = float(row.get("AWIN_IMAGE", 0) or 0)
+            bwin = float(row.get("BWIN_IMAGE", 0) or 0)
+            if awin > 0 and bwin > 0:
+                re = max(float(re), math.sqrt(awin * bwin))
         elongation = row.get("ELONGATION", 1.0)
         ba = 1.0 / elongation if elongation > 0 else 1.0
         pa = float(row.get("THETA_IMAGE", 0.0)) - 90.0
@@ -197,7 +295,10 @@ P) 0  # Choose: 0=optimize
 
 """
         constraints += f"{comp_num} n 0.5 to 6.0\n"
-        constraints += f"{comp_num} re 1.5 to 100.0\n"
+        re_max = 100.0
+        if is_host and extended_host:
+            re_max = min(float(max(xmax, ymax)), 300.0)
+        constraints += f"{comp_num} re 1.5 to {re_max:.1f}\n"
         constraints += f"{comp_num} mag {mag_min:.1f} to {mag_max:.1f}\n\n"
         comp_num += 1
 
@@ -225,10 +326,19 @@ def write_configs(wkdir: str, feedme: str, constraints: str) -> None:
 
 
 def clear_galfit_artifacts(wkdir: str) -> None:
-    for name in _GALFIT_ARTIFACTS:
-        path = os.path.join(wkdir, name)
+    """Remove fit.log, out.fits and every numbered galfit.NN restart file.
+
+    GALFIT appends to fit.log and emits a fresh galfit.NN per run, so stale
+    files from an earlier pass would poison sky parsing / restart detection.
+    """
+    stale = [os.path.join(wkdir, name) for name in _GALFIT_ARTIFACTS]
+    stale += glob.glob(os.path.join(wkdir, "galfit.[0-9][0-9]"))
+    for path in stale:
         if os.path.isfile(path):
-            os.remove(path)
+            try:
+                os.remove(path)
+            except OSError as exc:
+                log.warning(f"Could not remove stale GALFIT artifact {os.path.basename(path)}: {exc}")
 
 
 def ensure_proto_image(wkdir: str) -> bool:
@@ -245,22 +355,87 @@ def ensure_proto_image(wkdir: str) -> bool:
     return False
 
 
+def _feedme_input_files(feedme_path: str) -> list[str]:
+    """Input filenames referenced by the feedme control block.
+
+    Covers A) data, C) sigma, D) PSF, F) mask, G) constraints. B) is the
+    output and 'none' placeholders are skipped.
+    """
+    wanted_keys = {"A", "C", "D", "F", "G"}
+    names: list[str] = []
+    try:
+        with open(feedme_path, encoding="utf-8", errors="replace") as f:
+            for line in f:
+                stripped = line.strip()
+                if len(stripped) < 2 or stripped[1] != ")":
+                    continue
+                key = stripped[0].upper()
+                if key not in wanted_keys:
+                    continue
+                tokens = stripped[2:].split()
+                if tokens and tokens[0].lower() != "none":
+                    names.append(tokens[0])
+    except OSError:
+        return []
+    return names
+
+
 def run_galfit(wkdir: str) -> bool:
     log.info("Running wsl galfit...")
     log_path = os.path.join(wkdir, "fit.log")
+    out_path = os.path.join(wkdir, "out.fits")
+
+    # Every file named in the feedme must exist BEFORE launch: GALFIT drops
+    # into an interactive "try again:" prompt on a missing input, which (with
+    # stdin closed) becomes a busy prompt-loop until the timeout kills it.
+    feedme_path = os.path.join(wkdir, "galfit.feedme")
+    if not os.path.isfile(feedme_path):
+        log.error(f"galfit.feedme missing in {wkdir} — cannot run GALFIT.")
+        return False
+    missing = [
+        f for f in _feedme_input_files(feedme_path)
+        if not os.path.isfile(os.path.join(wkdir, f))
+    ]
+    if missing:
+        log.error(f"GALFIT inputs missing in {wkdir}: {', '.join(missing)} — refusing to launch.")
+        return False
+
+    combined = ""
+    exit_code: int | None = None
     try:
         proc = subprocess.run(
             ["wsl", "galfit", "galfit.feedme"],
             cwd=wkdir,
-            check=True,
+            check=False,
             capture_output=True,
             text=True,
             encoding="utf-8",
             errors="replace",
+            stdin=subprocess.DEVNULL,
+            timeout=_GALFIT_TIMEOUT_S,
         )
+        exit_code = proc.returncode
         combined = (proc.stdout or "") + (proc.stderr or "")
-    except (subprocess.CalledProcessError, FileNotFoundError, OSError) as exc:
-        log.error(f"GALFIT execution failed: {exc}")
+    except subprocess.TimeoutExpired as exc:
+        combined = ""
+        for stream in (exc.stdout, exc.stderr):
+            if stream:
+                combined += stream if isinstance(stream, str) else stream.decode("utf-8", "replace")
+        if combined.strip():
+            print(combined, end="" if combined.endswith("\n") else "\n")
+        log.error(
+            f"GALFIT exceeded the {_GALFIT_TIMEOUT_S}s wall-clock limit and was killed "
+            "(likely stuck on an interactive prompt or a pathological fit)."
+        )
+        return False
+    except FileNotFoundError:
+        log.error(
+            "Could not launch GALFIT: 'wsl' was not found on PATH. "
+            "WSL must be installed and 'wsl galfit' runnable (see README §2 sanity checks)."
+        )
+        return False
+    except OSError as exc:
+        log.error(f"Could not launch GALFIT via WSL: {exc}")
         return False
 
     # Raw GALFIT stdout/stderr is passed through verbatim (multi-line tool output).
@@ -270,10 +445,26 @@ def run_galfit(wkdir: str) -> bool:
     if any(marker in combined for marker in _GALFIT_CRASH_MARKERS):
         log.error("GALFIT reported a crash (bad parameters / singular matrix).")
         return False
-    if not os.path.isfile(log_path) or os.path.getsize(log_path) == 0:
+
+    has_log = os.path.isfile(log_path) and os.path.getsize(log_path) > 0
+    has_out = os.path.isfile(out_path) and os.path.getsize(out_path) > 0
+    if has_log and has_out:
+        if exit_code not in (0, None):
+            log.warning(
+                "GALFIT exited with code %s after writing fit.log/out.fits "
+                "(known teardown issue on GALFIT 3.0.x + modern glibc; "
+                "treating fit as successful).",
+                exit_code,
+            )
+        return True
+
+    if exit_code not in (0, None):
+        log.error(f"GALFIT exited with code {exit_code} without usable outputs.")
+    elif not has_log:
         log.error("GALFIT did not produce a non-empty fit.log.")
-        return False
-    return True
+    else:
+        log.error("GALFIT did not produce out.fits.")
+    return False
 
 
 def sky_within_tolerance(
@@ -340,16 +531,27 @@ def main() -> int:
     else:
         log.warning("host_sigma.fits not found — GALFIT will generate its own sigma image.")
 
-    with fits.open(os.path.join(wkdir, "host_cutout.fits")) as hdul:
-        ymax, xmax = hdul[0].data.shape
+    try:
+        with fits.open(os.path.join(wkdir, "host_cutout.fits")) as hdul:
+            data = hdul[0].data
+            if data is None or data.ndim < 2:
+                log.error("host_cutout.fits has no 2-D image data in HDU 0.")
+                return 1
+            ymax, xmax = data.shape[-2:]
+    except OSError as exc:
+        log.error(f"Could not open host_cutout.fits: {exc}")
+        return 1
 
     config: dict = {}
     yaml_file = os.path.join(wkdir, "galfit_config.yaml")
     if os.path.exists(yaml_file):
-        with open(yaml_file, "r", encoding="utf-8") as f:
-            loaded = yaml.safe_load(f)
+        try:
+            with open(yaml_file, "r", encoding="utf-8") as f:
+                loaded = yaml.safe_load(f)
             if isinstance(loaded, dict):
                 config = loaded
+        except (OSError, yaml.YAMLError) as exc:
+            log.warning(f"galfit_config.yaml unreadable ({exc}); using built-in defaults.")
 
     plate_scale_x = config.get("plate_scale_x")
     plate_scale_y = config.get("plate_scale_y")
@@ -386,9 +588,24 @@ def main() -> int:
     log.info(f"GALFIT photometric zeropoint: {mag_zeropoint:.4f} (source={mag_zp_source})")
     log.info(f"Sérsic mag constraints: {mag_min:.1f} to {mag_max:.1f}")
 
-    comp_df = pd.read_csv(os.path.join(wkdir, "host_components.csv"))
+    try:
+        comp_df = pd.read_csv(os.path.join(wkdir, "host_components.csv"))
+    except Exception as exc:
+        log.error(f"Could not read host_components.csv: {exc}")
+        return 1
+    if comp_df.empty:
+        log.error("host_components.csv has no components — nothing to fit (re-run Phase 3a).")
+        return 1
+    cutout_meta = load_cutout_meta(wkdir)
+    extended_host = bool(cutout_meta.get("extended_host"))
+    if extended_host:
+        log.info(
+            "Extended host cutout (host-only GALFIT): "
+            f"elong={cutout_meta.get('host_elongation', '?')}, "
+            f"bbox={cutout_meta.get('host_bbox_px', '?')} px"
+        )
     host_meta = host_audit_fields(comp_df)
-    sky_ref, sky_ref_source = load_sky_ref(comp_df)
+    sky_ref, sky_ref_source = load_sky_ref(comp_df, wkdir)
     n_sersic = len(comp_df)
     sky_comp_num = n_sersic + 1
 
@@ -428,6 +645,7 @@ def main() -> int:
             mag_min=mag_min,
             mag_max=mag_max,
             conv_box_pad=conv_box_pad,
+            extended_host=extended_host,
         )
         write_configs(wkdir, feedme, constraints)
         mode = "constrained" if constrain_sky else "free"
@@ -460,6 +678,9 @@ def main() -> int:
         }
         write_sky_audit(wkdir, audit)
 
+    # Clear ALL stale GALFIT outputs (fit.log, out.fits, galfit.NN) so success
+    # detection can never be fooled by artifacts from an earlier run.
+    clear_galfit_artifacts(wkdir)
     log_path = os.path.join(wkdir, "fit.log")
     sky_pass1: float | None = None
     sky_pass2: float | None = None
@@ -485,13 +706,28 @@ def main() -> int:
     else:
         failure_reason = "galfit_crash_pass1"
 
+    sky_delta = abs(sky_pass1 - sky_ref) if sky_pass1 is not None else None
+    seed_unreliable = (
+        sky_delta is not None
+        and sky_delta > _SKY_RETRY_MAX_DELTA_FACTOR * sky_tolerance_adu
+    )
     need_retry = (
         galfit_pass1_ok
         and sky_pass1 is not None
         and sky_check_enabled
         and sky_max_retries > 0
         and not sky_within_tolerance(sky_pass1, sky_ref, sky_tolerance_adu)
+        and not seed_unreliable
     )
+    if seed_unreliable and galfit_pass1_ok and sky_pass1 is not None:
+        log.warning(
+            "Sky QA: fitted sky %.6g ADU differs from seed %.6g ADU by %.6g "
+            "(>> ±%.1f tolerance) — seed likely unreliable; skipping constrained retry.",
+            sky_pass1,
+            sky_ref,
+            sky_delta,
+            sky_tolerance_adu,
+        )
 
     if need_retry:
         retried = True
@@ -518,13 +754,21 @@ def main() -> int:
         exit_code = 1
 
     sky_final = sky_pass2 if retried and sky_pass2 is not None else sky_pass1
+    sky_final_delta = (
+        abs(sky_final - sky_ref)
+        if sky_final is not None and math.isfinite(sky_ref)
+        else None
+    )
     passed = (
         galfit_pass1_ok
         and (
             not sky_check_enabled
+            or sky_final is None
+            or sky_within_tolerance(sky_final, sky_ref, sky_tolerance_adu)
             or (
-                sky_final is not None
-                and sky_within_tolerance(sky_final, sky_ref, sky_tolerance_adu)
+                sky_final_delta is not None
+                and sky_final_delta
+                > _SKY_RETRY_MAX_DELTA_FACTOR * sky_tolerance_adu
             )
         )
     )

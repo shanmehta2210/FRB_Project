@@ -1,0 +1,21 @@
+frb,folder_exists,has_fit_log,chi2nu,b_a,b_a_err,mag,mag_err,mag_final,mag_final_source,ref_mag,zp_ok,P_O,decision,reason,mag_final_err
+20121102A,True,False,,,,,,,,,,1.714327426244473e-147,delete_no_fit,no parseable fit.log,
+20180301A,True,True,0.999,0.32,0.05,13.09,1.45,,unavailable,,,,delete_fail_mag,mag_final unavailable (unavailable); b/a=0.32,
+20181112A,True,True,0.842,0.86,0.05,21.97,0.03,21.97,galfit_calibrated_zp,21.8782,True,0.4983786703059142,keep,mag_final=21.970 (galfit_calibrated_zp); b/a=0.860>q0,0.03
+20190614D,True,False,,,,,,,,,False,5.890665599314772e-07,delete_no_fit,no parseable fit.log,
+20191228A,True,False,,,,,,,,,True,1.3320355244573197e-07,delete_no_fit,no parseable fit.log,
+20201124A,True,True,0.868,0.54,0.01,12.26,0.01,,unavailable,,False,,delete_fail_mag,mag_final unavailable (unavailable); b/a=0.54,
+20210117A,True,False,,,,,,,,,True,0.0,delete_no_fit,no parseable fit.log,
+20220204A,True,False,,,,,,,,22.3835,True,0.7269723602476265,delete_no_fit,no parseable fit.log,
+20220222C,True,False,,,,,,,,24.3926,False,,delete_no_fit,no parseable fit.log,
+20220224C,True,False,,,,,,,,21.7984,False,,delete_no_fit,no parseable fit.log,
+20220501C,True,True,0.9,0.44,0.18,21.61,0.25,21.61,galfit_calibrated_zp,22.0697,True,0.667496955346797,keep,mag_final=21.610 (galfit_calibrated_zp); b/a=0.440>q0,0.25
+20220506D,True,False,,,,,,,,,False,,delete_no_fit,no parseable fit.log,
+20220610A,True,False,,,,,,,,,True,5.342165856174057e-92,delete_no_fit,no parseable fit.log,
+20220726A,True,False,,,,,,,,,False,,delete_no_fit,no parseable fit.log,
+20220918A,True,True,0.919,0.1,2.78,23.07,0.95,23.07,galfit_calibrated_zp,,True,0.0110643733273383,keep_mag_only,mag_final=23.070 (galfit_calibrated_zp); b/a=0.1 not reliable (need >0.2),0.95
+20221029A,True,False,,,,,,,,23.2867,False,,delete_no_fit,no parseable fit.log,
+20221113A,True,False,,,,,,,,,False,,delete_no_fit,no parseable fit.log,
+20230501A,True,False,,,,,,,,,False,,delete_no_fit,no parseable fit.log,
+20230521B,True,False,,,,,,,,,False,,delete_no_fit,no parseable fit.log,
+20240123A,True,False,,,,,,,,,False,,delete_no_fit,no parseable fit.log,

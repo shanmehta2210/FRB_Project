@@ -98,3 +98,7 @@ The **scatter panel uses raw (mag, b/a) points — no binning.** If bands appear
 2. Most other galaxies sit **within ~0.01–0.025** of some n×0.05 value — not continuous face-on→edge-on.
 3. Ask SDSS whether exp/deV axis ratios are quantized, rounded, or bounded in PhotoObj.
 4. State that **our plots do not impose 0.05 spacing**; scatter is unbinned; hex cell height ≈0.0175.
+
+## v2 formal follow-up
+
+Mag-binned median `expAB_r` and floor fractions on the 1.9M v2 catalog: [`plots/plots_null/v2/sdss_audit/formal/THREE_PLOT_DEEP_ANALYSIS.md`](../../../v2/sdss_audit/formal/THREE_PLOT_DEEP_ANALYSIS.md) §2.

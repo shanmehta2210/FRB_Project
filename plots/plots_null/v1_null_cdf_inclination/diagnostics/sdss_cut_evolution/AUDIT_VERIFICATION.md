@@ -1,7 +1,7 @@
 # Audit verification — NULL_CATALOG_DATA_AND_INCLINATION_AUDIT.md
 
 **Date:** 2026-05-28  
-**Catalog:** `SDSS_catalog_v1_allsky_modelmr.csv`  
+**Catalog:** `catalog/SDSS_catalog_v1_allsky_modelmr.csv`  
 **Production CDF mag limit:** `modelMag_r < 21`
 
 ## Automated checks

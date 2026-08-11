@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def generate_symmetry_plot():
-    df = pd.read_csv("psf_fwhm_summary.csv")
+    df = pd.read_csv("Archive/csv/psf/psf_fwhm_summary.csv")
     frb_data = df[df['FRB'] == '20211212A'].iloc[0]
     
     angles = np.array([0, 45, 90, 135])

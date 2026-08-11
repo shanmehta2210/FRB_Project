@@ -1,0 +1,3 @@
+mag_column,mag_limit,n,median_cosi,ur_max,q0,lnL_exp_wins
+petroMag_r,21.0,151397,0.5861,2.3,0.2,True
+modelMag_r,21.0,159144,0.5843,2.3,0.2,True

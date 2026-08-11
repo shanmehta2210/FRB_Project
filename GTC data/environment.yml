@@ -1,0 +1,15 @@
+# Conda environment for GTC observation planning (visibility batch tool).
+# Not part of the SExtractor → AstroPath → GALFIT imaging pipeline.
+#
+# Create:   conda env create -f "GTC data/environment.yml"
+# Activate: conda activate gtc_visibility
+# Update:   conda env update -f "GTC data/environment.yml" --prune
+name: gtc_visibility
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - numpy>=1.22
+  - astropy>=5.1
+  - pandas>=1.4
+  - astroplan>=0.10

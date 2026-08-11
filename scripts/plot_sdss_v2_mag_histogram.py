@@ -7,7 +7,7 @@ Production pool (no mag limit): u-r < 2.3, lnL exp-wins, **expAB_r > 0.2** only
 
 Binning: all modelMag_r < 15 in one bin; then 0.5 mag steps.
 
-Outputs under plots/plots_null/v2_sdss_audit/:
+Outputs under plots/plots_null/v2/sdss_audit/:
   mag_histogram_expAB_r.png
   mag_histogram_expAB_r.csv
 
@@ -39,7 +39,7 @@ from null_catalog_utils import (  # noqa: E402
 )
 from pipeline_null_plot_utils import DEFAULT_SDSS_V2, REPO_ROOT  # noqa: E402
 
-OUT_ROOT = REPO_ROOT / "plots" / "plots_null" / "v2_sdss_audit"
+OUT_ROOT = REPO_ROOT / "plots" / "plots_null" / "v2" / "sdss_audit"
 MAG_CLIP = 15.0
 BIN_WIDTH = 0.5
 

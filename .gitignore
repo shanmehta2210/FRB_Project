@@ -8,9 +8,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Node dependencies (reinstall with npm install in node_utils/)
-node_utils/node_modules/
-
 # Generated pipeline outputs and large data directories
 pipeline_scripts/Output/
 
@@ -42,6 +39,35 @@ large_cutouts/
 psfs/
 Archive/psfs/
 
+# Split out to https://github.com/shanmehta2210/AstroPATH-additions
+# (M49/R70 + CHIME published there as Repeaters)
+CHIME/
+PATH/
+
+# Local-only bulk catalogs / downloads
+catalog/
+catalog_downloads/
+
+# Verification run artifacts (keep scripts/docs only)
+pipeline_scripts/verification/outputs/
+pipeline_scripts/verification/Re-fits/
+pipeline_scripts/verification/AstroPhot.log
+pipeline_scripts/verification/.pytest_cache/
+
+# Oversized COSMOS morph table (download separately)
+plots/plots_null/v2/sdss_audit/COSMOS/data/cosmos_morph_zurich_1.0.tbl
+
+# Simulation run trees (regenerate locally)
+tools/psf_ba_mag_sim/outputs/
+tools/psf_ba_mag_sim/outputs_locked/
+
+# Accidental path copies / IDE / logs
+CUserslenovo/
+.vscode/
+AstroPhot.log
+box_big.csv
+box_test.csv
+
 # All-sky catalog CSVs and oversized FITS (download separately; >50 MB)
 LS_catalog_v1_allsky_modelmr.csv
 SDSS_catalog_v1_allsky_modelmr.csv
@@ -51,7 +77,4 @@ SDSS_v2_fetch_cache/
 SDSS_lnl_patch_cache.csv
 SDSS_lnl_patch_cache_v2.csv
 Archive/plots_null_pre_morphology_cut/
-M49 astropath/
-R70 astropath/
-Photometry/
 tools/Photometry/photometry/data/aC0_20181013-174714-557.wcs.fits.proc.cr.fits

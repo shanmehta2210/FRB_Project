@@ -12,7 +12,7 @@
 
 ## Production overlay (`mag_cuts/…/sdss_strict/`)
 
-**Pool:** `SDSS_catalog_v1_allsky_modelmr.csv` → `u-r < 2.3`, lnL exp-wins, `expAB_r > 0.2`, `modelMag_r <= limit`.
+**Pool:** `catalog/SDSS_catalog_v1_allsky_modelmr.csv` → `u-r < 2.3`, lnL exp-wins, `expAB_r > 0.2`, `modelMag_r <= limit`.
 
 **Green curve:** `cdf_envelope(pool, n_sample=N_FRB, n_draws=10000)` in `pipeline_null_plot_utils.py`.
 

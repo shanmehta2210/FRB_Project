@@ -1,0 +1,24 @@
+{
+  "track": "scaled_padilla",
+  "params": {
+    "mu_g": 0.2644552933540465,
+    "sig_g": 0.025029655594624445,
+    "mu": -0.5213518725664292,
+    "sig": 0.30364402021800074,
+    "E0": 1.5970823938135146
+  },
+  "chi2": 1435307.2443062407,
+  "n_data": 2000000,
+  "bin_width": 0.05,
+  "n_model": 200000,
+  "dust": "Padilla E0 in psi(theta); photometric adaptation (no 1/Vmax)",
+  "literature": {
+    "padilla_strauss_2008": {
+      "mu_g": 0.21,
+      "sig_g": 0.05,
+      "mu": -2.33,
+      "sig": 0.79,
+      "E0": 0.45
+    }
+  }
+}

@@ -65,19 +65,19 @@ Important differences vs CDF plots
 
 Inputs (defaults)
 -------------------
-- ``SDSS_catalog_v1_allsky_modelmr.csv`` — same as CDF driver.
+- ``catalog/SDSS_catalog_v1_allsky_modelmr.csv`` — same as CDF driver.
 - ``pipeline_galfit_results.csv`` — hosts with finite ``inc``.
 - Constants: ``SDSS_UR_MAX_CDF=2.3``, ``q0=0.2``, columns ``modelMag_r``,
   ``best_model_ba_r``.
 
 Output
 ------
-- ``test_results.md`` at repo root (tables + interpretation guide).
+- ``Archive/reports/test_results.md`` (tables + interpretation guide).
 
 Run from repo root::
 
     python scripts/run_sdss_frb_inclination_tests.py
-    python scripts/run_sdss_frb_inclination_tests.py --mag-limits 20 21 22 --out-md test_results.md
+    python scripts/run_sdss_frb_inclination_tests.py --mag-limits 20 21 22 --out-md Archive/reports/test_results.md
 """
 
 from __future__ import annotations
@@ -115,7 +115,7 @@ from pipeline_null_plot_utils import (  # noqa: E402
 )
 
 MAG_LIMITS_DEFAULT = [20, 21, 22]
-OUT_MD_DEFAULT = Path(__file__).resolve().parents[1] / "test_results.md"
+OUT_MD_DEFAULT = Path(__file__).resolve().parents[1] / "Archive" / "reports" / "test_results.md"
 
 # Interpretation block appended to test_results.md (kept in this file as source of truth).
 INTERPRETATION_MD = """
@@ -566,7 +566,7 @@ def main() -> None:
         "--out-md",
         type=Path,
         default=OUT_MD_DEFAULT,
-        help="Markdown output path (default: repo root test_results.md).",
+        help="Markdown output path (default: Archive/reports/test_results.md).",
     )
     args = parser.parse_args()
 

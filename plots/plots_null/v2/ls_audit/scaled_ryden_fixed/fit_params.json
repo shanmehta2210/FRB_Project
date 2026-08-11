@@ -1,0 +1,18 @@
+{
+  "track": "scaled_ryden_fixed",
+  "shape_source": "Ryden 2004 SDSS DR1 (frozen, NOT refit to LS)",
+  "params": {
+    "mu_g": 0.222,
+    "sig_g": 0.057,
+    "mu": -1.85,
+    "sig": 0.89,
+    "E0": 0.0
+  },
+  "dust": "Unterborn A1 face-on mag cut, coeff=1.27",
+  "n_model_pool": 2000000,
+  "tracks": {
+    "pure_lit": "cos i ~ P_Ryden2004(cos i | b/a); no de-REX",
+    "ceiling08": "cos i ~ P_Ryden2004(cos i | b/a/0.8), b/a<=0.8 (assume 0.8 face-on)"
+  },
+  "note": "Apply the IDENTICAL frozen sampler + same b/a treatment to FRB host b/a."
+}

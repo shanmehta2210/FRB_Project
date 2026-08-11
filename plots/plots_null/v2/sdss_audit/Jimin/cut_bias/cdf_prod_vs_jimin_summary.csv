@@ -1,0 +1,5 @@
+selection,n_strict,median_cosi
+Pool: gal+mag+lnL (no extra cuts),24222,0.5523
+Production: +u-r<2.3,16347,0.5773
+Jimin V2: +lnLStar+photoz+score,16551,0.5484
+Jimin V1: +fracDeV=0,8445,0.5458

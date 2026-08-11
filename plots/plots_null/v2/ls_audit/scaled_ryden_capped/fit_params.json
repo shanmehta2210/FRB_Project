@@ -1,0 +1,14 @@
+{
+  "track": "scaled_ryden_capped",
+  "model": "CappedShapeParams: face-on b/a uniform below cap, exp fall-off above",
+  "params": {
+    "mu_g": 0.2919074161672238,
+    "sig_g": 0.02262872951618139,
+    "cap": 0.8,
+    "lam": 0.004918000951227713,
+    "E0": 0.0
+  },
+  "chi2_bahist": 3488676.0996028446,
+  "n_model_pool": 3000000,
+  "note": "Apply the identical fitted capped sampler to FRB host b/a for comparison."
+}

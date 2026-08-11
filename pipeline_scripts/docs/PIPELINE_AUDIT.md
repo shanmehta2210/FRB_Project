@@ -1,6 +1,6 @@
 # Pipeline audit — FRB host galaxy imaging pipeline
 
-> **Last updated**: 2025-06-17 (QoL + Science + Robustness pass)
+> **Last updated**: 2026-08-04 (Phase 3a Re-separation ROI replaces containment fractions)
 
 ## Legend
 
@@ -234,9 +234,10 @@ Prints the commands that would be executed for all phases, then exits.
 ### Sci1  Effective radius in arcseconds
 
 `pipeline_summary.json` now includes `re_arcsec` and `re_arcsec_err` alongside
-the pixel values. Conversion uses the plate scale from `galfit_config.yaml`
-(or `--pixel-scale` CLI override). The scale itself is recorded as
-`plate_scale_arcsec_px` in the summary.
+the pixel values. Conversion uses the plate scale derived from the FITS WCS
+(injected into the workdir `galfit_config.yaml` by `master_run`; the old
+`--pixel-scale` CLI override was removed in Env2). The scale itself is
+recorded as `plate_scale_arcsec_px` in the summary.
 
 ### Sci2  Monte Carlo inclination errors
 
@@ -261,6 +262,28 @@ PSFEx XML diagnostics (FWHM mean/min/max/std, ellipticity, chi², number of
 accepted/rejected stars) are parsed from `psfex.xml` and included in
 `pipeline_summary.json` under `psf_quality`.
 
+### Sci5  Phase 3a neighbor ROI — Re-separation (2026-08-02)
+
+**Problem:** Neighbor expand/mask used seg-pixel containment fractions
+(`contain_thresh=0.995`, `expand_thresh=0.88`). That did not encode whether an
+interloper’s light could interfere with the host based on size and separation.
+
+**Change:**
+- Start ROI = host seg bbox + `host_pad` (**20** px, was 15).
+- Every non-host seg island that **clips** the ROI is evaluated:
+  - star / point-like SPREAD → always mask
+  - `sep(host, neighbor) > re_sep_factor × Re_neighbor` → mask
+  - else → jointly fit; grow ROI so every fit member has `host_pad`
+- `Re_neighbor` = ordinary GALFIT `re` seed (`FLUX_RADIUS`, floor 1.0) via
+  shared `galfit_fitting/sersic_init.effective_re_px` (Phase 3b uses the same
+  helper for non-extended-host components).
+- `re_sep_factor` YAML/`--re-sep-factor` (default **3.0**); `max_roi_iterations`
+  default **8**.
+- `contain_thresh` / `expand_thresh` removed from `galfit_config.yaml` and
+  `master_run` forwarding.
+
+**Tests:** `scripts/tests/test_neighbor_re_roi.py`.
+
 ---
 
 ## 7  Robustness / testing (Rob1–Rob4) — this pass
@@ -282,13 +305,15 @@ falls outside the image footprint.
 
 ### Rob3  Unit tests
 
-`tests/test_pipeline_shared.py`, `tests/test_galfit_fitlog_parse.py`, and
-`tests/test_field_depth.py` cover pure-function modules with pytest.
+`tests/test_pipeline_shared.py`, `tests/test_galfit_fitlog_parse.py`,
+`tests/test_field_depth.py`, `scripts/tests/test_generate_galfit_cutouts_catalog.py`
+(SPREAD sky-match), and `scripts/tests/test_neighbor_re_roi.py` (Re-separation
+ROI) cover pure-function / Phase 3a modules with pytest.
 
 ### Rob4  CI validation
 
 `.github/workflows/validate.yml` runs `py_compile` on all pipeline scripts
-and `pytest tests/ -v` on push/PR to main.
+and `pytest scripts/tests/ -v` on push/PR to main.
 
 ---
 
@@ -367,13 +392,66 @@ candidate selection, `astropath_association.png` zoom, P(U) normalisation.
 
 ---
 
+## Resolved (batch 4 — 2026-07-11)
+
+### Sel1 — `--outputs` drives phase execution   ✅
+
+Previously `--outputs` only filtered which files were *collected*; every
+phase still ran. `master_run.py` now has a `TOOL_PHASES` dependency map:
+
+| keyword | phases |
+|---------|--------|
+| `catalog` / `psf` | 1 |
+| `photometry` / `astropath` | 1 → 2 |
+| `statmorph` | 1 → 2 → 3a → statmorph |
+| `galfit` | 1 → 2 → 3a → 3b |
+| `all` | everything |
+
+Skipped phases are recorded as exit code −1 in `pipeline_summary.json`.
+Requesting `astropath`/`photometry`/`galfit` and having that phase fail
+now exits 1 (completeness gate). `--dry-run` prints the phase plan.
+`run_all_frbs.py` forwards `--outputs` and validates keywords up front;
+tag normalization matches `master_run` (lowercase / dedupe / sort).
+
+### WSL1 — GALFIT hang / interactive-prompt hardening   ✅
+
+GALFIT drops into an interactive "try again:" prompt when a feedme input
+is missing. Phase 3b now: (1) parses the feedme for A/C/D/F/G inputs and
+refuses to launch if any are absent; (2) runs with `stdin=DEVNULL`;
+(3) applies a 1-hour wall-clock timeout; (4) clears *all* stale
+`fit.log` / `out.fits` / `galfit.NN` before each pass. Exit-code-6
+glibc teardown after a good fit remains accepted when artifacts exist
+(verified against the current `/usr/local/bin/galfit` → 3.0.5 wrapper).
+
+### WSL2 — Phase 1 / 2 WSL robustness   ✅
+
+All WSL subprocesses close stdin. `FileNotFoundError` (`wsl` missing)
+and `OSError` produce actionable messages. Phase 1 verifies
+`image.cat` / `image.psf` / `proto_image.fits` / `segmentation_map.fits`
+before exit 0. Phase 2 shell-quotes bridge paths (`shlex.quote`) and
+verifies `calibrated_photometry_results.csv` + `zero_points.json` after
+a 0 bridge exit. `master_run.run_phase` also closes stdin for the whole
+phase subtree.
+
+### Batch1 — dry-run / list-file / tag consistency   ✅
+
+`run_all_frbs.py`: `--dry-run` no longer triggers the compare-script
+auto-refresh; missing `--list-file` or a CSV without a `frb` column
+aborts clearly; output-folder tags match `master_run` normalization.
+
+**Still deferred:** P1 (WSL path conversion portability) and P2
+(configurable binary command templates) — see §8.
+
+---
+
 ## 9  Testing checklist
 
 After any future change to the pipeline scripts, verify:
 
 - [ ] `python -m py_compile pipeline_scripts/<file>.py` for every touched file
-- [ ] `python -m pytest tests/ -v` (unit tests)
+- [ ] `python -m pytest scripts/tests/ -v` (unit tests)
 - [ ] `python -c "from pipeline_shared import resolve_apertures; ..."` smoke test
+- [ ] Selective dry-run: `python pipeline_scripts/master_run.py ... --outputs astropath --dry-run` (Phases 1–2 only)
 - [ ] Single-FRB end-to-end: `python pipeline_scripts/master_run.py --image ... --invvar ... --ra ... --dec ... --keep-workdir`
 - [ ] Check that `pipeline_scripts/Output/<frb>_all/` contains all expected deliverables
 - [ ] Batch: `python pipeline_scripts/run_all_frbs.py --frb <2-3 FRBs> --keep-workdir`

@@ -123,9 +123,9 @@ def query_nearest(svc, ra, dec, radius_arcsec=10.0):
     }
 
 # ─── Load data ──────────────────────────────────────────────────────────────────
-results = pd.read_csv(os.path.join(BASE, "new_16_frbs_galfit_results.csv"))
-master  = pd.read_csv(os.path.join(BASE, "galfit_vs_legacy_master.csv"))
-quick   = pd.read_csv(os.path.join(BASE, "galfit_vs_legacy_quick_read.csv"))
+results = pd.read_csv(os.path.join(BASE, "Archive", "csv", "galfit", "new_16_frbs_galfit_results.csv"))
+master  = pd.read_csv(os.path.join(BASE, "Archive", "csv", "galfit", "galfit_vs_legacy_master.csv"))
+quick   = pd.read_csv(os.path.join(BASE, "Archive", "csv", "galfit", "galfit_vs_legacy_quick_read.csv"))
 summary = pd.read_csv(os.path.join(BASE, "master_frb_summary.csv"))
 
 # Remove any previous entries for these 12 FRBs before appending fresh ones
@@ -244,11 +244,11 @@ for _, row in results12.iterrows():
 
 # ─── Save CSVs ──────────────────────────────────────────────────────────────────
 master_out = pd.concat([master, pd.DataFrame(new_master_rows, columns=master.columns)], ignore_index=True)
-master_out.to_csv(os.path.join(BASE, "galfit_vs_legacy_master.csv"), index=False)
+master_out.to_csv(os.path.join(BASE, "Archive", "csv", "galfit", "galfit_vs_legacy_master.csv"), index=False)
 print(f"\nMaster CSV: {len(master_out)} rows")
 
 quick_out = pd.concat([quick, pd.DataFrame(new_quick_rows, columns=quick.columns)], ignore_index=True)
-quick_out.to_csv(os.path.join(BASE, "galfit_vs_legacy_quick_read.csv"), index=False)
+quick_out.to_csv(os.path.join(BASE, "Archive", "csv", "galfit", "galfit_vs_legacy_quick_read.csv"), index=False)
 print(f"Quick read CSV: {len(quick_out)} rows")
 
 # ─── Update master_frb_summary ──────────────────────────────────────────────────

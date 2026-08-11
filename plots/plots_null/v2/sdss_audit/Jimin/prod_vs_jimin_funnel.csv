@@ -1,0 +1,17 @@
+stage,note,n,per_deg2
+P0_prod_style_base_type3_mag12_21,"Production-like: type=3, mode, clean, model r [12,21]",47504,2969.0
+P0b_type_r3_instead,Swap type->type_r=3 (Jimin),47351,2959.44
+J1_plus_lnLStar,Jimin add: lnLStar_r < -10,33045,2065.31
+J2_plus_Photoz_nnAvgZ,Jimin add: Photoz nnAvgZ > 0,32978,2061.12
+J3_plus_score,Jimin add: score > 0.8,28043,1752.69
+J4_V2_plus_lnL_exp,Jimin V2: + lnLExp wins,17657,1103.56
+J5_V1_plus_fracDeV0,Jimin V1: + fracDeV=0,9120,570.0
+P1_prod_plus_lnL_exp,Production CDF morph: lnLExp wins (no Jimin extras),26130,1633.12
+P2_prod_plus_lnL_and_ur_lt_2p3,Production CDF: lnL + u-r < 2.3,17352,1084.5
+P3_prod_lnL_ur_expAB_gt_0p2,Production strict null @ mag<=21 in box,16406,1025.38
+J4b_V2_plus_expAB,Jimin V2 strict ba,16551,1034.44
+J5b_V1_plus_expAB,Jimin V1 strict ba,8445,527.81
+V_lnLStar_alone_on_P1,Value: lnLStar on prod+lnL,20732,1295.75
+V_score_Photoz_on_P1,Value: Photoz+score on prod+lnL (no lnLStar),21963,1372.69
+V_fracDeV0_on_P1,Value: fracDeV=0 on prod+lnL,13373,835.81
+V_ur_on_JiminV2,What we add that Jimin lacks: u-r<2.3 on Jimin V2,12177,761.06

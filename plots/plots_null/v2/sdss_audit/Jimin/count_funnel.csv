@@ -1,0 +1,14 @@
+stage,n,notes
+A_box_mode_clean_type3,149555,type=3 (galaxy)
+B_box_type_r3,144070,Jimin type_r=3
+C_plus_r_12_21,47351,model r inclusive
+D_plus_lnLStar_lt_m10,33045,
+E_plus_Photoz_nnAvgZ,32978,INNER JOIN Photoz
+F_plus_score_gt_0.8,28043,Jimin base no morph
+G_V2_lnL_full_no_TOP,17657,lnLDeV < lnLExp
+H_V1_fracDeV0_and_lnL_full,9120,matches fetched V1 exactly
+I_soft_fracDeV_lt_0.01_and_lnL,9285,
+J_V2_no_Photoz_join,17678,
+K_V2_no_score,20717,
+L_V1_no_Photoz,9138,
+M_minimal_type3_r_lnL,26130,

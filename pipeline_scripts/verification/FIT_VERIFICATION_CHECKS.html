@@ -1,0 +1,2362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>GALFIT fit verification — method, implementation and results</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"/>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1a1a1a;
+    --bg: #fafafa;
+    --muted: #555;
+    --border: #ddd;
+    --code-bg: #f0f0f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e8e8e8;
+      --bg: #1e1e1e;
+      --muted: #aaa;
+      --border: #333;
+      --code-bg: #2a2a2a;
+    }
+  }
+  body {
+    font-family: "Segoe UI", system-ui, sans-serif;
+    line-height: 1.55;
+    max-width: 52rem;
+    margin: 2rem auto;
+    padding: 0 1.25rem 4rem;
+    color: var(--fg);
+    background: var(--bg);
+  }
+  h1, h2, h3, h4 { line-height: 1.25; }
+  h1 { font-size: 1.75rem; }
+  h2 { margin-top: 2.2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  h3 { margin-top: 1.6rem; }
+  code, pre { font-family: Consolas, "Cascadia Mono", monospace; font-size: 0.92em; }
+  code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 3px; }
+  pre { background: var(--code-bg); padding: 0.9rem 1rem; overflow-x: auto; border-radius: 6px; }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.95em; }
+  th, td { border: 1px solid var(--border); padding: 0.4rem 0.55rem; text-align: left; vertical-align: top; }
+  th { background: var(--code-bg); }
+  blockquote {
+    margin: 1rem 0; padding: 0.5rem 1rem; border-left: 4px solid #5b8def;
+    background: var(--code-bg); color: var(--muted);
+  }
+  .banner {
+    background: #fff3cd; color: #664d03; border: 1px solid #ffecb5;
+    padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 1.5rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    .banner { background: #3d3415; color: #ffe08a; border-color: #6b5a1e; }
+  }
+  .katex-display { margin: 1rem 0; overflow-x: auto; overflow-y: hidden; }
+</style>
+</head>
+<body>
+<div class="banner">
+  Rendered HTML with KaTeX. Cursor's native Markdown Preview does not evaluate
+  math; use this page (or classic <code>Ctrl+Shift+V</code> preview) instead.
+  Source: <code>FIT_VERIFICATION_CHECKS.md</code>.
+</div>
+<h1 id="galfit-fit-verification-method-implementation-and-results">GALFIT fit verification — method, implementation and results</h1>
+<p><strong>Created 2026-08-05.</strong> A complete walkthrough of every diagnostic used to verify
+the production Sérsic fits: why each test exists, what it is physically
+measuring, how it is implemented, what can make it lie, and what it returned on
+the first full run.</p>
+<blockquote>
+<p><strong>Equations will not render in Cursor's native Preview tab</strong> (known Cursor
+bug — KaTeX is not wired there). Use either:</p>
+<ul>
+<li><strong><code>FIT_VERIFICATION_CHECKS.html</code></strong> — open in a browser (or regenerate with
+  <code>python render_checks_html.py</code>). This is the reliable viewer.</li>
+<li>Classic preview: Command Palette → <strong>Markdown: Open Preview to the Side</strong>
+  (<code>Ctrl+Shift+V</code>). Requires <code>markdown.math.enabled: true</code> (now set in your
+  user settings).</li>
+</ul>
+<p>Math delimiters in this file are <code>$…$</code> / <code>$$…$$</code> only.</p>
+</blockquote>
+<p><strong>Contents</strong></p>
+<table>
+<thead>
+<tr>
+<th>§</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#1-scope-and-ground-rules">1</a></td>
+<td>Scope, cohort, ground rules</td>
+</tr>
+<tr>
+<td><a href="#2-running-the-suite">2</a></td>
+<td>Running the suite</td>
+</tr>
+<tr>
+<td><a href="#3-the-shared-layer">3</a></td>
+<td>The shared layer: geometry, masks, model rebuild</td>
+</tr>
+<tr>
+<td><a href="#4-the-checks">4</a></td>
+<td>The nine checks, in full</td>
+</tr>
+<tr>
+<td><a href="#5-aggregation-flags-and-trust-tiers">5</a></td>
+<td>Aggregation, flags, trust tiers</td>
+</tr>
+<tr>
+<td><a href="#6-data-walkthrough">6</a></td>
+<td>Data walkthrough — every file the suite writes</td>
+</tr>
+<tr>
+<td><a href="#7-results--first-full-run">7</a></td>
+<td>Results of the first full run</td>
+</tr>
+<tr>
+<td><a href="#8-deferred">8</a></td>
+<td>Deferred checks</td>
+</tr>
+<tr>
+<td><a href="#9-open-questions">9</a></td>
+<td>Open questions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-scope-and-ground-rules">1. Scope and ground rules</h2>
+<p><strong>What is being verified.</strong> The pipeline reports an axis ratio $q = b/a$ per host
+and converts it to an inclination. Everything downstream — the inclination
+distribution that is the science result — rests on $q$ being right. These checks
+exist to attack $q$ from as many independent directions as possible and see
+whether it survives.</p>
+<p><strong>Cohort.</strong> All <strong>64</strong> hosts in
+<a href="../../pipeline_galfit_results.csv"><code>pipeline_galfit_results.csv</code></a>. Each row is
+tagged <code>in_53</code> — magnitude $\le 22$ <strong>and</strong> $b/a > 0.2$ — so the 53-host science
+cut is applied at <em>analysis</em> time, never at run time. The 11 hosts outside it are
+still measured, because 9 of them are excluded (at least in part) <em>by the very
+quantity under study</em>; see <a href="#9-open-questions">§9</a>.</p>
+<p><strong>Read-only.</strong> The suite never writes to <code>pipeline_scripts/Output/</code>. The one
+check that re-runs GALFIT (§4.4) stages copies of the Phase 3a inputs into
+<code>outputs/per_host/&lt;FRB&gt;/galfit_sky_*/</code>. Production <code>fit.log</code> and <code>out.fits</code> are
+never touched.</p>
+<p><strong>Baseline provenance.</strong> Host geometry is read from the <code>out.fits</code> model-HDU
+header, which is guaranteed consistent with the model and residual planes in the
+same file. It is independently cross-checked against
+<a href="../../scripts/galfit_fitlog_parse.py"><code>scripts/galfit_fitlog_parse.py</code></a> with
+<code>sersic_component_index=0</code> — the production policy — and any disagreement above
+0.02 in any parameter is recorded as a note. Every number therefore reconciles
+with <code>pipeline_galfit_results.csv</code>.</p>
+<p><strong>Design rule.</strong> Each check is independent and idempotent, writes its own JSON,
+and never raises: a failure in one check leaves the other eight intact. That is
+what makes the suite re-runnable check-by-check as thresholds get calibrated.</p>
+<hr />
+<h2 id="2-running-the-suite">2. Running the suite</h2>
+<pre><code class="language-bash">cd pipeline_scripts/verification
+
+python run_verification.py --checks all --jobs 4          # everything, 64 hosts
+python run_verification.py --checks fourier isophote      # a subset
+python run_verification.py --frb 20240210A --checks all --force
+python run_verification.py --aggregate-only               # rebuild tables only
+python -m pytest tests/test_fourier_recovery.py -q        # estimator unit tests
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--checks</code></td>
+<td><code>all</code> or any of <code>chi2 rff fourier psf mag isophote sky astrophot visual</code>. Order is fixed internally; <code>visual</code> always runs last because it consumes the others' products.</td>
+</tr>
+<tr>
+<td><code>--frb</code></td>
+<td>Restrict to named hosts. Names not in the cohort are warned about, not silently dropped.</td>
+</tr>
+<tr>
+<td><code>--cohort</code></td>
+<td><code>all64</code> (default) or <code>53</code>.</td>
+</tr>
+<tr>
+<td><code>--jobs</code></td>
+<td>Process-pool width. Checks are CPU-bound and independent per host.</td>
+</tr>
+<tr>
+<td><code>--force</code></td>
+<td>Recompute even when a result JSON exists. Without it, existing results are reported as <code>cached</code>.</td>
+</tr>
+<tr>
+<td><code>--no-aggregate</code> / <code>--aggregate-only</code></td>
+<td>Skip or isolate the table-building step.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Runtime</strong> (64 hosts, <code>--jobs 4</code>): the image-space checks are milliseconds;
+<code>fourier</code> ~4 s/host (it rebuilds and convolves the model five times to pick the
+sampling, then twice more for the response kernels); <code>astrophot</code> ~6 s/host;
+<code>sky</code> ~4 s/host (two GALFIT runs); <code>isophote</code> is the slowest at ~28 s/host
+because of the strategy search in §4.5. Full suite: about 25 minutes.</p>
+<p><strong>Related runbooks</strong> (not part of this check bible): index
+<a href="VERIFICATION_README.md"><code>VERIFICATION_README.md</code></a>; re-fits
+<a href="REFIT_AND_REJECT_GRID.md"><code>REFIT_AND_REJECT_GRID.md</code></a>; sky protocol
+<a href="SKY_PROTOCOL.md"><code>SKY_PROTOCOL.md</code></a>; sandbox <a href="SANDBOX.md"><code>SANDBOX.md</code></a>;
+confirmation <a href="HOST_CONFIRMATION_WORKFLOW.md"><code>HOST_CONFIRMATION_WORKFLOW.md</code></a>.</p>
+<hr />
+<h2 id="3-the-shared-layer">3. The shared layer</h2>
+<p>Shared code lives in <code>vercommon.py</code>.</p>
+<p>Everything a check needs about a host is assembled once by <code>load_host(frb)</code> and
+passed around as a <code>HostData</code>.</p>
+<h3 id="31-what-load_host-assembles">3.1 What <code>load_host</code> assembles</h3>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out.fits</code> HDU 1/2/3</td>
+<td>data, <strong>PSF-convolved model</strong>, residual</td>
+</tr>
+<tr>
+<td><code>out.fits</code> HDU 2 header</td>
+<td>final $x_c, y_c, q, \mathrm{PA}, R_e, n, m$ with GALFIT's errors, sky level, $\chi^2/\nu$, zero point</td>
+</tr>
+<tr>
+<td><code>host_sigma.fits</code></td>
+<td>the per-pixel $\sigma$ GALFIT weighted with</td>
+</tr>
+<tr>
+<td><code>host_mask.fits</code></td>
+<td>pixels GALFIT ignored</td>
+</tr>
+<tr>
+<td><code>proto_image.fits</code></td>
+<td>the PSF stamp GALFIT convolved with</td>
+</tr>
+<tr>
+<td><code>psfex.xml</code></td>
+<td>PSF FWHM, Stokes ellipticities, star count</td>
+</tr>
+<tr>
+<td><code>galfit.feedme</code></td>
+<td>plate scale, zero point, fit region</td>
+</tr>
+<tr>
+<td><code>cutout_meta.json</code>, <code>pipeline_summary.json</code>, <code>sky_fit_audit.json</code></td>
+<td>ROI policy, phase status, sky provenance</td>
+</tr>
+<tr>
+<td><code>fit.log</code></td>
+<td>independent parse for the baseline cross-check</td>
+</tr>
+</tbody>
+</table>
+<p>Two provenance assertions run on load. <strong>Residual closure</strong>: the suite verifies
+$\lvert \mathrm{data} - \mathrm{model} - \mathrm{residual}\rvert \approx 0$
+across the stamp and stores the maximum as <code>residual_closure</code>; a nonzero value
+would mean the three planes are not from the same fit. <strong>Coordinate convention</strong>:
+GALFIT reports 1-based FITS pixel coordinates, so centres are converted to
+0-based NumPy indices on load. Getting this wrong shifts every elliptical
+aperture by one pixel, which for a barely-resolved host is a large error.</p>
+<h3 id="32-elliptical-coordinates">3.2 Elliptical coordinates</h3>
+<p>Every localized metric needs "how far along the galaxy's own ellipse is this
+pixel, and at what angle". For a pixel offset $(\Delta x, \Delta y)$ from the
+fitted centre, rotate into the major-axis frame and define</p>
+<p>$$
+a = \sqrt{x'^2 + (y'/q)^2},
+\qquad
+x' = a\cos\theta,
+\qquad
+y' = a\,q\sin\theta
+$$</p>
+<p>so $a$ is the <strong>semi-major axis (SMA)</strong> of the ellipse passing through that
+pixel and $\theta$ is the in-ellipse azimuth measured from the major axis.
+Contours of constant $a$ are exactly the model's own isophotes. GALFIT measures
+PA counter-clockwise from $+y$, so the rotation uses $\mathrm{PA} + 90^\circ$.</p>
+<p><strong>$a$ vs $R_e$ (why plots use $a/R_e$).</strong> $R_e$ is <strong>not</strong> a circular radius.
+In GALFIT it is the SMA of the elliptical isophote that encloses half the total
+<em>model</em> light — the half-light ellipse, stretched by the fitted $q$. The
+coordinate $a$ is that same SMA measured for an arbitrary pixel (or fitted
+isophote). So $a/R_e = 1$ is “on the half-light ellipse,” $a/R_e = 2$ is an
+ellipse twice as large in every linear dimension (homothetic), not a circle of
+radius $2R_e$.</p>
+<pre><code>elliptical_coords(shape, xc, yc, q, pa):
+    dx, dy   = pixel grid - (xc, yc)
+    phi      = radians(pa)
+    x_maj    = -dx sin(phi) + dy cos(phi)      # along the major axis
+    y_min    =  dx cos(phi) + dy sin(phi)      # along the minor axis
+    a        = hypot(x_maj, y_min / max(q, 1e-3))
+    theta    = atan2(y_min / q, x_maj)
+    return a, theta
+</code></pre>
+<h3 id="33-valid-pixels">3.3 Valid pixels</h3>
+<p>A pixel enters any metric only if data, model and $\sigma$ are finite,
+$\sigma > 0$, and <code>host_mask == 0</code>. When <code>cutout_meta.json</code> reports
+<code>n_fit_components &gt; 1</code>, pixels within $1 R_e$ of any <em>other</em> fitted component are
+dropped as well. Without that, a neighbour whose own model is slightly wrong
+would dump its residual into the host's aperture and every metric below would
+inherit it.</p>
+<h3 id="34-sigma-calibration-and-a-short-math58-primer">3.4 Sigma calibration and a short $\chi^2/\nu$ primer</h3>
+<p><strong>What $\chi^2/\nu$ is.</strong> GALFIT
+(<a href="https://doi.org/10.1086/340952">Peng et al. 2002</a>;
+<a href="https://doi.org/10.1088/0004-6256/139/6/2097">Peng et al. 2010</a>)
+and the suite score a fit by</p>
+<p>$$
+\chi^2 = \sum_j\left(\frac{I_j - I^{\rm model}_j}{\sigma_j}\right)^2,
+\qquad
+\frac{\chi^2}{\nu}
+\quad\text{with}\quad
+\nu = N_{\rm pix} - k_{\rm free}.
+$$</p>
+<p>Each term is the residual in units of the per-pixel uncertainty $\sigma_j$ from
+<code>host_sigma.fits</code>. If the model is correct and $\sigma$ is honest Gaussian noise,
+$E[\chi^2/\nu] = 1$. Three things break that reading: (i) a wrong model
+(bright/resolved hosts <em>should</em> sit above 1 — a single Sérsic is never perfect;
+see <a href="https://arxiv.org/abs/1012.3754">Andrae et al. 2010</a> on misusing reduced
+$\chi^2$), (ii) a wrong absolute $\sigma$ scale ($\chi^2$ moves as $1/\sigma^2$), and
+(iii) dilution of the global value by empty sky after the Re-separation ROI
+change. Localized $\chi^2/\nu$ inside $2R_e$ addresses (iii); this section
+addresses (ii).</p>
+<p><strong>Production rescale gate (Phase 3a, pre-fit).</strong> The pipeline builds
+$\sigma_{\rm invvar} = 1/\sqrt{\mathrm{invvar}}$ and compares it to the sky of
+the <em>data</em>:</p>
+<p>$$
+k = \frac{1.4826\times\mathrm{MAD}(\text{sky pixels of the cutout})}
+{\mathrm{median}(\sigma_{\rm invvar}\text{ on those same pixels})}.
+$$</p>
+<p>$\mathrm{MAD}$ is the median absolute deviation,
+$\mathrm{median}_i\lvert x_i - \mathrm{median}(x)\rvert$
+(<a href="https://doi.org/10.1080/01621459.1974.10482962">Hampel 1974</a>;
+<a href="https://doi.org/10.1080/01621459.1993.10476408">Rousseeuw &amp; Croux 1993</a>).
+For Gaussian noise of width $\sigma$,
+$\mathrm{MAD} = \sigma\cdot\Phi^{-1}(0.75)$ with
+$\Phi^{-1}(0.75)\approx 0.6745$, so</p>
+<p>$$
+\sigma \approx \frac{\mathrm{MAD}}{0.6745} = 1.4826\times\mathrm{MAD}.
+$$</p>
+<p>That factor is <strong>not</strong> $\sqrt{2}$. ($\sqrt{2/\pi}\approx 0.80$ appears elsewhere,
+in the RFF noise subtraction, because that uses the <em>mean</em> absolute deviation
+rather than the median.) The denominator is simply the median of the invvar-derived
+sigma map on the same sky pixels — the map's absolute scale, ignoring its spatial
+structure.</p>
+<p>Rescale fires <strong>only</strong> when $k\notin[0.5,\,2.0]$. Mild mismatches are left alone;
+only vacuous unit-scale failures (typically Legacy Survey flux/invvar unit
+mismatches with $k\sim10^3$–$10^4$;
+<a href="https://doi.org/10.3847/1538-3881/ab089d">Dey et al. 2019</a>)
+get a global multiply of the usable sigma map by $k$. On the current tree:
+52/64 hosts <code>scale OK</code> at $k\sim0.9$; 12/64 rescaled.</p>
+<p><strong>Verification ratio (post-fit audit).</strong> After the fit, the suite measures how the
+<em>residual</em> sky compares to the sigma map GALFIT actually used (already
+gate-corrected if it was):</p>
+<p>$$
+r_\sigma = \frac{1.4826\times\mathrm{MAD}(\text{residual on sky})}
+{\mathrm{median}(\mathtt{host\_sigma}\text{ on sky})}
+$$</p>
+<p>on unmasked pixels beyond $3R_e$ (fallback $1.5R_e$; <code>nan</code> below 20 pixels).
+Cohort median $r_\sigma = 0.892$ [0.839, 0.959] — a mild, expected offset from
+different sky definitions, model-wing leakage, and the fact that invvar is an
+estimate. Nobody sits outside $(0.5,\,2)$. This is <strong>not</strong> evidence that everyday
+fits had their $\chi^2$ forced to 1; it is a calibration thermometer.</p>
+<p><strong>Corrected $\chi^2/\nu$.</strong> Because $\chi^2\propto 1/\sigma^2$ and
+$r_\sigma = \sigma_{\rm emp}/\sigma_{\rm map}$,</p>
+<p>$$
+\left.\frac{\chi^2}{\nu}\right|_{\rm corr}
+= \frac{(\chi^2/\nu)}{r_\sigma^2}.
+$$</p>
+<p>With $r_\sigma = 0.89$ this raises the value by $\sim 1.26\times$, putting the
+comparison to 1 back on an empirically calibrated noise scale. Applied to both
+the global (whole-image) and localized ($2R_e$) values; see §4.1.</p>
+<h3 id="35-rebuilding-galfits-model-analytically">3.5 Rebuilding GALFIT's model analytically</h3>
+<p>The Fourier check (§4.3) needs $\partial M/\partial q$ of the <strong>PSF-convolved</strong>
+model. The residual is defined against that plane, so the derivative has to be
+too. The only honest route is to rebuild $M$, perturb $q$, and finite-difference —
+which is only legal if the rebuild matches GALFIT's plane to much better than the
+effect being measured.</p>
+<p><strong>The continuous Sérsic</strong>
+(<a href="https://ui.adsabs.harvard.edu/abs/1963BAAA....6...41S/abstract">Sérsic 1963</a>;
+<a href="https://doi.org/10.1071/AS05001">Graham &amp; Driver 2005</a>):</p>
+<p>$$
+I(a) = I_e \exp\!\left[-b_n\!\left(\left(\frac{a}{R_e}\right)^{1/n} - 1\right)\right],
+\qquad
+F_{\rm tot} = 2\pi n R_e^2\, q\, e^{b_n} b_n^{-2n}\, \Gamma(2n)\, I_e
+$$</p>
+<p>with the Ciotti &amp; Bertin $b_n$
+(<a href="https://arxiv.org/abs/astro-ph/9911078">Ciotti &amp; Bertin 1999</a>).
+Magnitude → total flux via the zero point; the stamp is then scaled by
+$F/F_{\rm analytic}(I_e=1)$, <strong>not</strong> by the stamp sum, so truncated wings cannot
+change the total light.</p>
+<p><strong>How GALFIT itself samples pixels</strong>
+(<a href="https://doi.org/10.1086/340952">Peng et al. 2002</a>, §3;
+<a href="https://users.obs.carnegiescience.edu/peng/work/galfit/TFAQ.html">GALFIT Technical FAQ</a>).
+GALFIT
+does <strong>not</strong> uniformly oversample the whole stamp. It decides per pixel, by
+distance from the component centroid:</p>
+<ul>
+<li>far from centre → evaluate the analytic function once, at the <strong>pixel centre</strong>;</li>
+<li>near the centre, where the second derivative is large → subdivide the pixel into
+  a square $k\times k$ grid, evaluate on each sub-cell, and sum (i.e. integrate
+  over the pixel area).</li>
+</ul>
+<p>For the pathological Nuker cusp it switches to an elliptical polar grid inside
+$r<3$ px; for Sérsic profiles the square sub-grid is what GALFIT uses. Convolution
+with the PSF is then an FFT. The central few pixels carry a large fraction of the
+light at high $n$, so under-sampling them before convolution permanently mis-states
+the convolved core — which is why a naive point-sampled rebuild fails on compact
+hosts.</p>
+<p><strong>What “chasing GALFIT” means.</strong> The mathematically exact pixel integral of a
+Sérsic is <em>not</em> the target. GALFIT's adaptive, finite-$k$ scheme is. Pushing a
+uniform high-order integrator harder can therefore move the rebuild <em>away</em> from
+<code>out.fits</code> HDU 2 even as it gets closer to mathematical truth — observed directly
+on <code>20230708A</code> ($R_e=1.5$ px, $n=6$), where some large $k$ values are worse than
+smaller ones. The match-to-GALFIT error surface is <strong>non-monotonic</strong> in $k$.</p>
+<p><strong>What the suite does.</strong> Mirror GALFIT's distance dependence: point-sample the
+whole stamp, and replace only an inner circular core with a $k\times k$ block
+average. Neighbours get the same treatment about their own centres. Then
+convolve with <code>proto_image.fits</code> and add sky. Because the error is non-monotonic
+in both the subdivision and the core size, the suite searches a small product
+grid — dense in $k$ (including even factors; block averaging does not require
+odd $k$) and three core radii ($5$ px, $8$ px, and the whole stamp):</p>
+<pre><code>model_reconstruction_error(host):
+    for core_radius in (5, 8, whole_stamp):
+        for k in (1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 15, 21):
+            recon = build_model(host, oversample=k, core_radius=...)
+            err = max|recon - galfit_model| / peak(galfit_model - sky)
+    keep the (k, core_radius) that minimises err
+</code></pre>
+<p>This is still an approximation of GALFIT (we do not re-implement the polar Nuker
+integrator or GALFIT's exact internal $k$ schedule), but it is the right <em>shape</em>
+of approximation, and the per-host comparison against HDU 2 is the ground truth
+for whatever residual remains. The Fourier calibration refuses the rebuild when
+the residual exceeds 3% of peak.</p>
+<p><strong>Why step 6 needs this.</strong> Finite-differencing $M(q\pm\varepsilon)$ only yields a
+usable $\partial M/\partial q$ if rebuild error $\ll$ the finite-difference signal.
+With a $0.1\%$ rebuild and $\varepsilon_q = 0.02$, that headroom is what lets
+§4.3 convert residual $A_2$ into a number in units of $q$ itself.</p>
+<hr />
+<h2 id="4-the-checks">4. The checks</h2>
+<p>Each check below is described as: <strong>why it exists</strong>, <strong>what it measures</strong>,
+<strong>how it is implemented</strong>, <strong>what can make it lie</strong>, and <strong>what it outputs</strong>.</p>
+<hr />
+<h3 id="41-chi-squared-per-degree-of-freedom-chi2_localpy">4.1 Chi-squared per degree of freedom — <code>chi2_local.py</code></h3>
+<p><strong>Why.</strong> The obvious first question, and the one most often misused
+(<a href="https://arxiv.org/abs/1012.3754">Andrae et al. 2010</a>).</p>
+<p><strong>The problem it solves.</strong> The global $\chi^2/\nu$ in <code>fit.log</code>
+(<a href="https://doi.org/10.1086/340952">Peng et al. 2002</a>) is computed over
+the whole fitting region. After the Re-separation ROI change the host can occupy
+a small fraction of the stamp, so sky pixels — which fit perfectly, being pure
+noise — dilute the host residuals toward 1. A compact galaxy can be fit badly and
+still report $\chi^2/\nu \approx 1$. Localizing the statistic to the host removes
+that dilution.</p>
+<p><strong>Definition.</strong></p>
+<p>$$
+\left.\frac{\chi^2}{\nu}\right|_{\rm loc} = \frac{1}{N_{\rm pix} - k}
+\sum_{a \le 2R_e}\left(\frac{I_j - I^{\rm model}_j}{\sigma_j}\right)^2
+$$</p>
+<p>over valid pixels, with $k$ = 7 free parameters per Sérsic component plus 1 for
+sky. Computed at both $1R_e$ and $2R_e$.</p>
+<p><strong>Implementation.</strong></p>
+<pre><code>run(host):
+    global:     last &quot;Chi^2 = ..., ndof = ...&quot; pair in fit.log   (regex)
+    localized:  a, _ = elliptical_coords(...)
+                sel  = valid_mask(host) &amp; (a &lt;= n_re * host.re)
+                chi2 = sum(resid[sel]^2 / sigma[sel]^2)
+                nu   = npix - (7 * n_components + 1)
+    also:       sigma_calibration_ratio(host)            # §3.4
+                chi2nu_global_corrected     = chi2nu_global     / r_sigma^2
+                chi2nu_local_2re_corrected  = chi2nu_local_2re  / r_sigma^2
+</code></pre>
+<p><strong>What makes it lie.</strong> Two things, both reported alongside. Sigma miscalibration
+($r_\sigma \ne 1$) rescales it directly. And SNR: a bright, well-resolved galaxy
+<em>should</em> show a large $\chi^2/\nu$, because a single Sérsic is wrong at the
+percent level and there are enough photons to see it. The population plot of
+$\chi^2/\nu$ against <code>snr_win</code> exists to confirm that trend — the interesting
+host is one whose high $\chi^2/\nu$ is <em>not</em> explained by SNR. A second trend
+against $R_e/\mathrm{FWHM}$ checks the same idea along resolution:
+$\chi^2/\nu$ tracks whether model mismatch is <em>visible after PSF convolution</em>,
+not whether the fit is trustworthy — unresolved hosts can look clean in
+$\chi^2$ while $q$ is still weakly constrained. Neither trend is a pass/fail
+gate; $\chi^2/\nu$ here is a visual / ranking diagnostic only.</p>
+<p><strong>Outputs.</strong> <code>chi2nu_global</code>, <code>chi2nu_local_1re</code>, <code>chi2nu_local_2re</code>,
+<code>chi2nu_global_corrected</code>, <code>chi2nu_local_2re_corrected</code>, <code>chi2_local_npix_*</code>,
+<code>chi2_local_nu_*</code>, <code>sigma_calibration_ratio</code>, <code>sigma_cal_npix</code>, <code>sky_mad_adu</code>,
+<code>sigma_map_median_adu</code>, <code>residual_closure</code>, <code>re_over_fwhm</code>.</p>
+<p><strong>Final document.</strong> Report the corrected values
+<code>chi2nu_global_corrected</code> (whole image) and <code>chi2nu_local_2re_corrected</code>
+(within $2R_e$).</p>
+<hr />
+<h3 id="42-localized-residual-flux-fraction-rffpy">4.2 Localized residual flux fraction — <code>rff.py</code></h3>
+<p><strong>Why.</strong> $\chi^2/\nu$ asks whether residuals match the <em>noise model</em> and weights
+bright pixels hard ($r^2/\sigma^2$). RFF asks a different question: what
+<em>fraction of the galaxy's light</em> is left unmodelled, after subtracting the
+noise you would see even for a perfect fit. That fraction is comparable across
+bright and faint hosts in a way raw $\chi^2$ is not.</p>
+<p><strong>Definition</strong>
+(<a href="https://doi.org/10.1111/j.1365-2966.2011.19918.x">Hoyos et al. 2012</a>;
+<a href="https://arxiv.org/abs/1109.6828">arXiv:1109.6828</a>),
+over an aperture $A$:</p>
+<p>$$
+\mathrm{RFF}
+= \frac{\displaystyle\sum_{j\in A}\lvert I_j - M_j\rvert
+- \sqrt{2/\pi}\,\sum_{j\in A}\sigma_j}
+{\displaystyle\sum_{j\in A} M_j^{\rm gal}}.
+$$</p>
+<p>Three pieces, separately:</p>
+<ol>
+<li><strong>Numerator, first term.</strong> $\sum\lvert I-M\rvert$ is the total absolute
+   residual flux in $A$. Absolute value so positive and negative lobes do not
+   cancel (a wrong $q$ produces opposite-signed lobes that would vanish in a
+   signed sum).</li>
+<li><strong>Numerator, second term.</strong> For zero-mean Gaussian noise,
+   $E[\lvert x\rvert]=\sigma\sqrt{2/\pi}\simeq 0.798\,\sigma$. Even a perfect
+   model therefore contributes $\sim 0.8\sum\sigma$ to the absolute residual.
+   Subtracting that debiasing term makes pure noise give
+   $\mathrm{RFF}\approx 0$ at any depth — the point of the statistic.</li>
+<li><strong>Denominator.</strong> $\sum M^{\rm gal}$ is the model <em>galaxy</em> flux in the same
+   aperture (sky stripped from <code>out.fits</code> HDU 2). RFF is then a dimensionless
+   fraction of host light. Including sky in the denominator would let a large
+   empty aperture drive RFF to 0 by dilution.</li>
+</ol>
+<p><strong>Uncertainty.</strong> $\mathrm{Var}(\lvert x\rvert)=(1-2/\pi)\sigma^2$, so under
+independent pixels</p>
+<p>$$
+\sigma_{\rm RFF}
+= \frac{\sqrt{(1-2/\pi)\sum_{j\in A}\sigma_j^2}}{\sum_{j\in A} M_j^{\rm gal}}.
+$$</p>
+<p>At low SNR the debiasing subtraction is noisy and RFF can go <strong>negative</strong>. That
+is expected arithmetic: $-0.05\pm 0.06$ means "consistent with a perfect model,"
+not "better than perfect."</p>
+<p><strong>Locality is an assumption.</strong> The suite evaluates $A$ as elliptical apertures
+tied to the <em>fitted</em> geometry: $a\le 1R_e$, $a\le 2R_e$, and the
+$1$–$2R_e$ annulus, with the same valid-pixel / neighbour mask as §3.3.
+That does <strong>not</strong> guarantee the whole host is inside $A$:</p>
+<ul>
+<li>$R_e$ is the half-light radius of the fitted Sérsic, so even a perfect match
+  leaves $\sim$ half the light outside $1R_e$ and a non-negligible wing outside
+  $2R_e$ (especially at high $n$).</li>
+<li>If the true galaxy is more extended than the fit, or the fit pinned $R_e$ low,
+  flux (and residual structure) outside $2R_e$ is simply not scored.</li>
+<li>Conversely, if $R_e$ is over-large, $A$ includes more sky and the denominator
+  can pick up model wing that is mostly prior, not data.</li>
+</ul>
+<p>So $2R_e$ is a <em>convention</em> matched to where most of the constrained light lives,
+not a proof that every host photon is counted. The three apertures exist partly
+to expose that: core vs $2R_e$ vs annulus.</p>
+<p><strong>Implementation.</strong></p>
+<pre><code>run(host):
+    model_gal = host.model - sky_level        # galaxy only in the denominator
+    a, _      = elliptical_coords(...)        # fitted q, PA, Re
+    ok        = valid_mask(host)
+    for aperture in (a &lt;= 1Re, a &lt;= 2Re, 1Re &lt; a &lt;= 2Re):
+        sel   = ok &amp; aperture
+        rff   = (sum|resid[sel]| - sqrt(2/pi)*sum(sigma[sel])) / sum(model_gal[sel])
+        err   = sqrt((1 - 2/pi) * sum(sigma[sel]^2)) / sum(model_gal[sel])
+    rff_outer_minus_inner = rff_annulus_1_2re - rff_1re
+</code></pre>
+<p><strong>Why the annulus separately.</strong> The $1$–$2R_e$ annulus is low surface brightness
+and large area, so a small sky offset moves it while barely touching the core.
+A large <code>rff_outer_minus_inner</code> points at background error rather than a wrong
+model shape.</p>
+<p><strong>$\chi^2/\nu$ vs RFF — why both, and which to keep if forced.</strong> They are not
+substitutes:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$\chi^2/\nu$</th>
+<th>RFF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Weights</td>
+<td>$r^2/\sigma^2$ — brightest, noisiest-weighted pixels dominate</td>
+<td>$\lvert r\rvert$ — every ADU of residual counts once</td>
+</tr>
+<tr>
+<td>Scale</td>
+<td>absolute, tied to the noise map</td>
+<td>fraction of model galaxy light</td>
+</tr>
+<tr>
+<td>Depth dependence</td>
+<td>rises with SNR when model error becomes visible</td>
+<td>debiased toward 0 for pure noise at any depth</td>
+</tr>
+<tr>
+<td>Cancelling lobes</td>
+<td>signed squares still accumulate</td>
+<td>absolute value keeps opposite-signed geometry errors</td>
+</tr>
+<tr>
+<td>Best at answering</td>
+<td>"are residuals consistent with $\sigma$?"</td>
+<td>"how much of the host light is unmodelled?"</td>
+</tr>
+</tbody>
+</table>
+<p>Keep both when possible: $\chi^2/\nu$ is the right thermometer for noise-model
+and SNR trends (§4.1); RFF is the right single number for "how dirty is the
+residual relative to the galaxy," and is the better triage scalar across a
+magnitude-mixed cohort. <strong>If only one were allowed for visual confirmation of
+fit dirtiness, choose RFF</strong> (prefer <code>rff_2re</code> with its error bar) — it is
+directly in units of host light and does not require a mental SNR correction.
+Keep $\chi^2/\nu$ when the question is specifically about the noise map or the
+population SNR/resolution trends.</p>
+<h4 id="how-to-read-math173-and-rff-good-bad-expected">How to read $\chi^2/\nu$ and RFF (good / bad / expected)</h4>
+<p>Neither number has a universal “pass at $X$” cut independent of depth and
+morphology. Use the rules of thumb below, then compare to <strong>this cohort</strong>.</p>
+<p><strong>$\chi^2/\nu$ (prefer the sigma-corrected values on the panel).</strong></p>
+<table>
+<thead>
+<tr>
+<th>value</th>
+<th>reading</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\sim 1$ after correction</td>
+<td>residuals consistent with the noise map (ideal Gaussian case)</td>
+</tr>
+<tr>
+<td>$\gg 1$ on a bright, resolved host</td>
+<td>usually <strong>real structure</strong> the single Sérsic cannot absorb (arms, clumps, neighbours) — expected, not automatically a failed $q$</td>
+</tr>
+<tr>
+<td>$\ll 1$</td>
+<td>almost always a <strong>noise-map</strong> problem (wrong units / overestimated $\sigma$), not a “better than perfect” fit</td>
+</tr>
+<tr>
+<td>rises with SNR / falls for faint hosts</td>
+<td>normal: model mismatch becomes visible only when $S/N$ is high</td>
+</tr>
+</tbody>
+</table>
+<p>Peng’s own FAQ is blunt: in galaxy fitting the absolute $\chi^2/\nu$ is
+“mostly meaningless” because residuals are dominated by imperfect models, not
+Gaussian noise
+(<a href="https://users.obs.carnegiescience.edu/peng/work/galfit/CHI2.html">GALFIT $\chi^2$ FAQ</a>).
+Use it <strong>relatively</strong> (host vs host, global vs $2R_e$, before/after a change)
+and always prefer <code>chi2nu_*_corrected</code> so a wrong $\sigma$ scale is not mistaken
+for a dirty residual. On the 53-cut, median
+$\chi^2/\nu|_{2R_e,{\rm corr}}\approx 1.35$ overall, but
+$\sim 3.2$ for $m<19$ vs $\sim 1.0$ for $m>20.5$ — brighter hosts look
+“worse” in $\chi^2$ because structure is resolved, not because the fainter ones
+are better models.</p>
+<p><strong>RFF (prefer <code>rff_2re</code> $\pm$ error).</strong></p>
+<table>
+<thead>
+<tr>
+<th>value</th>
+<th>reading</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\approx 0$ (within $\sim\sigma_{\rm RFF}$)</td>
+<td>residual consistent with noise after the Hoyos debias — the design point of RFF</td>
+</tr>
+<tr>
+<td>slightly negative</td>
+<td>common at low SNR; <strong>not</strong> “better than perfect,” just noisy debiasing</td>
+</tr>
+<tr>
+<td>$\lvert\mathrm{RFF}\rvert \lesssim 0.05$</td>
+<td>clean single-Sérsic residual for survey work</td>
+</tr>
+<tr>
+<td>$\lvert\mathrm{RFF}\rvert \gtrsim 0.10$</td>
+<td>Hoyos et al. (2012) regime where residuals often flag mergers / strong disturbances; our <code>flag_rff_high</code> cut</td>
+</tr>
+<tr>
+<td>$\mathrm{RFF} \gtrsim 0.5$</td>
+<td>commonly used in modern JWST/HST pipelines as a <strong>hard reject</strong> for unusable single-Sérsic fits (e.g. Lee et al. 2024; Ormerod et al. 2024)</td>
+</tr>
+</tbody>
+</table>
+<p>Literature medians for “typical” galaxies after a single Sérsic are often
+$\mathrm{RFF}\sim 0.1$–$0.12$ in deep HST/JWST samples
+(<a href="https://arxiv.org/abs/2312.04899">Lee et al. 2024</a>), not zero — real disks
+and irregularities leave light. There is <strong>no</strong> published universal
+RFF$(m)$ or $\chi^2(m)$ curve to import: both scale with depth, PSF sampling,
+and morphology. The practical calibration is <strong>internal</strong>: on this 53-cut,
+median $\mathrm{RFF}_{2R_e}\approx -0.002$ with p84 $\approx +0.07$, and
+median $\lvert\mathrm{RFF}\rvert$ is higher for bright hosts ($m<19$:
+$\sim 0.06$) than for $19<m<20.5$ ($\sim 0.006$), the same SNR/structure
+trend as $\chi^2$. So: treat $\lvert\mathrm{RFF}\rvert>0.10$ as “look at the
+panel,” not as automatic science rejection; treat $\chi^2/\nu_{\rm corr}>1$ on
+a mag$\lesssim 19$ host as the default, not a surprise.</p>
+<p><strong>Outputs.</strong> <code>rff_1re</code>, <code>rff_2re</code>, <code>rff_annulus_1_2re</code>, each with <code>_err</code>, <code>_sig</code>,
+<code>_npix</code>, <code>_model_flux</code>; plus <code>rff_outer_minus_inner</code> and <code>sky_level_adu</code>.</p>
+<hr />
+<h3 id="43-fourier-decomposition-of-the-residual-fourierpy">4.3 Fourier decomposition of the residual — <code>fourier.py</code></h3>
+<h4 id="why-math213-matters-for-axis-ratios-at-all">Why $m=2$ matters for axis ratios at all</h4>
+<p>An ellipse is a quadrupole distortion of a circle: stretching one axis and
+squeezing the other is exactly an $m=2$ perturbation in polar angle. That is
+why classical isophote work expands surface brightness as
+$I(\theta)=\sum (A_m\cos m\theta+B_m\sin m\theta)$ and treats the $m=2$ terms
+as the carriers of ellipticity and PA
+(<a href="https://doi.org/10.1093/mnras/226.4.747">Jedrzejewski 1987</a>;
+<a href="https://doi.org/10.1051/aas:1988002">Bender et al. 1988</a>;
+<a href="https://doi.org/10.1086/163219">Lauer 1985</a>).
+Higher even modes ($m=4$) describe boxy/disky deviations <em>from</em> an ellipse;
+odd modes describe lopsidedness. So if the fitted $q$ (or PA) is wrong, the
+residual after subtracting that elliptical model is not random — it must show
+up primarily as $m=2$. That is the sole reason this check stares at $A_2$ and
+$B_2$ rather than at $\chi^2$ or RFF.</p>
+<h4 id="what-this-check-is-even-trying-to-do">What this check is even trying to do</h4>
+<p>GALFIT returns a best-fit axis ratio $q_{\rm fit}$. The science question is
+whether that number is right. $\chi^2$ and RFF only say “the residual has some
+size.” They do not say “the residual looks like a wrong $q$.”</p>
+<p>$\delta q$ is the answer to a sharper question:</p>
+<blockquote>
+<p>If the true axis ratio were $q_{\rm fit}+\delta q$ instead of $q_{\rm fit}$,
+and that were the <em>only</em> thing wrong, how large would $\delta q$ have to be
+to produce the $m=2$ pattern we actually see in the residual?</p>
+</blockquote>
+<p>So $\delta q$ is <strong>not</strong> GALFIT’s formal $\sigma_q$, and not a Monte Carlo error
+bar. It is a <em>residual-inferred correction</em> (or inconsistency): a signed number
+in the same units as $q$, read off the shape of $I-M$. If
+$|\delta q|\ll \sigma_q$ and the pattern is reliable, the residual is not asking
+for a different axis ratio. If $|\delta q|$ is large and the reliability gate
+passes, the residual <em>is</em> asking for a different $q$ — either the fit is biased
+or real $m=2$ structure (bar/spiral) is present (phase test below).</p>
+<p>This is the same spirit as classical Fourier analysis of isophotes
+(<a href="https://doi.org/10.1093/mnras/226.4.747">Jedrzejewski 1987</a>;
+<a href="https://doi.org/10.1051/aas:1988002">Bender et al. 1988</a>), turned into a
+direct estimator of a parameter error rather than a shape coefficient alone.</p>
+<h4 id="why-a-pure-continuous-analytic-picture-is-not-enough">Why a pure continuous analytic picture is not enough</h4>
+<p>It is tempting to stay in the Ciotti–Bertin continuum: differentiate the Sérsic,
+never touch a pixel. That closed form is derived below and still computed as
+<code>fourier_dq_radial</code>. It is <strong>not</strong> what the calibrated estimator uses as truth,
+because the residual that exists in the real world is</p>
+<p>$$
+R = I_{\rm data} - M_{\rm GALFIT},
+$$</p>
+<p>and both sides are <strong>detector pixel arrays</strong>. $I_{\rm data}$ was never a
+continuous function in our pipeline; $M_{\rm GALFIT}$ is GALFIT’s
+pixel-integrated, PSF-convolved model plane
+(<a href="https://doi.org/10.1086/340952">Peng et al. 2002</a>). Masks, $\sigma_j$, and
+annulus membership are pixel sets. The Fourier step is a weighted least-squares
+sum over those pixels. There is no continuous $R(a,\theta)$ to expand until you
+commit to the same sampling.</p>
+<p>What §3.5’s oversampling is doing is <strong>not</strong> “4.3 needs a fine continuum for
+Fourier mathematics.” Fourier mathematics here is discrete by construction.
+Oversampling is only so that when we build</p>
+<p>$$
+K_q \approx \frac{M_{\rm rebuild}(q+\varepsilon)-M_{\rm rebuild}(q-\varepsilon)}{2\varepsilon}
+$$</p>
+<p>by finite difference, $M_{\rm rebuild}$ lives on the <strong>same pixelization
+convention as $M_{\rm GALFIT}$</strong>. Without that, $K_q$ would be the derivative of
+a different function than the one that defined $R$, and
+$\delta q = A_2/c_q$ would be nonsense. The continuous analytic derivative is
+exactly the approximation that under-recovered injected $\delta q$ by $\sim 18\%$
+once a real PSF and pixel grid are present.</p>
+<p>In short: pixelate because $R$ is pixelated; oversample when rebuilding so the
+response kernel matches GALFIT’s pixels, not because Fourier requires a
+continuum.</p>
+<h4 id="why-elliptical-annuli-not-one-global-fourier">Why elliptical annuli (not one global Fourier)</h4>
+<p>A geometry error is a function of elliptical radius $a$: bars live in a limited
+radial range, spirals wind with $a$, and a wrong global $q$ should be roughly
+constant across $a$. A single stamp-wide $m=2$ coefficient would mix those
+behaviours into one number and erase the phase test that separates them.
+Elliptical annuli (geometry of §3.2) keep the radial coordinate the model
+actually uses, so each ring’s $A_2(a),B_2(a)$ is local.</p>
+<p><strong>How Fourier picks its rings (not photutils).</strong> §4.5’s free isophotes and
+§4.3’s Fourier rings are <strong>different samplings</strong>. Photutils steps geometrically
+in SMA ($\times 1.1$) and fits a new ellipse each time. Fourier fixes GALFIT’s
+$(q,\mathrm{PA})$, builds the elliptical-radius map $a$, and slices it into
+<strong>fixed-width</strong> elliptical annuli via <code>azimuthal_annuli</code>:</p>
+<p>$$
+\mathrm{width} = \max\!\big(1\,\mathrm{px},\,\mathrm{FWHM}/2\big),
+\quad
+a \in [\!\max(0.2R_e,\,\tfrac12\mathrm{width}),\; 3R_e].
+$$</p>
+<p>On a barely-resolved host ($\mathrm{FWHM}\!\sim\!R_e$) that width is $\sim 2$ px,
+so you get only a handful of fat rings (e.g. midpoints at
+$0.63,\,1.26,\,1.89,\,2.52,\,3.15\,R_e$) — not the ~20 thin isophotes on the
+middle panel. Rings with fewer than <strong>20 valid pixels</strong> get no $\delta q$ (the
+azimuthal WLS has 9 coefficients; $<20$ pixels is underdetermined / pure noise).
+That is why the Fourier panel can skip the first midpoint and start near
+$\sim 1.3R_e$: the ring exists, but <code>npix &lt; 20</code> → $\delta q = \mathrm{NaN}$.</p>
+<p>On each usable annulus, decompose the residual azimuthally by inverse-variance
+least squares on the valid pixels (not an FFT — masking makes $\theta$-sampling
+non-uniform; <a href="https://doi.org/10.1093/mnras/226.4.747">Jedrzejewski 1987</a>):</p>
+<p>$$
+R(a,\theta) = A_0(a) + \sum_{m\ge1}\Big[A_m(a)\cos m\theta + B_m(a)\sin m\theta\Big].
+$$</p>
+<h4 id="why-the-m-2-mode-is-the-diagnostic">Why the m = 2 mode is the diagnostic</h4>
+<p>Suppose the true axis ratio is $q + \delta q$. To first order</p>
+<p>$$
+R \approx \frac{\partial M}{\partial q}\,\delta q.
+$$</p>
+<p>With $M = f(a)$ and the elliptical parametrization of §3.2,</p>
+<p>$$
+\frac{\partial a}{\partial q} = -\frac{a}{q}\sin^2\theta
+= -\frac{a}{2q}\big(1 - \cos 2\theta\big)
+\quad\Longrightarrow\quad
+\frac{\partial M}{\partial q} = -\frac{a f'(a)}{2q}\big(1 - \cos 2\theta\big).
+$$</p>
+<p>So an axis-ratio error puts power into $\cos 2\theta$ — four alternating lobes
+<strong>aligned with the axes</strong>. For a PA error $\delta\phi$ (radians),</p>
+<p>$$
+\frac{\partial a}{\partial \phi} = \frac{a}{2}\Big(\frac{1}{q} - q\Big)\sin 2\theta
+\quad\Longrightarrow\quad
+\frac{\partial M}{\partial \phi} = \frac{a f'(a)}{2}\Big(\frac1q - q\Big)\sin 2\theta,
+$$</p>
+<p>the same quadrupole rotated $45^\circ$. Because $\cos 2\theta$ and $\sin 2\theta$
+are orthogonal, $A_2$ and $B_2$ separate the two errors. Matching coefficients
+and using $f'(a)<0$:</p>
+<p>$$
+\delta q = -\frac{2q\,A_2(a)}{a\,\lvert f'(a)\rvert},
+\qquad
+\delta\phi = -\frac{2\,B_2(a)}{a\,\lvert f'(a)\rvert\,(1/q - q)}.
+$$</p>
+<p>A <strong>positive</strong> $\delta q$ means the true galaxy is rounder than the model
+($q_{\rm true}\approx q_{\rm fit}+\delta q$). The factor $(1/q-q)$ makes
+$\delta\phi$ diverge as $q\to 1$: a round galaxy has no measurable PA.</p>
+<h4 id="calibrating-the-conversion-psf-pixels">Calibrating the conversion (PSF + pixels)</h4>
+<p>The closed form assumes the PSF does not change the $A_2\to\delta q$ map. It
+does: convolution damps a quadrupole more than the radial gradient, so the
+analytic conversion <strong>under-recovers an injected $\delta q$ by $\sim 18\%$</strong> at
+this cohort’s resolution. The suite therefore builds $K_q$ and $K_{\rm PA}$ from
+the §3.5 rebuild (same <code>proto_image.fits</code>, same pixel grid), projects them with
+the <strong>identical</strong> design matrix and weights as $R$, and sets</p>
+<p>$$
+K_q = \frac{M_{\rm conv}(q+\epsilon) - M_{\rm conv}(q-\epsilon)}{2\epsilon},
+\qquad
+c_q(a) = \big[K_q\big]_{\cos 2\theta},
+\qquad
+\delta q(a) = \frac{A_2(a)}{c_q(a)}.
+$$</p>
+<p>Unbiased by construction for that projector. The analytic form remains as
+<code>fourier_dq_radial</code> / fallback.</p>
+<p><strong>What “injected $\delta q$” means (and what it does <em>not</em>).</strong> Nothing is injected
+into production science images. <code>tests/test_fourier_recovery.py</code> builds a
+<em>synthetic</em> Sérsic, convolves it with a real <code>proto_image.fits</code>, differences
+two copies that differ by a known $\delta q$ (or $\delta\mathrm{PA}$), and asks
+the estimator to recover that known number. That is a unit-test ground truth,
+not a science-sample perturbation. “Calibrated” = $A_2/c_q$ from the numerical
+PSF-convolved kernels; “analytic” = the thin-shell formula from $A_2$ and
+$d\langle M\rangle/da$. They differ because the analytic map ignores PSF damping
+of the quadrupole relative to the radial gradient (~18% under-recovery here).</p>
+<p><strong>Even / odd and crosstalk, in plain language.</strong> Under reflection
+$\theta\to-\theta$, $\cos 2\theta$ is even and $\sin 2\theta$ is odd. A pure
+$\delta q$ response $K_q$ should therefore project almost entirely onto
+$\cos 2\theta$; a pure $\delta\mathrm{PA}$ response $K_{\rm PA}$ onto
+$\sin 2\theta$. Crosstalk is the fraction of $K_q$ that leaked into the PA
+channel on that annulus:</p>
+<p>$$
+\texttt{fourier\_kernel\_crosstalk}(a)
+= \Big\lvert\frac{[K_q]_{\sin 2\theta}}{[K_q]_{\cos 2\theta}}\Big\rvert.
+$$</p>
+<p>Ideal value $\approx 0$. A large value means the finite-difference kernels (or
+the local sampling) are not cleanly separating the two channels — e.g. extreme
+$q$, heavy masking, or a rebuild mismatch. It is <strong>reported always</strong> and is a
+useful QA field. It does <strong>not</strong> gate or hide $\delta q$: if PA and $q$ are
+mixed, the geometry is usually untrustworthy anyway (except near-degenerate
+$180^\circ$ flips), so suppressing $\delta q$ would hide the hosts that most need
+inspection. Flagging still uses $|\delta q|$ against its threshold; read
+crosstalk alongside when interpreting.</p>
+<h4 id="step-d-in-detail-the-ratio-on-one-annulus">Step D in detail — the ratio on one annulus</h4>
+<p>Fix an annulus. After the least-squares fit you have a scalar $A_2$ (ADU): how
+much $\cos 2\theta$ is in the residual on those pixels. After projecting $K_q$
+with the <strong>same</strong> design matrix and weights you have a scalar $c_q$ (ADU per
+unit $q$): how much $\cos 2\theta$ appears in the model when $q$ moves by 1.</p>
+<p>If the residual’s quadrupole were caused only by a wrong $q$, then
+$A_2 = c_q\cdot\delta q$, hence</p>
+<p>$$
+\delta q(a)=\frac{A_2(a)}{c_q(a)}.
+$$</p>
+<p>That is ordinary linear response: observed amplitude divided by response per
+unit parameter. Using the same projector on both sides is what makes PSF
+damping, pixelation, masking, and annulus width cancel — they affect $A_2$ and
+$c_q$ equally. The PA channel is identical with $B_2$ and $c_{\rm PA}$. Errors
+propagate as $\sigma_{\delta q}=|A_2^{\rm err}/c_q|$ from the LSQ covariance on
+$A_2$ (treating $c_q$ as known from the noise-free rebuild).</p>
+<h4 id="step-e-in-detail-collapse-one-summary-number-from-many-rings">Step E in detail — “collapse” = one summary number from many rings</h4>
+<p>After Step D you still have a <strong>profile</strong> $\delta q(a_i)$ — one estimate per
+annulus. “Collapse” here is not a physical collapse of the galaxy; it is just
+reducing that curve to the single scalar <code>fourier_dq</code> used in tables and flags.
+The reduction is an <strong>inverse-variance weighted (IVW) mean</strong> over annuli with
+<strong>$a\le 2R_e$ only</strong> (points plotted beyond $2R_e$ are diagnostic, not in the
+mean):</p>
+<p>$$
+\delta q
+= \frac{\sum_i w_i\,\delta q(a_i)}{\sum_i w_i},
+\qquad
+w_i = 1/\sigma_{\delta q,i}^2,
+\qquad
+\sigma_{\delta q}
+= \big(\sum_i w_i\big)^{-1/2}.
+$$</p>
+<p><strong>Why cut at $2R_e$ (physical).</strong> For a Sérsic, most of the light that actually
+constrains $(q,\mathrm{PA},R_e,n)$ lives inside $\sim 2R_e$; beyond that the
+pixels are sky-, neighbour-, and mask-dominated, so a large outer $\delta q$ is
+usually not a statement about the fitted geometry. The same $2R_e$ aperture is
+used for localized $\chi^2/\nu$, RFF, and <code>iso_dq_2re</code>, so the headline numbers
+answer the same question. Opposite-signed rings inside $2R_e$ <strong>cancel</strong> in the
+IVW mean — e.g. $\delta q(1.26R_e)\approx -0.19$ and
+$\delta q(1.89R_e)\approx +0.05$ can yield <code>fourier_dq</code> $\approx -0.05$ — which
+is correct for a <em>global</em> geometry error (should be roughly constant) and a
+warning to read the curve when the profile flips sign (structure / noise, not
+one $\Delta q$).</p>
+<p><strong>Why inverse-variance weights (and not a plain / flux / equal mean).</strong>
+Treat each annulus estimate as an independent measurement
+$\hat\delta q_i = \delta q^\star + \varepsilon_i$ with
+$\varepsilon_i\sim\mathcal{N}(0,\sigma_i^2)$ and $\sigma_i\equiv\sigma_{\delta q,i}$
+from the WLS covariance on $A_2$ (Step D). The log-likelihood for a constant
+$\delta q^\star$ is</p>
+<p>$$
+\ln\mathcal{L}(\delta q^\star)
+= -\tfrac12\sum_i\frac{(\hat\delta q_i-\delta q^\star)^2}{\sigma_i^2}+\mathrm{const}.
+$$</p>
+<p>Maximising gives exactly the IVW mean above; the Fisher information is
+$\sum_i\sigma_i^{-2}$, so
+$\mathrm{Var}(\widehat{\delta q})=(\sum_i\sigma_i^{-2})^{-1}$.
+Among all unbiased linear estimators
+$\sum_i\alpha_i\hat\delta q_i$ with $\sum_i\alpha_i=1$, the Gauss–Markov /
+Aitken theorem says this choice uniquely minimises the variance
+(<a href="https://doi.org/10.1017/S0370164600014346">Aitken 1935</a>).
+Equivalently: any other weights (equal, flux-weighted, …) are a
+<strong>strictly worse</strong> estimator of a constant $\delta q$ under these assumptions —
+they throw away information encoded in $\sigma_i$.</p>
+<p>Important: $\sigma_i$ is the uncertainty on <strong>$\delta q$</strong>, not the pixel ADU
+noise and not “brighter ⇒ larger $\sigma$.” Brighter, better-sampled annuli
+almost always have <em>smaller</em> $\sigma_{\delta q}$ (more photons constrain $A_2$),
+so IVW <strong>up-weights</strong> the luminous rings and <strong>down-weights</strong> faint noisy ones.
+That is the opposite of unfairly ignoring the bright galaxy — it is optimal
+use of the well-measured core. If $\delta q(a)$ is <em>not</em> constant (bar, spiral,
+sign flip), the IVW scalar is still the ML constant fit, but the profile itself
+is the science product; that is why the panel plots $\delta q(a)$.</p>
+<p>That is <code>fourier_dq</code> / <code>fourier_dq_err</code>. The full $\delta q(a)$, phase, and
+amplitudes stay in <code>fourier_profiles.npz</code>.</p>
+<p><strong>Implementation (full path the code takes).</strong></p>
+<pre><code>run(host):
+    recon = model_reconstruction_error(host)   # §3.5: pick (k, core_radius)
+    K_q, K_PA, eps = response_kernels(...)     # finite-diff rebuild ±eps, no sky/neighbours
+    model_gal = host.model - sky
+    a_map, theta = elliptical_coords(...)
+    annuli = 0.2 Re -&gt; 3 Re, width = max(1 px, FWHM/2)
+
+    for each annulus with &gt;= 20 valid pixels:
+        design = [1, cos mθ, sin mθ] for m=1..4     # 9 columns
+        w = 1/sigma^2
+        coef, coef_err = WLS(design, resid, w)     # -&gt; A0,A1,B1,...,A4,B4
+        kq_coef = WLS(design, K_q,  w)            # same design, same w
+        kpa_coef = WLS(design, K_PA, w)
+        dq(a)  = A2 / kq_coef[cos2]
+        dPA(a) = B2 / kpa_coef[sin2]
+        also analytic dq_radial from A2 and d&lt;M&gt;/da
+        psi2 = 0.5 * atan2(B2, A2)
+        crosstalk = |kq_coef[sin2] / kq_coef[cos2]|   # reported, not a gate
+
+    fourier_dq = IVW mean of dq(a) for a &lt;= 2 Re     # Step E (&quot;collapse&quot;)
+    reliability gate (recon, n_annuli, Re/FWHM)      # not crosstalk
+    write fourier.json + fourier_profiles.npz
+</code></pre>
+<p>Least squares rather than an FFT, because masked pixels make the azimuthal
+sampling non-uniform and an FFT would alias the gaps into the coefficients.
+Annulus width never goes below the resolution element.</p>
+<h4 id="distinguishing-a-geometry-error-from-bars-spirals-we-do-not-subtract-them">Distinguishing a geometry error from bars / spirals (we do not subtract them)</h4>
+<p>A nonzero $m=2$ does not by itself mean the geometry is wrong — bars and spiral
+arms produce $m=2$ too
+(<a href="https://doi.org/10.1086/163147">Elmegreen &amp; Elmegreen 1985</a>;
+<a href="https://doi.org/10.1086/175701">Rix &amp; Zaritsky 1995</a>).
+The suite does <strong>not</strong> remove bar flux from the image. It <strong>classifies</strong> the
+$m=2$ pattern using the phase
+$\psi_2(a) = \tfrac12\arctan(B_2/A_2)$, fitted linearly against $a$:</p>
+<table>
+<thead>
+<tr>
+<th>phase behaviour</th>
+<th>interpretation</th>
+<th>what to trust</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>flat $\psi_2$, $|\delta q(a)|$ smooth across $a$</td>
+<td>global geometry error</td>
+<td>headline <code>fourier_dq</code></td>
+</tr>
+<tr>
+<td>flat $\psi_2$, $|\delta q(a)|$ peaked in a limited $a$ range</td>
+<td>bar-like</td>
+<td>report phase + radial peak; do not treat collapsed $\delta q$ as a $q$ correction</td>
+</tr>
+<tr>
+<td>$\psi_2$ winds with $a$ (nonzero slope)</td>
+<td>spiral</td>
+<td>report <code>fourier_m2_phase_slope_*</code>; $\delta q$ is structure, not a bias</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Good reporting when $m=2$ is interesting.</strong> Publish the triad
+(<code>fourier_dq</code>, <code>fourier_dq_err</code>, <code>fourier_m2_phase_slope_deg_per_re</code> /
+<code>_sig</code> / <code>_scatter</code>), plus a one-line morphological note from the table above,
+and for flagged hosts the $\delta q(a)$ curve from the NPZ (or the visual
+panel). That is how a bar is “caught”: not by excision, but by refusing to
+reinterpret a localized or winding quadrupole as a single global $\Delta q$.</p>
+<p><strong>Other modes (panel scalars).</strong> Amplitudes on the panel are
+$\sqrt{A_m^2+B_m^2}\,/\langle M\rangle$ medians over usable annuli
+(<code>fourier_m{1,2,3,4}_amp_median</code>), plus the $m=2$ phase slope
+$\psi_2'=$ <code>fourier_m2_phase_slope_deg_per_re</code>:</p>
+<table>
+<thead>
+<tr>
+<th>scalar</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$m=1$</td>
+<td>lopsidedness / centroid drift — large if the nucleus is offset or one side is brighter</td>
+</tr>
+<tr>
+<td>$m=2$</td>
+<td>quadrupole: geometry error <strong>or</strong> bar/spiral (use $\psi_2'$ to tell them apart)</td>
+</tr>
+<tr>
+<td>$m=3$</td>
+<td>triangular / odd asymmetry (interactions, uneven spiral arms)</td>
+</tr>
+<tr>
+<td>$m=4$</td>
+<td>boxy/disky isophotes (<a href="https://doi.org/10.1051/aas:1988002">Bender et al. 1988</a>) — physical, not a fit failure</td>
+</tr>
+<tr>
+<td>$\psi_2'\approx 0$</td>
+<td>flat phase → global $\delta q$ or bar; <strong>winding</strong> $\psi_2'$ → spiral (do not treat $\delta q$ as a $q$ correction)</td>
+</tr>
+</tbody>
+</table>
+<p>There is no hard “bad if $m_k>X$” cut: bright structured disks routinely show
+medians $\sim 0.05$–$0.2$. Use modes to <em>classify</em> residual structure next to
+$\delta q$. $A_0(a)$ beyond $2R_e$ remains the sky cross-check (§4.4), reported
+in units of the sky MAD as a median over outer annuli.</p>
+<h4 id="the-reliability-gate">The reliability gate</h4>
+<p>$\delta q$ is only meaningful if the estimator had leverage. It is marked
+unreliable, and excluded from <strong>flagging</strong> (the number is still written), when
+any of:</p>
+<table>
+<thead>
+<tr>
+<th>gate</th>
+<th>threshold</th>
+<th>why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model_recon_max_frac</code></td>
+<td>$> 0.03$</td>
+<td>the rebuilt model is not GALFIT's, so the kernel is wrong</td>
+</tr>
+<tr>
+<td><code>fourier_n_annuli_inner</code></td>
+<td>$< 4$</td>
+<td>too few rings inside $2R_e$ to average</td>
+</tr>
+<tr>
+<td><code>re_over_fwhm</code></td>
+<td>$< 0.8$</td>
+<td>host smaller than the PSF; see below</td>
+</tr>
+</tbody>
+</table>
+<p><code>fourier_kernel_crosstalk</code> is always stored but is <strong>not</strong> a reliability gate
+(see even/odd paragraph above).</p>
+<p><strong>Why unresolved is fatal for this check (not for $q$ in general).</strong> The PSF
+does give the image <em>some</em> structure — a roundish blob — but that structure is
+almost entirely the PSF itself. After convolution, a wide range of intrinsic
+$(q,n,R_e)$ collapse to nearly the same observed shape. Consequences for §4.3
+specifically:</p>
+<ol>
+<li><strong>Too few independent annuli.</strong> Annulus width is $\ge\mathrm{FWHM}/2$, and
+   the useful radial range is only a couple of resolution elements across, so
+   you cannot assemble $\ge 4$ rings inside $2R_e$ with $\ge 20$ pixels each.</li>
+<li><strong>$c_q$ has no leverage.</strong> Moving intrinsic $q$ barely changes the
+   convolved image, so $K_q$ (and $c_q$) → 0; then $\delta q=A_2/c_q$ blows up
+   or becomes noise-dominated. That is the mathematical meaning of “nothing to
+   decompose.”</li>
+<li><strong>Whatever $m=2$ you measure is often PSF ellipticity / pixel noise</strong>, not
+   host geometry — which is exactly the systematic §4.6 is built to catch at
+   population level.</li>
+</ol>
+<p>So unresolved does <strong>not</strong> mean “the galaxy has no shape” or “GALFIT’s $q$ is
+automatically wrong.” It means <strong>this residual→$\delta q$ converter has no
+information</strong>, and reporting a large $|\delta q|$ would be a false condemnation.
+The gate exists to refuse the number, not to discard the host from science.</p>
+<p>Without this gate a barely-resolved host would be condemned by arithmetic that
+means nothing. On the science cut, 24/53 hosts pass the remaining gates — a
+statement about the <em>imaging</em>, not about the estimator (see §7).</p>
+<h4 id="statmorph-ginim20-lotz-classification">Statmorph / Gini–M20 (Lotz classification)</h4>
+<p>Checks 1–9 do <strong>not</strong> re-run or re-measure non-parametric morphology. Production
+Phase Statmorph (<code>galfit_fitting/run_statmorph_pipeline.py</code>) already writes
+<code>Output/&lt;FRB&gt;_all/statmorph_results.json</code> from <code>host_cutout.fits</code> (+ optional
+<code>host_sigma.fits</code>, <code>proto_image.fits</code>) via the <a href="https://statmorph.readthedocs.io/">statmorph</a>
+package (Rodriguez-Gomez et al. 2019). Verification only <strong>reads</strong> those JSON
+fields and applies the Lotz et al. (2008) Gini–$M_{20}$ plane cuts.</p>
+<p><strong>Provenance.</strong> For each host:</p>
+<ol>
+<li>Phase 3a builds the cutout / segmentation inputs.</li>
+<li>Phase Statmorph calls <code>statmorph.source_morphology</code> on the background-subtracted
+   cutout (central segment only) and writes <code>statmorph_results.json</code>.</li>
+<li><code>run_gini_m20.py</code> loads <code>gini</code> and <code>m20</code> from that JSON for the science-cut
+   cohort and writes <code>outputs/tables/gini_m20_53.csv</code>.</li>
+<li>Visual panels (§4.9) show ${\rm Lotz}={\rm late}|{\rm early}|{\rm merger}$ in
+   the header from the same JSON (same cut equations as <code>run_gini_m20.py</code>).</li>
+</ol>
+<p><strong>Fields queried from <code>statmorph_results.json</code>:</strong></p>
+<table>
+<thead>
+<tr>
+<th>JSON key</th>
+<th>Quantity</th>
+<th>Role here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gini</code></td>
+<td>Gini coefficient $G$</td>
+<td>Lotz plane $x$-axis partner</td>
+</tr>
+<tr>
+<td><code>m20</code></td>
+<td>$M_{20}$</td>
+<td>second-order moment of the brightest 20% of light</td>
+</tr>
+<tr>
+<td><code>concentration</code>, <code>asymmetry</code>, <code>smoothness</code></td>
+<td>CAS</td>
+<td>reported in CSV; not used for Lotz class</td>
+</tr>
+<tr>
+<td><code>gini_m20_merger</code>, <code>gini_m20_bulge</code></td>
+<td>$F$, $S$</td>
+<td>Rodriguez-Gomez / Lotz $S$–$F$ statistics from statmorph</td>
+</tr>
+<tr>
+<td><code>rpetro_circ_px</code>, <code>r20_px</code>, <code>r80_px</code></td>
+<td>Petrosian / $r_{20}$ / $r_{80}$</td>
+<td>radii used internally by CAS/Gini–$M_{20}$</td>
+</tr>
+<tr>
+<td><code>sn_per_pixel</code>, <code>flag</code>, <code>flag_sersic</code></td>
+<td>quality</td>
+<td><code>flag&gt;0</code> ⇒ measurement unreliable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Metric definitions (compact).</strong> Following Abraham et al. (2003), Lotz et al.
+(2004), and Conselice (2003):</p>
+<ul>
+<li><strong>Gini $G$</strong> — inequality of the pixel flux distribution within the segmentation
+  map ($G=0$ equal pixels; $G\to 1$ light in few pixels). Sensitive to clumpiness
+  and central concentration without assuming elliptical isophotes.</li>
+<li><strong>$M_{20}$</strong> — normalized second-order moment of the pixels that contain the
+  brightest 20% of the galaxy’s flux; more negative for centrally concentrated
+  light, less negative when bright clumps sit off-centre (mergers / double nuclei).</li>
+<li><strong>CAS</strong> — Concentration $C=5\log_{10}(r_{80}/r_{20})$; Asymmetry $A$ from
+  $180^\circ$ residual; Smoothness $S$ from high-frequency residual after boxcar
+  smoothing (Conselice 2003).</li>
+</ul>
+<p><strong>Lotz et al. (2008) classification</strong> used in this repo
+(<a href="https://doi.org/10.1086/523659">ApJ 672, 177</a>; calibrations also in
+<a href="https://doi.org/10.1086/421849">Lotz et al. 2004, ApJ 613, 898</a>):</p>
+<p>$$
+\begin{aligned}
+{\rm merger\ (ULIRG/merger\ region):\quad}
+  & G > -0.14\,M_{20} + 0.33 \\
+{\rm early\ (E/S0/Sa):\quad}
+  & G \le -0.14\,M_{20} + 0.33
+    \;\land\; G > 0.14\,M_{20} + 0.80 \\
+{\rm late\ (Sb{-}Irr):\quad}
+  & G \le -0.14\,M_{20} + 0.33
+    \;\land\; G \le 0.14\,M_{20} + 0.80
+\end{aligned}
+$$</p>
+<p>CSV labels are <code>merger</code> / <code>early</code> / <code>late</code> (plus <code>missing</code> / <code>unknown</code> if JSON
+or $G,M_{20}$ absent). Panel header uses the same three science labels.</p>
+<p><strong>statmorph $S$ / $F$ (secondary).</strong> Rodriguez-Gomez et al. (2019) expose
+<code>gini_m20_bulge</code> ($S$) and <code>gini_m20_merger</code> ($F$) as signed distances to the
+Lotz dividing lines. <code>run_gini_m20.py</code> reports <code>bulge_side = early</code> if $S>0$,
+else <code>late</code>. This is a convenient summary, <strong>not</strong> a second independent
+classifier — the primary label for triage / panels is the Lotz+2008 region above.</p>
+<p><strong>How to use it here.</strong> Lotz class is <strong>context</strong> for dirty residuals and $m=2$
+structure (e.g. true mergers often fail a clean single-Sérsic), not a
+replacement for $\delta q$, RFF, or confirmation. Neighbours in the stamp can
+drive a spurious <code>merger</code> label even when the host is a quiet disk.</p>
+<p><strong>Citations.</strong></p>
+<ul>
+<li>Lotz, J. M., Primack, J., &amp; Madau, P. 2004, ApJ, 613, 898
+  (<a href="https://doi.org/10.1086/421849">10.1086/421849</a>) — Gini–$M_{20}$ definitions.</li>
+<li>Lotz, J. M., et al. 2008, ApJ, 672, 177
+  (<a href="https://doi.org/10.1086/523659">10.1086/523659</a>) — $G$–$M_{20}$ early / late / merger cuts used here.</li>
+<li>Conselice, C. J. 2003, ApJS, 147, 1
+  (<a href="https://doi.org/10.1086/375001">10.1086/375001</a>) — CAS.</li>
+<li>Abraham, R. G., van den Bergh, S., &amp; Nair, P. 2003, ApJ, 588, 218
+  (<a href="https://doi.org/10.1086/373919">10.1086/373919</a>) — Gini for galaxy morphology.</li>
+<li>Rodriguez-Gomez, V., et al. 2019, MNRAS, 483, 4140
+  (<a href="https://doi.org/10.1093/mnras/sty3345">10.1093/mnras/sty3345</a>) — <code>statmorph</code> implementation ($S$, $F$, CAS, Gini–$M_{20}$).</li>
+</ul>
+<h4 id="validation">Validation</h4>
+<p><code>tests/test_fourier_recovery.py</code> builds an analytic Sérsic at $q$, rebuilds at
+$q + \delta q$, convolves both with the host's real <code>proto_image.fits</code>,
+differences them, and checks what comes back:</p>
+<table>
+<thead>
+<tr>
+<th>injected $\delta q$</th>
+<th>calibrated</th>
+<th>analytic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.020</td>
+<td>0.0193</td>
+<td>0.0169</td>
+</tr>
+<tr>
+<td>0.050</td>
+<td>0.0459</td>
+<td>0.0402</td>
+</tr>
+<tr>
+<td>−0.040</td>
+<td>−0.0428</td>
+<td>−0.0376</td>
+</tr>
+</tbody>
+</table>
+<p>The few percent that remains is genuine second-order nonlinearity
+($\delta q = 0.05$ is an 8% change in $q$) and shrinks with the perturbation,
+which is the regime real residuals live in. An injected $\delta\mathrm{PA}$ of 3.000° comes
+back as 2.996°. The suite also asserts that an injected $\delta q$ produces no
+spurious $\delta\mathrm{PA}$ and vice versa, that the null case returns zero,
+and that the calibration beats the analytic form. Six tests, all passing.</p>
+<p><strong>Outputs.</strong> <code>fourier_dq</code>, <code>fourier_dq_err</code>, <code>fourier_dq_sig</code>,
+<code>fourier_dpa_deg</code>, <code>fourier_dpa_err_deg</code>, <code>fourier_dq_radial</code>,
+<code>fourier_m{1,2,3,4}_amp_{max,median}</code>, <code>fourier_m2_phase_slope_deg_per_re</code>,
+<code>fourier_m2_phase_slope_sig</code>, <code>fourier_m2_phase_scatter_deg</code>,
+<code>fourier_a0_outer_adu</code>, <code>fourier_a0_sky_offset_sigma</code>, <code>fourier_reliable</code>,
+<code>fourier_unreliable_reasons</code>, <code>fourier_kernel_crosstalk</code>, <code>fourier_n_annuli</code>,
+<code>q_fourier_corrected</code>, <code>model_recon_*</code>; full radial profiles in
+<code>fourier_profiles.npz</code>.</p>
+<hr />
+<h3 id="44-sky-perturbation-sky_perturbpy">4.4 Sky perturbation — <code>sky_perturb.py</code></h3>
+<p><strong>Why.</strong> Background error is the dominant systematic for faint and extended
+galaxies. It moves outer-disk flux, and outer-disk flux is what sets $q$ — the
+core is nearly round under any PSF, so the axis ratio is carried by the faintest
+part of the image, which is exactly the part a sky error corrupts.</p>
+<p><strong>Choosing the perturbation amplitude.</strong> The relevant quantity is the
+<strong>large-scale</strong> sky uncertainty, not the per-pixel noise. Taken as</p>
+<p>$$
+\sigma_{\rm sky} = 1.4826 \times \mathrm{MAD}\big(\texttt{BACKGROUND}\big)
+$$</p>
+<p>over <code>image.cat</code> sources with <code>FLAGS == 0</code>. SExtractor writes a <em>local</em> background
+estimate for every detected source, so the scatter of that column across the
+field is a direct empirical measure of large-scale structure — gradients,
+scattered light, flat-field residuals. The per-pixel sky RMS is recorded for
+reference but deliberately <strong>not</strong> used: it is much larger than the uncertainty
+on the <em>mean</em> sky, and using it would turn the test into an implausible worst
+case rather than a realistic systematic. Cohort median
+<code>sky_sigma_over_pixel_rms</code> = 0.085, i.e. the large-scale term is about 12×
+smaller than per-pixel noise, as it should be.</p>
+<p><strong>Method.</strong> Two re-fits per host, both minimal-diff copies of production.</p>
+<pre><code>for label, value in (plus, sky_best + sigma), (minus, sky_best - sigma):
+    stage outdir/galfit_sky_&lt;label&gt;/ with copies of:
+        host_cutout.fits  host_sigma.fits  host_mask.fits  proto_image.fits
+        constraints.txt   galfit.feedme
+    edit galfit.feedme, minimally:
+        every Sersic parameter -&gt; reseeded at its best-fit value
+        sky component line  &quot; 1) &lt;sky_best&gt; 1&quot;  -&gt;  &quot; 1) &lt;value&gt; 0&quot;     # fixed
+    strip any sky constraint from constraints.txt
+    run_galfit(wkdir)                       # production's own runner
+    parse out.fits header for q, PA, Re, n, mag
+</code></pre>
+<p><strong>Why reseed at the best fit.</strong> Starting the optimizer from the answer isolates
+the sky effect. If it started from the original guesses, part of the observed
+$\Delta q$ would be optimizer path dependence rather than sky sensitivity, and
+the two would be inseparable.</p>
+<p><strong>Why strip the sky constraint.</strong> GALFIT will happily override a fixed value if
+<code>constraints.txt</code> still bounds it, which would silently turn the perturbation
+into a no-op. The sky QA retry loop is disabled for the same reason. Everything
+else — data, sigma, PSF, mask, region, zero point — is byte-identical to
+production, and the run uses <code>run_galfit()</code> from
+<a href="../galfit_fitting/run_galfit_fitting.py"><code>run_galfit_fitting.py</code></a> so the two
+paths share crash handling.</p>
+<p><strong>What it produces.</strong> Report the full triad for every host:</p>
+<table>
+<thead>
+<tr>
+<th>symbol</th>
+<th>field</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$q_0$</td>
+<td><code>q_sky_0</code> (= production <code>b_a</code>)</td>
+<td>baseline best-fit axis ratio</td>
+</tr>
+<tr>
+<td>$q_{+1}$</td>
+<td><code>q_sky_plus</code></td>
+<td>re-fit with sky fixed at $\mathrm{sky}+\sigma_{\rm sky}$</td>
+</tr>
+<tr>
+<td>$q_{-1}$</td>
+<td><code>q_sky_minus</code></td>
+<td>re-fit with sky fixed at $\mathrm{sky}-\sigma_{\rm sky}$</td>
+</tr>
+</tbody>
+</table>
+<p>Then
+$\Delta q_{\rm sky} = \max\big(\lvert q_{+1}-q_0\rvert,\,\lvert q_{-1}-q_0\rvert\big)$
+(<code>dq_sky</code>) is the per-host <em>systematic</em>, compared to GALFIT's <em>statistical</em>
+<code>b_a_err</code> via <code>dq_sky_over_q_err</code>. Always look at $q_{-1},\,q_0,\,q_{+1}$
+together: a one-sided jump (only plus or only minus moves) is as informative as
+a symmetric swing.</p>
+<p><strong>Outputs.</strong> <code>q_sky_0</code>, <code>q_sky_plus</code>, <code>q_sky_minus</code>, <code>dq_sky</code>, <code>dq_sky_signed</code>,
+<code>dq_sky_over_q_err</code>, the same for PA / $R_e$ / $n$ / mag, <code>sky_sigma_adu</code>,
+<code>sky_sigma_source</code>, <code>sky_pixel_rms_adu</code>, <code>sky_sigma_over_pixel_rms</code>,
+<code>sky_cat_nsources</code>, <code>converged_sky_{plus,minus}</code>, <code>status_sky_{plus,minus}</code>.</p>
+<hr />
+<h3 id="45-isophote-comparison-isophotespy">4.5 Isophote comparison — <code>isophotes.py</code></h3>
+<p><strong>Why.</strong> An independent, <strong>non-parametric</strong> view of the same geometry. GALFIT
+imposes a single $q$ on the whole galaxy by construction; free isophotes do not.
+So this is the only check that can answer <em>where in radius</em> a single-Sérsic
+description breaks.</p>
+<p><strong>Method.</strong> <code>photutils.isophote.Ellipse</code> free fits — $q$ and PA free at every
+isophote — on <strong>both</strong> the data and the <strong>PSF-convolved model</strong> (<code>out.fits</code>
+HDU 2), using the same mask and same starting geometry.</p>
+<p><strong>Ellipse is a parametrization, not a claim that SB is elliptical.</strong> Real
+isophotes need not be ellipses (bars, spirals, boxy/disky deviations). The
+algorithm still fits the <em>best</em> ellipse at each $a$ (Jedrzejewski harmonic
+iteration: sample intensity on a trial ellipse, adjust centre/$q$/PA until the
+$m=1,2$ harmonics vanish). Non-elliptical structure is absorbed into higher
+harmonics / fit residuals — it is not modelled as free shape. So
+$q_{\rm data}(a)$ and $q_{\rm model}(a)$ are “best-fitting ellipse” axis ratios,
+on both images, by construction.</p>
+<p><strong>Why the convolved model and not the data alone.</strong> Isophotal $q$ measured on
+data is biased round by the PSF. Comparing it directly against GALFIT's
+<em>deconvolved</em> $q$ would charge the PSF's rounding to the fit as an error.
+Running the identical isophote machinery on the convolved model applies the
+identical bias to both sides, so the difference isolates the fit.</p>
+<p><strong>Sampling in $a$ (semi-major axis).</strong> Here $a$ <strong>is</strong> the SMA of each fitted
+ellipse (photutils <code>sma</code>, pixels). Growth is geometric with default
+<code>linear=False</code>, <code>step=0.1</code>: $a_{n+1}=a_n\times 1.1$, from
+<code>minsma = max(2, 0.2 Re)</code> out to <code>maxsma = min(3 Re, 0.45×stamp)</code> (and inward
+from the seed). Typical recovery on the 53-cut: ~20 isophotes per host
+(<code>iso_n_data</code> median 20). That is a discrete sampling of the continuum of
+brightness contours — denser steps mostly correlate neighbours.</p>
+<p><strong>The strategy search.</strong> <code>fit_image</code> grows from a seed <code>sma0</code> and aborts if that
+first ellipse fails, so one guess is not a strategy (on <code>20240119A</code>, <code>sma0=8</code>
+gives 21 isophotes; 5 and 12 give none):</p>
+<pre><code>_search(...):
+    seeds = 12 geom-spaced sma0 in [1.2*minsma, 0.9*maxsma]
+    for (step, fix_center) in ((0.10, True), (0.15, True), (0.10, False)):
+        for sma0 in seeds:
+            fit_image(minsma, maxsma, step, nclip=3, fix_pa/eps free)
+            keep the run with the most isophotes; stop early if &gt;= 8
+    reuse that strategy on the model (iso_same_strategy)
+</code></pre>
+<p><strong>What “profile” and $q(a)$ mean.</strong> GALFIT’s $q_{\rm GALFIT}$ is <strong>one number</strong>.
+A profile is $q$, PA, or $I$ <strong>vs</strong> $a$: $q_{\rm data}(a)$ on the cutout,
+$q_{\rm model}(a)$ from the same free-ellipse fit on the convolved model (not
+$q_{\rm GALFIT}$ copied). PSF convolution alone gives a mild $q(a)$ even for
+constant-$q$ Sérsics; differencing cancels that.</p>
+<p><strong>$\Delta q(a)$ and $\sigma_{\Delta q}$.</strong>
+$\Delta q(a)=q_{\rm data}(a)-q_{\rm model}(a)$, with</p>
+<p>$$
+\sigma_{\Delta q}(a)
+= \sqrt{\sigma_{q,{\rm data}}(a)^2 + \sigma_{q,{\rm model}}(a)^2}
+$$</p>
+<p>from photutils ellipticity errors — <strong>not</strong> GALFIT <code>b_a_err</code>.
+<code>iso_break_radius_re</code> = first $a/R_e$ with $|\Delta q|>3\sigma_{\Delta q}$.</p>
+<p><strong>Scalars, IVW, and the flag.</strong> Collapse $\Delta q(a)$ for $a\le 2R_e$ by
+inverse-variance mean (not a plain mean: outer/noisy isophotes have larger
+$\sigma_{\Delta q}$ and would dominate an unweighted average):</p>
+<p>$$
+\texttt{iso\_dq\_2re}
+= \frac{\sum_i w_i\Delta q(a_i)}{\sum_i w_i},
+\quad w_i=1/\sigma_{\Delta q,i}^2,
+\quad
+\texttt{iso\_dq\_2re\_err}=(\sum_i w_i)^{-1/2},
+\quad
+\texttt{iso\_dq\_2re\_sig}
+= \texttt{iso\_dq\_2re}/\texttt{iso\_dq\_2re\_err}.
+$$</p>
+<p><code>flag_iso_dq</code> is $|{\tt iso\_dq\_2re}| > 0.10$ — an absolute cut on that
+collapsed difference, not a cut on <code>iso_dq_2re_sig</code> and not using GALFIT
+$\sigma_q$. Other scalars: <code>iso_q_at_{1,2}re_*</code> (interpolated profile values),
+<code>iso_dq_max_abs_inner</code> / <code>iso_frac_discrepant_inner</code> (how often $|\Delta q|$
+exceeds $3\sigma$ inside $2R_e$), <code>iso_dpa_2re_*</code>, <code>iso_n_*</code>, strategy fields.</p>
+<p>Also the major-axis SB profile in mag arcsec$^{-2}$ (data vs model), kept where
+<code>intens &gt; 0</code>, <code>mu_err &gt; 0</code>, and $\sigma_\mu\le 0.3$ mag.</p>
+<p><strong>Guards.</strong> Search fail with $R_e/\mathrm{FWHM}<0.8$ → <code>unresolved</code>; tiny stamp →
+<code>stamp_too_small</code>. Both benign in the aggregator.</p>
+<p><strong>Population cross-check.</strong> $q_{\rm GALFIT}$ vs $q_{\rm isophote}$ coloured by
+$\mathrm{FWHM}/R_e$: isophotal $q$ should look rounder when unresolved; a
+smooth trend validates both methods, outliers are real discrepancies.</p>
+<p><strong>Outputs.</strong> scalars above; full curves in <code>isophote_profiles.npz</code>.</p>
+<hr />
+<h3 id="46-psf-leakage-psf_leakagepy">4.6 PSF leakage — <code>psf_leakage.py</code></h3>
+<p><strong>Why.</strong> The direct test of whether the measured shapes are partly tracking the
+<em>instrument</em> rather than the galaxies — the classic weak-lensing systematic. If
+$q$ correlated with PSF ellipticity, the inclination distribution would be
+partly an instrument artefact and the science result would be void.</p>
+<p><strong>Method.</strong> PSFEx writes Stokes ellipticity components to <code>psfex.xml</code>:</p>
+<p>$$
+e_{\rm PSF} = \sqrt{e_1^2 + e_2^2},
+\qquad
+\mathrm{PA}_{\rm PSF} = \tfrac12\operatorname{atan2}(e_2, e_1)
+$$</p>
+<p>The production parser in <code>master_run.py</code> keeps only the scalar
+<code>Ellipticity_Mean</code>, which has no direction, so the suite carries its own parser
+rather than modifying production code. An independent estimate from the
+flux-weighted second moments of <code>proto_image.fits</code> — the actual stamp GALFIT
+convolved with — is computed as a cross-check and used as a fallback if the XML
+lacks the Stokes columns:</p>
+<p>$$
+e_1 = \frac{Q_{xx} - Q_{yy}}{Q_{xx} + Q_{yy}},
+\qquad
+e_2 = \frac{2Q_{xy}}{Q_{xx} + Q_{yy}}
+$$</p>
+<p>Both are converted into GALFIT's PA convention (from $+y$) and wrapped to
+$[-90^\circ, 90^\circ)$, since PA is defined modulo 180.</p>
+<p><strong>Population tests</strong> (in <code>aggregate.py</code>, since a leakage test is meaningless one
+galaxy at a time):</p>
+<ol>
+<li>Spearman correlation of $q_{\rm host}$ with $e_{\rm PSF}$.</li>
+<li>Distribution of $\lvert\mathrm{PA}_{\rm host} - \mathrm{PA}_{\rm PSF}\rvert$
+   wrapped to $[0, 90^\circ)$, tested against uniform with a KS test. <strong>This is
+   the sharper of the two</strong>: an amplitude correlation dilutes easily across a
+   heterogeneous cohort, but alignment is unambiguous — there is no astrophysical
+   reason for galaxies to align with a telescope's optics.</li>
+<li>$q_{\rm host}$ against $\mathrm{FWHM}/R_e$ as the resolution control.</li>
+</ol>
+<p><strong>Outputs.</strong> <code>psf_e1</code>, <code>psf_e2</code>, <code>psf_ellipticity</code>, <code>psf_ellipticity_xml</code>,
+<code>psf_ellipticity_moments</code>, <code>psf_pa_deg</code>, <code>psf_pa_moments_deg</code>, <code>psf_pa_source</code>,
+<code>psf_fwhm_xml_px</code>, <code>psf_fwhm_moments_px</code>, <code>psf_nstars</code>, <code>psfex_chi2</code>,
+<code>re_over_fwhm</code>, <code>fwhm_over_re</code>, <code>dpa_host_psf_deg</code>, <code>q_host</code>, <code>pa_host_deg</code>.</p>
+<hr />
+<h3 id="47-magnitude-leakage-mag_leakagepy">4.7 Magnitude leakage — <code>mag_leakage.py</code></h3>
+<p><strong>Why.</strong> A model can be wrong in a way $\chi^2$ tolerates but total flux does
+not. Sky over-subtraction eats the outer disk; a runaway $n$ inflates it. Both
+show up in the integrated magnitude even when the residual map looks clean,
+because they are large-area, low-amplitude errors.</p>
+<p><strong>Definition.</strong> $\Delta m = m_{\rm GALFIT} - m_{\rm ref}$, using the
+<code>ref_survey</code> / <code>ref_mag</code> columns already in <code>pipeline_galfit_results.csv</code>.</p>
+<p><strong>Tests.</strong> $\Delta m$ regressed against $R_e$, $n$, the fitted sky offset, and
+$\chi^2/\nu$, each with slope, standard error and significance. The
+interpretation differs by regressor:</p>
+<table>
+<thead>
+<tr>
+<th>trend</th>
+<th>fingerprint of</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\Delta m$ vs $R_e$</td>
+<td>sky error (a sky offset integrates over area, so it scales with size) — <strong>or</strong> aperture-mismatch in the reference survey</td>
+</tr>
+<tr>
+<td>$\Delta m$ vs $n$</td>
+<td>runaway Sérsic index inflating the extrapolated wing</td>
+</tr>
+<tr>
+<td>$\Delta m$ vs sky offset</td>
+<td>direct confirmation of the above</td>
+</tr>
+<tr>
+<td>$\Delta m$ vs $\chi^2/\nu$</td>
+<td>fit quality; a <em>flat</em> trend argues the others are not fit failures</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Constraint bounds.</strong> Bounds are parsed for component 1 from <code>constraints.txt</code>
+as GALFIT was given them, and a parameter is reported as pinned when it sits
+within 5% <strong>of the bound value</strong>, not of the allowed range:</p>
+<pre><code>_at_bound(value, (lo, hi)):
+    return value &lt;= lo * 1.05  or  value &gt;= hi * 0.95
+</code></pre>
+<p>The range-relative version originally used called $n = 0.62$ "at the bound" with
+$n$ free over 0.5–6.0, which it plainly is not; that inflated the flag count
+from 15 to 27 on the science cut. <code>n_at_floor</code> and <code>n_at_ceiling</code> are reported
+separately, because they mean opposite things.</p>
+<p><strong>Caveat.</strong> Hosts whose Phase 2 zero point failed carry an untrustworthy raw
+<code>mag</code>. The check records <code>zp_ok</code> and <code>mag_final_source</code> so those can be
+separated rather than silently polluting the trend fits.</p>
+<p><strong>Outputs.</strong> <code>dmag_ref</code>, <code>dmag_flag</code>, <code>ref_mag</code>, <code>ref_mag_err</code>,
+<code>ref_sep_arcsec</code>, <code>mag_galfit</code>, <code>mag_galfit_err</code>, <code>mag_final_source</code>,
+<code>n_at_bound</code>, <code>n_at_floor</code>, <code>n_at_ceiling</code>, <code>re_at_bound</code>, <code>mag_at_bound</code>,
+<code>sky_fitted_adu</code>, <code>sky_offset_adu</code>, <code>sky_offset_sigma</code>,
+<code>flux_outside_stamp_frac</code>.</p>
+<hr />
+<h3 id="48-astrophot-cross-fit-astrophot_refitpy">4.8 AstroPhot cross-fit — <code>astrophot_refit.py</code></h3>
+<p><strong>Why.</strong> Agreement between two independent codes — different optimizer, different
+likelihood implementation, different pixel-integration scheme — rules out a whole
+class of implementation-specific and local-minimum failures that no internal
+diagnostic can see. If GALFIT had a systematic quirk in how it handles
+barely-resolved sources, every check above would inherit it; this one would not.</p>
+<p><strong>Method.</strong> AstroPhot v0.16.13 fits a Sérsic to <code>host_cutout.fits</code> with
+<code>host_sigma.fits</code> as the variance source and <code>host_mask.fits</code> applied. The PSF is
+<code>proto_image.fits</code> — <strong>the same stamp GALFIT convolved with</strong> — which makes this
+a like-for-like comparison rather than a comparison of two PSF treatments.
+Sérsic index free, matching the GALFIT configuration.</p>
+<p><strong>AstroPhot finds its own starting point.</strong> Seeding it with GALFIT's answer
+would make agreement much cheaper than it looks; the whole value of the check is
+that it converges independently.</p>
+<p><strong>Sky is the one quantity held common.</strong> GALFIT's fitted level is subtracted from
+the data and AstroPhot fits the galaxy alone. The reason is a parametrization
+trap: AstroPhot's flat sky is
+$\log_{10}(\mathrm{flux}\,/\,\mathrm{arcsec}^{2})$, which cannot represent a
+zero-or-negative background — left free it runs to $-\infty$, and the resulting
+disagreement would be about that parametrization rather than about our fits. The
+sky systematic is measured properly and separately by §4.4.</p>
+<p><strong>Convention reconciliation.</strong> AstroPhot shares GALFIT's PA convention (from
+$+y$) but reports radians; its $R_e$ is in arcsec, not pixels. Its LM optimizer's
+<code>res_loss()</code> is already the <strong>reduced</strong> $\chi^2$, so it is directly comparable to
+GALFIT's <code>Chi^2/nu</code> — dividing by <code>ndf</code> again (as an older repo script does) is
+wrong by a factor of $\nu$.</p>
+<p><strong>Outputs.</strong> <code>ap_q</code>, <code>ap_q_err</code>, <code>ap_pa_deg</code>, <code>ap_re_px</code>, <code>ap_re_arcsec</code>,
+<code>ap_n</code>, <code>ap_chi2nu</code>, <code>ap_message</code>, <code>ap_runtime_s</code>, <code>ap_sky_fixed_adu</code>, and the
+comparisons <code>dq_astrophot</code>, <code>dq_astrophot_over_q_err</code>, <code>dpa_astrophot_deg</code>,
+<code>dn_astrophot</code>, <code>dre_astrophot_frac</code>. The normalized version matters: two codes
+differing by 0.01 in $q$ is unremarkable unless GALFIT claims a 0.001 error.</p>
+<hr />
+<h3 id="49-visual-panel-visualpy">4.9 Visual panel — <code>visual.py</code></h3>
+<p><strong>Why.</strong> No metric replaces looking at the residual. Top-row <strong>data</strong> and
+<strong>model</strong> use an asinh stretch on sky-subtracted flux over the data’s
+$[1,99]$ percentile window (grayscale, soft factor 10) so cores and envelopes
+are both visible. The <strong>residual</strong> stays in $\sigma$ units on diverging
+<code>RdBu_r</code>, clipped at $\pm5$. (Ops detail / regen / pptx:
+<a href="VISUAL_PANELS.md"><code>VISUAL_PANELS.md</code></a>.)</p>
+<p><strong>Per-host panel</strong> (<code>panel.png</code>, 2×3). The two black ellipses on the images
+are <strong>GALFIT geometry at $1R_e$ and $2R_e$</strong> (scale markers), not the free
+isophote fits of §4.5 (those are the curves in the bottom-centre plot; often
+$\sim 20$ of them).</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>role</th>
+<th>why this, not something else</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>top: data / model / resid$/\sigma$</td>
+<td>see morphology + residual</td>
+<td>data+model: asinh 1–99%; resid: $/\sigma$, $\pm5$. Overlays = GALFIT ellipses at $1R_e$ and $2R_e$ (homothetic; $R_e$ = <strong>semi-major</strong>)</td>
+</tr>
+<tr>
+<td>bottom left: $\mu(a)$</td>
+<td>major- <strong>and</strong> minor-axis SB cuts vs elliptical $a/R_e$, data and model</td>
+<td>flux/scale check on both axes; for a correct ellipse the major and minor curves coincide at fixed $a$</td>
+</tr>
+<tr>
+<td>bottom centre: $q(a)$</td>
+<td>free isophotes on data <strong>and</strong> convolved model; blue dotted = <strong>intrinsic</strong> GALFIT $q$</td>
+<td>only plot that shows <em>where</em> shape disagrees (PA twin dropped — triage does not need it)</td>
+</tr>
+<tr>
+<td>bottom right: Fourier $\delta q(a)$</td>
+<td>residual→geometry converter of §4.3</td>
+<td>answers “does the residual look like wrong $q$?” — orthogonal to isophotes</td>
+</tr>
+</tbody>
+</table>
+<p>Those three bottom plots are the geometry triage set: <strong>flux</strong> ($\mu$ on both
+axes), <strong>observed shape vs radius</strong> (isophotes), <strong>residual-implied $\Delta q$</strong>
+(Fourier). Header columns: geometry; \(n\)+photometry+\(\delta m\) errs; corrected
+\(\chi^2/\nu\)+RFF+Lotz+2008 Gini–M20 class (<code>late</code>/<code>early</code>/<code>merger</code>; see
+§4.3 Statmorph / Gini–M20); then
+\(\delta q_{\rm Fou}\), \(\psi_2'\), sky \(q_\pm\), \(\Delta q_{\rm AP-G}\).</p>
+<p><strong>Reading trap — GALFIT $q$ vs isophotal $q$.</strong> The blue line is the
+<em>deconvolved</em> Sérsic $q$. Isophotal $q(a)$ is measured on <strong>pixel images after
+the PSF</strong>. For $R_e\lesssim\mathrm{FWHM}$ the PSF rounds observed isophotes, so
+both $q_{\rm data}(a)$ and $q_{\rm model}(a)$ sit well above GALFIT $q$ even
+when the fit is right — that gap is expected, not a smoking gun. Compare data
+vs model isophotes to each other; use GALFIT $q$ only as the intrinsic
+reference. Fourier $\delta q(a)$ may start at $a/R_e\gtrsim 1$ when inner
+annuli lack $\ge 20$ pixels (width $\sim\mathrm{FWHM}/2$).</p>
+<p><strong>$\chi^2/\nu|_{2R_e}$ vs an outer residual blob.</strong> Localized $\chi^2/\nu$ sums
+only pixels with elliptical $a\le 2R_e$. A bright unmodeled spot <em>outside</em>
+that ellipse does <strong>not</strong> enter it. Global $\chi^2/\nu$ is usually <em>lower</em>
+because thousands of sky pixels (with $\sigma$ slightly overestimated) dilute
+the mean toward $<1$; the local value is higher when the galaxy region itself
+is imperfect — that ordering is expected, not a bug.</p>
+<p><strong>Contact sheet</strong> (<code>outputs/plots/contact_sheet.png</code>): $\sigma$-unit residuals
+for all 64 hosts on a common scale.</p>
+<hr />
+<h2 id="5-aggregation-flags-and-trust-tiers">5. Aggregation, flags and trust tiers</h2>
+<p><code>aggregate.py</code> collects every per-host JSON into one row per host, runs the
+population-level tests (which by nature cannot live in a per-host check), and
+assigns flags.</p>
+<p><strong>Thresholds.</strong> Deliberately loose and explicitly provisional until calibrated
+against the real distribution of each metric:</p>
+<table>
+<thead>
+<tr>
+<th>Threshold</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rff_2re</code></td>
+<td>0.10</td>
+</tr>
+<tr>
+<td><code>fourier_dq</code></td>
+<td>0.05</td>
+</tr>
+<tr>
+<td><code>iso_dq_2re</code></td>
+<td>0.10</td>
+</tr>
+<tr>
+<td><code>dq_sky</code></td>
+<td>0.05</td>
+</tr>
+<tr>
+<td><code>dq_astrophot</code></td>
+<td>0.05</td>
+</tr>
+<tr>
+<td><code>dmag_ref</code></td>
+<td>0.5 mag</td>
+</tr>
+<tr>
+<td><code>sigma_calibration_ratio</code></td>
+<td>outside (0.5, 2.0)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Flags.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flag_sigma_miscalibrated</code></td>
+<td>$r_\sigma$ outside (0.5, 2.0)</td>
+</tr>
+<tr>
+<td><code>flag_rff_high</code></td>
+<td>$\lvert\mathrm{RFF}_{2R_e}\rvert > 0.10$</td>
+</tr>
+<tr>
+<td><code>flag_rff_sky</code></td>
+<td>$\lvert\mathrm{RFF}_{1{-}2R_e} - \mathrm{RFF}_{1R_e}\rvert > 0.10$</td>
+</tr>
+<tr>
+<td><code>flag_fourier_dq</code></td>
+<td>reliable <strong>and</strong> $\lvert\delta q\rvert > 0.05$</td>
+</tr>
+<tr>
+<td><code>flag_fourier_dq_significant</code></td>
+<td>reliable <strong>and</strong> $\lvert\delta q/\sigma_{\delta q}\rvert > 3$</td>
+</tr>
+<tr>
+<td><code>flag_fourier_unusable</code></td>
+<td>failed the §4.3 reliability gate</td>
+</tr>
+<tr>
+<td><code>flag_iso_dq</code></td>
+<td>$\lvert\Delta q_{\rm iso}\rvert > 0.10$</td>
+</tr>
+<tr>
+<td><code>flag_sky_sensitive</code></td>
+<td>$\Delta q_{\rm sky} > 0.05$</td>
+</tr>
+<tr>
+<td><code>flag_astrophot_disagrees</code></td>
+<td>$\lvert q_{\rm AP} - q_{\rm GALFIT}\rvert > 0.05$</td>
+</tr>
+<tr>
+<td><code>flag_dmag</code></td>
+<td>$\lvert\Delta m\rvert > 0.5$</td>
+</tr>
+<tr>
+<td><code>flag_param_at_bound</code></td>
+<td>$n$ or $R_e$ pinned (§4.7)</td>
+</tr>
+<tr>
+<td><code>flag_q_near_floor</code></td>
+<td>$q \le 0.25$</td>
+</tr>
+<tr>
+<td><code>flag_unresolved</code></td>
+<td>$R_e/\mathrm{FWHM} < 1$</td>
+</tr>
+<tr>
+<td><code>flag_check_error</code></td>
+<td>any check status not in {<code>ok</code>, <code>unresolved</code>, <code>stamp_too_small</code>}</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Trust tier.</strong> Only the four flags that speak to whether $q$ <em>itself</em> is
+trustworthy count — <code>flag_fourier_dq</code>, <code>flag_iso_dq</code>, <code>flag_sky_sensitive</code>,
+<code>flag_astrophot_disagrees</code>. A high RFF on a bright spiral is astrophysics, not a
+bad fit, and does not belong in the tier.</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>no geometry flags</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>exactly one</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>two or more</td>
+</tr>
+<tr>
+<td><strong>?</strong></td>
+<td>a check did not complete — the host <em>cannot</em> be graded</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>?</code> tier exists so an un-run host cannot silently score as clean. Note the
+gating on <code>fourier_reliable</code>: without it, every barely-resolved host would be
+condemned by a $\delta q$ that is arithmetic rather than measurement.</p>
+<hr />
+<h2 id="6-data-walkthrough">6. Data walkthrough</h2>
+<p>Suite products live under <code>verification/outputs/</code>. Re-fits, sandboxes, and
+sky-protocol JSON live under <code>verification/Re-fits/</code> (see
+<a href="VERIFICATION_README.md"><code>VERIFICATION_README.md</code></a>).</p>
+<pre><code>outputs/
+├── per_host/&lt;FRB&gt;/                 64 directories
+│   ├── chi2.json  rff.json  fourier.json  psf.json  mag.json
+│   ├── isophote.json  sky.json  astrophot.json  visual.json
+│   ├── fourier_profiles.npz        radial profiles, check 3
+│   ├── isophote_profiles.npz       radial profiles, check 5
+│   ├── panel.png                   the 2x3 diagnostic panel
+│   └── galfit_sky_{plus,minus}/    full staged GALFIT re-runs
+├── panels/
+│   ├── &lt;FRB&gt;.png                   published production panel
+│   └── &lt;FRB&gt;_{n1,sky,n1_sky,psf}.png   confirmed alternate legs
+├── tables/
+│   ├── fit_verification_metrics.csv    64 x 212
+│   ├── fit_verification_flags.csv      64 x 20
+│   ├── gini_m20_53.csv                 Lotz+2008 class from production statmorph
+│   └── population_summary.json         116 cohort-level statistics
+├── plots/
+│   ├── population_diagnostics.png  mag_leakage.png
+│   ├── dq_comparison.png           contact_sheet.png
+├── confirmed_fit_panels.pptx       one confirmed panel per slide
+└── logs/
+
+Re-fits/&lt;FRB&gt;/                      staged re-fits (outside outputs/)
+├── sky_protocol.json
+├── n1/  sky/  n1_sky/  sandbox/
+└── panel_{production,n1,sky,n1_sky}.png
+</code></pre>
+<h3 id="61-per-host-json">6.1 Per-host JSON</h3>
+<p>One file per check, sorted keys, <code>NaN</code>/<code>Inf</code> written as <code>null</code> so the files stay
+valid JSON. Every file carries <code>_check</code>, <code>_frb</code>, <code>_runtime_s</code> and <code>status</code>.
+Key counts and typical runtimes, from <code>20240210A</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Keys</th>
+<th>Runtime</th>
+<th>Status vocabulary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chi2.json</code></td>
+<td>29</td>
+<td>0.02 s</td>
+<td><code>ok</code></td>
+</tr>
+<tr>
+<td><code>rff.json</code></td>
+<td>22</td>
+<td>0.01 s</td>
+<td><code>ok</code></td>
+</tr>
+<tr>
+<td><code>fourier.json</code></td>
+<td>41</td>
+<td>4.1 s</td>
+<td><code>ok</code></td>
+</tr>
+<tr>
+<td><code>psf.json</code></td>
+<td>27</td>
+<td>0.00 s</td>
+<td><code>ok</code></td>
+</tr>
+<tr>
+<td><code>mag.json</code></td>
+<td>33</td>
+<td>0.03 s</td>
+<td><code>ok</code></td>
+</tr>
+<tr>
+<td><code>isophote.json</code></td>
+<td>29</td>
+<td>28.4 s</td>
+<td><code>ok</code>, <code>unresolved</code>, <code>stamp_too_small</code>, <code>isophote_fit_failed</code></td>
+</tr>
+<tr>
+<td><code>sky.json</code></td>
+<td>43</td>
+<td>3.9 s</td>
+<td><code>ok</code></td>
+</tr>
+<tr>
+<td><code>astrophot.json</code></td>
+<td>25</td>
+<td>6.4 s</td>
+<td><code>ok</code></td>
+</tr>
+<tr>
+<td><code>visual.json</code></td>
+<td>7</td>
+<td>1.0 s</td>
+<td><code>ok</code></td>
+</tr>
+</tbody>
+</table>
+<p>Any exception is caught and written as <code>status: "error"</code> with the exception text
+and an 8-frame traceback, so a failure is inspectable without re-running.</p>
+<h3 id="62-fourier_profilesnpz">6.2 <code>fourier_profiles.npz</code></h3>
+<p>33 annuli for <code>20240210A</code>. Everything the $m=2$ analysis rests on, kept so the
+summary scalars can be re-derived or re-weighted without re-running.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Shape</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a_mid</code>, <code>a_mid_re</code></td>
+<td>(N,)</td>
+<td>annulus midpoint in px and in $R_e$</td>
+</tr>
+<tr>
+<td><code>npix</code></td>
+<td>(N,)</td>
+<td>valid pixels in the annulus</td>
+</tr>
+<tr>
+<td><code>coef</code>, <code>coef_err</code></td>
+<td>(N, 9)</td>
+<td>$[A_0, A_1, B_1, A_2, B_2, A_3, B_3, A_4, B_4]$</td>
+</tr>
+<tr>
+<td><code>amp</code></td>
+<td>(5, N)</td>
+<td>$\sqrt{A_m^2 + B_m^2}$ normalized by the local model, $m = 0..4$</td>
+</tr>
+<tr>
+<td><code>dq</code>, <code>dq_err</code></td>
+<td>(N,)</td>
+<td>calibrated $\delta q(a)$</td>
+</tr>
+<tr>
+<td><code>dq_radial</code>, <code>dq_radial_err</code></td>
+<td>(N,)</td>
+<td>analytic $\delta q(a)$, for comparison</td>
+</tr>
+<tr>
+<td><code>dpa_deg</code>, <code>dpa_err_deg</code></td>
+<td>(N,)</td>
+<td>calibrated $\delta\mathrm{PA}(a)$</td>
+</tr>
+<tr>
+<td><code>psi2_rad</code>, <code>psi2_err_rad</code></td>
+<td>(N,)</td>
+<td>$m=2$ phase</td>
+</tr>
+<tr>
+<td><code>kernel_q_coef</code>, <code>kernel_pa_coef</code></td>
+<td>(N, 9)</td>
+<td>the response kernels, same basis</td>
+</tr>
+<tr>
+<td><code>crosstalk</code></td>
+<td>(N,)</td>
+<td>leakage between the two kernels</td>
+</tr>
+<tr>
+<td><code>dmda</code>, <code>model_profile</code></td>
+<td>(N,)</td>
+<td>azimuthally averaged model and its gradient</td>
+</tr>
+<tr>
+<td><code>calibrated</code></td>
+<td>scalar</td>
+<td>whether kernels or the analytic fallback were used</td>
+</tr>
+</tbody>
+</table>
+<h3 id="63-isophote_profilesnpz">6.3 <code>isophote_profiles.npz</code></h3>
+<p>29 isophotes for <code>20240210A</code>, interpolated onto a common $a/R_e$ grid so data and
+model are directly differenceable.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a_re</code>, <code>sma</code>, <code>sma_model</code></td>
+<td>radius grid, and the native grids of each fit</td>
+</tr>
+<tr>
+<td><code>q_data</code>, <code>q_data_err</code>, <code>q_model</code>, <code>q_model_err</code></td>
+<td>axis ratio profiles</td>
+</tr>
+<tr>
+<td><code>q_model_native</code></td>
+<td>model $q$ before interpolation</td>
+</tr>
+<tr>
+<td><code>pa_data_deg</code>, <code>pa_model_deg</code> (+ errors)</td>
+<td>PA profiles, GALFIT convention</td>
+</tr>
+<tr>
+<td><code>pa_model_native_deg</code></td>
+<td>as above, pre-interpolation</td>
+</tr>
+<tr>
+<td><code>dq</code>, <code>dq_err</code>, <code>dpa_deg</code>, <code>dpa_err_deg</code></td>
+<td>data − model differences</td>
+</tr>
+<tr>
+<td><code>intens_data</code>, <code>intens_data_err</code>, <code>intens_model</code></td>
+<td>isophotal intensities</td>
+</tr>
+<tr>
+<td><code>mu_data</code>, <code>mu_model</code>, <code>mu_err</code></td>
+<td>surface brightness, mag arcsec$^{-2}$</td>
+</tr>
+<tr>
+<td><code>mu_valid</code></td>
+<td>where $I > 0$ and $\sigma_\mu > 0$ — the only points safe to plot</td>
+</tr>
+</tbody>
+</table>
+<h3 id="64-galfit_sky_plusminus">6.4 <code>galfit_sky_{plus,minus}/</code></h3>
+<p>A complete, self-contained GALFIT run per leg — 128 across the cohort:
+<code>host_cutout.fits</code>, <code>host_sigma.fits</code>, <code>host_mask.fits</code>, <code>proto_image.fits</code>,
+<code>galfit.feedme</code>, <code>constraints.txt</code> (sky constraint stripped), plus GALFIT's own
+<code>out.fits</code>, <code>fit.log</code>, <code>galfit.01</code>–<code>.03</code> restart files and <code>galfit_stdout.log</code>.
+Because the inputs are staged copies, each directory can be re-run by hand for
+forensics without touching production.</p>
+<h3 id="65-fit_verification_metricscsv-64-212">6.5 <code>fit_verification_metrics.csv</code> — 64 × 212</h3>
+<p>One row per host. Columns are grouped by originating check, in run order; each
+block includes that check's <code>&lt;check&gt;_status</code> column.</p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Cols</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>production baseline</td>
+<td>13</td>
+<td><code>frb</code>, <code>in_53</code>, <code>snr_win</code>, <code>mag</code>, <code>b_a</code>, <code>b_a_err</code>, <code>re</code>, <code>n</code>, <code>pa</code>, <code>chi2nu</code>, <code>zp_ok</code>, <code>ref_survey</code>, <code>n_sersic_components</code></td>
+</tr>
+<tr>
+<td>check 1 — <code>chi2_*</code></td>
+<td>24</td>
+<td><code>chi2nu_global</code>, <code>chi2nu_local_2re</code>, <code>sigma_calibration_ratio</code>, <code>residual_closure</code>, <code>re_over_fwhm</code></td>
+</tr>
+<tr>
+<td>check 2 — <code>rff_*</code></td>
+<td>18</td>
+<td><code>rff_1re</code>, <code>rff_2re</code>, <code>rff_annulus_1_2re</code>, <code>rff_outer_minus_inner</code></td>
+</tr>
+<tr>
+<td>check 3 — <code>fourier_*</code>, <code>model_recon_*</code></td>
+<td>36</td>
+<td><code>fourier_dq</code>, <code>fourier_reliable</code>, <code>fourier_unreliable_reasons</code>, <code>model_recon_max_frac</code></td>
+</tr>
+<tr>
+<td>check 6 — <code>psf_*</code></td>
+<td>21</td>
+<td><code>psf_ellipticity</code>, <code>psf_pa_deg</code>, <code>dpa_host_psf_deg</code>, <code>fwhm_over_re</code></td>
+</tr>
+<tr>
+<td>check 7 — <code>mag_*</code></td>
+<td>20</td>
+<td><code>dmag_ref</code>, <code>n_at_floor</code>, <code>n_at_ceiling</code>, <code>sky_offset_sigma</code></td>
+</tr>
+<tr>
+<td>check 5 — <code>iso_*</code></td>
+<td>26</td>
+<td><code>iso_dq_2re</code>, <code>iso_q_at_1re_data</code>, <code>iso_break_radius_re</code>, <code>iso_same_strategy</code></td>
+</tr>
+<tr>
+<td>check 4 — <code>*_sky*</code></td>
+<td>37</td>
+<td><code>dq_sky</code>, <code>dq_sky_over_q_err</code>, <code>sky_sigma_adu</code>, <code>q_sky_plus</code>, <code>q_sky_minus</code></td>
+</tr>
+<tr>
+<td>check 8 — <code>ap_*</code></td>
+<td>17</td>
+<td><code>ap_q</code>, <code>ap_chi2nu</code>, <code>dq_astrophot</code>, <code>dq_astrophot_over_q_err</code></td>
+</tr>
+</tbody>
+</table>
+<p>Production columns take precedence on merge, so a check re-reporting <code>mag</code> or
+<code>b_a</code> for convenience cannot shadow the authoritative value or produce <code>_x</code>/<code>_y</code>
+suffixes.</p>
+<h3 id="66-fit_verification_flagscsv-64-20">6.6 <code>fit_verification_flags.csv</code> — 64 × 20</h3>
+<p><code>frb</code>, <code>in_53</code>, the 14 <code>flag_*</code> booleans of §5, <code>fourier_reliable</code>,
+<code>n_geometry_flags</code>, <code>n_flags_total</code>, <code>trust_tier</code>. Deliberately small: this is
+the triage table, meant to be read directly.</p>
+<h3 id="67-population_summaryjson-116-keys">6.7 <code>population_summary.json</code> — 116 keys</h3>
+<p>Every cohort-level statistic, computed twice — suffix <code>_all64</code> and <code>_in53</code> — so
+the effect of the science cut is always visible. Families:</p>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>psf_q_vs_epsf_*</code></td>
+<td>Spearman $r$, $p$, $n$ for the leakage test</td>
+</tr>
+<tr>
+<td><code>psf_dpa_ks_*</code></td>
+<td>KS statistic, $p$, median, $n$ for PA alignment</td>
+</tr>
+<tr>
+<td><code>psf_q_vs_fwhm_over_re_*</code></td>
+<td>the resolution control</td>
+</tr>
+<tr>
+<td><code>chi2nu_local_vs_{snr,re_over_fwhm,mag}_*</code></td>
+<td>is $\chi^2/\nu$ an SNR meter?</td>
+</tr>
+<tr>
+<td><code>dmag_vs_{re,n,sky,chi2nu}_*</code></td>
+<td>slope, error, significance, $r$, $p$, $n$</td>
+</tr>
+<tr>
+<td><code>q_vs_{isophote,astrophot}_*</code></td>
+<td>median offset, MAD scatter, $n$</td>
+</tr>
+<tr>
+<td><code>&lt;metric&gt;_{median,p16,p84}_in53</code></td>
+<td>distribution summaries for 8 headline metrics</td>
+</tr>
+</tbody>
+</table>
+<h3 id="68-plots">6.8 Plots</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>population_diagnostics.png</code></td>
+<td>2×3: $\chi^2/\nu$ vs SNR; RFF vs $R_e$/FWHM; $q$ vs $e_{\rm PSF}$; PA-alignment histogram against uniform; $q_{\rm AP}$ vs $q_{\rm GALFIT}$; $q_{\rm iso}$ vs $q_{\rm GALFIT}$</td>
+</tr>
+<tr>
+<td><code>mag_leakage.png</code></td>
+<td>1×4: $\Delta m$ against $R_e$, $n$, sky offset, $\chi^2/\nu$</td>
+</tr>
+<tr>
+<td><code>dq_comparison.png</code></td>
+<td>1×3 histograms of the three independent $\delta q$ handles, with medians</td>
+</tr>
+<tr>
+<td><code>contact_sheet.png</code></td>
+<td>64 $\sigma$-unit residual thumbnails</td>
+</tr>
+</tbody>
+</table>
+<h3 id="69-reading-it-back">6.9 Reading it back</h3>
+<pre><code class="language-python">import pandas as pd, numpy as np, json
+
+m = pd.read_csv(&quot;outputs/tables/fit_verification_metrics.csv&quot;, dtype={&quot;frb&quot;: str})
+f = pd.read_csv(&quot;outputs/tables/fit_verification_flags.csv&quot;,   dtype={&quot;frb&quot;: str})
+pop = json.load(open(&quot;outputs/tables/population_summary.json&quot;))
+
+sci = m[m.in_53]                                    # the 53-host science cut
+sci[sci.fourier_reliable == True].fourier_dq        # only where the estimator had leverage
+f[f.trust_tier.isin([&quot;C&quot;, &quot;?&quot;])].frb                # hosts needing a look
+
+z = np.load(&quot;outputs/per_host/20240210A/fourier_profiles.npz&quot;)
+z[&quot;a_mid_re&quot;], z[&quot;dq&quot;], z[&quot;dq_err&quot;]                 # the delta-q profile
+</code></pre>
+<hr />
+<h2 id="7-results-first-full-run">7. Results — first full run</h2>
+<p>Date: 2026-08-05.</p>
+<p>All nine checks over all 64 hosts. Numbers are the 53-host science cut, quoted as
+median [p16, p84].</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Median [p16, p84]</th>
+<th>Reading</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chi2nu_global</code></td>
+<td>0.889 [0.743, 1.707]</td>
+<td>$\sigma$ mildly over-estimated, not manufactured</td>
+</tr>
+<tr>
+<td><code>sigma_calibration_ratio</code></td>
+<td>0.892 [0.839, 0.959]</td>
+<td>blank-sky MAD $\approx 0.89\times$ <code>host_sigma</code></td>
+</tr>
+<tr>
+<td><code>rff_2re</code></td>
+<td>−0.002 [−0.034, +0.071]</td>
+<td>residual consistent with noise inside $2R_e$</td>
+</tr>
+<tr>
+<td><code>iso_dq_2re</code></td>
+<td>−0.026 [−0.076, +0.008]</td>
+<td>GALFIT $q$ slightly rounder than free isophotes</td>
+</tr>
+<tr>
+<td><code>dq_astrophot</code></td>
+<td>−0.006 [−0.020, −0.000]</td>
+<td>scatter 0.008 against an independent fitter</td>
+</tr>
+<tr>
+<td><code>dq_sky</code></td>
+<td>0.004 [0.001, 0.055]</td>
+<td>$q$ insensitive to a $\pm1\sigma$ sky shift</td>
+</tr>
+<tr>
+<td><code>dmag_ref</code></td>
+<td>−0.038 [−0.355, +0.112]</td>
+<td>photometry ties to the reference surveys</td>
+</tr>
+<tr>
+<td><code>model_recon_max_frac</code></td>
+<td>0.0013 [0.0007, 0.0090]</td>
+<td>the analytic rebuild reproduces GALFIT to 0.1%</td>
+</tr>
+<tr>
+<td><code>re_over_fwhm</code></td>
+<td>1.03 [0.53, 4.18]</td>
+<td><strong>half the cohort is at or below the PSF scale</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="71-the-four-falsification-tests-all-pass">7.1 The four falsification tests all pass</h3>
+<ol>
+<li><strong>No PSF leakage.</strong> $q_{\rm host}$ versus $e_{\rm PSF}$: Spearman $r = +0.04$,
+   $p = 0.77$. $q$ versus FWHM/$R_e$: $r = -0.045$, $p = 0.75$.
+   $\mathrm{PA}_{\rm host} - \mathrm{PA}_{\rm PSF}$ is consistent with uniform
+   (KS $p = 0.85$). The axis ratios are not tracking the instrument.</li>
+<li><strong>An independent fitter agrees.</strong> AstroPhot reproduces GALFIT's $q$ with a
+   median offset of $-0.006$ and MAD scatter $0.008$ — far below the $\sim0.05$
+   that would matter for inclination. Three hosts disagree (§7.3).</li>
+<li><strong>Sky is not driving $q$.</strong> Median $\lvert\Delta q\rvert$ under a
+   $\pm1\sigma$ sky shift is 0.004; only 9/53 exceed 0.05.</li>
+<li><strong>Residuals carry no $m=2$ signal</strong> where the estimator is usable: median
+   $\delta q = -0.035$, $\max\lvert\delta q\rvert = 0.121$ over the 20 hosts
+   that pass the reliability gate.</li>
+</ol>
+<h3 id="72-what-the-run-exposed">7.2 What the run exposed</h3>
+<p><strong>Resolution, not fit quality, is the limiting factor.</strong> 25/53 hosts have
+$R_e < \mathrm{FWHM}$. This is why the Fourier estimator is usable on only 24/53
+(<code>too_few_annuli</code> and <code>unresolved</code> dominate; crosstalk is recorded but no longer
+gates — hosts can fail more than one gate): a source smaller than the PSF has
+no annuli to decompose.
+The gate is doing its job; reporting $\delta q$ for those hosts would be
+reporting noise.</p>
+<p><strong>$\chi^2/\nu$ is an SNR meter, as anticipated.</strong> Localized $\chi^2/\nu$
+correlates with <code>snr_win</code> ($r = +0.41$, $p = 0.003$) and with $R_e/\mathrm{FWHM}$
+($r = +0.31$, $p = 0.023$). It ranks brightness, not correctness, and must not be
+used as a pass/fail gate.</p>
+<p><strong>A real $\Delta m$–$R_e$ trend</strong>, slope $-0.150$ mag arcsec$^{-1}$ at
+$6.3\sigma$: larger fits are systematically brighter than the reference aperture
+magnitude. Expected — the reference surveys use fixed apertures that miss
+extended wings — but it is also the classic sky-error fingerprint, so it is worth
+separating before the photometry is quoted. $\Delta m$ versus $\chi^2/\nu$ is
+flat ($0.3\sigma$), which argues against a fit-quality origin.</p>
+<p><strong>15/53 hosts have Sérsic $n$ pinned at a constraint</strong> (9 at the 0.5 floor, 6 at
+the 6.0 ceiling), and 3 have $R_e$ at a bound. Given the $n$–$q$ degeneracy this
+is the strongest argument for settling the fixed-versus-free $n$ question in §9.</p>
+<h3 id="73-trust-tiers">7.3 Trust tiers</h3>
+<p><strong>53-host cut: A = 34, B = 13, C = 6, ? = 0.</strong> The six tier-C hosts:</p>
+<table>
+<thead>
+<tr>
+<th>FRB</th>
+<th>$b/a$</th>
+<th>$R_e$/FWHM</th>
+<th>Issue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>20190711A</code></td>
+<td>0.56</td>
+<td>0.26</td>
+<td>$\chi^2/\nu = 347$; AstroPhot gives $q = 0.055$; unresolved, $n$ at ceiling</td>
+</tr>
+<tr>
+<td><code>20220501C</code></td>
+<td>0.52</td>
+<td>0.47</td>
+<td>most sky-sensitive, $\Delta q = 0.171$; AstroPhot $\Delta q = -0.30$; too compact for isophotes</td>
+</tr>
+<tr>
+<td><code>20190523A</code></td>
+<td>0.73</td>
+<td>0.33</td>
+<td>$\Delta q_{\rm sky} = 0.155$; AstroPhot $\Delta q = -0.26$; unresolved</td>
+</tr>
+<tr>
+<td><code>20230930A</code></td>
+<td>0.84</td>
+<td>18.7</td>
+<td>Phase 2 ZP failure — <code>mag = 8.9</code> is not physical, $\Delta m = -8.6$</td>
+</tr>
+<tr>
+<td><code>20220825A</code></td>
+<td>0.62</td>
+<td>1.42</td>
+<td>isophote $\Delta q = +0.161$ alongside a reliable Fourier $\delta q = -0.121$</td>
+</tr>
+<tr>
+<td><code>20220912A</code></td>
+<td>0.63</td>
+<td>1.26</td>
+<td>isophote $\Delta q = -0.127$; everything else clean</td>
+</tr>
+</tbody>
+</table>
+<p>The first four are the same two root causes seen from different angles — three
+are unresolved, one is a known zero-point failure — rather than six independent
+problems. <code>20230930A</code> should not carry a magnitude at all.</p>
+<hr />
+<h2 id="8-deferred">8. Deferred</h2>
+<p>Specified here so they can be switched on without redesign.</p>
+<h3 id="81-profile-likelihood-chi-squared-of-q">8.1 Profile likelihood chi-squared of q</h3>
+<p>Fix $q$ on a grid (0.05 to 0.95, finer near the minimum) and refit <strong>all</strong> other
+parameters at each node. The result is a curve $\chi^2_{\min}(q)$, not two
+points. Three things follow that nothing else provides:</p>
+<ol>
+<li><strong>The real error bar.</strong> $\Delta\chi^2 \le 1$ gives the $1\sigma$ interval,
+   $\Delta\chi^2 \le 4$ the $2\sigma$. This is correct under degeneracy because
+   the other parameters re-adjust at each node — precisely what a
+   covariance-matrix error cannot capture when the surface is non-quadratic.
+   Comparing this width with GALFIT's reported $\sigma_q$ gives the inflation
+   factor, which matters directly: <code>master_run._mc_inclination</code> propagates
+   <code>b_a_err</code> through $10^4$ draws to build every inclination confidence interval
+   the pipeline quotes.</li>
+<li><strong>Whether $q$ is measured at all.</strong> A flat-bottomed curve means the data do
+   not constrain $q$; a double minimum means the fit could have landed elsewhere.</li>
+<li><strong>It subsumes multi-start convergence</strong> along the axis of interest: a smooth
+   single-minimum curve <em>is</em> the proof that there is no local-minimum problem in
+   $q$.</li>
+</ol>
+<p>Cost is roughly 19 re-fits per host, about an hour for the cohort. The
+$n$-at-bound result in §7.2 strengthens the case for running it.</p>
+<h3 id="82-injectionrecovery-into-real-images">8.2 Injection–recovery into real images</h3>
+<p>Inject synthetic galaxies of known parameters into blank regions of the <em>same</em>
+image and run the full pipeline on them, measuring bias and scatter in $q$ at
+each host's true PSF, sky and SNR. Rejected as too computationally intensive:
+useful scatter needs many realizations per host.</p>
+<h3 id="83-multi-start-convergence">8.3 Multi-start convergence</h3>
+<p>Re-fit from deliberately bad initial guesses to map local minima. Rejected;
+largely subsumed by the $\chi^2(q)$ scan.</p>
+<hr />
+<h2 id="9-open-questions">9. Open questions</h2>
+<p>Raised, not settled. Not implemented.</p>
+<ul>
+<li><strong>Sérsic $n$ fixed versus free.</strong> $n$ and $q$ are correlated in practice, and
+  §7.2 shows 15/53 hosts with $n$ pinned at a bound. Re-fitting at $n = 1$ and
+  $n = 4$ and reporting $\Delta q$ would test whether the axis ratios survive the
+  degeneracy.</li>
+<li><strong>Fitted-centre drift.</strong> Fitted centre against the <code>host_components.csv</code>
+  centroid. Distinct from association: this catches a fit wandering off-centre
+  during optimization even when the literature host is correct, which no residual
+  metric flags.</li>
+<li><strong>The $b/a > 0.2$ selection cut.</strong> The 53-host sample is selected on the very
+  quantity whose distribution is the science result, and the cut removes the
+  edge-on tail. Of the eleven excluded hosts, seven fail on $b/a$ alone
+  (<code>20200430A</code>, <code>20220105A</code>, <code>20220717A</code>, <code>20221116A</code>, <code>20230708A</code>, <code>20240201A</code>,
+  <code>20240310A</code>), two on magnitude alone (<code>20190611B</code>, <code>20211203C</code>), and two on
+  both (<code>20220918A</code>, <code>20230712A</code>). The right treatment is to establish, per host,
+  whether the low $b/a$ is a genuine edge-on system or a fit pinned near the
+  constraint floor, and then either model the censoring or justify the cut. The
+  all-64 run exists so that evidence is available.</li>
+<li><strong>How to present the 25 unresolved hosts.</strong> They pass every test that <em>can</em> be
+  run on them, but several tests cannot be run at all. Silently reporting them
+  alongside the resolved hosts overstates the evidence; excluding them
+  re-introduces a selection on size, which correlates with $q$.</li>
+</ul>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "\\[", right: "\\]", display: true}
+    ],
+    throwOnError: false,
+    ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+  });
+});
+</script>
+</body>
+</html>

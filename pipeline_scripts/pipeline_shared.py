@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import logging
 import sys
+from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -138,3 +139,32 @@ def format_phot_apertures(apertures) -> str:
 def render_param_template(base_param: str, n_aper: int) -> str:
     """Substitute the aperture multiplicity ``{NAPER}`` into a .param template."""
     return base_param.replace("{NAPER}", str(int(n_aper)))
+
+
+def header_mag_zeropoint_from_fits(path: str | Path) -> float | None:
+    """Survey photometric ZP from a flux-image FITS header (PS1, etc.).
+
+    Used when Phase 2 calibration is unavailable so GALFIT ``J)`` matches
+    SExtractor instrumental mags (``MAG_ZEROPOINT=0`` in the pipeline).
+    """
+    import math
+    from pathlib import Path as _Path
+
+    p = _Path(path)
+    if not p.is_file():
+        return None
+    try:
+        from astropy.io import fits
+
+        with fits.open(p) as hdul:
+            header = hdul[0].header
+        for key in ("HIERARCH FPA.ZP", "MAGZPT", "ZPT", "PHOTZP"):
+            raw = header.get(key)
+            if raw is None:
+                continue
+            val = float(raw)
+            if math.isfinite(val) and 15.0 <= val <= 30.0:
+                return val
+    except (OSError, ValueError, TypeError, ImportError):
+        return None
+    return None

@@ -20,7 +20,7 @@ def _fmt_cell(v):
 def main():
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     runs_dir = os.path.join(project_root, "tools", "galfit", "runs")
-    output_csv = os.path.join(project_root, "galfit_metrics_summary.csv")
+    output_csv = os.path.join(project_root, "Archive", "csv", "galfit", "galfit_metrics_summary.csv")
     
     if not os.path.exists(runs_dir):
         print("Runs directory not found.")

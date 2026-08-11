@@ -1,0 +1,65 @@
+frb,confirmed,notes
+20171020A,True,
+20180924B,True,
+20181112A,True,confirmed on n=1 fixed re-fit (Re-fits/20181112A/n1); sky-stable; panel outputs/panels/20181112A_n1.png
+20190102C,True,confirmed on protocol-sky re-fit (free n); sky always degenerates free-sky; B/E/F same order (span~5e-4); panel outputs/panels/20190102C_sky.png
+20190523A,True,confirmed on n=1 fixed re-fit; panel outputs/panels/20190523A_n1.png
+20190608B,True,spiral residual (winding ψ2'); sky+AP lock q
+20190611B,False,DOOMED — cannot be fit; do not revisit (mag>22; sky Δq~0.4; AP collapse)
+20190711A,True,confirmed on n1+sky; unresolved; panel outputs/panels/20190711A_n1_sky.png; sky Re-fits/20190711A/sky_protocol.json
+20190714A,True,n at floor; barely resolved; sky+AP+iso lock q
+20191001A,True,spiral/merger residual; winding ψ2'; sky+AP lock q
+20200430A,False,way too unresolved / way too small q (q~0.04±0.18)
+20200906A,True,sky+AP+iso lock q; modest disk residual
+20210320C,True,barely resolved; sky+AP+iso lock q; clean
+20210410D,True,confirmed on n1+sky; B/E/F span~4e-4 (agree=False but same OOM); panel outputs/panels/20210410D_n1_sky.png
+20210807D,True,confirmed on n=1 (tames bullshit Re); panel outputs/panels/20210807D_n1.png
+20211127I,True,confirmed on n=1 (tames Re=100 bound); panel outputs/panels/20211127I_n1.png
+20211203C,True,faint; AP agrees; maybe sky problems (Δq_sky~0.06)
+20211212A,True,spiral residual; winding ψ2'; sky+AP lock q
+20220105A,False,way too unresolved / way too small q
+20220207C,True,edge-on; n at floor; sky+AP+iso lock q
+20220307B,True,sky+AP lock q; clean residuals
+20220310F,True,barely resolved; sky+AP+iso lock q; clean
+20220319D,True,n at ceiling; q locked by sky+AP; structured residual
+20220418A,True,n at floor; sky+AP lock q; clean
+20220501C,True,confirmed on n=1; panel outputs/panels/20220501C_n1.png
+20220509G,True,confirmed on sandbox host+PSF (star NE); panel outputs/panels/20220509G_psf.png; unresolved/merger caveat; Re-fits/20220509G/sandbox/panel_psf.png
+20220717A,False,too unresolved / way too small q
+20220725A,True,confirmed on n1+sky; unresolved; panel outputs/panels/20220725A_n1_sky.png; sky Re-fits/20220725A/sky_protocol.json
+20220825A,True,looks OK; too low SNR — confirm for now
+20220912A,True,sky+AP lock q; clean
+20220914A,True,barely resolved; sky+AP+iso lock q; clean
+20220918A,False,barely resolved; too small q / unconstrained
+20220920A,True,sky+AP+iso lock q; clean
+20221012A,True,barely resolved; sky+AP+iso lock q; clean
+20221101B,True,q OK; Re may be too big; possible Re–n degeneracy
+20221106A,True,sky+AP+iso lock q; clean
+20221116A,False,bullshit Re; sky-dominated / empty; no ref mag (zp_ok=false; 62% flux off-stamp)
+20221219A,True,confirmed on n1+sky; B/E/F poorly agree (F near 0); panel outputs/panels/20221219A_n1_sky.png
+20230124A,True,barely resolved; sky+AP+iso lock q; clean
+20230307A,True,n at ceiling; q locked by sky+AP
+20230526A,True,confirmed on n1+sky; unresolved; panel outputs/panels/20230526A_n1_sky.png; sky Re-fits/20230526A/sky_protocol.json
+20230613A,True,compact disk; q locked by sky+AP
+20230626A,True,confirmed on n1+sky; unresolved; panel outputs/panels/20230626A_n1_sky.png; sky Re-fits/20230626A/sky_protocol.json
+20230628A,True,compact disk; q locked; neighbor caveat
+20230708A,False,too unresolved; needle q; Re floor; n ceiling
+20230712A,False,too unresolved; needle q; huge q err
+20230902A,True,barely resolved; q soft-locked sky+AP; PSF-trap caveat
+20230907D,True,resolved disk; q locked by sky+AP+iso
+20230930A,False,REJECTED - whole lotta diffuse light / structured background; bad sky (unusable for inclination)
+20231020B,True,barely resolved; q soft-locked; PSF-trap caveat
+20231120A,True,edge-on disk; spiral residual; q locked; near q cut
+20231123B,True,inclined disk; mild structure; q locked
+20231220A,True,confirmed on n1+sky; unresolved; panel outputs/panels/20231220A_n1_sky.png; sky Re-fits/20231220A/sky_protocol.json
+20231226A,True,disk; q locked; isophote dip caveat
+20240119A,True,good fit + sky; n floor; SNR very low (~1.2)
+20240201A,True,edge-on; q locked; below q cut (not in 53)
+20240208A,True,user confirm; barely resolved; PSF-trap + AP-offset caveat
+20240210A,True,bright disk; spiral residual; q locked
+20240213A,True,inclined disk; q locked; near q cut; low n
+20240215A,True,barely resolved; q soft-locked; PSF-trap caveat
+20240229A,True,user confirm; unresolved+n ceiling; sky soft; PSF-trap caveat
+20240304A,True,compact disk; q locked by sky; low SNR
+20240310A,False,needle q; PSF trap; AP tinier; below q cut
+20240318A,True,inclined disk; q locked; user re-confirm

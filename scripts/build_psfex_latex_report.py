@@ -83,7 +83,7 @@ def main():
     report_dir.mkdir(parents=True, exist_ok=True)
     tables_dir.mkdir(parents=True, exist_ok=True)
 
-    cmp_csv = repo / "psf_constant_comparison.csv"
+    cmp_csv = repo / "Archive" / "csv" / "psf" / "psf_constant_comparison.csv"
     galfit_csv = repo / "galfit_sigma_metrics_summary.csv"
     legacy_csv = repo / "legacy_vs_galfit_two_inclinations.csv"
 

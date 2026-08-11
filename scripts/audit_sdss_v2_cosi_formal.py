@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Formal cos(i) hypothesis tests and SDSS magnitude benchmark (v2 audit)."""
+"""Formal cos(i) hypothesis tests and SDSS magnitude benchmark (v2 audit).
+
+Writes to plots/plots_null/v2/sdss_audit/formal/:
+  - Hypothesis tests, correlations, sky N(m), cut survival
+  - Median expAB_r per mag bin (full / ur+lnL / strict; no Hubble)
+  - ba_cosi_strict_overlay: median b/a vs median cos(i) on strict pool
+  - cos(i) q_min overlays: fixed-q0 clip and joint strict
+See formal/FORMAL_COSI_AUDIT.md and formal/EXPAB_R_BA_PLOTS.md.
+"""
 
 from __future__ import annotations
 
@@ -29,7 +37,7 @@ from null_catalog_utils import (  # noqa: E402
 )
 from pipeline_null_plot_utils import DEFAULT_SDSS_V2, REPO_ROOT  # noqa: E402
 
-OUT_DIR = REPO_ROOT / "plots" / "plots_null" / "v2_sdss_audit" / "formal"
+OUT_DIR = REPO_ROOT / "plots" / "plots_null" / "v2" / "sdss_audit" / "formal"
 REF_DIR = OUT_DIR / "reference"
 MODELMAG_REF_CSV = REF_DIR / "sdss_modelmag_r_counts.csv"
 YASUDA_CSV = REF_DIR / "yasuda2001_r_counts.csv"

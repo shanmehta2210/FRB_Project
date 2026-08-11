@@ -178,7 +178,7 @@ if all_results:
     params = ['chi2nu', 'mag', 'mag_err', 're', 're_err', 'n', 'n_err', 'b_a', 'b_a_err', 'pa', 'pa_err', 'x', 'x_err', 'y', 'y_err']
     f_keys = keys + [f"{p}_nopsf" for p in params] + [f"{p}_psf" for p in params]
     
-    out_csv = os.path.join(base_dir, "new_16_frbs_galfit_results.csv")
+    out_csv = os.path.join(base_dir, "Archive", "csv", "galfit", "new_16_frbs_galfit_results.csv")
     with open(out_csv, 'w', newline='') as f:
         # Filter keys to only those that exist in the dictionary
         writer = csv.DictWriter(f, fieldnames=f_keys, extrasaction='ignore')

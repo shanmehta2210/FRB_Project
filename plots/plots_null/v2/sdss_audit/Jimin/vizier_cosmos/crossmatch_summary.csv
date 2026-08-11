@@ -1,0 +1,16 @@
+metric,value
+vizier_N,19739.0
+vizier_area_deg2_approx,3.1416
+vizier_density_per_deg2,6283.12
+vizier_rmag_le_21,9903.0
+vizier_rPmag_le_21,9284.0
+jimin_v1_N,9120.0
+jimin_v2_N,17657.0
+jimin_v1_in_1deg_cone,1208.0
+jimin_v2_in_1deg_cone,2299.0
+vizier_matched_v1_1p5asec,1208.0
+vizier_matched_v2_1p5asec,2299.0
+v1_cone_found_in_vizier_pct,100.0
+v2_cone_found_in_vizier_pct,100.0
+median_abs_rdVell_minus_deVAB,0.000224
+median_abs_rdVell_minus_expAB,0.058176

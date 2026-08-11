@@ -292,14 +292,21 @@ def main():
 
     try:
         log.info("Running SExtractor...")
-        # Note: image_name is used, we run inside image_dir
+        # Note: image_name is used, we run inside image_dir. stdin is closed so
+        # neither WSL nor the tool can ever block waiting for console input.
         cmd_sex = ["wsl", "source-extractor", image_name, "-c", "default.sex"]
-        subprocess.run(cmd_sex, cwd=image_dir, check=True)
+        subprocess.run(cmd_sex, cwd=image_dir, check=True, stdin=subprocess.DEVNULL)
+
+        catalog_path = os.path.join(image_dir, catalog_name)
+        if not os.path.isfile(catalog_path) or os.path.getsize(catalog_path) == 0:
+            log.error(f"SExtractor exited 0 but did not produce a non-empty {catalog_name}.")
+            sys.exit(1)
 
         # Iterative PSFEx Strategy
         snrs_to_try = [30, 20, 10, 5, 3, 2.5, 2]
         import xml.etree.ElementTree as ET
 
+        accepted_stars = 0
         for snr in snrs_to_try:
             log.info(f"Executing PSFEx with SAMPLE_MINSN = {snr}")
             # Render dynamic PSFEX for this loop iteration
@@ -314,7 +321,7 @@ def main():
             with open(path_psfex, "w", newline="\n") as f: f.write(psfex_content)
 
             cmd_psfex = ["wsl", "psfex", catalog_name, "-c", "default.psfex"]
-            subprocess.run(cmd_psfex, cwd=image_dir, check=True)
+            subprocess.run(cmd_psfex, cwd=image_dir, check=True, stdin=subprocess.DEVNULL)
 
             # Parse XML to find NStars_Accepted_Total
             xml_path = os.path.join(image_dir, "psfex.xml")
@@ -347,6 +354,19 @@ def main():
                 break
             elif snr != snrs_to_try[-1]:
                 log.info("  -> Insufficient stars. Attempting lower SNR...")
+        else:
+            log.warning(
+                f"PSFEx ladder exhausted with only {accepted_stars} accepted stars "
+                f"(target {min_accepted_stars}); continuing with the last PSF model."
+            )
+
+        # Verify the Phase 1 contract: downstream phases rely on these exact
+        # files, so an exit code of 0 must mean they actually exist.
+        expected = ["image.psf", "proto_image.fits", "segmentation_map.fits"]
+        missing = [f for f in expected if not os.path.isfile(os.path.join(image_dir, f))]
+        if missing:
+            log.error(f"PSFEx/SExtractor finished but expected outputs are missing: {', '.join(missing)}")
+            sys.exit(1)
 
         log.info(f"Success! Catalog and PSF generated in {image_dir}")
         log.info(f"SExtractor DEBLEND_MINCONT = {deblend_mincont}")
@@ -355,6 +375,15 @@ def main():
         log.error(f"Subprocess Error: {e}")
         # Propagate the failure so master_run.py / callers see a non-zero exit
         # code instead of a false-positive "Phase 1 OK".
+        sys.exit(1)
+    except FileNotFoundError:
+        log.error(
+            "Could not launch WSL: 'wsl' was not found on PATH. Install WSL and ensure "
+            "'wsl source-extractor -v' and 'wsl psfex -v' work (see README §2)."
+        )
+        sys.exit(1)
+    except OSError as e:
+        log.error(f"Could not launch subprocess: {e}")
         sys.exit(1)
     finally:
         if args.keep_templates:

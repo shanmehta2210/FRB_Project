@@ -192,7 +192,8 @@ def _run_single_frb(cmd, out_subdir_str, log_path_str, loc_ra, loc_dec):
     out_subdir.mkdir(parents=True, exist_ok=True)
     t_start = time.time()
     with open(log_path, "w", encoding="utf-8") as lf:
-        proc = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT)
+        proc = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT,
+                              stdin=subprocess.DEVNULL)
     elapsed = time.time() - t_start
     summary = collect_summary(out_subdir, loc_ra, loc_dec)
     return proc.returncode, elapsed, summary
@@ -342,10 +343,27 @@ def main():
         raise SystemExit(f"[batch] large_cutouts/ not found at {CUTOUT_DIR}")
     loc_df = pd.read_csv(LOC_CSV, dtype=str).fillna("")
 
+    # Validate --outputs upfront so a typo fails once here instead of once per FRB.
+    _VALID_OUTPUTS = {"catalog", "psf", "photometry", "astropath", "statmorph", "galfit", "all"}
+    bad_outputs = [o for o in args.outputs if o.lower() not in _VALID_OUTPUTS]
+    if bad_outputs:
+        raise SystemExit(
+            f"[batch] Unknown --outputs entries {bad_outputs}. "
+            f"Valid: {sorted(_VALID_OUTPUTS)}."
+        )
+
     frb_names = list(args.frb or [])
-    if args.list_file and args.list_file.is_file():
+    if args.list_file:
+        if not args.list_file.is_file():
+            raise SystemExit(f"[batch] --list-file not found: {args.list_file}")
         if args.list_file.suffix.lower() == ".csv":
-            frb_names.extend(pd.read_csv(args.list_file)["frb"].astype(str).tolist())
+            list_df = pd.read_csv(args.list_file)
+            if "frb" not in list_df.columns:
+                raise SystemExit(
+                    f"[batch] --list-file {args.list_file} has no 'frb' column "
+                    f"(columns: {list(list_df.columns)})."
+                )
+            frb_names.extend(list_df["frb"].astype(str).tolist())
         else:
             frb_names.extend(
                 ln.strip()
@@ -358,10 +376,12 @@ def main():
         wanted = set(frb_names)
         flux_files = [f for f in flux_files if f.stem.removesuffix("_flux") in wanted]
 
-    # Tag string mirrors master_run's logic so we can pre-compute the per-FRB
-    # output folder name for --skip-existing.
-    is_all = ("all" in [o.lower() for o in args.outputs]) or len(args.outputs) == 0
-    tag = "all" if is_all else "_".join(sorted(args.outputs))
+    # Tag string mirrors master_run's resolve_outputs() (lowercase, deduped,
+    # sorted) so we can pre-compute the per-FRB output folder name for
+    # --skip-existing.
+    outputs_norm = [o.lower() for o in args.outputs]
+    is_all = ("all" in outputs_norm) or len(outputs_norm) == 0
+    tag = "all" if is_all else "_".join(sorted(dict.fromkeys(outputs_norm)))
 
     print(f"[batch] {len(flux_files)} FRB(s) to process; outputs={args.outputs}")
     print(f"[batch] localization table: {LOC_CSV}")
@@ -464,7 +484,8 @@ def main():
                 out_subdir.mkdir(parents=True, exist_ok=True)
                 t_start = time.time()
                 with open(log_path, "w", encoding="utf-8") as lf:
-                    proc = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT)
+                    proc = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT,
+                                          stdin=subprocess.DEVNULL)
                 elapsed = time.time() - t_start
                 summary = collect_summary(out_subdir, loc["ra"], loc["dec"])
 
@@ -481,7 +502,7 @@ def main():
                     results.append((frb, "FAIL", f"rc={proc.returncode}", summary))
 
     # ---- Auto-refresh: compare pipeline vs master ----
-    if not args.no_auto_refresh:
+    if not args.no_auto_refresh and not args.dry_run:
         compare_script = REPO_ROOT / "scripts" / "compare_pipeline_galfit_vs_master.py"
         if compare_script.is_file():
             print("\n[batch] Auto-running compare_pipeline_galfit_vs_master.py ...")

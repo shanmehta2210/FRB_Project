@@ -24,7 +24,7 @@ from null_catalog_utils import (
 )
 from pipeline_null_plot_utils import DEFAULT_SDSS_V2, REPO_ROOT
 
-OUT_DIR = REPO_ROOT / "plots" / "plots_null" / "v2_sdss_audit" / "formal"
+OUT_DIR = REPO_ROOT / "plots" / "plots_null" / "v2" / "sdss_audit" / "formal"
 OUT_CSV = OUT_DIR / "cosi_subsample_stability.csv"
 OUT_PNG = OUT_DIR / "cosi_subsample_stability.png"
 

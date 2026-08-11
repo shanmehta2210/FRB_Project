@@ -94,7 +94,7 @@ def parse_second_to_last_block(log_path):
 def main():
     root = "c:/Users/lenovo/Desktop/Bhardwajetal_2024_nature_inclination_angle-main"
     summary_path = os.path.join(root, "master_frb_summary.csv")
-    new16_path = os.path.join(root, "new_16_frbs_galfit_results.csv")
+    new16_path = os.path.join(root, "Archive", "csv", "galfit", "new_16_frbs_galfit_results.csv")
     runs_dir = os.path.join(root, "tools/galfit/runs")
     
     m_df = pd.read_csv(summary_path)

@@ -1,0 +1,48 @@
+# Rigid deterministic grid for PSF-over-magnitude b/a overcorrection simulation.
+# Run all scripts from WSL: ~/miniforge3/envs/frb_project/bin/python <script>.py
+
+grid:
+  intrinsic_ba: [0.9, 0.6, 0.3]
+  intrinsic_re_arcsec: [0.5, 1.0, 2.0]
+  mag_start: 17.0
+  mag_stop: 24.0
+  mag_step: 0.5
+  pa_deg: 30.0
+  sersic_n: 1.0
+
+physics:
+  pixel_scale: 0.396          # arcsec/pixel (SDSS r)
+  psf_fwhm_arcsec: 1.0
+  psf_moffat_beta: 3.0
+  sky_mag_arcsec2: 21.2
+  zeropoint_e: 22.5           # fixed pipeline-like ZP (do NOT auto-tune via sky)
+  coadd_exptime_sec: null     # null -> auto-scale exposure to SNR@Re~1 at calibrate_mag
+  stamp_px: 128
+  rng_seed: 42
+  calibrate_mag: 20.0
+  calibrate_re_arcsec: 1.0
+  target_snr_at_re: 1.0
+
+# Realizations: use EITHER n_realizations (int) OR n_realizations_by_mag (not both).
+realizations:
+  n_realizations: 1
+  # Example for future scale-up (uncomment and remove n_realizations above):
+  # n_realizations_by_mag:
+  #   default: 1
+  #   ">=21.0": 5
+  #   ">=23.0": 20
+
+galfit:
+  modes: [psf, nopsf]
+  mag_min: 8.0
+  mag_max: 40.0
+  xy_bound_pix: 1.0
+  conv_box_pad: 24
+  # Lock mag and sky to truth (0 on sky-subtracted stamps). Isolates b/a-only degeneracy.
+  lock_mag: true
+  lock_sky: true
+  sky_tolerance_adu: null
+  sky_tolerance_noise_frac: 0.2
+
+paths:
+  outputs_dir: outputs_locked

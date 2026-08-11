@@ -107,7 +107,7 @@ def main():
     if results:
         df_new = pd.DataFrame(results)
         
-        csv_path = "psf_fwhm_summary.csv"
+        csv_path = "Archive/csv/psf/psf_fwhm_summary.csv"
         if os.path.exists(csv_path):
             df_old = pd.read_csv(csv_path)
             # rename frb column if it exists under a different name

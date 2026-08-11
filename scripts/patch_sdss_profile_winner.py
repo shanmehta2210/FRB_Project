@@ -18,7 +18,7 @@ Run from repo root::
 
     python scripts/patch_sdss_profile_winner.py
 
-    python scripts/patch_sdss_profile_winner.py --footprint full --in-csv SDSS_catalog_v2_fullsky_modelmr.csv
+    python scripts/patch_sdss_profile_winner.py --footprint full --in-csv catalog/SDSS_catalog_v2_fullsky_modelmr.csv
 
 """
 
@@ -72,9 +72,9 @@ from null_catalog_utils import (
 
 
 
-DEFAULT_IN = "SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_IN = "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
 
-DEFAULT_OUT = "SDSS_catalog_v1_allsky_modelmr.csv"
+DEFAULT_OUT = "catalog/SDSS_catalog_v1_allsky_modelmr.csv"
 
 
 
@@ -376,7 +376,7 @@ def main() -> None:
 
         default=None,
 
-        help="Save/load SkyServer patch table (default: SDSS_lnl_patch_cache.csv or _v2).",
+        help="Save/load SkyServer patch table (default: catalog/SDSS_lnl_patch_cache.csv or _v2).",
 
     )
 
@@ -398,11 +398,11 @@ def main() -> None:
 
         if args.footprint == "full" or args.in_csv == SDSS_CATALOG_V2_DEFAULT:
 
-            args.cache_csv = "SDSS_lnl_patch_cache_v2.csv"
+            args.cache_csv = "catalog/SDSS_lnl_patch_cache_v2.csv"
 
         else:
 
-            args.cache_csv = "SDSS_lnl_patch_cache.csv"
+            args.cache_csv = "catalog/SDSS_lnl_patch_cache.csv"
 
 
 
