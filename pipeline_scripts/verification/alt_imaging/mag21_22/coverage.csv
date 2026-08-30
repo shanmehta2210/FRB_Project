@@ -1,0 +1,14 @@
+frb,ra_deg,dec_deg,mag,band,hsc_deep_r_status,hsc_wide_r_status,hsc_wide_i_status,unions_r_status,des_r_status,ls_r_status,chosen_survey,chosen_hips,stamp_fits,stamp_png,fetch_status
+20181112A,327.3484583333333,-52.97094444444445,21.98,r/i,empty,empty,empty,http_400,ok,ok,des_r,CDS/P/DES-DR2/r,alt_imaging\mag21_22\20181112A_des_r.fits,alt_imaging\mag21_22\20181112A_des_r.png,ok
+20190102C,322.415208643486,-79.4757580984851,21.67,r/i,empty,empty,empty,http_400,empty,ok,ls_r,CDS/P/DESI-Legacy-Surveys/DR10/r,alt_imaging\mag21_22\20190102C_ls_r.fits,alt_imaging\mag21_22\20190102C_ls_r.png,ok
+20190523A,207.064,72.471,21.72,r/i,empty,empty,empty,http_400,empty,empty,,,,,no_coverage
+20200430A,229.7063770513408,12.37660650001851,21.31,r/i,empty,empty,empty,http_400,empty,ok,ls_r,CDS/P/DESI-Legacy-Surveys/DR10/r,alt_imaging\mag21_22\20200430A_ls_r.fits,alt_imaging\mag21_22\20200430A_ls_r.png,ok
+20210410D,326.086,-79.318,21.12,r/i,empty,empty,empty,http_400,empty,ok,ls_r,CDS/P/DESI-Legacy-Surveys/DR10/r,alt_imaging\mag21_22\20210410D_ls_r.fits,alt_imaging\mag21_22\20210410D_ls_r.png,cached
+20220105A,208.8038033684155,22.46647856902548,21.47,r/i,empty,empty,empty,http_400,empty,ok,ls_r,CDS/P/DESI-Legacy-Surveys/DR10/r,alt_imaging\mag21_22\20220105A_ls_r.fits,alt_imaging\mag21_22\20220105A_ls_r.png,cached
+20220501C,352.37916666666666,-32.490722222222225,21.8,r/i,empty,empty,empty,http_400,empty,ok,ls_r,CDS/P/DESI-Legacy-Surveys/DR10/r,alt_imaging\mag21_22\20220501C_ls_r.fits,alt_imaging\mag21_22\20220501C_ls_r.png,cached
+20221219A,257.63,71.627,21.97,r/i,empty,empty,empty,http_400,empty,empty,,,,,no_coverage
+20230708A,303.1155111011838,-55.3562621673756,21.89,r/i,empty,empty,empty,http_400,ok,ok,des_r,CDS/P/DES-DR2/r,alt_imaging\mag21_22\20230708A_des_r.fits,alt_imaging\mag21_22\20230708A_des_r.png,cached
+20230902A,52.13996109451779,-47.33343399750132,21.54,r/i,empty,empty,empty,http_400,ok,ok,des_r,CDS/P/DES-DR2/r,alt_imaging\mag21_22\20230902A_des_r.fits,alt_imaging\mag21_22\20230902A_des_r.png,cached
+20231020B,57.278,-37.77,21.75,r/i,empty,empty,empty,http_400,ok,ok,des_r,CDS/P/DES-DR2/r,alt_imaging\mag21_22\20231020B_des_r.fits,alt_imaging\mag21_22\20231020B_des_r.png,cached
+20240119A,224.467,71.612,21.44,r/i,empty,empty,empty,http_400,empty,empty,,,,,no_coverage
+20240208A,159.2290009407401,-0.9533965604824464,21.62,r/i,empty,ok,ok,http_400,empty,ok,hsc_wide_r,CDS/P/HSC/DR2/wide/r,alt_imaging\mag21_22\20240208A_hsc_wide_r.fits,alt_imaging\mag21_22\20240208A_hsc_wide_r.png,cached

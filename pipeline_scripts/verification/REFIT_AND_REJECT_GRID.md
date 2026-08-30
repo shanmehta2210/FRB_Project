@@ -23,6 +23,7 @@ python run_refit.py 20181112A --fix-n 1 --label n1
 python run_refit.py 20181112A --sky-from-protocol --label sky
 python run_refit.py 20181112A --sky-from-protocol --fix-n 1 --label n1_sky
 python run_refit.py 20181112A --sky-adu 6.3e-5 --fix-n 1 --label n1_sky
+python run_refit.py 20221101B --add-psf-at-masked-star --psf-dmag 2 --label psf
 ```
 
 | flag | effect |
@@ -30,6 +31,8 @@ python run_refit.py 20181112A --sky-adu 6.3e-5 --fix-n 1 --label n1_sky
 | `--fix-n N` | host Sérsic index fixed at `N` (first Sérsic only) |
 | `--sky-adu X` | sky component fixed at `X` ADU |
 | `--sky-from-protocol` | sky = `Re-fits/<FRB>/sky_protocol.json` consensus |
+| `--add-psf-at-masked-star` | unmask the Phase 3a star island and add a free GALFIT `psf` at its centroid (host Sérsic stays). Production never jointly fits stars. |
+| `--psf-dmag X` | PSF mag seed = host mag − X (default 2) |
 | `--label` | subdir name under `Re-fits/<FRB>/` |
 | `--checks` | subset of suite (default all) |
 
@@ -51,8 +54,8 @@ verification status).
 
 ### Panel titles
 
-Refit panels can show `[n1]`, `[sky]`, or `[n1+sky]` via `refit_meta.json`
-(see `checks/visual.py`).
+Refit panels can show `[n1]`, `[sky]`, `[n1+sky]`, or `[psf]` via
+`refit_meta.json` (see `checks/visual.py`).
 
 ## Standard legs
 

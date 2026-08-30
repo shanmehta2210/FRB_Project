@@ -196,6 +196,8 @@ def parse_out_header(path: str) -> dict:
             n, n_err = _hdr_value(header, f"{idx}_N")
             q, q_err = _hdr_value(header, f"{idx}_AR")
             pa, pa_err = _hdr_value(header, f"{idx}_PA")
+            fwhm, fwhm_err = _hdr_value(header, f"{idx}_FWHM")
+            c_moff, c_err = _hdr_value(header, f"{idx}_C")
             comps.append(
                 {
                     "comp": idx,
@@ -207,6 +209,8 @@ def parse_out_header(path: str) -> dict:
                     "n": n, "n_err": n_err,
                     "q": q, "q_err": q_err,
                     "pa": pa, "pa_err": pa_err,
+                    "fwhm": fwhm, "fwhm_err": fwhm_err,
+                    "c": c_moff, "c_err": c_err,
                 }
             )
         idx += 1
@@ -392,6 +396,11 @@ class HostData:
     # host; set by model_reconstruction_error(), consumed by build_model().
     oversample: int | None = None
     core_radius: float | None = None
+    # GALFIT mask ∪ production neighbour mask. Residual metrics (RFF, χ², …)
+    # use this so an unmasked companion does not leak into host scores.
+    metric_mask: np.ndarray | None = None
+    # Every extra GALFIT component (Sérsic / PSF / Moffat), 0-based xy.
+    other_components: list[dict] = field(default_factory=list)
 
     @property
     def shape(self) -> tuple[int, int]:
@@ -450,6 +459,10 @@ def load_host_from_dir(hdir: str, frb: str | None = None) -> HostData:
     if mask_img is None:
         mask_img = _read_image(os.path.join(host_dir(frb), "host_mask.fits"))
     mask = np.zeros(data.shape, dtype=bool) if mask_img is None else (mask_img != 0)
+    prod_mask_img = _read_image(os.path.join(host_dir(frb), "host_mask.fits"))
+    metric_mask = mask.copy()
+    if prod_mask_img is not None and np.asarray(prod_mask_img).shape == mask.shape:
+        metric_mask = metric_mask | (np.asarray(prod_mask_img) != 0)
 
     hdr = parse_out_header(out_path)
     comps = hdr["components"]
@@ -519,6 +532,7 @@ def load_host_from_dir(hdir: str, frb: str | None = None) -> HostData:
         neighbours=[
             {**c, "xc": float(c["xc"]) - 1.0, "yc": float(c["yc"]) - 1.0}
             for c in comps[1:]
+            if str(c.get("type", "sersic")).lower() == "sersic"
         ],
         meta=_safe_json(os.path.join(prod_dir, "cutout_meta.json")),
         summary=_safe_json(os.path.join(prod_dir, "pipeline_summary.json")),
@@ -530,6 +544,11 @@ def load_host_from_dir(hdir: str, frb: str | None = None) -> HostData:
         residual_closure=closure,
         log_vs_header=recon,
         notes=notes,
+        metric_mask=metric_mask,
+        other_components=[
+            {**c, "xc": float(c["xc"]) - 1.0, "yc": float(c["yc"]) - 1.0}
+            for c in comps[1:]
+        ],
     )
 
 
@@ -567,28 +586,46 @@ def elliptical_coords(
 def valid_mask(host: HostData, neighbour_re_factor: float = 1.0) -> np.ndarray:
     """Pixels a residual metric may use.
 
-    Finite data/model, positive sigma, unmasked, and — for multi-component fits
-    — outside ``neighbour_re_factor`` Re of every other fitted component, so a
-    neighbour's model error cannot leak into host metrics.
+    Finite data/model, positive sigma, and not in the metric mask. The metric
+    mask is the GALFIT mask plus the production neighbour mask, so a companion
+    that was unmasked only so GALFIT could fit it is still excluded from RFF
+    and χ². Fitted extra components are punched out as well (1 Re for a
+    Sérsic; 2 × FWHM for a PSF/Moffat).
     """
+    ignore = host.metric_mask if host.metric_mask is not None else host.mask
     ok = (
         np.isfinite(host.data)
         & np.isfinite(host.model)
         & np.isfinite(host.sigma)
         & (host.sigma > 0)
-        & ~host.mask
+        & ~ignore
     )
-    for comp in host.neighbours:
-        re_n = float(comp.get("re", float("nan")))
-        q_n = float(comp.get("q", 1.0))
-        pa_n = float(comp.get("pa", 0.0))
-        if not math.isfinite(re_n) or re_n <= 0:
+    extras = list(host.other_components or []) or list(host.neighbours or [])
+    ny, nx = host.shape
+    yy, xx = np.mgrid[0:ny, 0:nx]
+    for comp in extras:
+        ctype = str(comp.get("type", "sersic")).lower()
+        xc = float(comp.get("xc", float("nan")))
+        yc = float(comp.get("yc", float("nan")))
+        if not (math.isfinite(xc) and math.isfinite(yc)):
             continue
-        a_n, _ = elliptical_coords(
-            host.shape, comp["xc"], comp["yc"], q_n if math.isfinite(q_n) else 1.0,
-            pa_n if math.isfinite(pa_n) else 0.0,
-        )
-        ok &= a_n > neighbour_re_factor * re_n
+        re_n = float(comp.get("re", float("nan")))
+        if ctype == "sersic" and math.isfinite(re_n) and re_n > 0:
+            q_n = float(comp.get("q", 1.0))
+            pa_n = float(comp.get("pa", 0.0))
+            a_n, _ = elliptical_coords(
+                host.shape, xc, yc, q_n if math.isfinite(q_n) else 1.0,
+                pa_n if math.isfinite(pa_n) else 0.0,
+            )
+            ok &= a_n > neighbour_re_factor * re_n
+            continue
+        rad = 2.0 * float(host.psf_fwhm) if math.isfinite(host.psf_fwhm) else float("nan")
+        fwhm = float(comp.get("fwhm", float("nan")))
+        if math.isfinite(fwhm) and fwhm > 0:
+            rad = max(rad, 2.0 * fwhm) if math.isfinite(rad) else 2.0 * fwhm
+        if not math.isfinite(rad) or rad <= 0:
+            rad = 8.0
+        ok &= np.hypot(xx - xc, yy - yc) > rad
     return ok
 
 

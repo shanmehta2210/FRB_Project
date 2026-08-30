@@ -13,7 +13,8 @@ follow the doc that matches the job.
 | Confirm / reject hosts; CSV conventions | [`HOST_CONFIRMATION_WORKFLOW.md`](HOST_CONFIRMATION_WORKFLOW.md) |
 | Long-form per-FRB case notes | [`HOST_TRIAGE_CASES.md`](HOST_TRIAGE_CASES.md) |
 | Independent sky (B / E / F) | [`SKY_PROTOCOL.md`](SKY_PROTOCOL.md) |
-| Re-fits, reject grid, fixed-n / fixed-sky legs | [`REFIT_AND_REJECT_GRID.md`](REFIT_AND_REJECT_GRID.md) |
+| Re-fits, reject grid, fixed-n / fixed-sky / masked-star PSF | [`REFIT_AND_REJECT_GRID.md`](REFIT_AND_REJECT_GRID.md) |
+| Deeper-survey / g-band inspection stamps | `fetch_alt_imaging.py` → `alt_imaging/` |
 | Manual GALFIT sandbox | [`SANDBOX.md`](SANDBOX.md) |
 | Visual panels, stretches, pptx | [`VISUAL_PANELS.md`](VISUAL_PANELS.md) |
 | PSFEx / GALFIT / verification PSF normalization | [`PSF_NORMALIZATION.md`](PSF_NORMALIZATION.md) |
@@ -41,6 +42,7 @@ verification/
 ├── vercommon.py                    shared IO / geometry / cohort
 ├── run_verification.py             production suite orchestrator
 ├── run_refit.py                    stage + GALFIT + full suite into Re-fits/
+├── fetch_alt_imaging.py            HSC/DES/LS hips2fits 1′ stamps (mag 21–22 + spirals)
 ├── run_reject_grid.py              n1 / sky / n1_sky grid for rejects
 ├── run_sandbox.py                  hand-edited feedme GALFIT
 ├── sky_protocol.py                 independent sky B/E/F
@@ -74,6 +76,12 @@ python sky_protocol.py 20181112A
 
 # Re-fit: n=1 + protocol sky, full verification
 python run_refit.py 20181112A --sky-from-protocol --fix-n 1 --label n1_sky
+
+# Mag 21–22 deeper r/i + Fourier-spiral g-band inspection stamps
+python fetch_alt_imaging.py
+
+# Masked-star PSF companion (host Sérsic kept)
+python run_refit.py 20221101B --add-psf-at-masked-star --psf-dmag 2 --label psf
 
 # Reject grid (production copy + three legs)
 python run_reject_grid.py

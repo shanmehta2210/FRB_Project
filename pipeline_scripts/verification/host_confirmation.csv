@@ -6,7 +6,7 @@ frb,confirmed,notes
 20190523A,True,confirmed on n=1 fixed re-fit; panel outputs/panels/20190523A_n1.png
 20190608B,True,spiral residual (winding ψ2'); sky+AP lock q
 20190611B,False,DOOMED — cannot be fit; do not revisit (mag>22; sky Δq~0.4; AP collapse)
-20190711A,True,confirmed on n1+sky; unresolved; panel outputs/panels/20190711A_n1_sky.png; sky Re-fits/20190711A/sky_protocol.json
+20190711A,False,"REJECTED — wrong object (star 6.3\" from Heintz host); true host GMOS-S r=23.54 fails mag cut; leave production star on review pile"
 20190714A,True,n at floor; barely resolved; sky+AP+iso lock q
 20191001A,True,spiral/merger residual; winding ψ2'; sky+AP lock q
 20200430A,False,way too unresolved / way too small q (q~0.04±0.18)
@@ -33,7 +33,7 @@ frb,confirmed,notes
 20220918A,False,barely resolved; too small q / unconstrained
 20220920A,True,sky+AP+iso lock q; clean
 20221012A,True,barely resolved; sky+AP+iso lock q; clean
-20221101B,True,q OK; Re may be too big; possible Re–n degeneracy
+20221101B,False,"REJECTED — morphology uncertain; MW star 6\" NE (Gaia) inflates Re; PSF/Moffat/Sersic companion legs all explode; leave on review pile"
 20221106A,True,sky+AP+iso lock q; clean
 20221116A,False,bullshit Re; sky-dominated / empty; no ref mag (zp_ok=false; 62% flux off-stamp)
 20221219A,True,confirmed on n1+sky; B/E/F poorly agree (F near 0); panel outputs/panels/20221219A_n1_sky.png
@@ -55,7 +55,7 @@ frb,confirmed,notes
 20231226A,True,disk; q locked; isophote dip caveat
 20240119A,True,good fit + sky; n floor; SNR very low (~1.2)
 20240201A,True,edge-on; q locked; below q cut (not in 53)
-20240208A,True,user confirm; barely resolved; PSF-trap + AP-offset caveat
+20240208A,True,user confirm; HSC wide-r recut; barely resolved; PSF-trap caveat
 20240210A,True,bright disk; spiral residual; q locked
 20240213A,True,inclined disk; q locked; near q cut; low n
 20240215A,True,barely resolved; q soft-locked; PSF-trap caveat

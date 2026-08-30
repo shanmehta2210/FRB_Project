@@ -187,18 +187,30 @@ Outside the eventual mag cut (\(m=23.01\)), unresolved:
 
 ---
 
-## 20190711A — REJECTED (looks like a star)
+## 20190711A — REJECTED (wrong object; true host fails mag cut)
 
-**Panel:** `outputs/panels/20190711A.png`
+**Panel:** `Re-fits/20190711A/psf_only/compare_sersic_vs_psf.png`
 
-### Host character
-\(m=18.09\), \(R_e=1.5\) px, \(R_e/\mathrm{FWHM}\approx 0.26\), \(n=6\) at ceiling,
-\(R_e\) pinned. Morphologically a **PSF-like point source**, not an extended galaxy.
-AstroPhot collapses (\(q_{\rm AP}=0.055\)); local \(\chi^2/\nu\sim 380\), RFF\(+0.22\);
-Fourier unusable.
+Production fitted SExtractor #501 / LS DR10 PSF \(r=18.33\),
+\(\mathrm{CLASS\_STAR}=0.982\), \(6.3''\) from the published host.
+PSF-only \(\chi^2/\nu=0.94\) vs Sérsic \(1.64\) (\(\Delta\chi^2=-2508\)).
+
+Heintz et al. (2020) / Gordon et al. (2023) host: GMOS-S \(r=23.54\),
+\(21^{\mathrm{h}}57^{\mathrm{m}}40.60^{\mathrm{s}}\), \(-80^{\circ}21'29.25''\),
+offset \(0.49''\), \(z=0.522\), \(R_{\mathrm{eff}}=0.46''\). Not in our catalog.
+True host fails \(m\le 22\). Production star stays in `in_53` on the review
+pile (`confirmed=False`).
+
+Public r-band at the Heintz position (`alt_imaging/20190711A_true_host/`):
+LS DR10 Tractor **REX** \(r=23.13\) at \(0.09''\) (host; \(\mathrm{S/N}\sim5\) in
+the HiPS stamp) and **PSF** \(r=18.33\) at \(6.31''\) (the star we fitted).
+SkyMapper DR4 catalogs only the star; HSC / PS1 / DES / KiDS / UNIONS / Euclid /
+HST / JWST / DECaPS / VPHAS empty. DSS2 sees the star only. No public survey is
+deeper than the LS cutout we already used. Deeper r is the targeted GMOS-S of
+Heintz et al.
 
 ### Decision
-**REJECTED.** Note: **looks like a star**, not a galaxy. Not a Re-fits candidate for host geometry.
+**REJECTED — wrong object.** Do not revisit on this cutout.
 
 ---
 
@@ -836,9 +848,17 @@ Lotz+2008: **late**. Mag vs LS: \(\Delta m_{\rm ref-m}=-0.04\).
 
 ---
 
-## 20221101B — recommend CONFIRMED (\(q\) locked; \(R_e\) sky-sensitive)
+## 20221101B — REJECTED (morphology uncertain; MW star)
 
 **Panel:** `outputs/panels/20221101B.png`
+
+Phase 3a Re-separation jointly fits **close galaxies** (`sep ≤ 3 × Re`) and
+**always masks stars**. Production is still single-Sérsic for all 64 hosts —
+no neighbor galaxy cleared that gate. This stamp has `n_fit_components=1`,
+`n_mask_objects=1`: the white disk NE of the nucleus is a **masked star**,
+not a jointly fitted galaxy. PSF companion re-fit (does not replace
+production): `run_refit.py 20221101B --add-psf-at-masked-star --psf-dmag 2
+--label psf` → `Re-fits/20221101B/psf/`, panel `outputs/panels/20221101B_psf.png`.
 
 ### Host character
 \(m=18.32\), \(R_e=17.5\) px (\(4.58''\)), \(R_e/\mathrm{FWHM}\approx 4.3\),
@@ -856,8 +876,59 @@ Lotz+2008: **merger**. Mag vs PS1: \(\Delta m_{\rm ref-m}=+1.10\), sep \(1.3''\)
 ### Residual morphology
 - \(\chi^2/\nu|_{2R_e,{\rm corr}}\approx 1.16\); \(\mathrm{RFF}_{2R_e}\approx -0.035\) — clean enough.
 
+### PSF companion re-fit (not confirmed)
+`Re-fits/20221101B/psf/`, panel `outputs/panels/20221101B_psf.png`.
+Unmasked seg 1371 (393 px) at \((x,y)=(34.24,50.06)\); PSF seed \(m=16.32\).
+GALFIT accepted a PSF at \((34.05,50.50)\), \(m=17.38\), but **free sky ran away**
+(\(-25\) ADU vs production \(6.22\)) and the host Sérsic ballooned
+(\(q=0.17\), \(R_e=96\) px, \(m=16.70\), \(\chi^2/\nu=9.74\)).
+
+\(n=1\) locked (`Re-fits/20221101B/n1_psf/`, panel `outputs/panels/20221101B_n1_psf.png`):
+\(R_e\) tames (\(14.7\) px, \(m=18.69\)) but sky still blows (\(70\) ADU) and \(q\)
+collapses to \(0.26\) (\(\chi^2/\nu_{\rm corr}\approx 11\)). The degeneracy is
+**sky + PSF**, not \(n\)–\(R_e\).
+
+Free neighbor Sérsic at the same coords (`Re-fits/20221101B/sersic/`, panel
+`outputs/panels/20221101B_sersic.png`): seed \((34.24,50.06)\), \(R_e=2.63\) px,
+\(n=1\), all flags free. Neighbor hits both walls — \(R_e=1.50\) (floor), \(n=6\)
+(ceiling), \(q=0.35\), \(m=16.97\) at \((34.05,50.50)\). Host \(q=0.671\),
+\(n=2.49\), \(R_e=17.76\) px, \(m=17.96\); sky \(-125\) ADU;
+\(\chi^2/\nu_{\rm corr}(2R_e)\approx 8.11\). GALFIT is trying to make a PSF.
+
+Free Moffat at the same coords (`Re-fits/20221101B/moffat/`, panel
+`outputs/panels/20221101B_moffat.png`): extra FWHM \(1.86\) px (on top of
+PSFEx \(4.05\)), \(c=11.7\) (almost Gaussian), \(m=17.26\), \(q=0.46\) — same
+\(q\) as the host. Host hits both walls (\(R_e=100\), \(n=6\)), sky \(-8.9\) ADU,
+\(\chi^2/\nu=2.47\). Slightly fatter PSF, not a galaxy; host still unusable.
+
+\(n=1\) locked (`Re-fits/20221101B/n1_moffat/`, panel
+`outputs/panels/20221101B_n1_moffat.png`): host \(R_e=8.04\) px, \(q=0.540\),
+\(m=19.01\); sky still high (\(38\) ADU);
+\(\chi^2/\nu_{\rm corr}\approx 2.67\) (\(\chi^2/\nu_{\rm corr}(2R_e)\approx 2.27\)).
+Moffat unchanged (FWHM \(1.87\) px, \(c=11.2\), \(q=0.47\), \(m=17.26\)).
+
+Star cut on seg 1371 (Phase 2 NUMBER 1401, match \(0.006''\)):
+\(\mathrm{CLASS\_STAR}=0.983\) (mask if \(\ge 0.75\));
+\(\mathrm{SPREAD\_MODEL}=0.00273\pm 0.00002\),
+\(\mathrm{SPREAD}+3\sigma=0.00280\) (mask if \(< 0.005\));
+PSFEx FWHM \(4.05\) px, \(\chi^2=1.07\). Not borderline on either cut.
+
+None of the companion legs is a replacement. Production \(q\) is not trusted
+for the paper.
+
+Residual metrics now punch out the companion the same way production
+does (GALFIT mask \(\cup\) production star island, plus \(2\times\)FWHM
+around a PSF/Moffat). With that, \({\rm RFF}_{1R_e}\) is
+\(-0.003\pm 0.010\) (production), \(+0.018\pm 0.007\) (Sérsic),
+\(+0.018\pm 0.011\) (free Moffat; \(R_e=100\) fills the stamp),
+\(+0.129\pm 0.008\) (\(n=1\) Moffat), \(+0.227\pm 0.007\) (PSF),
+\(+0.278\pm 0.008\) (\(n=1\) PSF).
+
 ### Decision
-**CONFIRMED** for \(q\). Note: \(R_e\) may be too big; possible \(R_e\)–\(n\) degeneracy (sky-minus blows \(R_e\), \(n\to 6\)).
+**REJECTED — morphology uncertain.** Sharma host (“Nina”) is real, but the
+Gaia star \(6''\) NE inflates production \(R_e\) (\(n=4.18\), \(17.5\) px) and
+every joint PSF / Sérsic / Moffat leg explodes. Leave on the review pile.
+Do not put \(q\) in the paper from this stamp.
 
 ---
 
@@ -1377,25 +1448,31 @@ PA \(=+62.2^\circ\), \(n=0.61\). Mag vs LS: \(\Delta m_{\rm ref-m}=+0.00\).
 
 ---
 
-## 20240208A — CONFIRMED (user override; barely resolved)
+## 20240208A — CONFIRMED (user override; barely resolved; HSC recut)
 
 **Panel:** `outputs/panels/20240208A.png`
 
+**Imaging:** LS 10′ pair replaced with HSC PDR3 wide-\(r\) (CDS HiPS
+`CDS/P/HSC/DR2/wide/r`), resampled to the pipeline 0.262″/px 2290² grid.
+Previous LS pair is in `large_cutouts/_pre_hsc/`. HiPS has no variance plane;
+invvar is sky-MAD. Native HSC seeing is **not** recovered (FWHM \(\approx 3.78\) px
+\(\approx 1.0''\) on this grid). DES was not used — LS DR10 already includes DECam.
+
 ### Host character
-\(m=21.62\), \(R_e=2.8\) px (\(0.73''\)), \(R_e/\mathrm{FWHM}\approx 0.60\),
-SNR \(\sim 1.0\). \(q=0.277\pm 0.037\), PA \(=+66.2^\circ\), \(n=1.45\).
-Lotz+2008: **late**. Mag vs LS: \(\Delta m_{\rm ref-m}=+0.10\).
+\(m=21.80\), \(R_e=2.47\) px (\(0.65''\)), \(R_e/\mathrm{FWHM}\approx 0.65\),
+SNR \(\sim 7.1\). \(q=0.40\pm 0.01\), PA \(=+67.4^\circ\), \(n=1.15\).
+Lotz+2008: **late**. Mag vs LS catalog: \(\Delta m_{\rm ref-m}=+0.08\).
 
 ### Geometry
 | test | result | reading |
 |---|---|---|
-| AstroPhot | \(q_{\rm AP}\approx 0.23\); \(\Delta q=-0.044\) | Mild offset / tinier |
-| Sky \(\pm1\sigma\) | \(q_+\approx 0.265\), \(q_-\approx 0.288\); \(n\) swings | Soft but bounded |
-| Isophotes | data \(q(1R_e)\approx 0.69\) vs GALFIT \(0.28\) | PSF trap caveat |
+| AstroPhot | \(q_{\rm AP}\approx 0.397\); \(\Delta q=-0.006\) | Agrees |
+| Sky \(\pm1\sigma\) | \(q_+\approx 0.397\), \(q_-\approx 0.410\); \(n\) 0.98–1.46 | \(q\) locked |
+| Isophotes | data \(q(1R_e)\approx 0.72\) vs GALFIT \(0.40\) | PSF trap caveat |
 | Fourier | unreliable (`too_few_annuli,unresolved`) | ignore |
 
 ### Decision
-**CONFIRMED** (user override). Barely resolved; keep PSF-trap + AP-offset + low-SNR caveats.
+**CONFIRMED** (user override). Barely resolved; PSF-trap remains (isophotal \(q\sim 0.72\) vs intrinsic \(0.40\)). AP offset is gone after the HSC recut.
 
 ---
 

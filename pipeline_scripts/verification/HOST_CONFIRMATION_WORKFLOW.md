@@ -34,7 +34,7 @@ When confirmation uses a **re-fit leg** (not production), cite leg + panel:
 
 ```text
 confirmed on n=1 fixed re-fit; panel outputs/panels/20181112A_n1.png
-confirmed on n1+sky; unresolved; panel outputs/panels/20190711A_n1_sky.png
+confirmed on n1+sky; unresolved; panel outputs/panels/20230526A_n1_sky.png
 confirmed on sandbox host+PSF; panel outputs/panels/20220509G_psf.png
 REJECTED - whole lotta diffuse light / structured background; bad sky
 ```

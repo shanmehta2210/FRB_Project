@@ -9,9 +9,11 @@ Consumes the products of the earlier checks, so it runs last.
 
 from __future__ import annotations
 
+import csv
 import json
 import math
 import os
+import re
 
 import matplotlib
 
@@ -26,6 +28,12 @@ NAME = "visual"
 
 RES_CLIP = 5.0
 _ASINH_SOFT = 10.0
+_ALT_PANEL = re.compile(
+    r"outputs/panels/([A-Za-z0-9]+_(?:n1_sky|n1_psf|n1_moffat|n1|sky|psf|sersic|moffat))\.png"
+)
+_HC_CSV = os.path.join(os.path.dirname(os.path.abspath(vc.__file__)),
+                       "host_confirmation.csv")
+_REFITS = os.path.join(os.path.dirname(os.path.abspath(vc.__file__)), "Re-fits")
 
 
 def _asinh_display(img: np.ndarray, lo: float, hi: float) -> np.ndarray:
@@ -150,6 +158,12 @@ def _refit_fix_marker(outdir: str) -> str | None:
         return "[n1]" if abs(float(n_fixed) - 1.0) < 1e-6 else f"[n={float(n_fixed):g}]"
     if has_sky:
         return "[sky]"
+    if meta.get("psf_added"):
+        return "[psf]"
+    if meta.get("sersic_added"):
+        return "[sersic]"
+    if meta.get("moffat_added"):
+        return "[moffat]"
     return None
 
 
@@ -214,6 +228,9 @@ def _header_columns(host: vc.HostData, outdir: str) -> list[list[str]]:
         [
             f"$\\chi^2/\\nu_{{\\rm corr}}={_fmt(gcorr, '{:.2f}')}$",
             f"$\\chi^2/\\nu|_{{2R_e,{{\\rm corr}}}}={_fmt(lcorr, '{:.2f}')}$",
+            (
+                f"${{\\rm RFF}}_{{1R_e}}={_fmt(rff.get('rff_1re'), '{:+.3f}')}$"
+            ),
             (
                 f"${{\\rm RFF}}_{{2R_e}}={_fmt(rff.get('rff_2re'), '{:+.3f}')}"
                 f"\\pm{_fmt(rff.get('rff_2re_err'), '{:.3f}')}$"
@@ -284,7 +301,8 @@ def run(host: vc.HostData, outdir: str, panel_path: str | None = None,
     model_disp = _asinh_display(model_flux, float(lo), float(hi))
     with np.errstate(divide="ignore", invalid="ignore"):
         resid_s = np.where(host.sigma > 0, host.resid / host.sigma, np.nan)
-    resid_s = np.where(host.mask, np.nan, resid_s)
+    resid_ignore = host.metric_mask if host.metric_mask is not None else host.mask
+    resid_s = np.where(resid_ignore, np.nan, resid_s)
 
     for col, (img, title, cmap, vmin, vmax) in enumerate((
         (data_disp, r"data  (asinh, 1–99%)", "gray", 0.0, 1.0),
@@ -473,9 +491,46 @@ def write_refit_panel(
     return out
 
 
+def _confirmation_notes() -> dict[str, str]:
+    out: dict[str, str] = {}
+    if not os.path.isfile(_HC_CSV):
+        return out
+    with open(_HC_CSV, encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            frb = str(row.get("frb", "")).strip()
+            notes = row.get("notes") or ""
+            if frb:
+                out[frb] = notes
+    return out
+
+
+def residual_workdir(frb: str, notes: str = "") -> tuple[str, str]:
+    """Confirmed-leg (or PSF-only) workdir for residual tiles; else production."""
+    refits = os.path.join(_REFITS, frb)
+    if "star" in notes.lower():
+        psf_only = os.path.join(refits, "psf_only")
+        if os.path.isfile(os.path.join(psf_only, "out.fits")):
+            return psf_only, "star"
+    m = _ALT_PANEL.search(notes)
+    if m:
+        leg = m.group(1).split("_", 1)[1]
+        cands = [os.path.join(refits, leg)]
+        if leg == "psf":
+            cands.append(os.path.join(refits, "sandbox"))
+        for cand in cands:
+            if os.path.isfile(os.path.join(cand, "out.fits")):
+                return cand, leg
+    return vc.host_dir(frb), "production"
+
+
 def contact_sheet(frbs: list[str], out_path: str, ncols: int = 8) -> str:
-    """Cohort triage sheet: residual in sigma units, one tile per host."""
+    """Cohort triage sheet: residual in sigma units, one tile per host.
+
+    Uses the confirmed-leg ``out.fits`` when ``host_confirmation.csv`` cites an
+    alternate panel (or a star/PSF-only reject). Production otherwise.
+    """
     frbs = list(frbs)
+    notes_map = _confirmation_notes()
     nrows = max(1, math.ceil(len(frbs) / ncols))
     fig, axes = plt.subplots(nrows, ncols, figsize=(2.0 * ncols, 2.15 * nrows))
     axes = np.atleast_1d(axes).ravel()
@@ -483,8 +538,10 @@ def contact_sheet(frbs: list[str], out_path: str, ncols: int = 8) -> str:
         ax.set_xticks([]); ax.set_yticks([]); ax.axis("off")
     for ax, frb in zip(axes, frbs):
         ax.axis("on"); ax.set_xticks([]); ax.set_yticks([])
+        notes = notes_map.get(frb, "")
+        hdir, tag = residual_workdir(frb, notes)
         try:
-            host = vc.load_host(frb)
+            host = vc.load_host_from_dir(hdir, frb=frb)
         except Exception:
             ax.text(0.5, 0.5, f"{frb}\nunreadable", ha="center", va="center",
                     fontsize=6, transform=ax.transAxes)
@@ -492,15 +549,24 @@ def contact_sheet(frbs: list[str], out_path: str, ncols: int = 8) -> str:
         with np.errstate(divide="ignore", invalid="ignore"):
             snr = np.where(host.sigma > 0, host.resid / host.sigma, np.nan)
         snr = np.where(host.mask, np.nan, snr)
-        # Crop to 3 Re so small hosts are not lost inside a large stamp.
-        half = max(int(3 * host.re), 15)
+        re = host.re if math.isfinite(host.re) and host.re > 0 else 5.0
+        half = max(int(3 * re), 15)
         y0, y1 = int(max(0, host.yc - half)), int(min(host.shape[0], host.yc + half))
         x0, x1 = int(max(0, host.xc - half)), int(min(host.shape[1], host.xc + half))
         ax.imshow(snr[y0:y1, x0:x1], origin="lower", cmap="RdBu_r",
                   vmin=-RES_CLIP, vmax=RES_CLIP)
-        ax.set_title(f"{frb}\n$q$={host.q:.2f}", fontsize=6.5, pad=2)
-    fig.suptitle(r"Residual / $\sigma$, clipped $\pm5$, cropped to $3R_e$",
-                 fontsize=11)
+        if tag == "star" or not math.isfinite(host.q):
+            label = f"{frb} [{tag}]\nstar"
+        elif tag != "production":
+            label = f"{frb} [{tag}]\n$q$={host.q:.2f}"
+        else:
+            label = f"{frb}\n$q$={host.q:.2f}"
+        ax.set_title(label, fontsize=6.5, pad=2)
+    fig.suptitle(
+        r"Residual / $\sigma$, clipped $\pm5$, cropped to $3R_e$"
+        "  (confirmed-leg / PSF-only where gated)",
+        fontsize=11,
+    )
     fig.tight_layout(rect=(0, 0, 1, 0.97))
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     fig.savefig(out_path, dpi=100)

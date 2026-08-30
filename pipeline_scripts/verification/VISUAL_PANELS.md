@@ -43,7 +43,7 @@ re-run `isophote` / `fourier` (or the full suite) then `visual --force`.
 | `outputs/panels/<FRB>_<leg>.png` | confirmed alternate leg |
 | `Re-fits/<FRB>/<leg>/panel.png` | re-fit suite panel |
 | `Re-fits/<FRB>/panel_*.png` | reject-grid published copies |
-| `outputs/plots/contact_sheet.png` | residual contact sheet (aggregate) |
+| `outputs/plots/contact_sheet.png` | residual contact sheet (confirmed-leg / PSF-only where gated) |
 | `outputs/confirmed_fit_panels.pptx` | one confirmed panel per slide |
 
 ## Regenerating panels
@@ -71,12 +71,17 @@ python build_confirmed_pptx.py
 Builds `outputs/confirmed_fit_panels.pptx`:
 
 1. Title slide  
-2. One slide per **in_53 ∩ confirmed** host (uses alternate panel if notes cite it)  
-3. Final slide(s) for **in_53 ∩ rejected** (red banner + note + production panel)
+2. Population overview (key numbers from `population_summary.json`)  
+3. One slide each: `population_diagnostics.png`, `mag_leakage.png`,
+   `dq_comparison.png`, `contact_sheet.png`  
+4. Section divider → one slide per **in_53 ∩ confirmed** host (alternate panel
+   if notes cite it)  
+5. Final slide(s) for **in_53 ∩ rejected** (red banner + note + production panel)
 
-Panel PNGs on disk are **not** recomputed. The builder embeds full-resolution
-PNGs at **200 DPI** (exact pixel→inch sizing), flattening RGBA→RGB only in
-memory so PowerPoint does not soft-render transparency.
+Panel / plot PNGs on disk are **not** recomputed. The builder embeds
+full-resolution PNGs at **200 DPI** (letterboxed when aspect differs from the
+host-panel slide), flattening RGBA→RGB only in memory so PowerPoint does not
+soft-render transparency.
 
 ## Reading traps (short)
 

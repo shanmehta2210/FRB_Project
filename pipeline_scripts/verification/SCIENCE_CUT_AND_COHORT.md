@@ -33,8 +33,8 @@ Cuts use production catalog `mag` and `b_a` from `pipeline_galfit_results.csv`
 After triage:
 
 - Science cut size: **53**
-- Confirmed in cut: **52**
-- Rejected in cut: **1** (`20230930A` — structured diffuse light / bad sky)
+- Confirmed in cut (paper sample): **50**
+- Rejected in cut (review pile): **3** — `20190711A` (wrong object / star), `20221101B` (morphology uncertain; MW star contaminates host), `20230930A` (structured diffuse light / bad sky)
 
 Total CSV rows: **64**. Recompute with:
 
