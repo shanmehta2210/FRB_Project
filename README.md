@@ -15,20 +15,20 @@ This repository is the analysis follow-up to [Bhardwaj, Lee & Ji (2024, *Nature*
 | Name | Definition | *N* |
 |------|------------|----:|
 | Production fits | Published host localization + parseable GALFIT in `pipeline_scripts/Output/<FRB>_all/` | **64** |
-| Science cut (`in_53`) | Production host with \(m_r \le 22\) and \(b/a > 0.2\) | **53** |
+| Science cut (`in_53`) | Production host with $m_r \le 22$ and $b/a > 0.2$ | **53** |
 | Paper sample | Science cut **and** human-confirmed in [`host_confirmation.csv`](pipeline_scripts/verification/host_confirmation.csv) | **50** |
 
 Three science-cut hosts are rejected on morphology / wrong object / sky: `20190711A`, `20221101B`, `20230930A`. See [`SCIENCE_CUT_AND_COHORT.md`](pipeline_scripts/verification/SCIENCE_CUT_AND_COHORT.md).
 
-**Inclination convention** (every stream): Hubble thin-disk inversion with intrinsic axis ratio \(q_0 = 0.2\),
+**Inclination convention** (every stream): Hubble thin-disk inversion with intrinsic axis ratio $q_0 = 0.2$,
 
-\[
+$$
 \cos^2 i = \frac{q^2 - q_0^2}{1 - q_0^2},\qquad q = b/a.
-\]
+$$
 
 Use **`mag_final`**, not raw GALFIT `mag`, for any magnitude-dependent cut (`pipeline_galfit_results.csv`). Science host = **GALFIT component 1**.
 
-A first comparison of the confirmed-50 \(\cos(i)\) values to an HSC disk analogue (\(N = 24{,}450\)) is consistent with a typical 50-galaxy draw (matched-*N* KS \(p \approx 0.57\)). Plots and tests: [`plots/plots_null/v2/frb_vs_hsc_confirmed50/`](plots/plots_null/v2/frb_vs_hsc_confirmed50/).
+A first comparison of the confirmed-50 $\cos(i)$ values to an HSC disk analogue ($N = 24{,}450$) is consistent with a typical 50-galaxy draw (matched-*N* KS $p \approx 0.57$). Plots and tests: [`plots/plots_null/v2/frb_vs_hsc_confirmed50/`](plots/plots_null/v2/frb_vs_hsc_confirmed50/).
 
 ---
 
@@ -41,7 +41,7 @@ One FRB, one flux + inverse-variance FITS pair, five phases driven by [`pipeline
 | 1 | SExtractor detection + PSFEx PSF (via WSL) |
 | 2 | PS1 / Legacy Survey zero-point, then [AstroPath](https://github.com/FRBs/astropath) host association |
 | 3a | Host cutout, neighbor mask / joint-fit ROI (Re-separation) |
-| Statmorph | Optional CAS + Gini–M\(_{20}\) |
+| Statmorph | Optional CAS + Gini–M$_{20}$ |
 | 3b | GALFIT Sérsic (host = component 1) + sky QA → inclination |
 
 `--outputs` selects **which phases run**, not only which files are copied (`all` is the production default). Every run writes `pipeline_summary.json`.
@@ -66,7 +66,7 @@ Full flags, YAML knobs, and troubleshooting: **[`pipeline_scripts/README.md`](pi
 | [`pipeline_scripts/verification/`](pipeline_scripts/verification/) | Fit-quality suite, host triage, re-fits |
 | [`scripts/`](scripts/) | Catalogs, CDFs, GALFIT parsers, unit tests |
 | [`plots/plots_null/`](plots/plots_null/) | Null-catalog and FRB-vs-survey figures |
-| [`tools/`](tools/) | Legacy GALFIT runs, AstroPath package, PSF \(b/a\) sims, `zdm` |
+| [`tools/`](tools/) | Legacy GALFIT runs, AstroPath package, PSF $b/a$ sims, `zdm` |
 | [`GTC data/`](GTC%20data/) | GTC visibility and science-review lists (not the imaging pipeline) |
 | [`Archive/`](Archive/) | Retired CSVs, original-paper notebooks, old reports |
 | [`Reports/`](Reports/) | Early validation write-ups |
@@ -79,7 +79,7 @@ Internal working notes: [`progress.md`](progress.md) (state), [`scripts.md`](scr
 
 | File | What it is |
 |------|------------|
-| [`master_frb_localization.csv`](master_frb_localization.csv) | Host coordinates, DM, \(z\), survey, literature cite (99 rows) |
+| [`master_frb_localization.csv`](master_frb_localization.csv) | Host coordinates, DM, $z$, survey, literature cite (99 rows) |
 | [`production_confirmed_lit_hosts.csv`](production_confirmed_lit_hosts.csv) | 64-host published-localization cohort |
 | [`pipeline_galfit_results.csv`](pipeline_galfit_results.csv) | Production GALFIT parameters + `mag_final` |
 | [`pipeline_scripts/verification/host_confirmation.csv`](pipeline_scripts/verification/host_confirmation.csv) | Human confirm / reject gate |
@@ -150,11 +150,11 @@ python run_verification.py --checks all --jobs 4
 
 ## Null catalogs (field-galaxy comparison)
 
-FRB \(\cos(i)\) CDFs are compared to disk-like galaxies in SDSS, Legacy Survey, DES, and HSC after **strict** cuts: \(b/a > 0.2\), plus morphology and colour (SDSS \(u-r < 2.3\) and \(\ln L_{\mathrm{exp}} > \ln L_{\mathrm{deV}}\); Legacy EXP or \(n \in [0.75, 2]\), \(g-r < 0.75\), no REX/DEV).
+FRB $\cos(i)$ CDFs are compared to disk-like galaxies in SDSS, Legacy Survey, DES, and HSC after **strict** cuts: $b/a > 0.2$, plus morphology and colour (SDSS $u-r < 2.3$ and $\ln L_{\mathrm{exp}} > \ln L_{\mathrm{deV}}$; Legacy EXP or $n \in [0.75, 2]$, $g-r < 0.75$, no REX/DEV).
 
 | Topic | Where |
 |-------|--------|
-| How catalogs and \(\cos(i)\) are built | [`NULL_CATALOG_DATA_AND_INCLINATION_AUDIT.md`](NULL_CATALOG_DATA_AND_INCLINATION_AUDIT.md) |
+| How catalogs and $\cos(i)$ are built | [`NULL_CATALOG_DATA_AND_INCLINATION_AUDIT.md`](NULL_CATALOG_DATA_AND_INCLINATION_AUDIT.md) |
 | Shared cuts | [`scripts/null_catalog_utils.py`](scripts/null_catalog_utils.py) |
 | Mag-cut CDFs | `python scripts/plot_null_mag_cut_cdfs.py` |
 | Confirmed-50 vs HSC | `python scripts/plot_frb_vs_hsc_confirmed50.py` |
@@ -182,6 +182,6 @@ Excluded or quarantined pipeline trials: [`pipeline_scripts/docs/EXCLUDED_RUNS.m
 
 > Bhardwaj, M., Lee, J. & Ji, K. 2024, Selection bias obfuscates the discovery of fast radio burst sources, *Nature*, **634**, 1065. [doi:10.1038/s41586-024-08065-w](https://doi.org/10.1038/s41586-024-08065-w) · [arXiv:2408.01876](https://arxiv.org/abs/2408.01876)
 
-**This pipeline.** Inclinations and \(b/a\) in `pipeline_galfit_results.csv` are from the GALFIT reductions here, not from the 2024 paper. Host coordinates and redshifts should be cited from the papers listed in `master_frb_localization.csv` / [`repeater_localizations_README.md`](repeater_localizations_README.md).
+**This pipeline.** Inclinations and $b/a$ in `pipeline_galfit_results.csv` are from the GALFIT reductions here, not from the 2024 paper. Host coordinates and redshifts should be cited from the papers listed in `master_frb_localization.csv` / [`repeater_localizations_README.md`](repeater_localizations_README.md).
 
 AstroPath priors follow [Aggarwal et al. (2021)](https://doi.org/10.3847/1538-4357/abf3c0).

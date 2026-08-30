@@ -1,0 +1,28 @@
+---
+description: Math delimiters — \( / \[ in chat, $ / $$ in markdown files
+alwaysApply: true
+---
+
+# Math delimiters
+
+## Chat replies (this conversation)
+
+Use TeX delimiters. Never `$` or `$$` in chat.
+
+- Inline: `\(...\)`
+- Display: `\[...\]`
+
+## Markdown / `.md` / `.mdc` files (including GitHub README)
+
+Use dollar delimiters. Never `\(` or `\[` in files.
+
+- Inline: `$...$`
+- Display: `$$...$$`
+
+```markdown
+The science cut is $m_r \le 22$ and $b/a > 0.2$.
+
+$$
+\cos^2 i = \frac{q^2 - q_0^2}{1 - q_0^2}
+$$
+```
