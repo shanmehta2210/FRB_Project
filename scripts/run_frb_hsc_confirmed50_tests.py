@@ -425,7 +425,8 @@ def write_md(
         "## Caveats",
         "",
         "1. Point estimates only — Protocol A/B error bands are not in these p-values.",
-        "2. HSC \(q\) is Kawinwanichakij GALFIT; FRB \(q\) is this pipeline’s winning leg.",
+        "2. HSC $q$ is from the Kawinwanichakij et al. Lenstronomy "
+        "single-Sérsic fits; FRB $q$ is this pipeline’s GALFIT winning leg.",
         "3. Pool tests have high power at \(N_{\\mathrm{HSC}}=24{,}450\); lean on matched-N p "
         "and the CDF when judging *practical* difference.",
         "4. Several tests share one sample; do not treat six small p-values as six "

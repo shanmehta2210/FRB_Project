@@ -1,4 +1,13 @@
-# Kawinwanichakij+2021 HSC GALFIT vs our FRB host pipeline
+# Kawinwanichakij+2021 HSC Lenstronomy vs our GALFIT pipeline
+
+> **Status (2026-09-04):** Kawinwanichakij et al. use Lenstronomy, not
+> GALFIT. Both analyses use PSF-convolved single-Sérsic models, so the
+> comparison is one of model class rather than identical software. Some
+> cohort counts and the containment-based neighbor description later in this
+> historical audit predate the current 64-host, Re-separation pipeline. For
+> paper-facing definitions use `pipeline_scripts/verification/SCIENCE_CUT_AND_COHORT.md`,
+> `pipeline_scripts/README.md`, and
+> `plots/plots_null/v2/frb_vs_hsc_confirmed50/README.md`.
 
 Comparison for using HSC as an inclination **null**.  
 HSC: Kawinwanichakij et al. 2021, ApJ 921, 38 ([arXiv](https://arxiv.org/abs/2109.09778)); catalog from IPMU.  
@@ -18,7 +27,7 @@ Skew flags (impact on **axis ratio / cos(i)** unless noted):
 
 | Area | Similarity | Skew for cos(i) null |
 |------|------------|---------------------|
-| Single free-n Sérsic + GALFIT | **High** | — |
+| Single free-n, PSF-convolved Sérsic model | **High** | — |
 | Local empirical PSF | **High** (both local) | LOW |
 | Neighbor mask + simultaneous fit | **High** (same idea, different rules) | MED |
 | Free sky | **Partial** (they free gradients; we freeze) | MED |
@@ -28,7 +37,11 @@ Skew flags (impact on **axis ratio / cos(i)** unless noted):
 | *n* ceiling | 8 vs 6 | LOW for disk null |
 | Survey / seeing / pixel scale | Different | MED (resolution → roundness at faint end) |
 
-Bottom line: the **core GALFIT model is the same class of fit** (single Sérsic, free *n*, free *q*, local PSF, neighbor deblend). Main null risks are **survey resolution + faint-end rounding**, **sky-gradient policy**, and **how we select disk analogues** (*n* window), not the *i* vs *r* band choice for nearby hosts.
+Bottom line: the two pipelines use the **same class of fit** (single Sérsic,
+free *n*, free *q*, local PSF, neighbor deblend), but different optimizers.
+Main null risks are **survey resolution + faint-end rounding**,
+**sky-gradient policy**, and **how we select disk analogues** (*n* window),
+not the *i* vs *r* band choice for nearby hosts.
 
 ---
 

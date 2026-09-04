@@ -171,6 +171,8 @@ The all-sky CSVs themselves are **not** in git (`catalog/` is gitignored). Rebui
 | `pipeline_scripts/Output/` | Per-host workdirs (FITS, `fit.log`, PNG QA) |
 | `catalog/`, `catalog_downloads/` | All-sky SDSS / LS / DES / HSC tables |
 | `CHIME/`, `PATH/` | Split to [AstroPATH-additions](https://github.com/shanmehta2210/AstroPATH-additions) (M49/R70 + CHIME repeaters) |
+| `tools/Photometry/*.fits`, `tools/galfit/runs/`, `tools/legacy/` | Local imaging / old GALFIT workdirs (scripts and IMR PNGs stay in git) |
+| `Publication/` | Local manuscript drafts |
 
 Excluded or quarantined pipeline trials: [`pipeline_scripts/docs/EXCLUDED_RUNS.md`](pipeline_scripts/docs/EXCLUDED_RUNS.md). Weak associations: [`WEAK_ASSOCIATIONS_PRODUCTION67.md`](pipeline_scripts/docs/WEAK_ASSOCIATIONS_PRODUCTION67.md).
 

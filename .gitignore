@@ -3,6 +3,9 @@
 .venv_astrophot/
 .venv_wsl/
 
+# Local ApJL manuscript drafts and publication planning
+Publication/
+
 # Python cache
 __pycache__/
 *.pyc
@@ -77,4 +80,37 @@ SDSS_v2_fetch_cache/
 SDSS_lnl_patch_cache.csv
 SDSS_lnl_patch_cache_v2.csv
 Archive/plots_null_pre_morphology_cut/
-tools/Photometry/photometry/data/aC0_20181013-174714-557.wcs.fits.proc.cr.fits
+# R70 / PSFEx imaging products (keep notebooks + scripts + small CSVs)
+tools/Photometry/**/*.fits
+tools/Photometry/**/*.cat
+tools/Photometry/**/*.tab
+tools/Photometry/**/*.xml
+tools/Photometry/**/*.psf
+tools/Photometry/**/*.sex
+tools/Photometry/**/*.conv
+tools/Photometry/**/*.nnw
+tools/Photometry/**/*.param
+
+# Legacy GALFIT run trees and image/model/resid FITS (keep scripts + IMR PNGs)
+tools/galfit/runs/
+tools/legacy/
+
+# Verification download stamps (keep PNG previews + scripts/docs)
+pipeline_scripts/verification/alt_imaging/**/*.fits
+
+# Archived v0 all-sky dumps (superseded; README stays)
+Archive/csv/null_catalogs_v0/*.csv
+Archive/csv/null_catalogs_v0/*.txt
+
+# Intermediate raw field pool (rebuild locally)
+plots/plots_null/v2/sdss_audit/Jimin/cut_bias/field_pool_raw.csv
+
+# Compiler / batch logs (keep reports and scripts)
+*.aux
+*.toc
+Reports/**/*.log
+Reports/**/*.out
+pipeline_scripts/docs/_rerun*.log
+GTC data/pipeline_trial/batch_run.log
+GTC data/pipeline_trial/batch_run.err
+tools/astrophot/logs/
