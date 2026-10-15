@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 from astropy.io import fits
 from astropy.wcs import WCS
-from scipy.ndimage import zoom
+from scipy.ndimage import map_coordinates, zoom
 
 TARGET_PIXSCALE = 0.262  # arcsec/pixel
 TARGET_SIZE = 2290
@@ -46,6 +46,10 @@ def _crop_zoom_centered(
     centre; default ``center_on_array=False`` uses WCS(ra,dec) for the crop centre.
     """
     data = _squeeze2d(data)
+    if not center_on_array:
+        out = _reproject_to_standard(data, header, ra, dec, native_scale, variance=variance)
+        if out is not None:
+            return out
     if center_on_array:
         xc, yc = (data.shape[1] + 1) / 2.0, (data.shape[0] + 1) / 2.0
     else:
@@ -79,8 +83,39 @@ def _crop_zoom_centered(
     return out
 
 
+def _reproject_to_standard(
+    data: np.ndarray, header, ra: float, dec: float, native_scale: float, *, variance: bool
+) -> np.ndarray | None:
+    """Resample onto the standard north-up TAN grid centred on (ra, dec) using the native WCS.
+
+    The previous crop/zoom kept the native pixel orientation while the output header asserted a
+    plain north-up TAN; for PS1 stamps this left the WCS mirrored in x (template ``PC1_1 = -1``
+    on top of a negative ``CDELT1``) and ignored the rotation between the skycell tangent point
+    and the stamp centre (several px at the field edge at high declination). Returns ``None``
+    when the native header has no usable celestial WCS (caller falls back to crop/zoom).
+    """
+    try:
+        wn = WCS(header).celestial
+        if not wn.is_celestial:
+            return None
+    except Exception:
+        return None
+    wo = WCS(_output_header(ra, dec))
+    yy, xx = np.mgrid[0:TARGET_SIZE, 0:TARGET_SIZE]
+    ra_g, dec_g = wo.wcs_pix2world(xx.ravel(), yy.ravel(), 0)
+    xn, yn = wn.wcs_world2pix(ra_g, dec_g, 0)
+    coords = np.stack([yn.reshape(xx.shape), xn.reshape(xx.shape)])
+    out = map_coordinates(np.nan_to_num(data, nan=0.0), coords, order=1, mode="constant", cval=0.0)
+    if variance:
+        out = out * (native_scale / TARGET_PIXSCALE) ** 2
+    return out
+
+
 def _output_header(ra: float, dec: float, template=None) -> fits.Header:
     hdr = template.copy() if template is not None else fits.Header()
+    for key in list(hdr.keys()):  # drop the native projection so CDELT/CRPIX below define the WCS alone
+        if key.startswith(("PC0", "PC1", "PC2", "CD1", "CD2", "CROTA", "PV", "CUNIT", "LONPOLE", "LATPOLE")):
+            del hdr[key]
     hdr["NAXIS"] = 2
     hdr["NAXIS1"] = TARGET_SIZE
     hdr["NAXIS2"] = TARGET_SIZE

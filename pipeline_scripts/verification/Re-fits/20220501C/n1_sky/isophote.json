@@ -1,0 +1,10 @@
+{
+  "_check": "isophote",
+  "_frb": "20220501C",
+  "_runtime_s": 0.25,
+  "iso_error_data": "IndexError: list index out of range",
+  "iso_maxsma": 20.25,
+  "iso_minsma": 17.448339999999998,
+  "re_over_fwhm": 16.935959481836516,
+  "status": "isophote_fit_failed"
+}

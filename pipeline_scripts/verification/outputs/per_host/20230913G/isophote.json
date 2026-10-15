@@ -1,0 +1,10 @@
+{
+  "_check": "isophote",
+  "_frb": "20230913G",
+  "_runtime_s": 0.549,
+  "iso_error_data": "only 0 isophotes",
+  "iso_maxsma": 4.5747,
+  "iso_minsma": 2.0,
+  "re_over_fwhm": 0.3565924827713613,
+  "status": "unresolved"
+}

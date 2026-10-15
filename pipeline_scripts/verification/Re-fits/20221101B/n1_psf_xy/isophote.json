@@ -1,0 +1,10 @@
+{
+  "_check": "isophote",
+  "_frb": "20221101B",
+  "_runtime_s": 0.211,
+  "iso_error_data": "only 0 isophotes",
+  "iso_maxsma": 25.2,
+  "iso_minsma": 4.52236,
+  "re_over_fwhm": 5.580060460238139,
+  "status": "isophote_fit_failed"
+}

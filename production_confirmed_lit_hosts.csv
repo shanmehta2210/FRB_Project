@@ -47,6 +47,7 @@ frb,citation,cite_source,coord_semantics
 20230712A,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",production67_lit_astropath_audit.csv,host
 20230902A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",production67_lit_astropath_audit.csv,host
 20230907D,"Pastor-Marazuela et al. 2026, MNRAS 545, f2144 (doi:10.1093/mnras/staf2144)",production67_lit_astropath_audit.csv,host
+20230913G,"Verdi et al. 2026, arXiv:2609.30616 (Table A1 localization; host via astropath P>0.9; Keck/LRIS z)",master_frb_localization.csv,host
 20230930A,"Anna-Thomas et al. 2025, ApJ 993, 221 (doi:10.3847/1538-4357/ae1014)",production67_lit_astropath_audit.csv,host
 20231020B,"Pastor-Marazuela et al. 2026, MNRAS 545, f2144 (doi:10.1093/mnras/staf2144)",production67_lit_astropath_audit.csv,host
 20231120A,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)",production67_lit_astropath_audit.csv,host
@@ -55,11 +56,15 @@ frb,citation,cite_source,coord_semantics
 20231226A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",production67_lit_astropath_audit.csv,host
 20240119A,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",production67_lit_astropath_audit.csv,host
 20240201A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",production67_lit_astropath_audit.csv,host
+20240203D,"Verdi et al. 2026, arXiv:2609.30616 (Table A1 localization; host via astropath P>0.9; Keck/LRIS z)",master_frb_localization.csv,host
 20240208A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",production67_lit_astropath_audit.csv,host
 20240210A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",production67_lit_astropath_audit.csv,host
 20240213A,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",production67_lit_astropath_audit.csv,host
 20240215A,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",production67_lit_astropath_audit.csv,host
+20240224A,"Verdi et al. 2026, arXiv:2609.30616 (Table A1 localization; host via astropath P>0.9; Keck/LRIS z)",master_frb_localization.csv,host
 20240229A,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)",production67_lit_astropath_audit.csv,host
 20240304A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",production67_lit_astropath_audit.csv,host
 20240310A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",production67_lit_astropath_audit.csv,host
 20240318A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)",production67_lit_astropath_audit.csv,host
+20240525A,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298); host position Table 1, localisation ellipse Table 5 (statistical sigma_a, sigma_b, PA); DM not yet published",master_frb_localization.csv,host
+20240615B,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298); host position Table 1, localisation ellipse Table 5 (statistical sigma_a, sigma_b, PA); DM not yet published",master_frb_localization.csv,host

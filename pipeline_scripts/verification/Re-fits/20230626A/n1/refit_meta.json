@@ -1,0 +1,14 @@
+{
+  "frb": "20230626A",
+  "label": "n1",
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 20.0025,
+    "n": 6.0,
+    "pa": -22.7122,
+    "q": 0.7379,
+    "re": 1.8147
+  },
+  "production_sky_adu": 9.129e-05,
+  "sky_fixed_adu": null
+}

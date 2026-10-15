@@ -1,0 +1,315 @@
+frb,quantity,current_value,current_source,verdict,verified_value,err_plus,err_minus,unit,method,source_short,arxiv_id,doi,location,notes
+20200430A,host_name,,,new,PSO J151849.52+122235.82,,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sec 2.2.5,Pan-STARRS catalogue galaxy J151849.52+122235.82; no other catalogue name
+20200430A,telescope_localization,,,new,ASKAP/CRAFT ICS,,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sec 2.2.5,detected commensally in first RACS-low epoch (Shannon et al. 2025 Sec 5.1); 863.5 MHz
+20200430A,repeater,,,new,no,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200430A,host_ra_deg,,,new,229.7063,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20200430A,host_dec_deg,,,new,12.3766,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20200430A,host_ra_deg,,,new,229.70638,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,15:18:49.53 +12:22:35.8 (SourceExtractor centroid on VLT/FORS2 I image)
+20200430A,host_dec_deg,,,new,12.37661,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,
+20200430A,z,,,new,0.16,,,,spec_z,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sec 2.2.5; Table 3,"NOT/ALFOSC grism 4; Halpha, [OII], [SII] emission + Ca H&K absorption"
+20200430A,z,,,new,0.1608,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1,"Keck/DEIMOS 600ZD spectrum (Table 2, 2020 Jun 07); Prospector-fitted z=0.1607 (Table 3)"
+20200430A,z,,,new,0.1608,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200430A,z,,,new,0.1608,,,,spec_z,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20200430A,z_type,,,new,spec,,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sec 2.2.5,
+20200430A,DM_obs,,,new,380.1,0.2,0.2,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200430A,DM_obs,,,new,379.9,0.6,0.5,pc cm-3,SN_maximising,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 1,structure-maximising DM = 379.6 +0.7/-0.4
+20200430A,DM_MW,,,new,27,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200430A,DM_MW,,,new,27.1,,,pc cm-3,NE2001,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary table (Name/DMobs/DMex/Redshift/DMMW),"compilation; DMobs listed as 380.00, DMex 352.90"
+20200430A,DM_host,,,new,202,43,58,pc cm-3,"DMobs-DMMW(NE2025)-DMcosmic, host rest frame",athukoralalage2026,2608.23868,10.48550/arXiv.2608.23868,Table 1,arXiv only; uses log M*=9.30 from Gordon et al. 2023
+20200430A,DM_host,,,new,201,,,pc cm-3,Macquart-relation residual (DMhost^Macquart),leung2025,2507.16816,10.3847/2041-8213/ae044d,Table 1,"Leung et al. adopt log M*=9.51 (the Gordon et al. 2023 total mass formed, not the surviving stellar mass 9.30)"
+20200430A,fluence_Jy_ms,,,new,35,2,2,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200430A,snr,,,new,16.0,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"real-time ICS S/N; Scott et al. 2025 Table 1: S/N_det 13.9, S/N_off 67"
+20200430A,width_ms,,,new,13.8,,,ms,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Scott et al. 2025 Table 1: w_snr 11 ms, w95 22.68 ms"
+20200430A,tau_scatt_ms,,,new,6.5,0.15,0.15,ms,"scattering fit, single component",scott2025,2505.17497,10.1017/pasa.2025.10103,Table 2,at 863.5 MHz; scattering index alpha=-1.45+/-0.2; tau_1GHz=5.25+/-0.25 ms
+20200430A,RM_rad_m2,,,new,195.3,0.7,0.7,rad m-2,RM synthesis/QU fit,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,RM_MW (Hutschenreuter+2022) = 14.5+/-7.0 rad m-2; calibrator 2045-1616; PA constant
+20200430A,RM_host_rad_m2,,,new,244,7,7,rad m-2,|RM_obs-RM_MW|(1+z)^2,athukoralalage2026,2608.23868,10.48550/arXiv.2608.23868,Table 1,arXiv only
+20200430A,pol_linear_frac,,,new,0.43,0.02,0.02,,,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,"|V|/I=0.04+/-0.02, P/I=0.43+/-0.02"
+20200430A,m_g,,,new,22.16,0.08,0.08,mag,Pan-STARRS PSF mag,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,"Bhandari et al. 2022 note these Heintz Pan-STARRS values were PSF mags, later replaced by Kron mags"
+20200430A,m_r,,,new,21.51,0.06,0.06,mag,Pan-STARRS PSF mag,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1; Table 6,Pan-STARRS r; PSF magnitude (superseded by Bhandari et al. 2022 Kron photometry)
+20200430A,m_i,,,new,21.16,0.04,0.04,mag,Pan-STARRS PSF mag,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20200430A,m_z,,,new,20.91,0.07,0.07,mag,Pan-STARRS PSF mag,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,y=20.67+/-0.18
+20200430A,m_g,,,new,22.21,0.1,0.1,mag,Pan-STARRS Kron mag,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,Galactic-extinction corrected
+20200430A,m_r,,,new,21.25,0.07,0.07,mag,Pan-STARRS Kron mag,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,Galactic-extinction corrected
+20200430A,m_i,,,new,20.97,0.05,0.05,mag,Pan-STARRS Kron mag,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200430A,m_z,,,new,20.71,0.1,0.1,mag,Pan-STARRS Kron mag,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200430A,m_g,,,new,21.78,0.03,0.03,mag,DECaLS DECam,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,Galactic-extinction corrected (Fitzpatrick & Massa 2007)
+20200430A,m_r,,,new,21.05,0.02,0.02,mag,DECaLS DECam r,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1; Table 5,Galactic-extinction corrected; value adopted by Glowacki et al. 2025 Table 2 (mR=21.05)
+20200430A,m_i,,,new,20.98,0.05,0.05,mag,Pan-STARRS i,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20200430A,m_z,,,new,20.52,0.03,0.03,mag,DECaLS DECam z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,"Pan-STARRS y=20.68+/-0.18; MMT/MMIRS J=19.85+/-0.05, Ks=21.26+/-0.25 (2022 Jun)"
+20200430A,m_g,,,new,21.856,0.008,0.008,mag,VLT/FORS2 g,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,not corrected for Galactic extinction
+20200430A,m_I,,,new,20.61,0.02,0.02,mag,VLT/FORS2 I,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,not corrected for Galactic extinction; PATH-table automated mag 21.18
+20200430A,m_I,,,new,21.18,,,mag,Keck/LRIS I (PATH photometry),bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2,
+20200430A,M_r_abs,,,new,-18.05,0.05,0.05,mag,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20200430A,M_r_abs,,,new,-18.25,0.05,0.05,mag,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20200430A,u_r_color,,,new,1.78,0.31,0.31,mag,rest-frame Mu-Mr from SED,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20200430A,u_r_color,,,new,2.08,0.3,0.3,mag,rest-frame Mu-Mr from SED,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20200430A,logMstar,,,new,9.11,0.17,0.27,log Msun,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,published as M*=1.30+/-0.60 x1e9 Msun (Chabrier IMF); converted to log here
+20200430A,logMstar,,,new,9.32,0.18,0.31,log Msun,cigale_sed,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,published as 0.21+/-0.11 x1e10 Msun; re-fit with Kron photometry; converted to log here
+20200430A,logMstar,,,new,9.3,0.07,0.1,log Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,"Chabrier IMF, non-parametric SFH; total mass formed log MF=9.51 +0.07/-0.10; AGN template used in fit (does not imply AGN)"
+20200430A,logMstar,,,new,9.19,0.13,0.13,log Msun,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,independent Bagpipes fit to survey photometry; SED Quality flag = 4 (bad fit/missing data; excluded from their analysis)
+20200430A,SFR,,,new,<0.2,,,Msun/yr,upper_limit,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,from best-fit CIGALE SED (footnote b); no Halpha SFR because spectrum S/N too low
+20200430A,SFR,,,new,0.26,0.08,0.08,Msun/yr,halpha,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,new Keck spectrum; Halpha flux 4.27+/-0.15e-16 erg/s/cm2 (Table A1); Heintz et al. 2020 method (Chabrier)
+20200430A,SFR,,,new,0.11,0.06,0.04,Msun/yr,prospector_sed 0-100 Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200430A,SFR,,,new,0.39,0.38,0.38,Msun/yr,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,Quality flag 4 (bad)
+20200430A,log_sSFR,,,new,-9.89,,,log yr-1,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20200430A,log_sSFR,,,new,-10.26,0.21,0.21,log yr-1,prospector 0-100 Myr (from Gordon et al. 2023 SFR and M*),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 2,derived value; log SFR=-0.96+/-0.20
+20200430A,tm_Gyr,,,new,0.69,,,Gyr,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20200430A,tm_Gyr,,,new,5.99,0.96,1.31,Gyr,prospector_sed mass-weighted age,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200430A,metallicity_12logOH,,,new,8.88,,,,O3N2 (Hirschauer+2018 calibration),bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,Heintz et al. 2020 gave no value (too few lines)
+20200430A,metallicity_logZ,,,new,-0.99,0.32,0.35,dex,prospector_sed stellar log(Z*/Zsun),gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,gas-phase log(Zgas/Zsun)=-0.12+/-0.06
+20200430A,AV,,,new,1.08,0.32,0.33,mag,"prospector_sed AV,young",gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,"AV,old=0.38 +0.14/-0.15"
+20200430A,halpha_flux_1e-16,,,new,4.27,0.15,0.15,1e-16 erg s-1 cm-2,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A1,"Hbeta 1.15+/-0.21, [NII] 2.02+/-0.20, [OIII] 1.17+/-0.25; Galactic-extinction corrected"
+20200430A,halpha_EW,,,new,22.12,1.59,1.59,Angstrom,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 2,EW derived in Glowacki et al. from the Gordon et al. 2023 spectrum; Halpha flux listed 3.36+/-0.14e-16 (Eftekhari et al. 2023)
+20200430A,Re_arcsec,,,new,0.57,,,arcsec,galfit,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sec 2.2.5; Table 1,Keck/LRIS I image; Table 1 lists r1/2=0.6 arcsec
+20200430A,Re_kpc,,,new,1.6,0.5,0.5,kpc,galfit,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20200430A,Re_kpc,,,new,1.64,0.53,0.53,kpc,galfit,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20200430A,Re_arcsec,,,new,0.57,,,arcsec,"galfit (single Sersic, VLT/FORS2 I)",gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,"Re=1.59 kpc; Sersic n=1.22; re,GC=0.81 arcsec/2.27 kpc"
+20200430A,Re_kpc,,,new,1.59,,,kpc,galfit (VLT/FORS2 I),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,
+20200430A,sersic_n,,,new,1.22,,,,galfit (VLT/FORS2 I),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,
+20200430A,Re_kpc,,,new,1.99,0.01,0.01,kpc,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,log(Reff)=0.299+/-0.003; log(M*/Reff)=9.00+/-0.09; log(M*/Reff^2)=8.70+/-0.18
+20200430A,offset_arcsec,,,new,1.04,,,arcsec,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,"FRB position of Heintz et al. (15:18:49.54 +12:22:36.8, sigma 0.3/1.1 arcsec); superseded by Shannon et al. 2025 position 15:18:49.55 +12:22:34.8"
+20200430A,offset_kpc,,,new,3.0,2.4,2.4,kpc,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20200430A,offset_kpc,,,new,1.7,2.2,2.2,kpc,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20200430A,offset_arcsec,,,new,1.3,0.79,0.79,arcsec,Pan-STARRS r (ground-based),mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,delta R = 2.97+/-2.36 kpc; delta R/re = 1.81+/-1.44
+20200430A,offset_kpc,,,new,2.97,2.36,2.36,kpc,,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20200430A,offset_normalized,,,new,1.81,1.44,1.44,re,,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20200430A,offset_arcsec,,,new,1.49,0.42,0.46,arcsec,VLT/FORS2 I; Shannon et al. 2025 FRB position,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,"total position uncertainty a=0.46, b=0.43 arcsec, theta=17.24 deg (Table B1)"
+20200430A,offset_kpc,,,new,4.17,1.17,1.28,kpc,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,
+20200430A,offset_normalized,,,new,2.63,0.74,0.81,re,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,
+20200430A,offset_kpc,,,new,2.89,1.2,1.2,kpc,Marnoch et al. in prep,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,offset/Reff=1.45+/-0.42
+20200430A,offset_kpc,,,new,3.0,,,kpc,Sersic fit on DESI imaging,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,area 67.32+/-0.64 kpc2
+20200430A,P_chance,,,new,0.0051,,,,Bloom et al. 2002,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,Sample A
+20200430A,PATH_posterior,,,new,1.0,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2,"P(O)=0.9379; Pchance=0.0047; LRIS I image; theta=0.4 arcsec, phi=0.72 arcsec"
+20200430A,PATH_posterior,,,new,1.0,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,"P(O)=0.9389; candidate 229.7064 +12.3766, theta=0.37 arcsec, phi=0.72 arcsec, mag 21.18; P(U|x)=0"
+20200430A,inclination_deg,,,new,75.56,0.45,0.45,deg,"from GALFIT b/a (Marnoch et al. in prep), q0=0.2 formula",glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,b/a=0.316+/-0.006; only CRAFT-paper inclination for this host
+20200430A,axis_ratio,,,new,0.316,0.006,0.006,,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,
+20200430A,inclination_deg,,,new,43.88,,,deg,"Sersic fit (DESI/Pan-STARRS imaging), cos i from b/a with Bhardwaj+2024 formula",li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,conflicts with Glowacki et al. 2025 (75.6 deg); Li et al. fit shallow survey imaging of a 21-mag host; their SED quality flag for this host is 4 (bad)
+20200430A,galaxy_type,,,new,star-forming,,,,Tacchella+2022 mass-doubling criterion,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sec 6.1 (Figure 6 classification),"only 20180916B, 20210410D (transitioning) and 20210807D (quiescent) are non-SF in Gordon et al. 2023; Heintz et al. 2020 Sec 4.2 place HG200430 in the green valley"
+20200430A,galaxy_type,,,new,SF (Y),,,,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 2,
+20200430A,morphology,,,new,no distinct morphology in Keck/LRIS image; disk-like n=1.22,,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sec 2.2.5,Sersic n from Gordon et al. 2025 Table 3; Gordon et al. 2025 Figure A8 model comparison
+20220105A,host_name,,,new,(uncatalogued) host at 13:55:12.92 +22:27:59.4,,,,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,"no catalogue designation given in Gordon et al. 2023/2025, Shannon et al. 2025 or Muller et al. 2026"
+20220105A,telescope_localization,,,new,ASKAP/CRAFT ICS,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Sec 5.1; Table 1,"detected in first epoch of RACS high band, 1631.5 MHz; first localised by Gordon et al. 2023"
+20220105A,repeater,,,new,no,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20220105A,host_ra_deg,,,new,208.80383,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,13:55:12.92 +22:27:59.4
+20220105A,host_dec_deg,,,new,22.4665,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,
+20220105A,host_ra_deg,,,new,208.80379,,,deg,,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 1,13:55:12.91 +22:27:59.41
+20220105A,host_dec_deg,,,new,22.4665,,,deg,,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 1,
+20220105A,z,,,new,0.2785,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1,"Keck/DEIMOS 600ZD, 2022 Mar 31 (Table 2); Prospector z=0.2784 (Table 3)"
+20220105A,z,,,new,0.2785,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20220105A,z,,,new,0.2784,,,,spec_z,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,"VLT/X-shooter (FURBY), pPXF"
+20220105A,z_type,,,new,spec,,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1,
+20220105A,DM_obs,,,new,583,2,2,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20220105A,DM_obs,,,new,583,2,2,pc cm-3,SN_maximising,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 1,structure-maximising DM = 581.5 +3.6/-3.1
+20220105A,DM_MW,,,new,22,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20220105A,DM_MW,,,new,21.9,,,pc cm-3,NE2001,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary table,compilation; DMobs listed 580.00
+20220105A,fluence_Jy_ms,,,new,19,2,2,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20220105A,snr,,,new,9.8,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Scott et al. 2025: S/N_det 9.8, S/N_off 42"
+20220105A,width_ms,,,new,5.9,,,ms,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Scott et al. 2025: w_snr 0.95 ms, w95 2.25 ms"
+20220105A,tau_scatt_ms,,,new,0.43,0.01,0.01,ms,"scattering fit, multiple components",scott2025,2505.17497,10.1017/pasa.2025.10103,Table 2,at 1649.8 MHz; alpha=-2+/-0.8; tau_1GHz=1.2+/-0.5 ms
+20220105A,RM_rad_m2,,,new,-1312,8,8,rad m-2,RM synthesis/QU fit,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,RM_MW=3.9+/-1.5 rad m-2; calibrator PSR 1644; PA constant
+20220105A,pol_linear_frac,,,new,0.3,0.03,0.03,,,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,|V|/I=0.05+/-0.03
+20220105A,m_g,,,new,22.36,0.21,0.21,mag,Pan-STARRS g,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,Galactic-extinction corrected
+20220105A,m_r,,,new,21.19,0.08,0.08,mag,Pan-STARRS r,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1; Table 5,Galactic-extinction corrected; adopted by Glowacki et al. 2025 Table 2
+20220105A,m_i,,,new,21.05,0.11,0.11,mag,Pan-STARRS i,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20220105A,m_z,,,new,20.48,0.01,0.01,mag,SOAR/Goodman z (2022 Jan 25),gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20220105A,m_Ks,,,new,19.76,0.02,0.02,mag,VLT/HAWK-I Ks (2022 Mar 24),gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,"Galactic-extinction corrected; differs by 0.7 mag from Shannon et al. 2025 Table 5 Ks=19.06+/-0.08 (same instrument, uncorrected) - aperture/zero-point difference unexplained"
+20220105A,m_R,,,new,21.317,0.005,0.005,mag,VLT/FORS2 R,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,not corrected for Galactic extinction; Ks=19.06+/-0.08 (HAWK-I)
+20220105A,m_R,,,new,21.27,0.005,0.005,mag,VLT/FORS2 R,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,Galactic-extinction corrected
+20220105A,logMstar,,,new,10.01,0.05,0.07,log Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,log MF=10.22 +0.06/-0.07; AGN template used in fit; repeated in Gordon et al. 2025 Table 3
+20220105A,logMstar,,,new,9.95,0.11,0.11,log Msun,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,Quality flag 0 (good)
+20220105A,SFR,,,new,0.42,0.31,0.19,Msun/yr,prospector_sed 0-100 Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,"Glowacki et al. 2025 Table 2 lists log SFR=-0.93+/-0.01 for this host, inconsistent with log(0.42)=-0.38; treat the Glowacki entry as a transcription error"
+20220105A,SFR,,,new,0.425,0.008,0.008,Msun/yr,halpha,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,"X-shooter Halpha 35.10+/-0.66e-17 erg/s/cm2 (Table 2), Galactic-extinction corrected only; no strong Balmer absorption"
+20220105A,SFR,,,new,0.5,0.74,0.74,Msun/yr,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,log sSFR=-10.23+/-1.10
+20220105A,tm_Gyr,,,new,5.67,0.73,1.24,Gyr,prospector_sed mass-weighted age,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20220105A,metallicity_logZ,,,new,-0.81,0.16,0.14,dex,prospector_sed stellar log(Z*/Zsun),gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,gas-phase log(Zgas/Zsun)=-0.14+/-0.13
+20220105A,metallicity_12logOH,,,new,8.5,0.1,0.1,,N2 (Marino+2013),muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,
+20220105A,AV,,,new,1.15,0.26,0.28,mag,"prospector_sed AV,young",gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,"AV,old=0.76 +0.15/-0.17"
+20220105A,halpha_flux_1e-16,,,new,3.51,0.066,0.066,1e-16 erg s-1 cm-2,,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 2,"published as 35.10+/-0.66 x1e-17; Hbeta 10.2+/-1.2, [NII]6583 12.47+/-0.68, [OIII]5007 <4.90 (1e-17)"
+20220105A,halpha_EW,,,new,22.73,1.55,1.55,Angstrom,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 2,[SII] doublet ratio 1.51+/-0.21 (FURBY)
+20220105A,Re_arcsec,,,new,0.79,,,arcsec,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,"K band: 0.74 arcsec, 3.16 kpc, n=1.10"
+20220105A,Re_kpc,,,new,3.37,,,kpc,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,
+20220105A,sersic_n,,,new,0.75,,,,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,K band n=1.10
+20220105A,Re_kpc,,,new,3.01,0.03,0.03,kpc,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,log(M*/Reff)=9.53+/-0.06; log(M*/Reff^2)=9.05+/-0.13
+20220105A,offset_arcsec,,,new,2.29,0.93,0.86,arcsec,VLT/FORS2 R,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band: 2.31 +0.92/-0.85 arcsec; FRB uncertainty ellipse 1.51x0.82 arcsec (Table B1)
+20220105A,offset_kpc,,,new,9.8,4.0,3.68,kpc,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 9.90 +3.92/-3.63 kpc
+20220105A,offset_normalized,,,new,2.91,1.19,1.09,re,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,"K band 3.13 +1.24/-1.15; large offset (3.1 re) drives GC-model preference (Sec 5.2, Table 5: GC Spherical preferred in NIR, dBIC 3.57/3.89)"
+20220105A,offset_kpc,,,new,7.91,3.87,3.87,kpc,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,offset/Reff=2.63+/-0.50
+20220105A,offset_kpc,,,new,8.45,,,kpc,,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,area 100.73+/-0.87 kpc2
+20220105A,PATH_posterior,,,new,1.0,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,"P(O)=0.5694; candidate 208.8038 +22.4665, theta=1.81 arcsec, phi=0.90 arcsec, mag 21.53"
+20220105A,PATH_posterior,,,new,0.9998,,,,PATH (FURBY criterion P(O|x)>0.99),muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 1,
+20220105A,axis_ratio,,,new,0.259,0.001,0.001,,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,inclination cell left blank in Glowacki et al. 2025 Table 3 (verified in PDF)
+20220105A,inclination_deg,,,new,56.26,,,deg,Sersic fit on DESI imaging,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,only published numerical inclination; b/a=0.259 of Glowacki et al. would imply ~80 deg with q0=0.2
+20220105A,galaxy_type,,,new,star-forming,,,,Tacchella+2022 criterion,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sec 6.1,
+20220105A,morphology,,,new,"disk (n=0.75 R / 1.10 K); FRB 3 re off, GC model favoured",,,,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3; Table 5; Sec 5.2,Figures A22-A23
+20220717A,host_name,,,new,PSO J293.3038-19.2876,,,,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 3.3,Pan-STARRS DR1 galaxy; NOT a CRAFT FRB: discovered/localised by MeerTRAP (MeerKAT) transient buffer
+20220717A,telescope_localization,,,new,"MeerKAT/MeerTRAP transient buffer (UHF, 816 MHz)",,,,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 3.1; Table 1,commensal MeerTime observation; FRB position 19:33:13.0 -19:17:15.8 +/-0.9 arcsec
+20220717A,repeater,,,new,no,,,,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 1,
+20220717A,host_ra_deg,,,new,293.30379,,,deg,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table A4,19:33:12.91 -19:17:15.42; angular size 2.2 arcsec; separation 0.6 arcsec
+20220717A,host_dec_deg,,,new,-19.28762,,,deg,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table A4,
+20220717A,z,,,new,0.36295,0.00018,0.00018,,spec_z,rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 3.3,Keck/DEIMOS ZD600 (2022 Oct 27) + SOAR/Goodman quicklook; Fig. 6 caption quotes Halpha/[NII] at z=0.3633
+20220717A,z_type,,,new,spec,,,,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 3.3,
+20220717A,DM_obs,,,new,637.34,3.52,3.52,pc cm-3,SN_maximising,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1,scattering-corrected DM 634.69+/-0.10
+20220717A,DM_MW,,,new,118,,,pc cm-3,NE2001,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1,
+20220717A,DM_MW,,,new,83,,,pc cm-3,YMW16,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1,
+20220717A,DM_halo,,,new,86,,,pc cm-3,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1,Sec 4.4 also quotes 52 pc cm-3 (Cook et al. 2023 model)
+20220717A,DM_host,,,new,100,,,pc cm-3,"Halpha emission measure (Tendulkar+2017), L=0.15 kpc assumed",rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 3.3; Sec 4.4; abstract,order-of-magnitude (~100); abstract says host contributes ~15% of total DM; DMcosmic ~402
+20220717A,tau_scatt_ms,,,new,8.2,0.3,0.3,ms,scattering fit,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1,tau at 1 GHz; scattering index -3.7+/-0.2; measured at 1020.3 MHz reference
+20220717A,width_ms,,,new,8.4,0.3,0.3,ms,W50,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1,W10=20.1+/-0.6 ms; Weq=10.0+/-0.3 ms
+20220717A,RM_rad_m2,,,new,385.7,0.4,0.4,rad m-2,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1; Sec 3.1,host-frame RM(1+z)^2 ~ 720 rad m-2 (Sec 4.4)
+20220717A,fluence_Jy_ms,,,new,6.83,0.03,0.03,Jy ms,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1,peak flux density 0.34+/-0.03 Jy
+20220717A,snr,,,new,15.3,,,,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table 1,detection S/N; beamformed S/N 101.1
+20220717A,pol_linear_frac,,,new,0.3,0.02,0.02,,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 3.1,circular polarisation inconclusive (calibration)
+20220717A,m_r,,,new,21.8,,,mag,Pan-STARRS DR1 (PATH photometry; filter not stated),rajwade2024,2407.02173,10.1093/mnras/stae1652,Table A4,only published host magnitude; filter not specified in the table
+20220717A,halpha_flux_1e-16,,,new,1.708,0.37,0.37,1e-16 erg s-1 cm-2,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 3.3,"published 17.08+/-3.7e-17, not corrected for Galactic extinction; line on a skyline, underestimated"
+20220717A,SFR,,,new,0.65,0.14,0.14,Msun/yr,halpha (Kennicutt+1994 linear relation); lower limit,rajwade2024,2407.02173,10.1093/mnras/stae1652,Sec 3.3,authors state SFR should be understood as a lower limit
+20220717A,logMstar,,,new,10.84,0.6,0.6,log Msun,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,Quality flag 1; only published stellar mass for this host; large error
+20220717A,SFR,,,new,3.23,11.08,11.08,Msun/yr,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,log sSFR=-10.13+/-4.01; unconstrained
+20220717A,galaxy_area_kpc2,,,new,141.5,17.56,17.56,kpc2,Sersic fit (Pan-STARRS imaging),li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,inclination and offset cells blank in Li et al. Table 2
+20220717A,PATH_posterior,,,new,0.969,,,,"PATH (P(U)=0.05, offset prior 0.5 Rhalf)",rajwade2024,2407.02173,10.1093/mnras/stae1652,Table A4; Sec 3.3,Pan-STARRS DR1 image; Gemini/GMOS deeper image gave P(U|x)~1 before the PS1 galaxy was included
+20220717A,offset_arcsec,,,new,0.6,,,arcsec,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table A4; Sec 3.3,separation FRB-host candidate
+20220717A,offset_kpc,,,new,3.0,,,kpc,,rajwade2024,2407.02173,10.1093/mnras/stae1652,Table A4 (derived),"0.6 arcsec x 5.06 kpc/arcsec at z=0.363 (Planck18); derived here, not in paper"
+20230708A,host_name,,,new,J201227.73-552122.72,,,,,muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.1,designation from Dial et al. 2025 / PATH; dwarf host
+20230708A,telescope_localization,,,new,ASKAP/CRAFT ICS,,,,,dial2025,2412.11347,10.1093/mnras/stae2756,Sec 2.1,detected during EMU survey observation (Shannon et al. 2025 Sec 5.2.7); 919.5 MHz
+20230708A,repeater,,,new,no,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20230708A,host_ra_deg,,,new,303.11558,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,20:12:27.74 -55:21:22.7; Muller et al. 2026 Table 1: 20:12:27.73 -55:21:22.72
+20230708A,host_dec_deg,,,new,-55.35631,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,
+20230708A,z,,,new,0.105,0.0001,0.0001,,spec_z,muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.1; Table 3,"VLT/X-shooter; Halpha, Hbeta, [OII], [OIII]; no stellar continuum detected"
+20230708A,z,,,new,0.105,0.0001,0.0001,,spec_z,dial2025,2412.11347,10.1093/mnras/stae2756,Table 2,
+20230708A,z,,,new,0.105,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20230708A,z_type,,,new,spec,,,,,muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.1,
+20230708A,DM_obs,,,new,411.51,0.05,0.05,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20230708A,DM_obs,,,new,411.51,0.05,0.05,pc cm-3,structure maximising,dial2025,2412.11347,10.1093/mnras/stae2756,Table 2,real-time detection DM 411.12
+20230708A,DM_obs,,,new,411.54,0.05,0.04,pc cm-3,SN_maximising,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 1,structure-maximising 411.52 +0.08/-0.05
+20230708A,DM_MW,,,new,50,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20230708A,DM_host,,,new,200,,,pc cm-3,DMobs minus MW and mean IGM (approximate),muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 4,text: around 200 pc cm-3
+20230708A,DM_host,,,new,228,38,46,pc cm-3,"DMobs-DMMW(NE2025)-DMcosmic, host rest frame",athukoralalage2026,2608.23868,10.48550/arXiv.2608.23868,Table 1,arXiv only; log M*=8.00 adopted
+20230708A,fluence_Jy_ms,,,new,111,4,4,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Dial et al. 2025 Table 2 give 89.2+/-0.9 Jy ms (HTR, 10% systematic) - the two CRAFT papers disagree"
+20230708A,fluence_Jy_ms,,,new,89.2,0.9,0.9,Jy ms,HTR CELEBI,dial2025,2412.11347,10.1093/mnras/stae2756,Table 2,10% systematic; total energy (9.1+/-1.0)e39 erg; peak L (8.1+/-0.9)e40 erg/s
+20230708A,snr,,,new,31.5,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Scott et al. 2025: S/N_det 30.5, S/N_off 270"
+20230708A,width_ms,,,new,23.6,,,ms,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Dial et al. 2025: burst width 26.44 ms, quasi-period 7.267 ms, five sub-bursts; Scott et al.: w_snr 1.14, w95 23.578 ms"
+20230708A,tau_scatt_ms,,,new,0.17,0.02,0.02,ms,multi-component scattering fit,dial2025,2412.11347,10.1093/mnras/stae2756,Table 2,at 919.5 MHz; alpha_t=-2.17 +0.12/-0.08; scintillation bandwidth 0.38+/-0.07 MHz (NE2001 0.43); Muller et al. 2026 quote 0.14+/-0.02 ms
+20230708A,tau_scatt_ms,,,new,0.24,0.02,0.02,ms,"scattering fit, multiple components",scott2025,2505.17497,10.1017/pasa.2025.10103,Table 2,at 920.5 MHz; alpha=-2.84+/-0.4; tau_1GHz=0.21+/-0.005 ms
+20230708A,RM_rad_m2,,,new,-6.9,0.04,0.04,rad m-2,,dial2025,2412.11347,10.1093/mnras/stae2756,Table 2,Muller et al. 2026 quote |RM|=6.90+/-0.04; Uttarkar et al. 2025 (ApJ 982 119) study the intra-burst polarisation state variations
+20230708A,RM_rad_m2,,,new,-7.5,0.4,0.4,rad m-2,,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,RM_MW=43.6+/-10.5 rad m-2; VELA calibrator; PA variable
+20230708A,RM_host_rad_m2,,,new,62,6,6,rad m-2,|RM_obs-RM_MW|(1+z)^2,athukoralalage2026,2608.23868,10.48550/arXiv.2608.23868,Table 1,arXiv only
+20230708A,pol_linear_frac,,,new,0.95,0.01,0.01,,,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,"|V|/I=0.39+/-0.01, P/I=1.03+/-0.01; Dial et al. 2025 first sub-burst: L=0.684, |V|=0.401, P=0.878; peak |V|/I 0.79"
+20230708A,m_R,,,new,22.65,0.02,0.02,mag,VLT/FORS2 R,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,"not corrected for Galactic extinction; HAWK-I Ks=18.8+/-0.1 (as published; implausibly red for this dwarf, likely contaminated/erroneous)"
+20230708A,m_R,,,new,22.53,0.02,0.02,mag,VLT/FORS2 R,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3; abstract,Galactic-extinction corrected; R-band luminosity 1.6e8 Lsun ~0.01 L*
+20230708A,logMstar,,,new,7.97,0.09,0.08,log Msun,prospector_sed,muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.2,"Kroupa IMF, 8-bin continuity SFH, joint photometry (FORS2 R, HAWK-I K, DES griz) + X-shooter VIS spectrum; repeated in Gordon et al. 2025 Table 3 and Glowacki et al. 2025 Table 2"
+20230708A,logMstar,,,new,7.78,0.14,0.14,log Msun,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,Quality flag 1
+20230708A,SFR,,,new,0.04,0.02,0.01,Msun/yr,prospector_sed 0-100 Myr,muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.2,SFH rising to present day (Fig. 4)
+20230708A,SFR,,,new,0.0262,0.0009,0.0009,Msun/yr,halpha,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,"Halpha 14.02+/-0.49e-17 erg/s/cm2 (Table 2), Galactic-extinction corrected only"
+20230708A,SFR,,,new,0.04,0.03,0.03,Msun/yr,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,log sSFR=-9.14+/-0.38
+20230708A,log_sSFR,,,new,-9.62,0.27,0.24,log yr-1,prospector 0-100 Myr,muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.2,
+20230708A,tm_Gyr,,,new,5.82,0.94,1.25,Gyr,prospector_sed mass-weighted age,muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.2,
+20230708A,metallicity_12logOH,,,new,8.0-8.3,,,,"O3N2 (<8.3) and N2 (>8.0) limits, Marino+2013",muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.1; Table 3,"[NII] undetected (<1.37e-17); O3N2 limit <~0.6, N2 limit <~-0.4"
+20230708A,halpha_flux_1e-16,,,new,1.402,0.049,0.049,1e-16 erg s-1 cm-2,,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 2,"published 14.02+/-0.49 x1e-17; Hbeta 10.96+/-0.60, [OIII]5007 44.2+/-1.1, [NII] <1.37 (1e-17)"
+20230708A,Re_arcsec,,,new,0.31,,,arcsec,"galfit (VLT/FORS2 R), n fixed to 1",gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,"K band: 0.40 arcsec, 0.78 kpc, n=2.69"
+20230708A,Re_kpc,,,new,0.59,,,kpc,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,
+20230708A,sersic_n,,,new,1,,,,galfit (fixed),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,K band free fit n=2.69
+20230708A,Re_kpc,,,new,0.58,0.08,0.08,kpc,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,log(M*/Reff)=8.21+/-0.06; log(M*/Reff^2)=8.45+/-0.12
+20230708A,offset_arcsec,,,new,0.57,0.37,0.28,arcsec,VLT/FORS2 R,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 0.60 +0.38/-0.29 arcsec
+20230708A,offset_kpc,,,new,1.1,0.72,0.54,kpc,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 1.17 +0.74/-0.56
+20230708A,offset_normalized,,,new,1.86,1.22,0.91,re,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 1.50 +0.94/-0.72
+20230708A,offset_kpc,,,new,0.33,0.63,0.63,kpc,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,offset/Reff=0.57+/-2.05
+20230708A,offset_kpc,,,new,1.1,,,kpc,,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,
+20230708A,PATH_posterior,,,new,1.0,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,"P(O)=0.0873; candidate 303.1155 -55.3563, theta=0.14 arcsec, phi=0.58 arcsec, mag 22.73"
+20230708A,PATH_posterior,,,new,1.0,,,,PATH,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 1,Dial et al. 2025 Sec 2.1: false-association probability 8e-7
+20230708A,inclination_deg,,,new,66.19,4.5,4.5,deg,"from GALFIT b/a, q0=0.2 formula",glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,b/a=0.44+/-0.06
+20230708A,axis_ratio,,,new,0.44,0.06,0.06,,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,Li et al. 2025 Table 2 leaves inclination blank
+20230708A,galaxy_type,,,new,star-forming dwarf,,,,BPT (SF region) and sSFR mass-doubling criterion,muller2026,2506.20774,10.3847/1538-4357/ae5060,Sec 3.1-3.2; Fig. 3,lowest-luminosity non-repeater host; no PRS (3.4)
+20230708A,morphology,,,new,compact dwarf; exponential profile (n fixed 1),,,,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,Figures A32-A33
+20240310A,host_name,,,new,(uncatalogued) host at 01:10:29.25 -44:26:21.5,,,,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,no catalogue designation in Shannon et al. 2025 or Gordon et al. 2025
+20240310A,telescope_localization,,,new,ASKAP/CRAFT ICS,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Sec 5.2.15; Table 1,EMU survey observation; 920.5 MHz; arrival time known only to ~15 s (metadata)
+20240310A,repeater,,,new,no,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20240310A,host_ra_deg,,,new,17.621875,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,01:10:29.25 -44:26:21.5
+20240310A,host_dec_deg,,,new,-44.439306,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,
+20240310A,z,,,new,0.127,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Sec 5.2.15; Table 1,"VLT/X-shooter: Halpha, [OII], [OIII], [NII], [SII]"
+20240310A,z_type,,,new,spec,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Sec 5.2.15,
+20240310A,DM_obs,,,new,601.8,0.2,0.2,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20240310A,DM_obs,,,new,601.8,0.2,0.2,pc cm-3,SN_maximising,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 1,structure-maximising 601.76 +0.86/-0.85
+20240310A,DM_MW,,,new,36,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20240310A,fluence_Jy_ms,,,new,35,2,2,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20240310A,snr,,,new,19.1,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Scott et al. 2025: S/N_det 19.1, S/N_off 40"
+20240310A,width_ms,,,new,7.1,,,ms,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Scott et al. 2025: w_snr 4.19 ms, w95 13.493 ms"
+20240310A,tau_scatt_ms,,,new,2.23,0.07,0.07,ms,"scattering fit, single component",scott2025,2505.17497,10.1017/pasa.2025.10103,Table 2,at 846.4 MHz; alpha=-3.23+/-0.5; tau_1GHz=1.30+/-0.13 ms; Scott et al. Sec 4.2 note very little scattering for its large inferred DM_host
+20240310A,RM_rad_m2,,,new,-1709.2,1.1,1.1,rad m-2,,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,RM_MW=-4.8+/-7.4 rad m-2; VELA calibrator; PA variable
+20240310A,pol_linear_frac,,,new,0.72,0.03,0.03,,,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,|V|/I=0.09+/-0.03; Glowacki et al. 2025 Table 1 list 0.75
+20240310A,m_R,,,new,20.143,0.005,0.005,mag,VLT/FORS2 R,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,not corrected for Galactic extinction; HAWK-I Ks=18.51+/-0.07; PATH automated mag 20.16
+20240310A,m_Ks,,,new,18.51,0.07,0.07,mag,VLT/HAWK-I Ks,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,not corrected for Galactic extinction
+20240310A,logMstar,,,new,9.97,,,log Msun,K-band mass-to-light ratio 0.6 Msun/Lsun (McGaugh & Schombert 2014) on Shannon et al. 2025 Ks mag,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3; Sec 4.2,not an SED fit; no uncertainty given; conflicts with Li et al. 2025 Bagpipes 9.14+/-0.12
+20240310A,logMstar,,,new,9.14,0.12,0.12,log Msun,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,Quality flag 0; 0.8 dex below Gordon et al. 2025 K-band estimate
+20240310A,SFR,,,new,0.38,0.18,0.18,Msun/yr,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,only published SFR; log sSFR=-9.56+/-0.28; no Prospector/Halpha SFR published (not in Muller et al. 2026 FURBY release I)
+20240310A,Re_arcsec,,,new,0.92,,,arcsec,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,"K band: 0.84 arcsec, 1.93 kpc, n=0.91"
+20240310A,Re_kpc,,,new,2.11,,,kpc,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,
+20240310A,sersic_n,,,new,0.93,,,,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,
+20240310A,Re_kpc,,,new,3.21,0.01,0.01,kpc,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,potential/compactness cells blank
+20240310A,offset_arcsec,,,new,0.95,0.54,0.47,arcsec,VLT/FORS2 R,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 0.84 +0.50/-0.41
+20240310A,offset_kpc,,,new,2.18,1.24,1.07,kpc,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 1.92 +1.16/-0.94
+20240310A,offset_normalized,,,new,1.04,0.59,0.51,re,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 1.00 +0.60/-0.49; model preference differs between optical and NIR (Sec 5.1)
+20240310A,offset_kpc,,,new,4.64,0.26,0.26,kpc,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,offset/Reff=1.45+/-0.06; twice the Gordon et al. 2025 value
+20240310A,offset_kpc,,,new,2.18,,,kpc,,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,area 30.76+/-0.09 kpc2
+20240310A,PATH_posterior,,,new,0.9884,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,"P(O)=0.7637; candidate 17.6219 -44.4393, theta=0.39 arcsec, phi=1.06 arcsec, mag 20.16; second candidate 17.6228 -44.4387 (3.65 arcsec, mag 21.80) P(O|x)=0.0116"
+20240310A,inclination_deg,,,new,84.58,0.27,0.27,deg,"from GALFIT b/a, q0=0.2 formula",glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,b/a=0.22+/-0.002; Leung et al. 2025 quote i~85 deg and exclude the host as edge-on
+20240310A,axis_ratio,,,new,0.22,0.002,0.002,,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,
+20240310A,inclination_deg,,,new,56.27,,,deg,Sersic fit on DESI imaging,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,conflicts with Glowacki et al. 2025 (84.6 deg) from deep VLT imaging
+20240310A,galaxy_type,,,new,SF (Y),,,,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 2,emission-line spectrum (Shannon et al. 2025); no SED classification published
+20240310A,morphology,,,new,disk (n~0.9),,,,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,Figures A50-A51
+20240201A,host_name,,,new,WISEA J095937.44+140519.4,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Sec 5.2.11,SDSS spectroscopic galaxy; NYU-VAGC ID 2491950 (Chang et al. 2015)
+20240201A,telescope_localization,,,new,ASKAP/CRAFT ICS,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Sec 5.2.11; Table 1,"filler observation of a |b|=50 deg field; FRB in a null of the primary beam (Sec 6, multibeam position discrepant); detected off-axis in edge/corner beam (Scott et al. 2025 Sec 2) so polarisation calibration uncertain; 920.5 MHz; Table 1 UTC printed as 2024-02-08 20:00:54"
+20240201A,repeater,,,new,no,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20240201A,host_ra_deg,,,new,149.90617,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,09:59:37.48 +14:05:19.4; Muller et al. 2026 Table 1: 09:59:37.47 +14:05:19.76; Roxburgh et al. 2025 Table 1: 149.9060 +14.0887
+20240201A,host_dec_deg,,,new,14.08872,,,deg,sextractor,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 1,
+20240201A,host_ra_deg,,,new,149.9060474,,,deg,,chang2015,1506.00648,10.1088/0067-0049/219/1/8,VizieR J/ApJS/219/8/gal,SDSS/NYU-VAGC position 149.9060474 +14.0887623
+20240201A,host_dec_deg,,,new,14.0887623,,,deg,,chang2015,1506.00648,10.1088/0067-0049/219/1/8,VizieR J/ApJS/219/8/gal,
+20240201A,z,,,new,0.042729,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1; Sec 5.2.11,SDSS catalogued redshift; Sec 5.2.11 text misprints it as 0.047279 - the SDSS/NYU-VAGC value is 0.0427292 (Chang et al. 2015 catalogue) and Table 1 / Glowacki / Roxburgh use 0.042729
+20240201A,z,,,new,0.0427292,,,,spec_z,chang2015,1506.00648,10.1088/0067-0049/219/1/8,VizieR J/ApJS/219/8/gal,SDSS DR7 spectroscopic (NYU-VAGC)
+20240201A,z,,,new,0.0427,,,,spec_z,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,"VLT/X-shooter (FURBY); edge-on host filled the slit, blank-sky offset used"
+20240201A,z_type,,,new,spec,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Sec 5.2.11,
+20240201A,DM_obs,,,new,374.5,0.2,0.2,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20240201A,DM_obs,,,new,374.5,0.2,0.2,pc cm-3,SN_maximising,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 1,structure-maximising 373.514+/-0.35
+20240201A,DM_MW,,,new,38,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20240201A,DM_host,,,new,270,21,27,pc cm-3,"DMobs-DMMW(NE2025)-DMcosmic, host rest frame",athukoralalage2026,2608.23868,10.48550/arXiv.2608.23868,Table 1,arXiv only; log M*=10.21 adopted (from Glowacki/Chang)
+20240201A,fluence_Jy_ms,,,new,47,3,3,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,primary-beam correction uncertain (null of the primary beam)
+20240201A,snr,,,new,13.9,,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Scott et al. 2025: S/N_det 13.9, S/N_off 63"
+20240201A,width_ms,,,new,9.5,,,ms,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,"Scott et al. 2025: w_snr 3.05 ms, w95 3.901 ms"
+20240201A,tau_scatt_ms,,,new,0.78,0.04,0.04,ms,"scattering fit, multiple components",scott2025,2505.17497,10.1017/pasa.2025.10103,Table 2,at 915.5 MHz; alpha=-3.9+/-0.5; tau_1GHz=0.46+/-0.06 ms
+20240201A,RM_rad_m2,,,new,1275.0,0.4,0.4,rad m-2,,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,RM_MW=5.9+/-6.5 rad m-2; PSR 1644 calibrator; PA variable; polarisation fractions flagged unreliable (off-axis)
+20240201A,RM_host_rad_m2,,,new,1380,5,5,rad m-2,|RM_obs-RM_MW|(1+z)^2,athukoralalage2026,2608.23868,10.48550/arXiv.2608.23868,Table 1,arXiv only
+20240201A,pol_linear_frac,,,new,0.76,0.02,0.02,,,scott2025,2505.17497,10.1017/pasa.2025.10103,Table 3,"|V|/I=0.09+/-0.02; flagged (c) potentially unreliable, detected outside half-power point; excluded from Glowacki et al. 2025 analysis"
+20240201A,m_R,,,new,16.97,0.01,0.01,mag,VLT/FORS2 R,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,not corrected for Galactic extinction; HAWK-I Ks=15.41+/-0.05
+20240201A,m_Ks,,,new,15.41,0.05,0.05,mag,VLT/HAWK-I Ks,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,
+20240201A,m_R,,,new,16.91,0.01,0.01,mag,VLT/FORS2 R,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,Galactic-extinction corrected; adopted in Glowacki et al. 2025 Table 2
+20240201A,logMstar,,,new,10.22,,,log Msun,K-band mass-to-light ratio 0.6 Msun/Lsun on Shannon et al. 2025 Ks mag,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3; Sec 4.2,not an SED fit; no uncertainty
+20240201A,logMstar,,,new,10.04,0.08,0.1,log Msun,"magphys_sed (SDSS ugriz + WISE), Chabrier IMF",chang2015,1506.00648,10.1088/0067-0049/219/1/8,VizieR J/ApJS/219/8/gal (lmass50),"median with 16-84 percentiles 9.94-10.12 (2.5-97.5: 9.84-10.21). Glowacki et al. 2025 Table 2 quote 10.21+/-0.02 from Chang et al. - that is the 97.5th-percentile column, not the median"
+20240201A,logMstar,,,new,9.99,0.07,0.07,log Msun,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,Quality flag 0
+20240201A,SFR,,,new,0.62,0.31,0.2,Msun/yr,"magphys_sed (100 Myr), Chabrier IMF",chang2015,1506.00648,10.1088/0067-0049/219/1/8,VizieR J/ApJS/219/8/gal (lsfr50),log SFR median -0.208 (16-84: -0.373 to -0.033; 97.5: +0.137). Glowacki et al. 2025 Table 2 quote log SFR=0.14+/-0.02 and log sSFR=-10.07 = the 97.5th-percentile columns
+20240201A,SFR,,,new,0.106,0.001,0.001,Msun/yr,halpha (X-shooter 1.2x11 arcsec slit),muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,"slit covers a small fraction of a 4.4 arcsec Re edge-on disk; aperture-limited, treat as lower limit; Halpha 331.9+/-3.0e-17 erg/s/cm2"
+20240201A,SFR,,,new,1.18,0.83,0.83,Msun/yr,bagpipes_sed,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,log sSFR=-9.92+/-0.42
+20240201A,SFR,,,new,1.04,0.57,0.37,Msun/yr,"radio continuum (MeerKAT L band, S_cont=0.42 mJy)",roxburgh2025,2507.06594,10.1017/pasa.2025.10123,Table 3,for the interacting pair combined (dagger)
+20240201A,log_sSFR,,,new,-10.22,0.15,0.2,log yr-1,magphys_sed,chang2015,1506.00648,10.1088/0067-0049/219/1/8,VizieR J/ApJS/219/8/gal (lssfr50),
+20240201A,metallicity_12logOH,,,new,8.6,0.1,0.1,,O3N2 (Marino+2013),muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 3,no strong Balmer absorption
+20240201A,halpha_flux_1e-16,,,new,33.19,0.3,0.3,1e-16 erg s-1 cm-2,,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 2,"published 331.9+/-3.0 x1e-17 (slit); Hbeta 64.6+/-1.3, [NII]6583 124.9+/-2.3, [OIII]5007 12.12+/-0.93; [SII] ratio 1.43+/-0.11 (Glowacki Table 2)"
+20240201A,Re_arcsec,,,new,4.38,,,arcsec,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,"K band: 3.13 arcsec, 2.67 kpc, n=1.23"
+20240201A,Re_kpc,,,new,3.73,,,kpc,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,
+20240201A,sersic_n,,,new,0.68,,,,galfit (VLT/FORS2 R),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 3,K band n=1.23
+20240201A,Re_kpc,,,new,4.13,0.01,0.01,kpc,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,log(M*/Reff)=9.59+/-0.02; log(M*/Reff^2)=8.98+/-0.18
+20240201A,offset_arcsec,,,new,3.3,0.54,0.46,arcsec,VLT/FORS2 R (astrometry re-solved to Gaia DR3),gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 3.31 +0.51/-0.49; FRB uncertainty 0.52x0.46 arcsec (Table B1)
+20240201A,offset_kpc,,,new,2.81,0.46,0.39,kpc,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 2.82 +0.44/-0.42
+20240201A,offset_normalized,,,new,0.75,0.12,0.1,re,,gordon2025,2506.06453,10.3847/1538-4357/ae0298,Table 4,K band 1.06+/-0.16
+20240201A,offset_kpc,,,new,9.63,3.78,3.78,kpc,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,offset/Reff=2.33+/-0.39; 3.4x the Gordon et al. 2025 value (2.81 kpc) - inconsistent; Shannon et al. 2025 PATH table gives theta=6.25 arcsec (=5.3 kpc) to the automated centroid
+20240201A,offset_kpc,,,new,4.38,,,kpc,,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,identical to the 20240210A entry in the same table; likely a copy error
+20240201A,offset_arcsec,,,new,6.25,,,arcsec,PATH candidate centroid,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,automated photometry centroid; mag column 26.17 is unphysical for this 17-mag galaxy (segmentation issue)
+20240201A,PATH_posterior,,,new,1.0,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,P(O)=1.0000
+20240201A,PATH_posterior,,,new,0.9998,,,,PATH,muller2026,2506.20774,10.3847/1538-4357/ae5060,Table 1,
+20240201A,axis_ratio,,,new,0.166,0.0002,0.0002,,galfit (Marnoch et al. in prep),glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 3,"inclination cell blank in Table 3 (b/a below q0=0.2, formula undefined -> edge-on); verified in PDF"
+20240201A,inclination_deg,,,new,80,,,deg,i ~ arccos(b/a) using Glowacki et al. 2025 b/a,leung2025,2507.16816,10.3847/2041-8213/ae044d,"Sec 2 (sample cuts, item 2)",approximate; host excluded from Leung et al. sample as >70 deg
+20240201A,inclination_deg,,,new,82.45,,,deg,Sersic fit on DESI imaging,li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2,area 29.17+/-0.04 kpc2
+20240201A,axis_ratio,,,new,0.44,,,,2MASS XSC ellipse fit,skrutskie2006,,10.1086/498708,"2MASS XSC via NED (K_s isophotal, 20 mag/arcsec2)","catalogue value, not an FRB paper; PA=60 deg; K_s isophotal semi-major 7.3 arcsec; NIR axis ratio much rounder than optical 0.166"
+20240201A,position_angle_deg,,,new,60,,,deg,,skrutskie2006,,10.1086/498708,2MASS XSC via NED,catalogue value
+20240201A,galaxy_type,,,new,SF (Y),,,,,glowacki2025,2506.23403,10.1017/pasa.2025.10122,Table 2,Chang et al. 2015 Sp flag = Sp; Muller et al. 2026: no strong Balmer absorption
+20240201A,morphology,,,new,edge-on spiral in an interacting pair,,,,,roxburgh2025,2507.06594,10.1017/pasa.2025.10123,Sec 5.11,Gordon et al. 2025 n=0.68 (R); Shannon et al. 2025 Fig. 1 image
+20240201A,environment,,,new,tidally interacting galaxy pair; neighbour at z=0.04314; HI envelope shared; classified HI-disturbed,,,,,roxburgh2025,2507.06594,10.1017/pasa.2025.10123,Sec 5.11; Sec 6,neighbour SDSS redshift 0.04314; HI connects the two; stellar disk of neighbour distorted towards host (DECam)
+20240201A,HI_flux_Jy_kms,,,new,1.01,0.11,0.11,Jy km/s,"MeerKAT L-band (2025 Feb 21, 240 min), SoFiA-2",roxburgh2025,2507.06594,10.1017/pasa.2025.10123,Table 3,pair combined (dagger); W50=373+/-5 km/s
+20240201A,logMHI,,,new,9.96,0.05,0.05,log Msun,MeerKAT HI,roxburgh2025,2507.06594,10.1017/pasa.2025.10123,Table 3,pair combined; asymmetry metrics not measured; R_HI and M200 not given
+20240201A,radio_continuum_mJy,,,new,0.42,,,mJy,MeerKAT L band,roxburgh2025,2507.06594,10.1017/pasa.2025.10123,Table 3,

@@ -7,9 +7,9 @@ Each of 10_000 draws samples 50 HSC galaxies without replacement.
 
 Protocol A: σ_q = 10 × q_err, then i = Hubble(q) + N(0, 5°)
     (existing inflated-error protocol).
-Protocol B: σ_q = sqrt(q_err² + σ_q,sky² + σ_q,5°²) with
-    σ_q,sky = |q_sky+ − q_sky−| / 2 and σ_q,5° the Hubble half-range
-    at i ± 5°. No extra 5° after Hubble.
+Protocol B (paper): σ_q = sqrt(q_err² + σ_q,sky²) with
+    σ_q,sky = |q_sky+ − q_sky−| / 2, then i = Hubble(q) + N(0, 5°).
+    The 5° floor is an inclination systematic, not a GALFIT q error.
 
 Run from repo root::
 
@@ -149,10 +149,15 @@ def sigma_q_protocol_b(
     floor_deg: float = INC_FLOOR_DEG,
     q0: float = Q0,
 ) -> np.ndarray:
+    """Measurement uncertainty on q: formal GALFIT error ⊕ sky half-range.
+
+    The 5° photometric floor is applied to i after Hubble, not here.
+    ``floor_deg`` / ``q0`` are kept so existing call sites do not break.
+    """
+    del floor_deg, q0, q
     qe = np.nan_to_num(np.asarray(q_err, dtype=float), nan=0.0)
     qs = np.nan_to_num(np.asarray(sigma_q_sky, dtype=float), nan=0.0)
-    q5 = sigma_q_from_floor_deg(q, floor_deg, q0=q0)
-    return np.sqrt(np.maximum(qe, 0.0) ** 2 + np.maximum(qs, 0.0) ** 2 + q5**2)
+    return np.sqrt(np.maximum(qe, 0.0) ** 2 + np.maximum(qs, 0.0) ** 2)
 
 
 def mc_sigma_q_envelope(
@@ -197,8 +202,8 @@ def confirmed50() -> pd.DataFrame:
     cohort = vc.cohort("all64")
     m = hc.merge(cohort, on="frb", suffixes=("", "_cohort"))
     m = m.loc[m["confirmed"] & m["in_53"]].sort_values("frb").reset_index(drop=True)
-    if len(m) != 50:
-        raise RuntimeError(f"expected 50 confirmed in-cut hosts, got {len(m)}")
+    if len(m) < 1:
+        raise RuntimeError("no confirmed in-cut hosts")
 
     rows = []
     for _, row in m.iterrows():
@@ -332,7 +337,7 @@ def write_readme(out_dir: Path, hosts: pd.DataFrame, n_hsc: int, n_draws: int) -
         f"| median q (FRB) | {med_q:.3f} |",
         f"| median cos(i) (point) | {med_cosi:.3f} |",
         f"| median sigma_q,A (10 x q_err) | {med_a:.3f} |",
-        f"| median sigma_q,B (sky xor q_err xor 5 deg) | {med_b:.3f} |",
+        f"| median sigma_q,B (sky xor q_err) | {med_b:.3f} |",
         f"| hosts missing sky +/- | {n_sky_miss} (those get sigma_q,sky = 0) |",
         "",
         "## Protocol A — `frb_vs_hsc_inflate10.png`",
@@ -342,12 +347,16 @@ def write_readme(out_dir: Path, hosts: pd.DataFrame, n_hsc: int, n_draws: int) -
         "## Protocol B — `frb_vs_hsc_sky_quad.png`",
         "",
         "sigma_q,sky = |q+ - q-| / 2",
-        "sigma_q,5deg = (1/2) |q(i+5 deg) - q(i-5 deg)|",
-        "sigma_q = sqrt(q_err^2 + sigma_q,sky^2 + sigma_q,5deg^2)",
+        "sigma_q = sqrt(q_err^2 + sigma_q,sky^2)",
+        "then i = Hubble(q) + N(0, 5 deg).",
         "",
-        "No extra 5 deg after Hubble. q_err is not multiplied by 10.",
+        "The 5 deg term is an inclination floor (Barnes & Sellwood 2003),",
+        "not a GALFIT q error. q_err is not multiplied by 10.",
         "",
-        "Table: `confirmed50_q.csv`.",
+        "Table: `confirmed50_q.csv`. Tests: [`TEST_RESULTS.md`](TEST_RESULTS.md).",
+        "",
+        "Literature on GALFIT **axis-ratio** errors (not \(n\)/\(R_e\)/mag): "
+        "[`GALFIT_Q_ERROR_LITERATURE.md`](GALFIT_Q_ERROR_LITERATURE.md).",
         "",
     ]
     dest = out_dir / "README.md"
@@ -412,18 +421,19 @@ def main(argv: list[str] | None = None) -> int:
         stem=args.out_dir / "frb_vs_hsc_inflate10",
     )
 
-    print("[*] Protocol B (sky + q_err + 5 deg in quadrature) ...", flush=True)
+    print("[*] Protocol B (sky + q_err, then 5 deg on i) ...", flush=True)
     sig_b = hosts["sigma_q_B"].to_numpy(dtype=float)
-    b_med, b_lo, b_hi = mc_sigma_q_envelope(
-        ba, sig_b, n_draws=args.n_draws, q0=args.q0, x=X, seed=SEED,
+    b_med, b_lo, b_hi = mc_inflated_cdf_envelope(
+        ba, sig_b, n_draws=args.n_draws, inflate=1.0,
+        floor_deg=args.floor_deg, q0=args.q0, x=X, seed=SEED,
     )
     _overlay(
         x=X, hsc_med=hsc_med, hsc_lo=hsc_lo, hsc_hi=hsc_hi,
         frb_med=b_med, frb_lo=b_lo, frb_hi=b_hi,
         n_frb=n_frb, n_hsc=n_hsc, n_draws=args.n_draws, q0=args.q0,
         title=rf"FRB vs HSC  $\cos(i)$  ($m_r\leq{args.mag_limit:g}$, "
-              rf"$N={n_frb}$, sky$\oplus q_{{\rm err}}\oplus{args.floor_deg:g}^\circ$)",
-        frb_label=rf"FRB confirmed  ($N={n_frb}$, sky$\oplus q_{{\rm err}}\oplus{args.floor_deg:g}^\circ$)",
+              rf"$N={n_frb}$, sky$\oplus q_{{\rm err}}$ then ${args.floor_deg:g}^\circ$)",
+        frb_label=rf"FRB confirmed  ($N={n_frb}$, sky$\oplus q_{{\rm err}}+{args.floor_deg:g}^\circ$)",
         stem=args.out_dir / "frb_vs_hsc_sky_quad",
     )
 

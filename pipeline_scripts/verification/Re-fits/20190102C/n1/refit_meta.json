@@ -1,0 +1,14 @@
+{
+  "frb": "20190102C",
+  "label": "n1",
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 21.6658,
+    "n": 0.5,
+    "pa": 3.9982,
+    "q": 0.417,
+    "re": 3.9062
+  },
+  "production_sky_adu": 3.691e-05,
+  "sky_fixed_adu": null
+}

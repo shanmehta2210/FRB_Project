@@ -1,0 +1,388 @@
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage{amsmath}
+
+\setlength{\textwidth}{7.1in}
+\setlength{\textheight}{9.3in}
+\setlength{\oddsidemargin}{-0.3in}
+\setlength{\evensidemargin}{-0.3in}
+\setlength{\topmargin}{-0.6in}
+\setlength{\columnsep}{0.25in}
+
+% Lightweight citation commands keep this draft self-contained until the
+% final BibTeX database and AASTeX package are added.
+\NewDocumentCommand{\citep}{o o m}{%
+  \IfNoValueTF{#1}{\cite{#3}}{#1~\cite{#3}}%
+}
+\NewDocumentCommand{\citet}{m}{\cite{#1}}
+\newcommand{\arcmin}{^{\prime}}
+\newcommand{\arcsec}{^{\prime\prime}}
+
+\begin{document}
+
+\title{Revisiting the Inclination Distribution of Fast Radio Burst Host Galaxies}
+\author{Authors to be finalized}
+\date{\today}
+\maketitle
+
+% Working ApJL draft. Abstract intentionally deferred.
+% Citation keys marked TODO must be reconciled with the final BibTeX file.
+
+\section{Introduction}
+\label{sec:introduction}
+
+Fast radio bursts (FRBs) are brief, luminous extragalactic radio transients
+whose progenitors and emission environments remain uncertain
+\citep[e.g.,][]{CordesChatterjee2019,Petroff2022}.  Host-galaxy demographics
+offer a route to identifying their progenitor channels and measuring their
+volumetric occurrence rates, but the observed host population is filtered by
+both radio-detection and optical-identification selection effects.
+\citet{2024Natur.634.1065B} presented evidence for one such effect: a deficit
+of FRBs observed in highly inclined, nearly edge-on host galaxies.  If real,
+this deficit would affect inferred FRB rates, comparisons among host
+environments, and conclusions about where FRB progenitors reside within their
+galaxies.
+
+Host inclination provides a physically motivated route to such a bias.  An
+FRB embedded in an inclined disk is viewed through a longer column of its
+host interstellar medium than an otherwise similar source in a face-on disk.
+The additional ionized and turbulent material can increase dispersion and
+multipath scattering.  Temporal broadening lowers the peak signal-to-noise
+ratio of a burst and can move it below the detection threshold of a radio
+search pipeline \citep{Chawla2022,Ocker2022}.  The strength of this effect
+should depend on the host gas distribution, the position of the source within
+the galaxy, and the observing frequency and time resolution of the survey.
+
+The initial inclination analysis used 23 localized FRB hosts and found fewer
+edge-on systems than expected from a matched sample of field galaxies
+\citep{2024Natur.634.1065B}.  That result motivated the present expanded
+analysis, but two limitations require particular attention.  First, the
+localized-host sample available at the time was small.  Second, galaxy
+inclinations are inferred from projected light distributions rather than
+measured directly.  The recovered axial ratio can depend on the point-spread
+function (PSF), image depth, sky subtraction, deblending, nearby sources, and
+the adopted surface-brightness model.  These effects become especially
+important for compact or low-surface-brightness hosts.
+
+For randomly oriented axisymmetric disks, $\cos i$ is intrinsically uniform.
+An observed, flux-limited galaxy sample need not follow that ideal
+distribution: dust attenuation, surface-brightness selection, finite
+resolution, morphology cuts, and shape-measurement systematics can each
+distort it.  We therefore test the FRB hosts against an empirical control
+sample rather than treating a uniform $\cos i$ distribution as the sole
+observational null.  A useful control must resemble the FRB hosts in apparent
+magnitude and disk-like morphology and must have projected shapes measured
+with a comparable PSF-aware model.
+
+Here we revisit the inclination distribution with a homogeneous structural
+analysis of 64 FRB hosts having published localizations.  We model
+predominantly $r$-band images from the DESI Legacy Imaging Surveys and
+Pan-STARRS1, together with one Hyper Suprime-Cam field, using empirical PSFs
+and PSF-convolved S\'ersic profiles.  After applying the working cuts
+$m_r\leq22$ and $q=b/a>0.2$ and excluding unreliable host-shape measurements,
+the analysis sample contains 50 hosts.  We compare this sample with disk-like
+galaxies selected from the HSC-PDR2 structural catalog of
+\citet{2021ApJ...921...38K}, whose axial ratios were obtained from
+PSF-convolved single-S\'ersic fits.  We explicitly assess uncertainties from
+the profile fit, sky background, and inclination conversion, and use
+independent image- and fit-level diagnostics to test the robustness of each
+host measurement.  This larger, consistently analyzed sample provides a
+direct test of whether the inclination-dependent deficit reported by
+\citet{2024Natur.634.1065B} persists under a different structural-analysis
+pipeline and a new empirical control sample.
+
+% SAMPLE POLICY NOTE:
+% The current final-50 sample contains one known repeater (FRB 20220912A) and
+% is not restricted to CRAFT/DSA discoveries. Do not claim otherwise unless
+% the cohort is rebuilt.
+
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{FRB Host Sample and Imaging Data}
+\label{subsec:sample_imaging}
+
+We begin with 64 FRB hosts that have a published host localization, paired
+flux and inverse-variance images, and a successful production fit.  Host
+positions are taken from the published localization literature rather than
+selected by the output of our image-analysis pipeline.  We nevertheless run
+the Probabilistic Association of Transients to their Hosts (PATH) framework
+\citep{Aggarwal2021} as an independent association cross-check using the
+reported localization uncertainty and the calibrated sources in each field.
+We do not impose a uniform pipeline PATH-posterior threshold because several
+secure literature associations are based on information not contained in the
+archival image alone.  We also do not impose a repeater-status cut; the final
+working sample contains one known repeater, FRB~20220912A.
+
+For each host we use a $10\arcmin\times10\arcmin$ $r$-band flux image and its
+inverse-variance map.  The 64 production images comprise 51 fields from the
+DESI Legacy Imaging Surveys \citep{2019AJ....157..168D}, 12 from the
+Pan-STARRS1 $3\pi$ survey \citep{2016arXiv161205560C}, and one deeper
+HSC-SSP image \citep{Aihara2019}.  The Legacy Surveys are preferred where
+available because their nominal $5\sigma$ point-source depth
+($r\simeq23.9$ AB) is deeper than that of the Pan-STARRS1 stacked survey
+($r\simeq23.2$ AB), although the limiting depth for reliable extended-source
+morphology is brighter and varies between fields.  The HSC image replaces a
+shallower cutout for one host for which the deeper data provide the more
+reliable morphology.  Pixel scales are measured from the WCS of each image
+rather than assumed globally.
+
+We require $m_r\leq22$ to limit the analysis to hosts for which the archival
+imaging can constrain a two-dimensional light profile.  The current
+tabulation retains 60 of the 64 production hosts under this cut.  We then
+require $q=b/a>0.2$ because the inclination transformation described in
+Section~\ref{subsec:inclination} becomes undefined for $q<q_0$.  The joint
+magnitude and axis-ratio cuts leave 53 candidates.  Image- and fit-quality
+review described in Section~\ref{subsec:validation} rejects three additional
+objects, yielding a 50-host inclination sample.  Because the same axis-ratio
+cut is applied to the field sample, all population statements are conditional
+on $q>0.2$.
+
+% TODO BEFORE SUBMISSION:
+% Define the magnitude column in this paragraph. The current cut code uses
+% GALFIT `mag` and gives 60 hosts; `mag_final` gives 59. The joint m+q cohort
+% and confirmed final sample remain 53 and 50 in either case.
+
+\subsection{Source Detection, PSF Modeling, and Photometry}
+\label{subsec:detection_psf}
+
+We run Source Extractor \citep{1996A&AS..117..393B} on each flux image with
+the inverse-variance map as the weight image.  A $3\sigma$ detection and
+analysis threshold is used so that faint hosts remain represented in the
+segmentation map, while \texttt{DEBLEND\_MINCONT}=0.005 limits the
+fragmentation of structured galaxies into multiple detections.  The resulting
+catalog and segmentation image define the sources used in all later stages.
+
+PSFEx \citep{2011ASPC..442..435B} is then used to construct an empirical PSF
+from point sources across the $10\arcmin$ field.  The minimum stellar
+signal-to-noise threshold is reduced iteratively only when needed to obtain a
+usable stellar sample; the default stopping criterion is 25 accepted stars.
+The final PSF model is sampled into a $25\times25$ pixel stamp and supplied to
+all subsequent PSF-aware measurements and to \texttt{GALFIT}.
+
+A second Source Extractor pass includes the PSFEx model and provides the
+photometric measurements and shape diagnostics used downstream.  We
+calibrate the field independently against Pan-STARRS1 DR1 and the Legacy
+Survey DR10 Tractor catalog, using the catalog that provides the larger set of
+at least three clean matched stars; ties favor Pan-STARRS1.  The zero point is
+the sigma-clipped median of the reference-minus-instrumental magnitudes.
+When this calibration is unreliable, the host magnitude used for
+magnitude-dependent analysis is replaced by matched Legacy Survey or
+Pan-STARRS1 reference photometry.
+
+\subsection{Host Selection, Deblending, and S\'ersic Fitting}
+\label{subsec:galfit}
+
+The published host coordinate is the default fitting center.  We select the
+nearest extended Source Extractor detection within $5\arcsec$ and abort the
+fit if no galaxy-like source is present, preventing a noise peak or foreground
+star from being treated as the host.  The independent PATH posterior is
+retained for quality control but does not override a secure literature host
+in the production configuration.
+
+The initial fitting region is the host segmentation bounding box padded by 20
+pixels.  Stars are masked.  For every neighboring galaxy whose segmentation
+island intersects this region, we compare the host--neighbor separation with
+three times the neighbor's Source Extractor \texttt{FLUX\_RADIUS}.  More
+distant neighbors are masked; closer neighbors are represented by independent
+S\'ersic components, and the fitting region is expanded until every jointly
+fitted component has the same boundary padding.  This procedure limits both
+contamination from unmodeled neighbors and unnecessary growth of the fitted
+sky area.  The FRB host is always component 1.
+
+We fit the host with a two-dimensional, PSF-convolved S\'ersic profile using
+\texttt{GALFIT} \citep{2002AJ....124..266P,2010AJ....139.2097P}.  The
+centroid, total magnitude, effective semimajor axis $R_{\rm e}$, S\'ersic
+index $n$, projected axis ratio $q$, and position angle are free.  Initial
+values are taken from the PSF-aware Source Extractor catalog.  We constrain
+$0.5\leq n\leq6$, $1.5\leq R_{\rm e}\leq100$ pixels, and
+$8\leq m\leq40$; the latter broad interval is a numerical guard rather than a
+sample-selection cut.  Nearby galaxies selected for simultaneous fitting have
+their own S\'ersic components but do not contribute to the reported host
+parameters.
+
+The pixel uncertainty image is formed from the inverse variance.  Invalid or
+nonpositive inverse-variance pixels are masked, and the absolute uncertainty
+scale is compared with the robust sky scatter measured from unmasked pixels.
+If their ratio lies outside $0.5$--$2$, the uncertainty image is rescaled by a
+single multiplicative factor while retaining its spatial structure.  A
+constant sky pedestal is fitted simultaneously with the galaxy components;
+sky gradients are held at zero because the comparatively shallow cutouts do
+not constrain them robustly.  Fits whose sky level departs strongly from the
+independent reference are repeated with a bounded sky term and are rejected
+if the sky check still fails.
+
+We also run Statmorph \citep{2019MNRAS.483.4140R} to measure concentration,
+asymmetry, smoothness, Gini, and $M_{20}$.  These quantities are diagnostics
+of non-S\'ersic structure and are not used to replace the \texttt{GALFIT}
+axis ratio.
+
+\subsection{Fit Validation and Adopted Axis Ratios}
+\label{subsec:validation}
+
+All 64 production fits are subjected to the same validation suite before the
+science cuts are applied.  The checks measure the local reduced
+$\chi^2$, residual-flux fraction, Fourier structure of the residual,
+sensitivity to sky perturbations, radial isophotal geometry, leakage of PSF
+ellipticity into host shape, magnitude-dependent bias, agreement with an
+independent AstroPhot S\'ersic fit, and visual agreement among the data,
+model, and residual.  Deeper archival imaging is inspected where available.
+These tests are designed to falsify a host-axis-ratio measurement; no single
+threshold, including reduced $\chi^2$, automatically admits an object to the
+paper sample.
+
+For hosts whose free-$n$, free-sky production fit is unstable, we inspect
+controlled alternatives in which $n$ and/or the sky is fixed, or a contaminating
+point source is modeled explicitly.  The adopted ``winning leg'' is recorded
+before population-level comparisons.  Of the final 50 hosts, 37 use the
+production fit and 13 use a documented re-fit.  Three objects that pass the
+joint $m_r$ and $q$ cuts are excluded because the fitted object or its geometry
+is not trustworthy: FRB~20190711A, FRB~20221101B, and FRB~20230930A.
+Full diagnostic definitions and per-object decisions are provided in the
+Appendix.
+
+\subsection{Inclination Angles and Uncertainties}
+\label{subsec:inclination}
+
+We convert the adopted projected axis ratio $q=b/a$ to inclination using the
+oblate-disk relation \citep{1926ApJ....64..321H}
+
+\begin{equation}
+\cos^2 i = \frac{q^2-q_0^2}{1-q_0^2},
+\label{eq:hubble_inclination}
+\end{equation}
+
+where $i=0^\circ$ is face-on and $q_0$ is the intrinsic short-to-long axis
+ratio of an edge-on disk.  We adopt $q_0=0.2$, following common practice for
+late-type disks and \citet{2024Natur.634.1065B}.  Objects with $q\leq q_0$
+are excluded rather than assigned a formally saturated $i=90^\circ$.
+The sensitivity of the population result to plausible choices of $q_0$ is
+tested in the Appendix.
+
+The formal covariance uncertainty reported by \texttt{GALFIT} captures
+statistical noise near the best-fitting model but does not include background
+or model-choice systematics \citep{2010AJ....139.2097P,2007ApJS..172..615H}.
+We therefore do not multiply the formal axis-ratio uncertainty by an arbitrary
+constant.  Instead, we combine two explicitly defined terms on $q$.  First,
+$\sigma_{q,\rm fit}$ is the formal uncertainty of the adopted fit.  Second,
+we estimate the large-scale background uncertainty as
+
+\begin{equation}
+\sigma_{\rm sky}=1.4826\,{\rm MAD}(\texttt{BACKGROUND}),
+\end{equation}
+
+using local Source Extractor background estimates for clean sources across the
+field.  We re-fit each host with the sky fixed at the best-fitting value plus
+and minus $\sigma_{\rm sky}$, obtaining $q_+$ and $q_-$, and define
+
+\begin{equation}
+\sigma_{q,\rm sky}=\frac{|q_+-q_-|}{2}.
+\end{equation}
+
+This follows the general strategy of estimating background systematics through
+sky-perturbed re-fits rather than through the local covariance matrix
+\citep{2013ApJ...766...47H,2017ApJ...845..114G}.  The measurement uncertainty
+on the axis ratio is then
+
+\begin{equation}
+\sigma_q^2
+=\sigma_{q,\rm fit}^2+\sigma_{q,\rm sky}^2.
+\label{eq:q_uncertainty}
+\end{equation}
+
+A further $\sim5^\circ$ systematic applies to photometric inclination itself,
+from non-axisymmetry, bars, dust, and the Hubble conversion, rather than from
+the GALFIT covariance \citep{2003AJ....125.1164B,2024Natur.634.1065B}.
+We therefore draw $q$ from a Gaussian of width $\sigma_q$, truncate draws to
+$q_0<q\leq1$, convert each draw with Equation~\ref{eq:hubble_inclination}, and
+add a $5^\circ$ Gaussian floor to $i$.  The $5^\circ$ term is applied once, on
+inclination, and is not mapped into $q$.  The same draws construct the
+uncertainty envelope of the FRB-host cumulative distribution.  This protocol
+supersedes the preliminary prescription that scaled formal \texttt{GALFIT}
+errors by a factor of 10.
+
+% TODO: generate and freeze the individual asymmetric i intervals for Table 1
+% from the same Monte Carlo convention used for the CDF.
+
+\subsection{Matched Field-Galaxy Comparison}
+\label{subsec:control}
+
+We construct the field-galaxy control from the HSC-PDR2 structural catalog of
+\citet{2021ApJ...921...38K}.  That catalog fits HSC $i$-band images with a
+PSF-convolved single-S\'ersic model using Lenstronomy.  It therefore does not
+use the same software as our \texttt{GALFIT} analysis, but it fits the same
+parametric profile family and reports the corresponding projected axis ratio.
+This is closer methodological parity than comparing our model-derived host
+shapes with heterogeneous isophotal or catalog moments.
+
+From a reproducible random subset of the public HSC catalogs, we retain fits
+with \texttt{goodfits\_flag}=1 and $0.4<n<1.5$ to select exponential-disk
+analogues.  We then apply the same photometric and geometric cuts used for the
+hosts, $r\leq22$ and $q>0.2$, leaving 24,450 control galaxies.  The HSC
+structural fit is measured in the $i$ band whereas the matching magnitude is
+the catalog $r$ magnitude; possible bandpass and resolution effects are
+examined in the Appendix.
+
+Each HSC axis ratio is converted to $\cos i$ with Equation
+\ref{eq:hubble_inclination} and the same $q_0=0.2$.  We draw 10,000 samples of
+50 HSC galaxies without replacement and use their cumulative distributions to
+define the median field expectation and its 16th--84th percentile sampling
+envelope.  We compare the 50 host point estimates with the complete HSC pool
+using two-sample Kolmogorov--Smirnov and Anderson--Darling statistics.  Because
+the HSC pool is much larger than the host sample, we also calculate
+sample-size-matched empirical $p$-values: for each statistic, the $p$-value is
+the fraction of 50-object HSC draws whose discrepancy from the parent HSC pool
+is at least as large as that measured for the FRB hosts.  The hypothesis-test
+$p$-values use point estimates; the uncertainty-aware CDF envelopes are shown
+separately.  A uniform $\cos i$ distribution is retained as a visual reference,
+not used as the observational null, because the matched magnitude,
+morphological, and $q$ cuts reshape the measured field distribution.
+
+\begin{thebibliography}{99}
+
+\bibitem{CordesChatterjee2019}
+Cordes, J. M., \& Chatterjee, S. 2019, ARA\&A, 57, 417
+\bibitem{Petroff2022}
+Petroff, E., Hessels, J. W. T., \& Lorimer, D. R. 2022, A\&ARv, 30, 2
+\bibitem{2024Natur.634.1065B}
+Bhardwaj, M., Lee, J., \& Ji, K. 2024, Nature, 634, 1065
+\bibitem{Chawla2022}
+Chawla, P., et al. 2022, ApJ, 927, 35
+\bibitem{Ocker2022}
+Ocker, S. K., Cordes, J. M., Chatterjee, S., \& Gorsuch, M. R. 2022,
+ApJ, 934, 71
+\bibitem{2021ApJ...921...38K}
+Kawinwanichakij, L., et al. 2021, ApJ, 921, 38
+\bibitem{Aggarwal2021}
+Aggarwal, K., et al. 2021, ApJ, 911, 95
+\bibitem{2019AJ....157..168D}
+Dey, A., et al. 2019, AJ, 157, 168
+\bibitem{2016arXiv161205560C}
+Chambers, K. C., et al. 2016, arXiv:1612.05560
+\bibitem{Aihara2019}
+Aihara, H., et al. 2019, PASJ, 71, 114
+\bibitem{1996A&AS..117..393B}
+Bertin, E., \& Arnouts, S. 1996, A\&AS, 117, 393
+\bibitem{2011ASPC..442..435B}
+Bertin, E. 2011, ASPC, 442, 435
+\bibitem{2002AJ....124..266P}
+Peng, C. Y., Ho, L. C., Impey, C. D., \& Rix, H.-W. 2002, AJ, 124, 266
+\bibitem{2010AJ....139.2097P}
+Peng, C. Y., Ho, L. C., Impey, C. D., \& Rix, H.-W. 2010, AJ, 139, 2097
+\bibitem{2019MNRAS.483.4140R}
+Rodriguez-Gomez, V., et al. 2019, MNRAS, 483, 4140
+\bibitem{1926ApJ....64..321H}
+Hubble, E. P. 1926, ApJ, 64, 321
+\bibitem{2007ApJS..172..615H}
+H{\"a}ussler, B., et al. 2007, ApJS, 172, 615
+\bibitem{2013ApJ...766...47H}
+Huang, S., Ho, L. C., Peng, C. Y., Li, Z.-Y., \& Barth, A. J. 2013,
+ApJ, 766, 47
+\bibitem{2017ApJ...845..114G}
+Gao, H., \& Ho, L. C. 2017, ApJ, 845, 114
+\bibitem{2003AJ....125.1164B}
+Barnes, E. I., \& Sellwood, J. A. 2003, AJ, 125, 1164
+
+\end{thebibliography}
+
+\end{document}

@@ -472,7 +472,9 @@ def sky_within_tolerance(
 ) -> bool:
     if sky_fit is None or not math.isfinite(sky_fit):
         return False
-    return abs(sky_fit - sky_ref) <= tolerance_adu
+    # fit.log prints the sky with 2 decimals, so a pass-2 fit sitting exactly on the
+    # +/-tolerance constraint can read as tolerance + 0.005; allow that print rounding.
+    return abs(sky_fit - sky_ref) <= tolerance_adu + 0.005
 
 
 def write_results_png(wkdir: str) -> None:

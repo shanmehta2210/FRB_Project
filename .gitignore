@@ -3,8 +3,8 @@
 .venv_astrophot/
 .venv_wsl/
 
-# Local ApJL manuscript drafts and publication planning
-Publication/
+# Publication materials are tracked; third-party papers (re-downloadable, ~530 MB) are not
+Publication/materials/host_properties/papers/
 
 # Python cache
 __pycache__/
@@ -51,9 +51,15 @@ PATH/
 catalog/
 catalog_downloads/
 
-# Verification run artifacts (keep scripts/docs only)
-pipeline_scripts/verification/outputs/
-pipeline_scripts/verification/Re-fits/
+# Verification run artifacts: keep panels, JSON metrics, fit logs, feedme; drop bulk FITS/catalogs
+pipeline_scripts/verification/outputs/**/*.fits
+pipeline_scripts/verification/outputs/**/*.npz
+pipeline_scripts/verification/outputs/**/*.cat
+pipeline_scripts/verification/outputs/**/*.xml
+pipeline_scripts/verification/Re-fits/**/*.fits
+pipeline_scripts/verification/Re-fits/**/*.npz
+pipeline_scripts/verification/Re-fits/**/*.cat
+pipeline_scripts/verification/Re-fits/**/*.xml
 pipeline_scripts/verification/AstroPhot.log
 pipeline_scripts/verification/.pytest_cache/
 
@@ -114,3 +120,7 @@ pipeline_scripts/docs/_rerun*.log
 GTC data/pipeline_trial/batch_run.log
 GTC data/pipeline_trial/batch_run.err
 tools/astrophot/logs/
+
+# Competitor / reference preprints kept locally only
+2610.13062v1.pdf
+scripts/_tmp_methods.txt

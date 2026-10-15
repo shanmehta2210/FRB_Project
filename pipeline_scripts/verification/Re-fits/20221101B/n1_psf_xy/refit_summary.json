@@ -1,0 +1,93 @@
+{
+  "components": [
+    {
+      "c": null,
+      "c_err": null,
+      "comp": 1,
+      "fwhm": null,
+      "fwhm_err": null,
+      "mag": 17.9688,
+      "mag_err": 0.0604,
+      "n": 1.0,
+      "n_err": null,
+      "pa": -19.7774,
+      "pa_err": 1.2632,
+      "q": 0.2693,
+      "q_err": 0.014,
+      "re": 22.6118,
+      "re_err": 1.4164,
+      "type": "sersic",
+      "xc": 35.1952,
+      "xc_err": 0.1487,
+      "yc": 47.2772,
+      "yc_err": 0.4919
+    },
+    {
+      "c": null,
+      "c_err": null,
+      "comp": 2,
+      "fwhm": null,
+      "fwhm_err": null,
+      "mag": 17.3704,
+      "mag_err": 0.0015,
+      "n": null,
+      "n_err": null,
+      "pa": null,
+      "pa_err": null,
+      "q": null,
+      "q_err": null,
+      "re": null,
+      "re_err": null,
+      "type": "psf",
+      "xc": 34.0165,
+      "xc_err": null,
+      "yc": 50.5026,
+      "yc_err": null
+    }
+  ],
+  "fit": {
+    "converged": true,
+    "mag": 17.9688,
+    "n": 1.0,
+    "pa": -19.7774,
+    "q": 0.2693,
+    "q_err": 0.014,
+    "re": 22.6118,
+    "sky": 13.7368,
+    "status": "ok"
+  },
+  "frb": "20221101B",
+  "label": "n1_psf_xy",
+  "moffat_added": false,
+  "n_fixed": 1.0,
+  "panel_png": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221101B\\n1_psf_xy\\panel.png",
+  "psf_added": true,
+  "psf_xy_fixed": true,
+  "published_panel": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\outputs\\panels\\20221101B_n1_psf_xy.png",
+  "sersic_added": false,
+  "sky": {
+    "comp": 3,
+    "level": 13.7368,
+    "level_err": 9.1023
+  },
+  "sky_fixed_adu": null,
+  "verification": {
+    "frb": "20221101B",
+    "host_dir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221101B\\n1_psf_xy",
+    "notes": [],
+    "outdir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221101B\\n1_psf_xy",
+    "status": {
+      "astrophot": "ok",
+      "chi2": "ok",
+      "fourier": "ok",
+      "isophote": "isophote_fit_failed",
+      "mag": "ok",
+      "psf": "ok",
+      "rff": "ok",
+      "sky": "ok",
+      "visual": "ok"
+    }
+  },
+  "verification_runtime_s": 30.326,
+  "wkdir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221101B\\n1_psf_xy"
+}

@@ -1,0 +1,151 @@
+\begin{thebibliography}{}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\href{#1}{#1}}
+\providecommand{\dodoi}[1]{doi:~\href{http://doi.org/#1}{\nolinkurl{#1}}}
+\providecommand{\doeprint}[1]{\href{http://ascl.net/#1}{\nolinkurl{http://ascl.net/#1}}}
+\providecommand{\doarXiv}[1]{\href{https://arxiv.org/abs/#1}{\nolinkurl{https://arxiv.org/abs/#1}}}
+
+% type= article
+\bibitem[{M. Bhardwaj {et~al.}(2024)Bhardwaj, Lee, \& Ji}]{bhardwaj2024}
+Bhardwaj, M., Lee, J., \& Ji, K. 2024, \bibinfo{title}{Selection bias
+  obfuscates the discovery of fast radio burst sources,} Nature,
+  \dodoi{10.1038/s41586-024-08065-w}
+
+% type= article
+\bibitem[{L. {Connor} {et~al.}(2025){Connor}, {Ravi}, {Sharma}, {Ocker},
+  {Faber}, {Hallinan}, {Harnach}, {Hellbourg}, {Hobbs}, {Hodge}, {Hodges},
+  {Kosogorov}, {Lamb}, {Law}, {Rasmussen}, {Sherman}, {Somalwar}, {Weinreb},
+  {Woody}, \& {Konietzka}}]{connor2025}
+{Connor}, L., {Ravi}, V., {Sharma}, K., {et~al.} 2025, \bibinfo{title}{A
+  gas-rich cosmic web revealed by the partitioning of the missing baryons,}
+  Nature Astronomy, \dodoi{10.1038/s41550-025-02566-y}
+
+% type= article
+\bibitem[{M. {Glowacki} {et~al.}(2025){Glowacki}, {Bera}, {James}, {Paterson},
+  {Deller}, {Gordon}, {Marnoch}, {Muller}, {Prochaska}, {Ryder}, {Shannon},
+  {Tejos}, \& {Mannings}}]{glowacki2025}
+{Glowacki}, M., {Bera}, A., {James}, C.~W., {et~al.} 2025, \bibinfo{title}{An
+  investigation into correlations between FRB and host galaxy properties,}
+  Publications of the Astronomical Society of Australia, 42, e157,
+  \dodoi{10.1017/pasa.2025.10122}
+
+% type= article
+\bibitem[{A.~C. Gordon {et~al.}(2023)Gordon, Fong, Kilpatrick, Eftekhari, Leja,
+  Prochaska, Nugent, Bhandari, Blanchard, Caleb, Day, Deller, Dong, Glowacki,
+  Gourdji, Mannings, Mahoney, Marnoch, Miller, Paterson, Rastinejad, Ryder,
+  Sadler, Scott, Sears, Shannon, Simha, Stappers, \& Tejos}]{gordon2023}
+Gordon, A.~C., Fong, W.-f., Kilpatrick, C.~D., {et~al.} 2023,
+  \bibinfo{title}{The Demographics, Stellar Populations, and Star Formation
+  Histories of Fast Radio Burst Host Galaxies: Implications for the
+  Progenitors,} The Astrophysical Journal, 954, 80,
+  \dodoi{10.3847/1538-4357/ace5aa}
+
+% type= article
+\bibitem[{A.~C. {Gordon} {et~al.}(2025){Gordon}, {Fong}, {Deller}, {Marnoch},
+  {Lim}, {Peng}, {Bannister}, {Bera}, {Bhat}, {Dial}, {Dong}, {Eftekhari},
+  {Glowacki}, {Gourdji}, {Gupta}, {Jahns-Schindler}, {Jaini}, {Kilpatrick},
+  {Liu}, {Prochaska}, {Ryder}, {Shannon}, {Simha}, {Tejos}, {Wang}, \&
+  {Wang}}]{gordon2025}
+{Gordon}, A.~C., {Fong}, W.-f., {Deller}, A.~T., {et~al.} 2025,
+  \bibinfo{title}{Mapping the Spatial Distribution of Fast Radio Bursts within
+  their Host Galaxies,} The Astrophysical Journal, 993, 119,
+  \dodoi{10.3847/1538-4357/ae0298}
+
+% type= article
+\bibitem[{M. {Hussaini} {et~al.}(2025){Hussaini}, {Connor}, {Konietzka},
+  {Ravi}, {Faber}, {Sharma}, \& {Sherman}}]{hussaini2025}
+{Hussaini}, M., {Connor}, L., {Konietzka}, R.~M., {et~al.} 2025,
+  \bibinfo{title}{A Correlation Between FRB Dispersion Measure and Foreground
+  Large-Scale Structure,} The Astrophysical Journal Letters, 993, L27,
+  \dodoi{10.3847/2041-8213/ae0a49}
+
+% type= article
+\bibitem[{K. Lee-Waddell {et~al.}(2023)Lee-Waddell, James, Ryder, Mahony,
+  Bahramian, Koribalski, Kumar, Marnoch, North-Hickey, Sadler, Shannon, Tejos,
+  Thorne, Wang, \& Wayth}]{leewaddell2023}
+Lee-Waddell, K., James, C.~W., Ryder, S.~D., {et~al.} 2023, \bibinfo{title}{The
+  Host Galaxy of FRB 20171020A Revisited,} Publications of the Astronomical
+  Society of Australia, 40, e029, \dodoi{10.1017/pasa.2023.27}
+
+% type= article
+\bibitem[{C. {Leung} {et~al.}(2025){Leung}, {Simha}, {Medlock}, {Nagai},
+  {Masui}, {Kahinga}, {Lanman}, {Andrew}, {Bandura}, {Curtin}, {Gaensler},
+  {Gusinskaia}, {Joseph}, {Lazda}, {Mas-Ribas}, {Meyers}, {Nimmo}, {Pearlman},
+  {Prochaska}, {Sammons}, {Shin}, {Smith}, \& {Wang}}]{leung2025}
+{Leung}, C., {Simha}, S., {Medlock}, I., {et~al.} 2025, \bibinfo{title}{Stellar
+  Mass-Dispersion Measure Correlations Constrain Baryonic Feedback in Fast
+  Radio Burst Host Galaxies,} The Astrophysical Journal Letters,
+  \dodoi{10.3847/2041-8213/ae044d}
+
+% type= article
+\bibitem[{R.-N. {Li} {et~al.}(2025){Li}, {Xu}, {Gao}, {Wu}, {Yi}, \&
+  {Wang}}]{li2025}
+{Li}, R.-N., {Xu}, K., {Gao}, D.-H., {et~al.} 2025, \bibinfo{title}{Calibrating
+  DM$_{\rm IGM}$-$z$ Relation using Host Galaxy Properties of Fast Radio
+  Bursts,} The Astrophysical Journal, \dodoi{10.3847/1538-4357/adeb72}
+
+% type= article
+\bibitem[{J.~P. Macquart {et~al.}(2020)Macquart, Prochaska, McQuinn, Bannister,
+  Bhandari, Day, Deller, Ekers, James, Marnoch, Oslowski, Phillips, Ryder,
+  Scott, Shannon, \& Tejos}]{macquart2020}
+Macquart, J.~P., Prochaska, J.~X., McQuinn, M., {et~al.} 2020,
+  \bibinfo{title}{A census of baryons in the Universe from localized fast radio
+  bursts,} Nature, 581, 391, \dodoi{10.1038/s41586-020-2300-2}
+
+% type= article
+\bibitem[{A.~R. {Muller} {et~al.}(2026){Muller}, {Gordon}, {Ryder}, {Mannings},
+  {Prochaska}, {Bannister}, {Bera}, {Bhandari}, {Bhat}, {Deller}, {Fong},
+  {Glowacki}, {Gupta}, {Jahns-Schindler}, {James}, {Jorgenson}, {Marnoch},
+  {Shannon}, {Tejos}, {Uttarkar}, {Wang}, \& {Wang}}]{muller2026}
+{Muller}, A.~R., {Gordon}, A.~C., {Ryder}, S.~D., {et~al.} 2026,
+  \bibinfo{title}{The Low-mass Dwarf Host Galaxy of Nonrepeating FRB
+  20230708A,} The Astrophysical Journal, 1001, 118,
+  \dodoi{10.3847/1538-4357/ae5060}
+
+% type= article
+\bibitem[{I. {Pastor-Marazuela} {et~al.}(2026){Pastor-Marazuela}, {Gordon},
+  {Stappers}, {Khrykin}, {Tejos}, {Rajwade}, {Caleb}, {Surnis}, {Driessen},
+  {Simha}, {Tian}, {Prochaska}, {Barr}, {Buchner}, {Fong}, {Jankowski},
+  {Kahinga}, {Kilpatrick}, {Kramer}, {Mas-Ribas}, \&
+  {Hennawi}}]{pastormarazuela2026}
+{Pastor-Marazuela}, I., {Gordon}, A.~C., {Stappers}, B., {et~al.} 2026,
+  \bibinfo{title}{Localization and host galaxy identification of new fast radio
+  bursts with MeerKAT,} Monthly Notices of the Royal Astronomical Society, 545,
+  staf2144, \dodoi{10.1093/mnras/staf2144}
+
+% type= article
+\bibitem[{V. Ravi {et~al.}(2019)Ravi, Catha, D'Addario, Djorgovski, Hallinan,
+  Hobbs, Kocz, Kulkarni, Shi, Vedantham, Weinreb, \& Woody}]{ravi2019}
+Ravi, V., Catha, M., D'Addario, L., {et~al.} 2019, \bibinfo{title}{A fast radio
+  burst localized to a massive galaxy,} Nature, 572, 352,
+  \dodoi{10.1038/s41586-019-1389-7}
+
+% type= article
+\bibitem[{V. Ravi {et~al.}(2023)Ravi, Catha, Chen, Connor, Faber, Lamb,
+  Hallinan, Harnach, Hellbourg, Hobbs, Hodge, Hodges, Law, Rasmussen, Sharma,
+  Sherman, Shi, Simard, Squillace, Weinreb, Woody, Yadlapalli, Ahumada, Dong,
+  Fremling, Huang, Karambelkar, \& Miller}]{ravi2023}
+Ravi, V., Catha, M., Chen, G., {et~al.} 2023, \bibinfo{title}{{Deep Synoptic
+  Array Science: Discovery of the Host Galaxy of FRB 20220912A},} The
+  Astrophysical Journal Letters, 949, L3, \dodoi{10.3847/2041-8213/acc4b6}
+
+% type= article
+\bibitem[{R.~M. Shannon {et~al.}(2025)Shannon, Bannister, Bera, Bhandari, Day,
+  Deller, Dial, Dobie, Ekers, Fong, Glowacki, Gordon, Gourdji, Jaini, James,
+  Kumar, Mahony, Marnoch, Muller, Prochaska, Qiu, Ryder, Sadler, Scott, Tejos,
+  Uttarkar, \& Wang}]{shannon2025}
+Shannon, R.~M., Bannister, K.~W., Bera, A., {et~al.} 2025, \bibinfo{title}{The
+  Commensal Real-time ASKAP Fast Transient incoherent-sum survey,} Publications
+  of the Astronomical Society of Australia, 42, e036,
+  \dodoi{10.1017/pasa.2025.8}
+
+% type= article
+\bibitem[{K. Sharma {et~al.}(2024)Sharma, Ravi, Connor, Law, Ocker, Sherman,
+  Kosogorov, Faber, Hallinan, Harnach, Hellbourg, Hobbs, Hodge, Hodges, Lamb,
+  Rasmussen, Somalwar, Weinreb, Woody, Leja, Anand, Das, Qin, Rose, Dong,
+  Miller, \& Yao}]{sharma2024}
+Sharma, K., Ravi, V., Connor, L., {et~al.} 2024, \bibinfo{title}{{Preferential
+  occurrence of fast radio bursts in massive star-forming galaxies},} Nature,
+  635, 61, \dodoi{10.1038/s41586-024-08074-9}
+
+\end{thebibliography}

@@ -1,0 +1,8 @@
+{
+  "_check": "isophote",
+  "_frb": "20220501C",
+  "_runtime_s": 0.0,
+  "iso_maxsma": 20.25,
+  "iso_minsma": 20.0,
+  "status": "stamp_too_small"
+}

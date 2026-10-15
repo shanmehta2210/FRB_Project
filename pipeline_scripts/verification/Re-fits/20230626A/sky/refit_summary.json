@@ -1,0 +1,37 @@
+{
+  "fit": {
+    "converged": true,
+    "mag": 19.9985,
+    "n": 6.0,
+    "pa": -22.6716,
+    "q": 0.7412,
+    "q_err": 0.0246,
+    "re": 1.831,
+    "sky": 3.08e-06,
+    "status": "ok"
+  },
+  "frb": "20230626A",
+  "label": "sky",
+  "n_fixed": null,
+  "panel_png": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20230626A\\sky\\panel.png",
+  "sky_fixed_adu": 3.075345381674961e-06,
+  "verification": {
+    "frb": "20230626A",
+    "host_dir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20230626A\\sky",
+    "notes": [],
+    "outdir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20230626A\\sky",
+    "status": {
+      "astrophot": "ok",
+      "chi2": "ok",
+      "fourier": "ok",
+      "isophote": "ok",
+      "mag": "ok",
+      "psf": "ok",
+      "rff": "ok",
+      "sky": "ok",
+      "visual": "ok"
+    }
+  },
+  "verification_runtime_s": 9.285,
+  "wkdir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20230626A\\sky"
+}

@@ -1,0 +1,906 @@
+frb,quantity,value,err_plus,err_minus,unit,method,source_short,arxiv_id,doi,location,notes
+20180924B,host_name,DES J214425.25-405400.81,,,,,bannister2019,1906.11476,10.1126/science.aaw5903,main text,first ASKAP-localised FRB host
+20180924B,telescope_localization,ASKAP/CRAFT ICS,,,,,bannister2019,1906.11476,10.1126/science.aaw5903,main text,
+20180924B,repeater,no,,,,,bannister2019,1906.11476,10.1126/science.aaw5903,main text,
+20180924B,DM_obs,361.42,0.06,0.06,pc cm-3,measured,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,fluence_Jy_ms,16,1,1,Jy ms,ICS,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,width_ms,1.3,0.09,0.09,ms,measured,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,snr,21,,,,incoherent,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,image S/N 194
+20180924B,RM_rad_m2,14,1,1,rad m-2,measured,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,L/I = 80+/-10 %
+20180924B,z,0.3214,0.0002,0.0002,,spec_z,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,z_type,spec,,,,,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,"KCWI + GMOS; [OII],[OIII],Halpha,Hbeta, Ca H+K"
+20180924B,host_ra_deg,326.105208,,,deg,,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,host_dec_deg,-40.900225,,,deg,,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,m_g,21.62,0.03,0.03,AB mag,DES_DR1,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1 / Table S5,
+20180924B,m_r,20.54,0.02,0.02,AB mag,DES_DR1,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1 / Table S5,
+20180924B,m_i,20.14,0.02,0.02,AB mag,DES_DR1,bannister2019,1906.11476,10.1126/science.aaw5903,Table S5,Table 1 prints i=21.14 (typo); Table S5 and r-i=0.41 give 20.14
+20180924B,m_z,19.85,0.02,0.02,AB mag,DES_DR1,bannister2019,1906.11476,10.1126/science.aaw5903,Table S5,
+20180924B,m_Y,19.81,0.06,0.06,AB mag,DES_DR1,bannister2019,1906.11476,10.1126/science.aaw5903,Table S5,
+20180924B,m_W1,16.85,0.1,0.1,Vega mag,WISE,bannister2019,1906.11476,10.1126/science.aaw5903,Table S5,
+20180924B,m_W2,16.06,0.18,0.18,Vega mag,WISE,bannister2019,1906.11476,10.1126/science.aaw5903,Table S5,
+20180924B,g_r_color,1.08,0.04,0.04,mag,observed_DES,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,DM_MW,40.5,,,pc cm-3,NE2001,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,DM_halo,30,,,pc cm-3,assumed,bannister2019,1906.11476,10.1126/science.aaw5903,Table 1,
+20180924B,logMstar,10.35,0.12,0.16,log10 Msun,cigale,bannister2019,1906.11476,10.1126/science.aaw5903,Table S7,total mass 2.25+/-0.71e10; old stellar mass 2.24e10
+20180924B,u_r_color,1.7,0.2,0.2,mag,cigale_restframe,bannister2019,1906.11476,10.1126/science.aaw5903,Table S7,
+20180924B,M_r_abs,-20.77,0.05,0.05,AB mag,cigale_restframe,bannister2019,1906.11476,10.1126/science.aaw5903,Table S7,
+20180924B,SFR,2.9,3.9,3.9,Msun/yr,cigale_sed,bannister2019,1906.11476,10.1126/science.aaw5903,Table S7,consistent with zero
+20180924B,SFR,<2.0,,,Msun/yr,upper_limit,bannister2019,1906.11476,10.1126/science.aaw5903,main text / S1.14,"Halpha, attributing emission to non-SF (LINER-like) processes"
+20180924B,ebv,0.27,0.11,0.11,mag,cigale_sed,bannister2019,1906.11476,10.1126/science.aaw5903,Table S7,
+20180924B,age_mass_weighted_Gyr,5.55,3.17,3.17,Gyr,cigale_sed,bannister2019,1906.11476,10.1126/science.aaw5903,Table S7,SFH-weighted age t_age
+20180924B,Re_kpc,2.8,0.2,0.2,kpc,galfit_DES_r,bannister2019,1906.11476,10.1126/science.aaw5903,S1.14.1,main text quotes 2.79+/-0.01 kpc; galaxy not well resolved
+20180924B,sersic_n,2.0,0.2,0.2,,galfit_FORS2_I,bannister2019,1906.11476,10.1126/science.aaw5903,S1.14.1,DES r: n=1-2.4 (n~2 preferred); Halpha NB n=1.7
+20180924B,axis_ratio,0.62,0.05,0.05,,galfit_DES_r,bannister2019,1906.11476,10.1126/science.aaw5903,S1.14.1,b/a; 'indicative of a disk-like profile'
+20180924B,position_angle_deg,-24,5,5,deg,galfit_DES_r,bannister2019,1906.11476,10.1126/science.aaw5903,S1.14.1,
+20180924B,offset_kpc,3.9,,,kpc,projected,bannister2019,1906.11476,10.1126/science.aaw5903,abstract / S1.15,abstract rounds to 4 kpc; FRB radius encloses ~90% of stellar light
+20180924B,light_fraction,0.92,0.02,0.02,,galfit_FORS2_I,bannister2019,1906.11476,10.1126/science.aaw5903,S1.14.1,fraction of light within FRB radius
+20180924B,galaxy_type,quiescent/LINER-like (limited recent SF),,,,,bannister2019,1906.11476,10.1126/science.aaw5903,main text,g-i~1.5; LINER emission-line ratios
+20180924B,DM_host,51,32,32,pc cm-3,halo_model_tophat_1Rvir,bannister2019,1906.11476,10.1126/science.aaw5903,Table S9,"host halo DM likelihood; top-hat 1 Rvir, 95% < 108; NFW 1 Rvir: 66+/-34"
+20180924B,DM_obs,361.42,0.06,0.06,pc cm-3,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20180924B,RM_rad_m2,14,1,1,rad m-2,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20180924B,fluence_Jy_ms,16,1,1,Jy ms,ICS,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,90% confidence errors
+20180924B,z,0.3214,,,,spec_z,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20180924B,offset_kpc,3.5,0.9,0.9,kpc,projected,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20180924B,snr,21.1,,,,incoherent,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Extended Data Table 1,
+20180924B,width_ms,1.76,0.09,0.09,ms,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Extended Data Table 1,
+20180924B,DM_obs,362.16,0.01,0.01,pc cm-3,HTR_fit,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,high-time-resolution structure fit
+20180924B,tau_scatt_ms,0.68,0.03,0.03,ms,HTR_fit,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,at 1.2725 GHz; scattering index -3.6 +0.6/-0.5
+20180924B,width_ms,0.09,0.04,0.04,ms,HTR_fit_gaussian_sigma,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,intrinsic Gaussian sigma
+20180924B,RM_rad_m2,22,2,2,rad m-2,HTR_polarimetry,day2020,2005.13162,10.1093/mnras/staa2138,Table 3,"Galactic RM expectation 7+/-9; L/I 90.2+/-2.0 %, V/I -13.3 %"
+20180924B,frb_ra_deg,326.105229,,,deg,,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,+/-0.008 s
+20180924B,frb_dec_deg,-40.900028,,,deg,,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,+/-0.11 arcsec
+20180924B,DM_obs,362.4,0.2,0.2,pc cm-3,measured,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,DM_MW,40.5,,,pc cm-3,NE2001,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,fluence_Jy_ms,16,1,1,Jy ms,ICS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,width_ms,1.76,0.09,0.09,ms,measured,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,z,0.3214,0.0002,0.0002,,spec_z,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,u_r_color,1.75,0.16,0.16,mag,cigale_restframe,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,M_r_abs,-20.76,0.05,0.05,AB mag,cigale_restframe,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,ebv_galactic,0.0165,,,mag,SF11,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,logMstar,10.35,0.14,0.14,log10 Msun,cigale_sed,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,SFR,<2,,,Msun/yr,upper_limit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,Halpha dust-corrected
+20180924B,log_sSFR,<-10.0,,,log10 yr-1,upper_limit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,metallicity_z_massfrac,0.008,0.01,0.01,Z (mass fraction),cigale_sed,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,offset_kpc,3.5,0.9,0.9,kpc,projected,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,Re_kpc,2.5,0.3,0.3,kpc,galfit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20180924B,galaxy_type,luminous quiescent galaxy; LINER-like line ratios,,,,,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Sect. 2.1,
+20180924B,m_g,21.38,0.04,0.04,AB mag,VLT_FORS2,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3a,
+20180924B,m_I,20.1,0.02,0.02,AB mag,VLT_FORS2,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3a,
+20180924B,m_g,21.59,0.12,0.12,AB mag,LCOGT,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3a,
+20180924B,m_r,20.46,0.08,0.08,AB mag,LCOGT,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3a,
+20180924B,m_i,20.2,0.11,0.11,AB mag,LCOGT,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3a,
+20180924B,radio_6p5GHz_uJy,<21,,,uJy,upper_limit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,ATCA 3-sigma; log L < 21.73 W/Hz
+20180924B,host_ra_deg,326.1052,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20180924B,host_dec_deg,-40.9002,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20180924B,offset_arcsec,0.71,,,arcsec,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20180924B,Re_arcsec,0.6,,,arcsec,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,r_1/2 from GALFIT Sersic fit on i-band or equivalent
+20180924B,m_r,20.5,0.02,0.02,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1 / Table 6,Galactic-extinction corrected
+20180924B,m_g,21.56,0.03,0.03,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,extinction corrected
+20180924B,m_i,20.11,0.02,0.02,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,extinction corrected
+20180924B,m_z,19.83,0.02,0.02,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,extinction corrected
+20180924B,m_Y,19.79,0.06,0.06,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,extinction corrected
+20180924B,p_chance,0.0018,,,,Bloom2002,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,Sample A
+20180924B,z,0.3212,,,,spec_z,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20180924B,M_r_abs,-20.81,0.05,0.05,AB mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20180924B,u_r_color,1.78,0.15,0.15,mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20180924B,logMstar,10.12,0.14,0.21,log10 Msun,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,13.2+/-5.1e9 Msun
+20180924B,SFR,0.88,0.26,0.26,Msun/yr,halpha_dustcorr_Chabrier,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20180924B,age_mass_weighted_Gyr,0.38,,,Gyr,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20180924B,metallicity_12logOH,8.93,0.02,0.02,12+log(O/H),O3N2_Hirschauer2018,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20180924B,offset_kpc,3.4,0.5,0.5,kpc,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20180924B,Re_kpc,2.7,0.1,0.1,kpc,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20180924B,halpha_flux_1e16,2.79,0.03,0.03,1e-16 erg/s/cm2,spectroscopy,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 2,"Hbeta 0.72, [OIII]5007 0.79, [NII]6584 1.94"
+20180924B,offset_kpc,3.4,0.8,0.8,kpc,projected,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20180924B,Re_kpc,2.75,0.1,0.1,kpc,isophotal_HST_Mannings2021,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20180924B,logMstar,10.12,0.14,0.21,log10 Msun,cigale_sed,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,1.32+/-0.51e10
+20180924B,SFR,0.88,0.26,0.26,Msun/yr,halpha,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20180924B,log_sSFR,-10.18,,,log10 yr-1,halpha/cigale,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20180924B,M_r_abs,-20.81,0.05,0.05,AB mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20180924B,u_r_color,1.78,0.15,0.15,mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20180924B,metallicity_12logOH,8.93,,,12+log(O/H),O3N2,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20180924B,PATH_posterior,0.9894,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2,"P(O)=0.8723, Pc=0.0119, theta=0.8 arcsec, m=21.32 (FORS2 g)"
+20180924B,z,0.3212,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 3 (Prospector z),
+20180924B,m_r,20.33,0.01,0.01,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 5,extinction corrected (Fitzpatrick & Massa 2007)
+20180924B,m_g,21.42,0.02,0.02,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,m_i,20.01,0.01,0.01,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,m_z,19.56,0.01,0.01,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,m_Y,19.65,0.05,0.05,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,m_F300W,23.37,0.06,0.06,AB mag,HST_WFC3_F300X,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,m_F160W,19.34,0.002,0.002,AB mag,HST_WFC3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,m_J,19.24,0.11,0.11,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,m_Ks,18.97,0.17,0.17,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,m_W1,19.46,0.22,0.22,AB mag,WISE,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20180924B,log_mformed,10.6,0.02,0.03,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20180924B,metallicity_logZ,-0.14,0.04,0.04,log(Z*/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,stellar metallicity
+20180924B,metallicity_logZgas,0.03,0.08,0.08,log(Zgas/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20180924B,AV,1.1,0.3,0.25,mag,prospector_sed_young,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,"A_V,young"
+20180924B,AV_old,0.11,0.03,0.03,mag,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20180924B,SFR,0.62,0.32,0.24,Msun/yr,prospector_sed_0-100Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20180924B,logMstar,10.39,0.02,0.02,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20180924B,tm_Gyr,5.63,0.53,0.75,Gyr,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,mass-weighted age
+20180924B,log_sSFR,-10.6,,,log10 yr-1,derived_from_Table3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3 (derived),not tabulated per host; log(0.62)-10.39
+20180924B,galaxy_type,star-forming,,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 6.1 / Fig. 6,"Tacchella+22 classification; only 20210410D,20180916B transitioning and 20210807D quiescent"
+20180924B,morphology,early-type spiral with spiral arms (HST),,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 1 (citing Mannings+21),
+20180924B,host_ra_deg,326.105233,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20180924B,host_dec_deg,-40.900222,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20180924B,logMstar,10.12,0.14,0.21,log10 Msun,cigale_sed_Heintz2020,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20180924B,offset_arcsec,0.71,0.12,0.12,arcsec,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20180924B,offset_kpc,3.37,0.56,0.56,kpc,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20180924B,offset_normalized,1.2,0.2,0.2,dR/re,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20180924B,fractional_flux,0.24,0.11,0.11,,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,F_F; enclosed flux F_E=0.66+/-0.07
+20180924B,m_F300W,23.478,0.058,0.058,AB mag,HST_WFC3_F300X,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 4,not extinction corrected; A_lambda=0.12
+20180924B,Re_kpc,2.54,0.41,0.41,kpc,isophotal_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20180924B,Re_kpc,2.82,0.53,0.53,kpc,galfit_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20180924B,m_F160W,19.349,0.002,0.002,AB mag,HST_WFC3,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,not extinction corrected
+20180924B,morphology,spiral arms + bar in GALFIT residuals; FRB on/near spiral arm,,,,,mannings2021,2012.11617,10.3847/1538-4357/abff56,Sect. 4.1 / Fig. 7,
+20180924B,DM_obs,362.4,0.2,0.2,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20180924B,DM_MW,41,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20180924B,z,0.3214,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20180924B,snr,21.1,,,,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20180924B,width_ms,2.6,,,ms,ICS_search_width,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20180924B,fluence_Jy_ms,18.4,0.9,0.9,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20180924B,frb_ra_deg,326.10525,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,sigma 0.16 arcsec
+20180924B,frb_dec_deg,-40.900028,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,
+20180924B,PATH_posterior,0.9994,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,P(O)=0.8722; theta=0.85 arcsec; m=21.32
+20180924B,m_g,21.231,0.006,0.006,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT corrected for Galactic extinction
+20180924B,m_I,19.875,0.005,0.005,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT corrected for Galactic extinction
+20180924B,inclination_deg,34,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20180924B,inclination_deg,36,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20180924B,SFR,0.62,,,Msun/yr,prospector_0-100Myr_from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20180924B,log_sSFR,-10.6,,,log10 yr-1,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20180924B,logMstar,10.39,,,log10 Msun,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as 2.45e10 Msun
+20180924B,z,0.3212,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20180924B,DM_host,80,,,pc cm-3,DM_obs-NE2001-median_Macquart,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,observer frame; fiducial MW ISM and IGM subtracted
+20180924B,m_r,20.33,,,AB mag,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20181112A,host_name,DES J214923.66-525815.28,,,,,prochaska2019,1909.11681,10.1126/science.aay0073,main text,
+20181112A,telescope_localization,ASKAP/CRAFT ICS,,,,,prochaska2019,1909.11681,10.1126/science.aay0073,main text,
+20181112A,repeater,no,,,,,prochaska2019,1909.11681,10.1126/science.aay0073,main text,
+20181112A,frb_ra_deg,327.34846,0.0006,0.0006,deg,measured,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1,"stat 0.00007, sys 0.0006 deg"
+20181112A,frb_dec_deg,-52.97093,0.0002,0.0002,deg,measured,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1,
+20181112A,DM_obs,589.27,0.03,0.03,pc cm-3,measured,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1,
+20181112A,RM_rad_m2,10.9,0.9,0.9,rad m-2,measured,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1,
+20181112A,width_ms,<0.04,,,ms,upper_limit,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1,<40 us
+20181112A,z,0.4755,0.00015,0.00015,,spec_z,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1,
+20181112A,z_type,spec,,,,,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1,VLT/FORS2
+20181112A,logMstar,9.41,0.15,0.24,log10 Msun,cigale_sed,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1 / Table S4,2.6+/-1.1e9 (Table S4: 0.26+/-0.1e10)
+20181112A,SFR,0.6,,,Msun/yr,hbeta,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1 / S1.5,pPXF SFR_beta 0.57+/-0.17 (Table S4)
+20181112A,SFR,0.4,0.6,0.6,Msun/yr,cigale_sed,prochaska2019,1909.11681,10.1126/science.aay0073,Table S4,
+20181112A,u_r_color,1.2,0.2,0.2,mag,cigale_restframe,prochaska2019,1909.11681,10.1126/science.aay0073,Table S4,
+20181112A,M_r_abs,-20.34,0.07,0.07,AB mag,cigale_restframe,prochaska2019,1909.11681,10.1126/science.aay0073,Table S4,
+20181112A,ebv,0.15,0.08,0.08,mag,cigale_sed,prochaska2019,1909.11681,10.1126/science.aay0073,Table S4,
+20181112A,m_g,22.71,0.09,0.09,AB mag,DES_DR1,prochaska2019,1909.11681,10.1126/science.aay0073,Table S3,
+20181112A,m_r,21.73,0.05,0.05,AB mag,DES_DR1,prochaska2019,1909.11681,10.1126/science.aay0073,Table S3,
+20181112A,m_i,21.49,0.06,0.06,AB mag,DES_DR1,prochaska2019,1909.11681,10.1126/science.aay0073,Table S3,
+20181112A,m_z,21.45,0.11,0.11,AB mag,DES_DR1,prochaska2019,1909.11681,10.1126/science.aay0073,Table S3,
+20181112A,m_Y,21.07,0.17,0.17,AB mag,DES_DR1,prochaska2019,1909.11681,10.1126/science.aay0073,Table S3,
+20181112A,m_g,22.57,0.04,0.04,AB mag,VLT_FORS2,prochaska2019,1909.11681,10.1126/science.aay0073,Table S3,
+20181112A,m_I,21.51,0.04,0.04,AB mag,VLT_FORS2,prochaska2019,1909.11681,10.1126/science.aay0073,Table S3,
+20181112A,sersic_n,1.9,0.4,0.4,,galfit_FORS2_I,prochaska2019,1909.11681,10.1126/science.aay0073,Table S7,
+20181112A,Re_arcsec,0.64,0.04,0.04,arcsec,galfit_FORS2_I,prochaska2019,1909.11681,10.1126/science.aay0073,Table S7,
+20181112A,p_chance,0.0031,,,,empirical_DES_r<22,prochaska2019,1909.11681,10.1126/science.aay0073,S1.6,0.31% chance of r<22 galaxy within 1 arcsec
+20181112A,halpha_flux_1e16,0.64,0.08,0.08,1e-16 erg/s/cm2,spectroscopy,prochaska2019,1909.11681,10.1126/science.aay0073,Table S6,"Hbeta 0.29, [NII] 0.49, [OIII] 0.54 (x1e-16)"
+20181112A,foreground_galaxy,"FG-181112 z=0.36738, R_perp=29+/-3 kpc, logM*=10.69",,,,,prochaska2019,1909.11681,10.1126/science.aay0073,Table 1,sightline passes through foreground halo
+20181112A,galaxy_type,star-forming (on SF locus),,,,,prochaska2019,1909.11681,10.1126/science.aay0073,S1.5 / Fig. S3,
+20181112A,DM_obs,589.265,0.001,0.001,pc cm-3,HTR_pulse1,cho2020,2002.12539,10.3847/2041-8213/ab7824,Table 1,pulse 3: 589.26(1); pulse 4: 589.306(4)
+20181112A,RM_rad_m2,10.5,0.4,0.4,rad m-2,HTR_pulse1,cho2020,2002.12539,10.3847/2041-8213/ab7824,Table 1,pulse 3 RM 25+/-2
+20181112A,snr,220,,,,HTR_pulse1,cho2020,2002.12539,10.3847/2041-8213/ab7824,Table 1,
+20181112A,DM_obs,589.27,0.03,0.03,pc cm-3,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20181112A,RM_rad_m2,10.9,0.9,0.9,rad m-2,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20181112A,fluence_Jy_ms,26,3,3,Jy ms,ICS,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20181112A,z,0.4755,,,,spec_z,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20181112A,offset_kpc,3.1,15.7,3.1,kpc,projected,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20181112A,snr,19.3,,,,incoherent,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Extended Data Table 1,
+20181112A,width_ms,2.1,0.2,0.2,ms,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Extended Data Table 1,
+20181112A,DM_obs,589.0,0.3,0.3,pc cm-3,measured,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,DM_MW,40.2,,,pc cm-3,NE2001,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,RM_rad_m2,10,,,rad m-2,,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,fluence_Jy_ms,26,3,3,Jy ms,ICS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,width_ms,2.1,0.2,0.2,ms,measured,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,z,0.4755,0.0002,0.0002,,spec_z,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,u_r_color,1.15,0.15,0.15,mag,cigale_restframe,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,M_r_abs,-20.34,0.07,0.07,AB mag,cigale_restframe,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,ebv_galactic,0.0174,,,mag,SF11,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,logMstar,9.42,0.2,0.2,log10 Msun,cigale_sed,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,SFR,0.6,,,Msun/yr,halpha_dustcorr,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,systematic uncertainty up to 50%
+20181112A,log_sSFR,-9.62,,,log10 yr-1,,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,metallicity_z_massfrac,0.006,0.012,0.012,Z (mass fraction),cigale_sed,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,offset_kpc,3.1,15.7,3.1,kpc,projected,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,Re_kpc,8,3,3,kpc,galfit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20181112A,m_g,22.37,0.33,0.33,AB mag,LCOGT,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3a,
+20181112A,m_r,21.61,0.22,0.22,AB mag,LCOGT,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3a,
+20181112A,m_i,21.29,0.26,0.26,AB mag,LCOGT,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3a,
+20181112A,radio_6p5GHz_uJy,<21,,,uJy,upper_limit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,log L < 22.11 W/Hz
+20181112A,host_ra_deg,327.3486,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20181112A,host_dec_deg,-52.9709,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20181112A,offset_arcsec,0.28,,,arcsec,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20181112A,Re_arcsec,1.2,,,arcsec,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20181112A,m_r,21.68,0.05,0.05,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1 / Table 6,extinction corrected
+20181112A,m_g,22.64,0.09,0.09,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20181112A,m_i,21.46,0.06,0.06,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20181112A,m_z,21.42,0.11,0.11,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20181112A,m_Y,21.05,0.17,0.17,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20181112A,p_chance,0.0257,,,,Bloom2002,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,Sample C because foreground galaxy also has Pchance<0.05
+20181112A,z,0.4755,,,,spec_z,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20181112A,M_r_abs,-20.4,0.07,0.07,AB mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20181112A,u_r_color,1.12,0.15,0.15,mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20181112A,logMstar,9.6,0.18,0.31,log10 Msun,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,3.98+/-2.02e9
+20181112A,SFR,0.37,0.11,0.11,Msun/yr,halpha_dustcorr_Chabrier,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20181112A,age_mass_weighted_Gyr,0.57,,,Gyr,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20181112A,metallicity_12logOH,8.86,0.1,0.13,12+log(O/H),O3N2_Hirschauer2018,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20181112A,offset_kpc,1.7,19.2,19.2,kpc,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20181112A,Re_kpc,7.2,1.7,1.7,kpc,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20181112A,halpha_flux_1e16,0.64,0.3,0.3,1e-16 erg/s/cm2,spectroscopy,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 2,
+20181112A,PATH_posterior,0.6678,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2,"P(O)=0.0784, Pc=0.0622; excluded from their sample (P<0.9)"
+20181112A,z,0.4755,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 3,
+20181112A,m_r,21.68,0.05,0.05,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 5,
+20181112A,m_g,22.64,0.09,0.09,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20181112A,m_i,21.46,0.06,0.06,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20181112A,m_z,21.42,0.11,0.11,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20181112A,m_Y,21.05,0.17,0.17,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20181112A,m_J,20.96,0.02,0.02,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20181112A,log_mformed,10.06,0.07,0.08,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20181112A,metallicity_logZ,-0.19,0.27,0.32,log(Z*/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20181112A,metallicity_logZgas,-0.17,0.12,0.12,log(Zgas/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20181112A,AV,1.16,0.26,0.31,mag,prospector_sed_young,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20181112A,AV_old,0.13,0.13,0.08,mag,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20181112A,SFR,1.54,0.99,0.65,Msun/yr,prospector_sed_0-100Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20181112A,logMstar,9.87,0.07,0.07,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20181112A,tm_Gyr,3.82,0.84,0.98,Gyr,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20181112A,log_sSFR,-9.68,,,log10 yr-1,derived_from_Table3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3 (derived),
+20181112A,galaxy_type,star-forming,,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 6.1 / Fig. 6,
+20181112A,DM_obs,589.0,0.3,0.3,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20181112A,DM_MW,40,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20181112A,z,0.4755,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20181112A,snr,19.3,,,,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20181112A,width_ms,3.5,,,ms,ICS_search_width,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20181112A,fluence_Jy_ms,28,2,2,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20181112A,frb_ra_deg,327.348458,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,"sigma_RA 3.8, sigma_Dec 2.4 arcsec"
+20181112A,frb_dec_deg,-52.970944,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,
+20181112A,PATH_posterior,0.9274,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,P(O)=0.0785; foreground galaxy P(O|x)=0.0724; theta=0.43 arcsec
+20181112A,m_g,22.342,0.009,0.009,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20181112A,m_I,21.17,0.01,0.01,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20190102C,telescope_localization,ASKAP/CRAFT ICS,,,,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190102C,repeater,no,,,,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,main text,
+20190102C,DM_obs,363.6,0.3,0.3,pc cm-3,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190102C,RM_rad_m2,110,,,rad m-2,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,sign/precision superseded by Day+20 (-105+/-1)
+20190102C,fluence_Jy_ms,14,1,1,Jy ms,ICS,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190102C,frb_ra_deg,322.415667,,,deg,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,+/-0.06 +/-0.16 s
+20190102C,frb_dec_deg,-79.475694,,,deg,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,+/-0.2 +/-0.5 arcsec
+20190102C,z,0.291,,,,spec_z,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190102C,z_type,spec,,,,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Methods,VLT/FORS2 GRIS 300I
+20190102C,offset_kpc,1.5,3.4,1.5,kpc,projected,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190102C,snr,14.0,,,,incoherent,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Extended Data Table 1,
+20190102C,width_ms,1.7,0.1,0.1,ms,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Extended Data Table 1,
+20190102C,DM_obs,364.545,0.004,0.004,pc cm-3,HTR_fit,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,
+20190102C,tau_scatt_ms,0.041,0.002,0.003,ms,HTR_fit,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,"at 1.2725 GHz, pulse 2; index -3.84; pulse 1 tau 0.18+/-0.02 ms (Sect. 4)"
+20190102C,width_ms,0.053,0.002,0.002,ms,HTR_fit_gaussian_sigma,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,
+20190102C,RM_rad_m2,-105,1,1,rad m-2,HTR_polarimetry,day2020,2005.13162,10.1093/mnras/staa2138,Table 3,pulse 2; pulse 1 -128+/-7; Galactic expectation 34+/-22; L/I 82 %
+20190102C,frb_ra_deg,322.415667,,,deg,,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,+/-0.17 s
+20190102C,frb_dec_deg,-79.475694,,,deg,,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,+/-0.5 arcsec
+20190102C,DM_obs,364.5,0.3,0.3,pc cm-3,measured,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,DM_MW,57.3,,,pc cm-3,NE2001,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,RM_rad_m2,110,,,rad m-2,,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,fluence_Jy_ms,14,1,1,Jy ms,ICS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,width_ms,1.7,0.1,0.1,ms,measured,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,z,0.2913,0.0002,0.0002,,spec_z,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,u_r_color,1.33,0.22,0.22,mag,cigale_restframe,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,M_r_abs,-19.9,0.07,0.07,AB mag,cigale_restframe,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,ebv_galactic,0.1994,,,mag,SF11,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,logMstar,9.5,0.35,0.35,log10 Msun,cigale_sed,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,SFR,1.5,,,Msun/yr,halpha_dustcorr,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,log_sSFR,-9.33,,,log10 yr-1,,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,metallicity_z_massfrac,0.011,0.016,0.016,Z (mass fraction),cigale_sed,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,offset_kpc,1.5,3.4,1.5,kpc,projected,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,Re_kpc,5.3,0.1,0.1,kpc,galfit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190102C,m_u,23.7,0.2,0.2,AB mag,VLT_FORS2,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3b,
+20190102C,m_g,22.6,0.1,0.1,AB mag,VLT_FORS2,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3b,
+20190102C,m_I,21.1,0.05,0.05,AB mag,VLT_FORS2,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3b,
+20190102C,m_z,20.8,0.2,0.2,AB mag,VLT_FORS2,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3b,
+20190102C,m_r,22.06,0.51,0.51,AB mag,LCOGT,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3b,"LCOGT g>22.13, i 22.02(73)"
+20190102C,radio_6p5GHz_uJy,<19,,,uJy,upper_limit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,log L < 21.62 W/Hz
+20190102C,host_ra_deg,322.415,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190102C,host_dec_deg,-79.4757,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190102C,offset_arcsec,0.45,,,arcsec,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190102C,Re_arcsec,1.0,,,arcsec,galfit_I,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190102C,m_I,20.77,0.05,0.05,AB mag,VLT_FORS2,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1 / Table 7,extinction corrected; no r-band published
+20190102C,m_u,22.77,0.2,0.2,AB mag,VLT_FORS2,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 7,
+20190102C,m_g,21.87,0.1,0.1,AB mag,VLT_FORS2,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 7,
+20190102C,m_z,20.54,0.2,0.2,AB mag,VLT_FORS2,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 7,
+20190102C,m_F160W,20.45,0.01,0.01,AB mag,HST_WFC3,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 8 / App. A,
+20190102C,p_chance,0.005,,,,Bloom2002,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,Sample A
+20190102C,z,0.2912,,,,spec_z,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190102C,M_r_abs,-19.85,0.06,0.06,AB mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190102C,u_r_color,1.4,0.12,0.12,mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190102C,logMstar,9.53,0.11,0.16,log10 Msun,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,3.39+/-1.02e9
+20190102C,SFR,0.86,0.26,0.26,Msun/yr,halpha_dustcorr_Chabrier,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190102C,age_mass_weighted_Gyr,0.06,,,Gyr,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190102C,metallicity_12logOH,8.7,0.07,0.08,12+log(O/H),O3N2_Hirschauer2018,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190102C,offset_kpc,2.0,2.2,2.2,kpc,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190102C,Re_kpc,4.4,0.5,0.5,kpc,galfit_I,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190102C,halpha_flux_1e16,5.66,0.17,0.17,1e-16 erg/s/cm2,spectroscopy,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 2,"Hbeta 1.90, [OII] 3.20/4.21, [OIII]5007 3.80, [NII] 1.69"
+20190102C,offset_kpc,2.3,4.2,4.2,kpc,projected,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190102C,Re_kpc,4.43,0.51,0.51,kpc,isophotal_HST_Mannings2021,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190102C,logMstar,9.67,0.33,,log10 Msun,cigale_sed,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,0.47+/-0.54e10; lower error undefined (error exceeds value)
+20190102C,SFR,0.86,0.26,0.26,Msun/yr,halpha,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190102C,log_sSFR,-9.74,,,log10 yr-1,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190102C,M_r_abs,-19.87,0.06,0.06,AB mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190102C,u_r_color,1.44,0.15,0.15,mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190102C,metallicity_12logOH,8.7,,,12+log(O/H),O3N2,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190102C,PATH_posterior,1.0,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2,"P(O)=0.8425, Pc=0.0056, theta=0.5 arcsec, m=20.73 (I)"
+20190102C,z,0.2912,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1,Prospector z 0.2909 (Table 3)
+20190102C,m_I,20.77,0.05,0.05,AB mag,VLT_FORS2,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 5,host magnitude column uses I band for this host
+20190102C,m_u,22.77,0.2,0.2,AB mag,VLT_FORS2,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190102C,m_g,21.87,0.1,0.1,AB mag,VLT_FORS2,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190102C,m_z,20.54,0.2,0.2,AB mag,VLT_FORS2,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190102C,m_F160W,20.45,0.01,0.01,AB mag,HST_WFC3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190102C,log_mformed,9.9,0.09,0.09,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190102C,metallicity_logZ,-1.15,0.37,0.39,log(Z*/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190102C,metallicity_logZgas,-0.51,0.78,0.51,log(Zgas/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190102C,AV,1.09,0.29,0.29,mag,prospector_sed_young,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190102C,AV_old,0.2,0.18,0.13,mag,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190102C,SFR,0.4,0.31,0.11,Msun/yr,prospector_sed_0-100Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190102C,logMstar,9.69,0.09,0.11,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190102C,tm_Gyr,4.76,1.02,1.47,Gyr,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190102C,log_sSFR,-10.09,,,log10 yr-1,derived_from_Table3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3 (derived),
+20190102C,galaxy_type,star-forming,,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 6.1 / Fig. 6,
+20190102C,host_ra_deg,322.414904,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,sigma_host 14.2 mas
+20190102C,host_dec_deg,-79.4757,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190102C,logMstar,9.53,0.11,0.16,log10 Msun,cigale_sed_Heintz2020,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190102C,offset_arcsec,0.8,0.39,0.39,arcsec,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190102C,offset_kpc,2.26,2.22,2.22,kpc,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190102C,offset_normalized,0.45,0.44,0.44,dR/re,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190102C,fractional_flux,0.39,0.25,0.25,,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,F_E=0.25+/-0.16; UV F_F=0.36+/-0.29
+20190102C,m_F300W,>27.2,,,AB mag,upper_limit,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 4,HST F300X 5-sigma; A_lambda=1.40
+20190102C,Re_kpc,4.87,0.34,0.34,kpc,isophotal_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20190102C,Re_kpc,5.0,0.15,0.15,kpc,galfit_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20190102C,m_F160W,20.55,0.006,0.006,AB mag,HST_WFC3,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,not extinction corrected; A=0.11
+20190102C,morphology,no clear symmetric structure in GALFIT residuals,,,,,mannings2021,2012.11617,10.3847/1538-4357/abff56,Sect. 4.1,
+20190102C,DM_obs,364.5,0.3,0.3,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190102C,DM_MW,57,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190102C,z,0.2912,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190102C,snr,14.0,,,,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190102C,width_ms,2.6,,,ms,ICS_search_width,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190102C,fluence_Jy_ms,16.0,0.9,0.9,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190102C,PATH_posterior,1.0,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,P(O)=0.8426; theta=0.55 arcsec; m=20.73
+20190102C,m_u,24.0,0.2,0.2,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected (E(B-V)_gal ~0.2 here)
+20190102C,m_g,22.59,0.01,0.01,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20190102C,m_I,21.1,0.02,0.02,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20190102C,m_z,20.83,0.08,0.08,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20190102C,inclination_deg,50,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190102C,inclination_deg,50,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190102C,SFR,0.4,,,Msun/yr,prospector_0-100Myr_from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190102C,log_sSFR,-10.09,,,log10 yr-1,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190102C,logMstar,9.69,,,log10 Msun,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,0.49e10 Msun
+20190102C,z,0.2909,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190102C,DM_host,94,,,pc cm-3,DM_obs-NE2001-median_Macquart,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190102C,m_r,20.77,,,AB mag,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,actually FORS2 I-band magnitude
+20190608B,telescope_localization,ASKAP/CRAFT ICS,,,,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190608B,repeater,no,,,,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,main text,
+20190608B,host_name,SDSS J221604.90-075355.9,,,,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Methods,SDSS DR7 spectrum used for z
+20190608B,DM_obs,338.7,0.5,0.5,pc cm-3,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190608B,fluence_Jy_ms,26,4,4,Jy ms,ICS,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190608B,frb_ra_deg,334.019792,,,deg,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,+/-0.02 +/-0.02 s
+20190608B,frb_dec_deg,-7.898222,,,deg,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,+/-0.3 +/-0.3 arcsec
+20190608B,z,0.1178,,,,spec_z,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190608B,z_type,spec,,,,,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Methods,SDSS DR7
+20190608B,offset_kpc,7.0,1.3,1.3,kpc,projected,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Table 1,
+20190608B,snr,16.1,,,,incoherent,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Extended Data Table 1,
+20190608B,width_ms,6.0,0.8,0.8,ms,measured,macquart2020,2005.13161,10.1038/s41586-020-2300-2,Extended Data Table 1,
+20190608B,DM_obs,340.05,0.06,0.03,pc cm-3,HTR_fit,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,
+20190608B,tau_scatt_ms,3.3,0.2,0.2,ms,HTR_fit,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,at 1.2725 GHz; index -3.5+/-0.9; most scattered in Day+20 sample
+20190608B,width_ms,1.1,0.2,0.2,ms,HTR_fit_gaussian_sigma,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,
+20190608B,RM_rad_m2,353,2,2,rad m-2,HTR_polarimetry,day2020,2005.13162,10.1093/mnras/staa2138,Table 3,Galactic expectation -25+/-8; L/I 91 %
+20190608B,frb_ra_deg,334.019875,,,deg,,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,+/-0.02 s
+20190608B,frb_dec_deg,-7.89825,,,deg,,day2020,2005.13162,10.1093/mnras/staa2138,Table 4,+/-0.3 arcsec
+20190608B,DM_obs,339.5,0.5,0.5,pc cm-3,measured,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,DM_MW,37.2,,,pc cm-3,NE2001,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,fluence_Jy_ms,26,4,4,Jy ms,ICS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,width_ms,6.0,0.8,0.8,ms,measured,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,z,0.11778,,,,spec_z,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,u_r_color,1.49,0.11,0.11,mag,cigale_restframe,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,M_r_abs,-21.15,0.05,0.05,AB mag,cigale_restframe,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,logMstar,10.4,0.14,0.14,log10 Msun,cigale_sed,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,Heintz+20 App. A: a database error led to misreported results for this host in Bhandari+20a
+20190608B,SFR,1.2,,,Msun/yr,halpha_dustcorr,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,log_sSFR,-10.3,,,log10 yr-1,,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,metallicity_z_massfrac,0.009,0.014,0.014,Z (mass fraction),cigale_sed,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,offset_kpc,6.8,1.3,1.3,kpc,projected,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,
+20190608B,m_u,19.19,0.09,0.09,AB mag,SDSS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3c,
+20190608B,m_g,18.18,0.02,0.02,AB mag,SDSS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3c,
+20190608B,m_r,17.65,0.01,0.01,AB mag,SDSS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3c,
+20190608B,m_i,17.28,0.02,0.02,AB mag,SDSS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3c,
+20190608B,m_z,17.13,0.05,0.05,AB mag,SDSS,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3c,
+20190608B,m_r,17.38,0.01,0.01,AB mag,LCOGT,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 3c,"LCOGT g 18.28(2), i 17.55(2)"
+20190608B,galaxy_type,star-forming spiral with AGN/LINER nucleus (broad Halpha),,,,,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Sect. 2.4,half-light radius from GALFIT 'not a true representation' (complex structure)
+20190608B,radio_6p5GHz_uJy,<10.5,,,uJy,upper_limit,bhandari2020a,2005.13160,10.3847/2041-8213/ab672e,Table 1,VLA; log L < 20.55 W/Hz
+20190608B,DM_obs,339.79,,,pc cm-3,from_Day2020,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3,
+20190608B,RM_rad_m2,353,2,2,rad m-2,from_Day2020,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3,
+20190608B,logMstar,10.4,,,log10 Msun,cigale_Bhandari2020a,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3,
+20190608B,inclination_deg,37,3,3,deg,kinematic_KCWI_Hbeta_qubefit,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3 / Sect. 3.3,"i_gas; thin disk 39.19 +0.62/-0.49, thick disk 35.70+/-0.17 (Table 2); 3DBarolo 37 deg"
+20190608B,inclination_deg,26,3,3,deg,isophote_ellipticity_VLT_Xshooter_g,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3 / Sect. 3.4,i_stellar from e=0.10+/-0.02 between bar-dominated (<4 arcsec) and sky-dominated (>7 arcsec) radii
+20190608B,axis_ratio,0.9,0.02,0.02,,isophote_ellipticity_VLT_g,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Sect. 3.4,"b/a = 1-e, e=0.10+/-0.02"
+20190608B,position_angle_deg,133.05,0.95,0.33,deg,kinematic_thin_disk,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 2,kinematic PA; thick disk 135.55
+20190608B,vcirc_km_s,141,8,8,km/s,kinematic,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3,3DBarolo gives 165 km/s
+20190608B,AV,1.28,,,mag,balmer_decrement_SDSS,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3,fHa/fHb = 4.63
+20190608B,DM_host,149,45,45,pc cm-3,Halpha_EM_ISM_plus_halo_model,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3,"DM_host,ISM 94+/-38 (Sect. 4.1) + halo"
+20190608B,log_mhalo_dyn,11.96,0.08,0.08,log10 Msun,kinematic,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3,
+20190608B,sigma_sfr_frb,0.015,,,Msun/yr/kpc2,Halpha_at_FRB,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Table 3,
+20190608B,morphology,barred spiral; FRB in NW spiral arm on kinematic major axis,,,,,chittidi2021,2005.13158,10.3847/1538-4357/ac2818,Sect. 3,bar + spiral arms; pattern speed 34+/-6 km/s/kpc
+20190608B,DM_host,47-117,,,pc cm-3,Chittidi2020_ISM_range,simha2020,2005.13157,10.3847/1538-4357/abafc3,Table 3,"DM_host,ISM; DM_host,halo 15-41"
+20190608B,DM_MW,38,,,pc cm-3,NE2001,simha2020,2005.13157,10.3847/1538-4357/abafc3,Table 3,
+20190608B,DM_halo,40,,,pc cm-3,Prochaska_Zheng_2019,simha2020,2005.13157,10.3847/1538-4357/abafc3,Table 3,
+20190608B,DM_IGM,91-126,,,pc cm-3,MCPM_25-75pct,simha2020,2005.13157,10.3847/1538-4357/abafc3,Table 3,foreground halos 7-28
+20190608B,host_ra_deg,334.0204,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190608B,host_dec_deg,-7.8989,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190608B,offset_arcsec,3.0,,,arcsec,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190608B,Re_arcsec,1.3,,,arcsec,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190608B,m_r,17.55,0.01,0.01,AB mag,SDSS,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1 / Table 6,extinction corrected
+20190608B,m_u,18.99,0.09,0.09,AB mag,SDSS,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190608B,m_g,18.02,0.02,0.02,AB mag,SDSS,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190608B,m_i,17.22,0.02,0.02,AB mag,SDSS,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190608B,m_z,17.09,0.05,0.05,AB mag,SDSS,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190608B,p_chance,0.0016,,,,Bloom2002,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,Sample A
+20190608B,z,0.1178,,,,spec_z,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190608B,M_r_abs,-21.22,0.05,0.05,AB mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190608B,u_r_color,1.4,0.09,0.09,mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190608B,logMstar,10.06,0.09,0.12,log10 Msun,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,11.6+/-2.8e9
+20190608B,SFR,0.69,0.21,0.21,Msun/yr,halpha_dustcorr_Chabrier,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190608B,age_mass_weighted_Gyr,0.38,,,Gyr,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190608B,metallicity_12logOH,8.85,0.02,0.02,12+log(O/H),O3N2_Hirschauer2018,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190608B,offset_kpc,6.6,0.6,0.6,kpc,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190608B,Re_kpc,2.8,0.2,0.2,kpc,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190608B,halpha_flux_1e16,27.7,0.4,0.4,1e-16 erg/s/cm2,spectroscopy_SDSS,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 2,"Hbeta 8.37, [OIII]5007 15.0, [NII] 18.3"
+20190608B,offset_kpc,6.5,0.8,0.8,kpc,projected,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190608B,Re_kpc,2.84,0.23,0.23,kpc,isophotal_HST_Mannings2021,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190608B,logMstar,10.06,0.09,0.12,log10 Msun,cigale_sed,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,1.16+/-0.28e10
+20190608B,SFR,0.69,0.21,0.21,Msun/yr,halpha,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190608B,log_sSFR,-10.22,,,log10 yr-1,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190608B,M_r_abs,-21.22,0.05,0.05,AB mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190608B,u_r_color,1.4,0.09,0.09,mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190608B,metallicity_12logOH,8.85,,,12+log(O/H),O3N2,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190608B,PATH_posterior,1.0,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2,"P(O)=0.9930, Pc=0.0005, theta=2.5 arcsec, m=17.60 (I)"
+20190608B,z,0.1178,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 3,
+20190608B,m_r,17.41,0.002,0.002,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 5,
+20190608B,m_u,19.06,0.04,0.04,AB mag,SDSS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190608B,m_g,17.98,0.001,0.001,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190608B,m_i,17.12,0.01,0.01,AB mag,SDSS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190608B,m_z,16.92,0.001,0.001,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190608B,m_F300W,19.51,0.01,0.01,AB mag,HST_WFC3_F300X,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190608B,m_F160W,16.67,0.001,0.001,AB mag,HST_WFC3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190608B,m_J,16.76,0.02,0.02,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190608B,m_Ks,16.55,0.04,0.04,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190608B,m_W1,16.97,0.03,0.03,AB mag,WISE,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,"W2 17.13+/-0.06, W3 15.93+/-0.15 (AB)"
+20190608B,log_mformed,10.78,0.02,0.02,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190608B,metallicity_logZ,-0.03,0.04,0.04,log(Z*/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190608B,metallicity_logZgas,0.02,0.05,0.05,log(Zgas/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190608B,AV,1.09,0.22,0.21,mag,prospector_sed_young,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190608B,AV_old,0.08,0.02,0.02,mag,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190608B,SFR,7.03,1.43,1.15,Msun/yr,prospector_sed_0-100Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,AGN template used (AGN=Y)
+20190608B,logMstar,10.56,0.02,0.02,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190608B,tm_Gyr,7.13,0.7,1.21,Gyr,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190608B,log_sSFR,-9.71,,,log10 yr-1,derived_from_Table3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3 (derived),
+20190608B,galaxy_type,star-forming,,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 6.1 / Fig. 6,
+20190608B,host_ra_deg,334.020429,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190608B,host_dec_deg,-7.898864,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190608B,z,0.1177,,,,spec_z,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190608B,logMstar,10.06,0.03,0.03,log10 Msun,cigale_sed_Heintz2020,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190608B,offset_arcsec,2.98,0.27,0.27,arcsec,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190608B,offset_kpc,6.52,0.6,0.6,kpc,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190608B,offset_normalized,0.88,0.08,0.08,dR/re,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190608B,fractional_flux,0.19,0.06,0.06,,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,F_E=0.82+/-0.08; UV F_F=0.39+/-0.28
+20190608B,m_F300W,19.765,0.014,0.014,AB mag,HST_WFC3_F300X,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 4,not extinction corrected; Sigma_SFR(FRB)=0.007+/-0.001 Msun/yr/kpc2
+20190608B,Re_kpc,2.65,0.53,0.53,kpc,isophotal_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20190608B,Re_kpc,7.37,0.06,0.06,kpc,galfit_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,disk component of 2-component fit
+20190608B,m_F160W,16.693,0.001,0.001,AB mag,HST_WFC3,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,not extinction corrected
+20190608B,morphology,spiral; FRB on spiral arm,,,,,mannings2021,2012.11617,10.3847/1538-4357/abff56,Sect. 4.1 / Fig. 7,
+20190608B,DM_obs,339.5,0.5,0.5,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190608B,DM_MW,37,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190608B,z,0.1178,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190608B,snr,16.1,,,,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190608B,width_ms,8.6,,,ms,ICS_search_width,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190608B,fluence_Jy_ms,28,2,2,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190608B,PATH_posterior,1.0,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,P(O)=0.9941; theta=2.87 arcsec; m=17.15
+20190608B,m_g,18.167,0.005,0.005,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20190608B,m_I,17.097,0.006,0.006,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20190608B,inclination_deg,37,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190608B,inclination_deg,36,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190608B,SFR,7.03,,,Msun/yr,prospector_0-100Myr_from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190608B,log_sSFR,-9.71,,,log10 yr-1,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190608B,logMstar,10.56,,,log10 Msun,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,3.63e10 Msun
+20190608B,z,0.1178,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190608B,DM_host,238,,,pc cm-3,DM_obs-NE2001-median_Macquart,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190608B,m_r,17.41,,,AB mag,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190714A,host_name,J121555.0941-130116.004 (Pan-STARRS/VISTA),,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sect. 2.2.3,
+20190714A,telescope_localization,ASKAP/CRAFT ICS,,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sect. 2.2.3,
+20190714A,repeater,no,,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190714A,frb_ra_deg,183.9797,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,"12h15m55.12s; sigma_RA 0.4 arcsec (sys offset 0.71+/-0.32 arcsec, App. A)"
+20190714A,frb_dec_deg,-13.021,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,-13d01m15.7s; sigma_Dec 0.3 arcsec
+20190714A,host_ra_deg,183.9796,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190714A,host_dec_deg,-13.0211,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190714A,offset_arcsec,0.49,,,arcsec,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190714A,Re_arcsec,1.0,,,arcsec,galfit_I,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,Sect. 2.2.3 quotes 1.02 arcsec
+20190714A,m_r,20.69,0.03,0.03,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1 / Table 6,"PSF mags, later updated to Kron in Bhandari+22; Sect 2.2.3 quotes r=20.85"
+20190714A,m_g,21.2,0.04,0.04,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190714A,m_i,20.38,0.02,0.02,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190714A,m_z,20.05,0.03,0.03,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190714A,m_y,20.04,0.05,0.05,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190714A,m_F160W,18.88,0.0,0.0,AB mag,HST_WFC3,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 8,
+20190714A,p_chance,0.005,,,,Bloom2002,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,Sample A
+20190714A,z,0.2365,,,,spec_z,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190714A,z_type,spec,,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sect. 2.2.3,"Keck/LRIS: Hbeta,[OIII],Halpha,[NII]"
+20190714A,M_r_abs,-19.92,0.05,0.05,AB mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190714A,u_r_color,1.19,0.17,0.17,mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190714A,logMstar,10.17,0.17,0.28,log10 Msun,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,14.9+/-7.1e9
+20190714A,SFR,0.65,0.2,0.2,Msun/yr,halpha_dustcorr_Chabrier,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190714A,age_mass_weighted_Gyr,1.59,,,Gyr,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190714A,metallicity_12logOH,9.03,0.04,0.04,12+log(O/H),O3N2_Hirschauer2018,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190714A,offset_kpc,1.9,1.1,1.1,kpc,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,Sect 2.2.3: ~2 kpc
+20190714A,Re_kpc,3.9,0.1,0.1,kpc,galfit_I,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190714A,halpha_flux_1e16,3.89,0.03,0.03,1e-16 erg/s/cm2,spectroscopy_LRIS,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 2,"Hbeta 0.97, [OIII]5007 0.31, [NII] 1.70"
+20190714A,morphology,possible spiral arms (HST preliminary); none in FORS2 I,,,,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Sect. 2.2.3,
+20190714A,offset_kpc,2.7,1.8,1.8,kpc,projected,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190714A,Re_kpc,3.94,0.05,0.05,kpc,isophotal_HST_Mannings2021,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190714A,logMstar,10.15,0.14,0.21,log10 Msun,cigale_sed_Kron_mags,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,1.42+/-0.55e10; refit with PS1 Kron mags
+20190714A,SFR,0.65,0.2,0.2,Msun/yr,halpha,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190714A,log_sSFR,-10.34,,,log10 yr-1,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190714A,M_r_abs,-20.37,0.05,0.05,AB mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190714A,u_r_color,1.51,0.28,0.28,mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190714A,metallicity_12logOH,9.03,,,12+log(O/H),O3N2,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190714A,PATH_posterior,1.0,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2,"P(O)=0.7993, Pc=0.0014, theta=1.2 arcsec, m=19.48 (FORS2 I)"
+20190714A,m_g,20.88,0.04,0.04,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190714A,m_r,20.32,0.03,0.03,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190714A,m_i,19.82,0.02,0.02,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190714A,m_z,19.63,0.03,0.03,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190714A,m_y,19.43,0.06,0.06,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190714A,z,0.2365,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 3,
+20190714A,m_r,20.34,0.03,0.03,AB mag,Pan-STARRS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 5,
+20190714A,m_g,20.91,0.04,0.04,AB mag,Pan-STARRS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_i,19.84,0.02,0.02,AB mag,Pan-STARRS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_z,19.64,0.03,0.03,AB mag,Pan-STARRS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_y,19.44,0.06,0.06,AB mag,Pan-STARRS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_F300W,22.68,0.05,0.05,AB mag,HST_WFC3_F300X,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_F160W,18.88,0.002,0.002,AB mag,HST_WFC3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_Y,19.48,0.02,0.02,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_J,18.9,0.01,0.01,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_H,18.8,0.01,0.01,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_Ks,18.79,0.01,0.01,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20190714A,m_W1,19.31,0.24,0.24,AB mag,WISE,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,W2 19.11+/-0.33
+20190714A,log_mformed,10.42,0.04,0.05,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190714A,metallicity_logZ,-0.09,0.22,0.55,log(Z*/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190714A,metallicity_logZgas,0.12,0.22,0.21,log(Zgas/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190714A,AV,1.05,0.28,0.27,mag,prospector_sed_young,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190714A,AV_old,0.69,0.32,0.19,mag,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190714A,SFR,1.89,1.22,0.72,Msun/yr,prospector_sed_0-100Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,AGN=Y
+20190714A,logMstar,10.22,0.04,0.04,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190714A,tm_Gyr,5.48,0.75,1.02,Gyr,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20190714A,log_sSFR,-9.94,,,log10 yr-1,derived_from_Table3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3 (derived),
+20190714A,galaxy_type,star-forming,,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 6.1 / Fig. 6,
+20190714A,host_ra_deg,183.979542,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190714A,host_dec_deg,-13.0211,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190714A,logMstar,10.17,0.17,0.28,log10 Msun,cigale_sed_Heintz2020,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20190714A,offset_arcsec,0.61,0.29,0.29,arcsec,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190714A,offset_kpc,1.97,1.18,1.18,kpc,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190714A,offset_normalized,0.51,0.31,0.31,dR/re,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20190714A,fractional_flux,0.34,0.23,0.23,,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,F_E=0.23+/-0.10; UV F_F=0.38+/-0.31
+20190714A,m_F300W,23.072,0.053,0.053,AB mag,HST_WFC3_F300X,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 4,not extinction corrected; A=0.39
+20190714A,Re_kpc,4.07,0.35,0.35,kpc,isophotal_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20190714A,Re_kpc,3.85,0.03,0.03,kpc,galfit_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20190714A,m_F160W,18.896,0.002,0.002,AB mag,HST_WFC3,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,not extinction corrected
+20190714A,morphology,spiral arms revealed in GALFIT residuals; FRB on/near arm,,,,,mannings2021,2012.11617,10.3847/1538-4357/abff56,Sect. 4.1 / Fig. 7,
+20190714A,DM_obs,504.7,0.3,0.3,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190714A,DM_MW,39,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190714A,z,0.2365,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190714A,snr,10.7,,,,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190714A,width_ms,3.5,,,ms,ICS_search_width,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190714A,fluence_Jy_ms,13,1,1,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20190714A,frb_ra_deg,183.979708,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,sigma 0.52/0.38 arcsec
+20190714A,frb_dec_deg,-13.021,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,
+20190714A,PATH_posterior,1.0,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,P(O)=0.7984; theta=1.16 arcsec; m=19.47
+20190714A,m_g,21.037,0.006,0.006,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20190714A,m_I,19.618,0.009,0.009,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20190714A,environment,foreground halo excess: ~2/3 of extragalactic DM from intervening halos (Simha+23),,,,,shannon2025,2408.02083,10.1017/pasa.2025.8,Sect. 5.1,
+20190714A,inclination_deg,51,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190714A,inclination_deg,50,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190714A,SFR,1.89,,,Msun/yr,prospector_0-100Myr_from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190714A,log_sSFR,-9.94,,,log10 yr-1,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190714A,logMstar,10.22,,,log10 Msun,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1.66e10 Msun
+20190714A,z,0.2365,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190714A,DM_host,335,,,pc cm-3,DM_obs-NE2001-median_Macquart,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190714A,m_r,20.34,,,AB mag,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20191001A,telescope_localization,ASKAP/CRAFT ICS (commensal with EMU),,,,,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Sect. 2.1,
+20191001A,repeater,no,,,,,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,main text,
+20191001A,snr,62,,,,incoherent,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,coherent S/N 192
+20191001A,DM_obs,506.92,0.04,0.04,pc cm-3,detection,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,structure-maximised DM 507.90(7)
+20191001A,DM_MW,44,,,pc cm-3,NE2001,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,
+20191001A,DM_MW,31,,,pc cm-3,YMW16,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,
+20191001A,DM_cosmic,373,,,pc cm-3,DM_obs-NE2001-halo,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,as tabulated (NE2001)
+20191001A,frb_ra_deg,323.351542,,,deg,,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,+/-0.02 s (RA error corrected in Heintz+20 App. A)
+20191001A,frb_dec_deg,-54.747739,,,deg,,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,+/-0.13 arcsec
+20191001A,fluence_Jy_ms,143,15,15,Jy ms,ICS_336MHz,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,
+20191001A,width_ms,0.22,0.03,0.03,ms,modelled_primary_component,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,
+20191001A,tau_scatt_ms,3.3,0.2,0.2,ms,HTR_fit,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,at 824 MHz; scintillation bandwidth ~600 kHz
+20191001A,RM_rad_m2,55.5,0.9,0.9,rad m-2,HTR_polarimetry,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,"L/I 57 %, V/I -5 %"
+20191001A,z,0.234,0.0001,0.0001,,spec_z,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,
+20191001A,z_type,spec,,,,,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,Gemini-S GMOS (Heintz+20)
+20191001A,logMstar,10.7,0.15,0.22,log10 Msun,cigale_sed,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,5+/-2 e10 Msun
+20191001A,ebv,0.27,0.16,0.16,mag,cigale_sed,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,
+20191001A,radio_persistent_W_Hz,2e+21,,,W/Hz,ASKAP_5.5GHz_host_SF,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Table 1,persistent radio emission from host attributed to star formation
+20191001A,morphology,spiral (two nearby candidate hosts at common z),,,,,bhandari2020b,2008.12488,10.3847/2041-8213/abb462,Sect. 2 / Bhandari+22 Sect. 4.1,
+20191001A,host_ra_deg,323.3519,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20191001A,host_dec_deg,-54.7485,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20191001A,offset_arcsec,2.86,,,arcsec,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20191001A,Re_arcsec,1.4,,,arcsec,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20191001A,m_r,18.34,0.0,0.0,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1 / Table 6,extinction corrected
+20191001A,m_g,19.12,0.0,0.0,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20191001A,m_i,17.91,0.0,0.0,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20191001A,m_z,17.74,0.0,0.0,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20191001A,m_Y,17.63,0.01,0.01,AB mag,DES,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20191001A,p_chance,0.0031,,,,Bloom2002,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,Sample A
+20191001A,z,0.234,,,,spec_z,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20191001A,M_r_abs,-22.13,0.05,0.05,AB mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20191001A,u_r_color,1.67,0.19,0.19,mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20191001A,logMstar,10.67,0.15,0.23,log10 Msun,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,46.4+/-18.8e9
+20191001A,SFR,8.06,2.42,2.42,Msun/yr,halpha_dustcorr_Chabrier,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20191001A,age_mass_weighted_Gyr,0.64,,,Gyr,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20191001A,metallicity_12logOH,8.94,0.05,0.05,12+log(O/H),O3N2_Hirschauer2018,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20191001A,offset_kpc,11,1,1,kpc,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20191001A,Re_kpc,5.5,0.1,0.1,kpc,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20191001A,halpha_flux_1e16,27.4,0.3,0.3,1e-16 erg/s/cm2,spectroscopy_GMOS,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 2,"Hbeta 5.01, [OIII]5007 3.62, [NII] 13.9"
+20191001A,offset_kpc,11.1,0.8,0.8,kpc,projected,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20191001A,Re_kpc,5.55,0.03,0.03,kpc,isophotal_HST_Mannings2021,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20191001A,logMstar,10.67,0.15,0.23,log10 Msun,cigale_sed,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,4.64+/-1.88e10
+20191001A,SFR,8.06,2.42,2.42,Msun/yr,halpha,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20191001A,log_sSFR,-9.76,,,log10 yr-1,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20191001A,M_r_abs,-22.13,0.05,0.05,AB mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20191001A,u_r_color,1.67,0.19,0.19,mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20191001A,metallicity_12logOH,8.94,,,12+log(O/H),O3N2,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20191001A,PATH_posterior,0.598,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2 / Sect. 4.1,"two candidates at common z: P(O|x)=0.60 (adopted, closer) and 0.40; P(O)=0.5075, Pc=0.0010, theta=4.2 arcsec, m=17.82"
+20191001A,z,0.234,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1,Prospector z 0.2342
+20191001A,m_r,18.36,0.003,0.003,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 5,
+20191001A,m_g,19.18,0.01,0.01,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,m_i,17.92,0.002,0.002,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,m_z,17.73,0.004,0.004,AB mag,DECaLS,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,m_Y,17.64,0.01,0.01,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,m_F300W,21.07,0.02,0.02,AB mag,HST_WFC3_F300X,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,m_F160W,17.12,0.001,0.001,AB mag,HST_WFC3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,m_J,17.3,0.01,0.01,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,m_H,17.09,0.01,0.01,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,m_Ks,16.9,0.01,0.01,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20191001A,log_mformed,10.92,0.08,0.09,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20191001A,metallicity_logZ,-0.52,0.11,0.1,log(Z*/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20191001A,metallicity_logZgas,-0.08,0.11,0.11,log(Zgas/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20191001A,AV,1.15,0.28,0.25,mag,prospector_sed_young,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20191001A,AV_old,1.06,0.1,0.1,mag,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20191001A,SFR,18.28,17.24,8.95,Msun/yr,prospector_sed_0-100Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20191001A,logMstar,10.73,0.07,0.08,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20191001A,tm_Gyr,3.89,1.68,1.56,Gyr,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20191001A,log_sSFR,-9.47,,,log10 yr-1,derived_from_Table3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3 (derived),
+20191001A,galaxy_type,star-forming,,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 6.1 / Fig. 6,most luminous host in Gordon+23 (~3e10 Lsun)
+20191001A,host_ra_deg,323.351833,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20191001A,host_dec_deg,-54.748481,,,deg,HST_centroid,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20191001A,logMstar,10.67,0.15,0.23,log10 Msun,cigale_sed_Heintz2020,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 1,
+20191001A,offset_arcsec,2.74,0.15,0.15,arcsec,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20191001A,offset_kpc,10.49,0.59,0.59,kpc,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20191001A,offset_normalized,2.87,0.16,0.16,dR/re,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,
+20191001A,fractional_flux,0.09,0.03,0.03,,HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 3,F_E=0.91+/-0.09; UV F_F=0.29+/-0.25
+20191001A,m_F300W,21.228,0.02,0.02,AB mag,HST_WFC3_F300X,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 4,not extinction corrected; A=0.18
+20191001A,Re_kpc,6.05,0.66,0.66,kpc,isophotal_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20191001A,Re_kpc,6.23,0.04,0.04,kpc,galfit_HST_F160W,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,
+20191001A,m_F160W,17.135,0.001,0.001,AB mag,HST_WFC3,mannings2021,2012.11617,10.3847/1538-4357/abff56,Table 5,not extinction corrected
+20191001A,morphology,"spiral; FRB on/near spiral arm, in outskirts",,,,,mannings2021,2012.11617,10.3847/1538-4357/abff56,Sect. 4.1 / Fig. 7,
+20191001A,DM_obs,506.92,0.04,0.04,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20191001A,DM_MW,44,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20191001A,z,0.234,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20191001A,snr,62.0,,,,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20191001A,width_ms,10.4,,,ms,ICS_search_width,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20191001A,fluence_Jy_ms,120,2,2,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20191001A,frb_ra_deg,323.351708,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,"updated (CELEBI) position; sigma 0.46/0.43 arcsec, PA 81.9"
+20191001A,frb_dec_deg,-54.748306,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,
+20191001A,PATH_posterior,0.9995,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,updated position gives theta=1.18 arcsec; second candidate P(O|x)=0.0005
+20191001A,offset_arcsec,1.18,,,arcsec,PATH_updated_position,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,
+20191001A,m_g,19.103,0.004,0.004,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20191001A,m_I,17.743,0.006,0.006,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20191001A,inclination_deg,53,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20191001A,inclination_deg,56,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20191001A,SFR,18.28,,,Msun/yr,prospector_0-100Myr_from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20191001A,log_sSFR,-9.47,,,log10 yr-1,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20191001A,logMstar,10.73,,,log10 Msun,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,5.37e10 Msun
+20191001A,z,0.2342,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20191001A,DM_host,340,,,pc cm-3,DM_obs-NE2001-median_Macquart,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20191001A,m_r,18.36,,,AB mag,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20190523A,host_name,PSO J207.0643+72.4708 (S1),,,,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text,
+20190523A,telescope_localization,DSA-10,,,,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text,3x8 arcsec 95% ellipse
+20190523A,repeater,no,,,,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text,no repeats in ~78 h
+20190523A,fluence_Jy_ms,>280,,,Jy ms,lower_limit,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,
+20190523A,DM_obs,760.8,0.6,0.6,pc cm-3,measured,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,DM index -2.003(8)
+20190523A,DM_MW,37,,,pc cm-3,NE2001,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,
+20190523A,DM_halo,50-80,,,pc cm-3,assumed,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,
+20190523A,DM_exgal,644-674,,,pc cm-3,DM_obs-MW_disk-halo,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,
+20190523A,DM_IGM,660,,,pc cm-3,IGM_model_fIGM0.7,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text,660 (f_IGM/0.7); rms scatter ~200
+20190523A,width_ms,0.42,0.05,0.05,ms,band_averaged_FWHM,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,
+20190523A,tau_scatt_ms,1.4,0.2,0.2,ms,measured,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,at 1 GHz
+20190523A,frb_ra_deg,207.065,,,deg,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,+/-0.2 s
+20190523A,frb_dec_deg,72.469722,,,deg,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,+/-2 arcsec
+20190523A,host_ra_deg,207.0643,,,deg,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text (PSO name),
+20190523A,host_dec_deg,72.4708,,,deg,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text (PSO name),
+20190523A,z,0.66,0.002,0.002,,spec_z,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,Keck/LRIS stellar absorption + tentative [OII]
+20190523A,z_type,spec,,,,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,
+20190523A,luminosity_distance_Mpc,4080,10,10,Mpc,Planck15,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,
+20190523A,logMstar,11.07,0.06,0.06,log10 Msun,prospector_delaytau,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1 / Methods,mass in formed stars
+20190523A,SFR,<1.3,,,Msun/yr,upper_limit,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Table 1,[OII] 3727 flux 4.7(7)e-17 -> 1.3(2) Msun/yr adopted as upper limit; Prospector ~1.3
+20190523A,metallicity_logZ,-0.52,,,log(Z*/Zsun),prospector_delaytau,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Methods,0.3(2) Zsun
+20190523A,age_mass_weighted_Gyr,6.6,0.8,0.8,Gyr,prospector_delaytau,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Methods,population age; tau_SF=1.0(2) Gyr
+20190523A,AV,0.3,0.2,0.2,mag,prospector_delaytau,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Methods,
+20190523A,m_r,22.1,0.1,0.1,AB mag,Pan-STARRS_stack,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text,
+20190523A,p_chance,<0.10,,,,upper_limit,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text,any galaxy within 3x8 arcsec ellipse
+20190523A,environment,"apparent group of galaxies (PS1 r 19-23), unconfirmed",,,,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Methods,
+20190523A,galaxy_type,"massive, low-SFR (quiescent-like)",,,,,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text,
+20190523A,radio_3GHz_mJy,<0.36,,,mJy,upper_limit,ravi2019,1907.01542,10.1038/s41586-019-1389-7,Methods,VLASS 3-sigma
+20190523A,frb_ra_deg,207.065,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,sigma 2.449 arcsec
+20190523A,frb_dec_deg,72.4697,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190523A,host_ra_deg,207.0643,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190523A,host_dec_deg,72.4708,,,deg,,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190523A,offset_arcsec,3.79,,,arcsec,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,S1; S2 at ~5.1 arcsec has z=0.363
+20190523A,Re_arcsec,0.5,,,arcsec,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1,
+20190523A,m_r,22.01,0.1,0.1,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1 / Table 6,extinction corrected
+20190523A,m_g,22.92,0.17,0.17,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190523A,m_i,21.14,0.06,0.06,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190523A,m_z,20.79,0.06,0.06,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190523A,m_y,20.59,0.1,0.1,AB mag,Pan-STARRS_PSF,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 6,
+20190523A,p_chance,0.0733,,,,Bloom2002,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 1 / App. A.3,Sample C; Pchance(S2)=0.10
+20190523A,z,0.66,,,,spec_z,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,confirmed with Keck/DEIMOS
+20190523A,M_r_abs,-22.06,0.12,0.12,AB mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190523A,u_r_color,1.92,0.19,0.19,mag,cigale_restframe,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190523A,logMstar,10.79,0.22,0.46,log10 Msun,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,61.2+/-40.1e9
+20190523A,SFR,<0.09,,,Msun/yr,upper_limit,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,"from Hbeta < 0.03e-16 assuming nominal Halpha/Hbeta, no extinction"
+20190523A,age_mass_weighted_Gyr,0.69,,,Gyr,cigale_sed,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190523A,offset_kpc,27,23,23,kpc,projected,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190523A,Re_kpc,3.3,0.2,0.2,kpc,galfit_i,heintz2020,2009.10747,10.3847/1538-4357/abb6fb,Table 3,
+20190523A,DM_cosmic,625,,,pc cm-3,DM_obs-37-50-80/(1+z),heintz2020,2009.10747,10.3847/1538-4357/abb6fb,App. A.3,<DM_cosmic>(z=0.66)=607 supports S1 over S2 (616 vs 319)
+20190523A,offset_kpc,27.2,22.6,22.6,kpc,projected,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190523A,Re_kpc,3.28,0.18,0.18,kpc,galfit,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190523A,logMstar,11.67,0.25,0.63,log10 Msun,cigale_sed_Kron_mags,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,tabulated 46.49+/-35.51 in units of 1e10 Msun (i.e. 4.6e11); consistent with their log sSFR=-12.74; refit with PS1 Kron mags
+20190523A,SFR,0.09,0.03,0.03,Msun/yr,hbeta_limit_as_value,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190523A,log_sSFR,-12.74,,,log10 yr-1,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190523A,M_r_abs,-22.69,0.14,0.14,AB mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190523A,u_r_color,2.2,0.22,0.22,mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20190523A,PATH_posterior,0.8154,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2,"P(O)=0.1974, Pc=0.1158, theta=3.4 arcsec, m=22.13 (LRIS R); excluded from their sample (P<0.9)"
+20190523A,m_g,22.1,0.14,0.14,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190523A,m_r,21.91,0.15,0.15,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190523A,m_i,20.86,0.08,0.08,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190523A,m_z,20.63,0.09,0.09,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190523A,m_y,19.88,0.11,0.11,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20190523A,PATH_posterior,excluded,,,,PATH,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 2 criterion 1,removed from secure sample because PATH P(O|x)<0.9; no Prospector fit
+20171020A,host_name,ESO 601-G036,,,,,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,abstract / Table 3,
+20171020A,telescope_localization,ASKAP/CRAFT fly's-eye (multi-beam),,,,,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 2,50x34 arcmin error ellipse
+20171020A,repeater,no,,,,,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 2,no repeats above S/N 9
+20171020A,DM_obs,114,,,pc cm-3,Shannon2018,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 1 / abstract,
+20171020A,DM_MW,38,,,pc cm-3,NE2001,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 1,
+20171020A,DM_MW,26,,,pc cm-3,YMW16,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 1,
+20171020A,DM_halo,12,,,pc cm-3,LMC_pulsar_excess,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 1 / Sect. 2,
+20171020A,DM_host,64-76,,,pc cm-3,all_excess_DM_to_host,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 3,assumes all excess DM is host; Table 1 models assume 0 or 45
+20171020A,DM_IGM,19-76,,,pc cm-3,model_dependent,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 1,four cases (YMW16/NE2001 x DM_host 0/45)
+20171020A,z,0.00867,,,,HI_21cm_HIPASS,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 2 / Table 3,GMOS optical z ~0.0082; Table 3 quotes 0.008672
+20171020A,z_type,spec (HI + optical),,,,,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 4,
+20171020A,luminosity_distance_Mpc,37,,,Mpc,,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 3,
+20171020A,morphology,Sc,,,,,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 3,Hubble type
+20171020A,M_R_abs,-17.9,,,mag,SuperCOSMOS_R,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 2 / Table 3,
+20171020A,m_R,15.0,,,mag,SuperCOSMOS_R_extcorr,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 2,"B=15.0; W1 14.7, W2 14.6 (Vega)"
+20171020A,SFR,0.13,,,Msun/yr,halpha_dustcorr_Wong2016,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 3,abstract: ~0.1
+20171020A,logMstar,8.95,,,log10 Msun,literature_photometric,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 3,9e8 Msun
+20171020A,metallicity_12logOH,8.3,0.2,0.2,12+log(O/H),O3N2_PettiniPagel2004,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 4.1 / Table 3,log([NII]/Ha)=-1.09; star-forming on BPT
+20171020A,log_mhi,9.36,,,log10 Msun,HIPASS,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 4,
+20171020A,vrot_km_s,80,,,km/s,HIPASS,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 4,dynamical mass ~1.6e10 Msun within 11 kpc
+20171020A,environment,loose galaxy group (4 other HIPASS gas-rich members),,,,,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 4,
+20171020A,galaxy_type,"star-forming, low-metallicity",,,,,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 4.1,
+20171020A,radio_2p1GHz_W_Hz,4.3e+19,,,W/Hz,ATCA_resolved_SF,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Sect. 4.2,resolved; no compact PRS < 3.6e19 W/Hz (5 sigma)
+20171020A,PATH_posterior,0.42,,,,PATH_mr_prior_only,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 1 col 9 / Sect. 2.3,p(m_r) prior alone; z-prior analysis gives 97%
+20171020A,PATH_posterior,0.9845,,,,joint_spatial_x_redshift_prior,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 1 col 10,98% association confidence (not standard PATH)
+20171020A,DM_obs,114.1,,,pc cm-3,Shannon2018,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Sect. 2.2,
+20171020A,snr,19.5,,,,flys_eye,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Sect. 2.2,
+20171020A,z,0.00867,,,,HI_21cm,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 1,
+20171020A,luminosity_distance_Mpc,37,,,Mpc,,leewaddell2023,2305.17960,10.1017/pasa.2023.27,abstract / Sect. 1,
+20171020A,m_r,14.97,,,mag,WISExSCOSPZ_corrected,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 1,
+20171020A,m_g,15.382,0.003,0.003,AB mag,Pan-STARRS1_petrosian,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 6,extinction corrected
+20171020A,m_r,15.141,0.002,0.002,AB mag,Pan-STARRS1_petrosian,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 6,extinction corrected
+20171020A,m_i,15.102,0.002,0.002,AB mag,Pan-STARRS1_petrosian,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 6,
+20171020A,m_z,15.06,0.01,0.01,AB mag,Pan-STARRS1_petrosian,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 6,
+20171020A,m_y,14.88,0.01,0.01,AB mag,Pan-STARRS1_petrosian,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 6,
+20171020A,logMstar,8.5,,,log10 Msun,g-r_colour_M/L_Zibetti2009,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 6,~8.5
+20171020A,logMstar,8.64,0.03,0.15,log10 Msun,prospect_sed,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Sect. 3.6,GALEX+PS1+VISTA+WISE; Chabrier IMF
+20171020A,SFR,0.09,0.01,0.01,Msun/yr,prospect_sed,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Sect. 3.6,
+20171020A,log_sSFR,-9.69,,,log10 yr-1,derived_from_prospect,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Sect. 3.6 (derived),
+20171020A,log_mhi,9.2,,,log10 Msun,ATCA_HI,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 4,ESO 601-G036 alone ~9.2; with tail 9.32+/-0.02
+20171020A,hi_w50_km_s,126,2,2,km/s,ATCA_HI,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 4,W20 148+/-2; v_c 2578+/-2 km/s
+20171020A,metallicity_12logOH,8.45,0.05,0.05,12+log(O/H),Xshooter_HII_complex_A,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 7,complex B 8.43+/-0.02; ESO601-G037 complex C 8.23+/-0.05
+20171020A,environment,interacting pair / ongoing minor merger with ESO 601-G037 (HI tail),,,,,leewaddell2023,2305.17960,10.1017/pasa.2023.27,abstract / Sect. 4,
+20171020A,galaxy_type,typical star-forming (on z~0 main sequence),,,,,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Sect. 3.6,
+20171020A,radio_2p1GHz_uJy,734.7,5.4,5.4,uJy,ATCA,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 5,spectral index -0.9; SF-dominated
+20171020A,logMstar,8.95,,,log10 Msun,from_Mahony2018,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,0.09e10
+20171020A,SFR,0.13,,,Msun/yr,halpha_from_Mahony2018,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20171020A,log_sSFR,-9.84,,,log10 yr-1,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20171020A,M_r_abs,-17.9,,,mag,observed_as_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20171020A,metallicity_12logOH,8.3,,,12+log(O/H),from_Mahony2018,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A3,
+20171020A,inclination_deg,69,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20171020A,inclination_deg,65,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20171020A,SFR,0.09,,,Msun/yr,prospect_from_LeeWaddell2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20171020A,log_sSFR,-9.69,,,log10 yr-1,from_LeeWaddell2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20171020A,logMstar,8.6,,,log10 Msun,from_LeeWaddell2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,0.04e10 Msun
+20171020A,z,0.0087,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20171020A,DM_host,83,,,pc cm-3,DM_obs-NE2001-median_Macquart,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20171020A,m_r,14.97,,,AB mag,from_LeeWaddell2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20200906A,host_name,DES J033358.99-140459.2,,,,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Sect. 3.2.1,= PSO J033358.994-140459.287 = WISE J033358.99-140459.1
+20200906A,telescope_localization,ASKAP/CRAFT ICS (7 antennas),,,,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Sect. 3.2,
+20200906A,repeater,no,,,,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Sect. 3.2,
+20200906A,snr,19.2,,,,incoherent,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,DM_obs,577.8,0.2,0.2,pc cm-3,measured,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1 / Sect. 3.2,Table 1 prints +/-0.02; text 577.8(2)
+20200906A,DM_MW,36,,,pc cm-3,NE2001,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,DM_MW,38,,,pc cm-3,YMW16,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,DM_cosmic,324,,,pc cm-3,Macquart_relation,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,frb_ra_deg,53.496167,,,deg,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,+/-0.10 +/-0.34 arcsec
+20200906A,frb_dec_deg,-14.083194,,,deg,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,+/-0.1 +/-0.6 arcsec
+20200906A,fluence_Jy_ms,59,25,10,Jy ms,ICS,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,width_ms,6.0,0.6,0.6,ms,measured,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,z,0.3688,,,,spec_z,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,z_type,spec,,,,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Sect. 3.2.1,Keck/DEIMOS
+20200906A,u_r_color,1.22,0.11,0.11,mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,M_r_abs,-21.49,0.05,0.05,AB mag,cigale_restframe,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,ebv_galactic,0.05,,,mag,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,logMstar,10.12,0.11,0.14,log10 Msun,cigale_sed,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1 / Table A3,1.33+/-0.37e10
+20200906A,SFR,0.48,0.14,0.14,Msun/yr,halpha_dustcorr,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,log_sSFR,-10.44,,,log10 yr-1,,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,metallicity_12logOH,8.76,,,12+log(O/H),O3N2,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,offset_kpc,5.9,2.0,2.0,kpc,projected,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,Re_kpc,7.58,0.06,0.06,kpc,galfit,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1,
+20200906A,PATH_posterior,1.0,,,,PATH,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A2 / Sect. 3.2.1,"P(O)=0.8997, Pc=0.0106, theta=1.6 arcsec, m=20.70 (FORS2 g)"
+20200906A,m_g,20.93,0.05,0.05,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200906A,m_r,20.15,0.03,0.03,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200906A,m_i,19.89,0.02,0.02,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200906A,m_z,19.62,0.03,0.03,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200906A,m_y,19.65,0.08,0.08,AB mag,Pan-STARRS_Kron,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200906A,m_g,20.54,0.05,0.05,AB mag,VLT_FORS2,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200906A,m_I,19.51,0.02,0.02,AB mag,VLT_FORS2,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,
+20200906A,m_W1,16.65,0.07,0.07,Vega mag,WISE,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A4,"W2 16.08+/-0.14, W3 12.42+/-0.49, W4 9.01"
+20200906A,halpha_flux_1e16,6.49,0.07,0.07,1e-16 erg/s/cm2,spectroscopy_DEIMOS,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table A1,"Hbeta 4.25, [NII] 1.80, [OIII] 5.38"
+20200906A,radio_6GHz_W_Hz,<4.3e21,,,W/Hz,upper_limit,bhandari2022,2108.01282,10.3847/1538-3881/ac3aec,Table 1 / Sect. 3.2.1,VLA 3-sigma 12 uJy/beam
+20200906A,z,0.3688,,,,spec_z,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 3,
+20200906A,m_r,19.95,0.01,0.01,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 1 / Table 5,
+20200906A,m_g,20.84,0.01,0.01,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20200906A,m_i,19.69,0.01,0.01,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20200906A,m_z,19.43,0.02,0.02,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20200906A,m_Y,19.4,0.06,0.06,AB mag,DES,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20200906A,m_J,19.36,0.01,0.01,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20200906A,m_Ks,18.84,0.01,0.01,AB mag,VISTA,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,
+20200906A,m_W1,19.35,0.15,0.15,AB mag,WISE,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 5,W2 19.36+/-0.23
+20200906A,log_mformed,10.57,0.05,0.06,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200906A,metallicity_logZ,-0.39,0.18,0.15,log(Z*/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200906A,metallicity_logZgas,-0.26,0.14,0.13,log(Zgas/Zsun),prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200906A,AV,1.09,0.27,0.23,mag,prospector_sed_young,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200906A,AV_old,0.2,0.1,0.1,mag,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200906A,SFR,4.93,3.46,2.34,Msun/yr,prospector_sed_0-100Myr,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,AGN=Y
+20200906A,logMstar,10.37,0.05,0.05,log10 Msun,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200906A,tm_Gyr,4.3,0.86,1.11,Gyr,prospector_sed,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3,
+20200906A,log_sSFR,-9.68,,,log10 yr-1,derived_from_Table3,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Table 3 (derived),
+20200906A,galaxy_type,star-forming,,,,,gordon2023,2302.05465,10.3847/1538-4357/ace5aa,Sect. 6.1 / Fig. 6,
+20200906A,DM_obs,577.8,0.2,0.2,pc cm-3,measured,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200906A,DM_MW,36,,,pc cm-3,NE2001,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200906A,z,0.3688,,,,spec_z,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200906A,snr,16.1,,,,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200906A,width_ms,5.2,,,ms,ICS_search_width,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200906A,fluence_Jy_ms,53,3,3,Jy ms,ICS,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 1,
+20200906A,frb_ra_deg,53.495542,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,updated position; sigma 0.49 arcsec
+20200906A,frb_dec_deg,-14.083,,,deg,,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 2,
+20200906A,PATH_posterior,1.0,,,,PATH,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 3,P(O)=0.8997; theta=1.56 arcsec; m=20.70
+20200906A,m_g,20.91,0.007,0.007,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20200906A,m_I,19.564,0.007,0.007,AB mag,VLT_FORS2,shannon2025,2408.02083,10.1017/pasa.2025.8,Table 5,NOT extinction corrected
+20200906A,inclination_deg,63,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20200906A,inclination_deg,59,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20200906A,SFR,4.93,,,Msun/yr,prospector_0-100Myr_from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20200906A,log_sSFR,-9.43,,,log10 yr-1,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20200906A,logMstar,10.12,,,log10 Msun,from_Bhandari2022,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,"1.33e10 Msun (Bhandari+22 CIGALE value, not Gordon+23)"
+20200906A,z,0.3688,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20200906A,DM_host,309,,,pc cm-3,DM_obs-NE2001-median_Macquart,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20200906A,m_r,19.95,,,AB mag,from_Gordon2023,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20181112A,DM_MW,42,,,pc cm-3,NE2001,prochaska2019,1909.11681,10.1126/science.aay0073,Supplementary text (DM budget),Galactic ISM
+20181112A,DM_halo,60,,,pc cm-3,assumed_MW_halo,prochaska2019,1909.11681,10.1126/science.aay0073,Supplementary text (DM budget),MW halo assumed
+20181112A,DM_host,32,,,pc cm-3,assumed_50/(1+z),prochaska2019,1909.11681,10.1126/science.aay0073,Supplementary text (DM budget),assumed rest-frame host ISM+halo DM of 50 pc cm-3 evaluated at z=0.4755; not a measurement
+20190523A,DM_host,<150,,,pc cm-3,upper_limit_from_scattering,ravi2019,1907.01542,10.1038/s41586-019-1389-7,main text,host DM column 'potentially contributed by PSO J207+72 (<~150)'; limit not measurement

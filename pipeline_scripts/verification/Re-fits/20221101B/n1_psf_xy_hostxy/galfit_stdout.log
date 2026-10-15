@@ -1,0 +1,391 @@
+
+GALFIT Version 3.0.5 -- Apr. 23, 2013
+
+
+
+
+
+#  Input menu file: galfit.feedme
+
+
+================================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) host_cutout.fits      # Input data image (FITS file)
+B) out.fits            # Output data image block
+C) host_sigma.fits      # Sigma image name (made from data if blank or "none") 
+D) proto_image.fits #        # Input PSF image and (optional) diffusion kernel
+E) 1                   # PSF fine sampling factor relative to data 
+F) host_mask.fits      # Bad pixel mask (FITS image or ASCII coord list)
+G) constraints.txt      # File with parameter constraints (ASCII file) 
+H) 1    56   1    59   # Image region to fit (xmin xmax ymin ymax)
+I) 80     83           # Size of the convolution box (x y)
+J) 32.277              # Magnitude photometric zeropoint 
+K) 0.262  0.262        # Plate scale (dx dy)   [arcsec per pixel]
+O) regular             # Display type (regular, curses, both)
+P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
+
+# INITIAL FITTING PARAMETERS
+#
+#   For component type, the allowed functions are: 
+#       sersic, expdisk, edgedisk, devauc, king, nuker, psf, 
+#       gaussian, moffat, ferrer, and sky. 
+#  
+#   Hidden parameters will only appear when they're specified:
+#       Bn (n=integer, Bending Modes).
+#       C0 (diskyness/boxyness), 
+#       Fn (n=integer, Azimuthal Fourier Modes).
+#       R0-R10 (coordinate rotation, for creating spiral structures).
+#       To, Ti, T0-T10 (truncation function).
+# 
+# ------------------------------------------------------------------------------
+#   par)    par value(s)    fit toggle(s)    # parameter description 
+# ------------------------------------------------------------------------------
+
+# Component number: 1
+ 0) sersic                 #  Component type
+ 1) 27.8498  28.6258  0 0  #  Position x, y
+ 3) 18.3164     1          #  Integrated magnitude 
+ 4) 17.4740     1          #  R_e (effective radius)   [pix]
+ 5) 1.0000      0          #  Sersic index n (de Vaucouleurs n=4) 
+ 6) 0.0000      0          #     ----- 
+ 7) 0.0000      0          #     ----- 
+ 8) 0.0000      0          #     ----- 
+ 9) 0.7516      1          #  Axis ratio (b/a)  
+10) -34.1047    1          #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+# Component number: 2
+ 0) psf                    #  Component type
+ 1) 34.0165  50.5026  0 0  #  Position x, y 
+ 3) 17.1686     1          #  Integrated magnitude 
+ 4) 0.0000      0          #     ----- 
+ 5) 0.0000      0          #     ----- 
+ 6) 0.0000      0          #     ----- 
+ 7) 0.0000      0          #     ----- 
+ 8) 0.0000      0          #     ----- 
+ 9) 1.0000      0          #  Axis ratio (b/a)  
+10) 0.0000      0          #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+# Component number: 3
+ 0) sky                    #  Component type
+ 1) 6.2246      1          #  Sky background at center of fitting region [ADUs]
+ 2) 0.000e+00      0       #  dsky/dx (sky gradient in x)     [ADUs/pix]
+ 3) 0.000e+00      0       #  dsky/dy (sky gradient in y)     [ADUs/pix]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+================================================================================
+
+
+
+-- WARNING: The exposure time header is missing.  Default to 1 second.
+
+-- No CCD charge diffusion kernel found or applied.
+
+================================================================================
+Initial parameters:
+ sersic    : (  [27.85],  [28.63])  18.32     17.47   [1.00]   0.75   -34.10
+ psf       : (  [34.02],  [50.50])  17.17     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]     6.22  [0.00e+00]  [0.00e+00]
+================================================================================
+
+Iteration : 1     Chi2nu: 1.280e+01     dChi2/Chi2: -2.37e+22   alamda: 1e-03     
+ sersic    : (  [27.85],  [28.63])  18.76     20.07   [1.00]  *0.05*   55.28
+ psf       : (  [34.02],  [50.50])  17.32     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    66.25  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 99 
+
+Iteration : 2     Chi2nu: 1.130e+01     dChi2/Chi2: -1.32e-01   alamda: 1e-04     
+ sersic    : (  [27.85],  [28.63])  20.06      1.50   [1.00]   0.13    55.45
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   136.52  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 98 
+
+Iteration : 3     Chi2nu: 1.130e+01     dChi2/Chi2: -3.09e-08   alamda: 1e-03     
+ sersic    : (  [27.85],  [28.63])  20.06      1.50   [1.00]   0.13    55.45
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   136.52  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 10 
+
+Iteration : 4     Chi2nu: 1.130e+01     dChi2/Chi2: -3.09e-08   alamda: 1e-02     
+ sersic    : (  [27.85],  [28.63])  20.06      1.50   [1.00]   0.13    55.45
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   136.52  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 9 
+
+Iteration : 5     Chi2nu: 1.130e+01     dChi2/Chi2: -3.09e-08   alamda: 1e-01     
+ sersic    : (  [27.85],  [28.63])  20.06      1.50   [1.00]   0.13    55.45
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   136.52  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 8 
+
+Iteration : 6     Chi2nu: 1.126e+01     dChi2/Chi2: -3.93e-03   alamda: 1e-02     
+ sersic    : (  [27.85],  [28.63])  19.81      2.15   [1.00]   0.45    54.74
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   126.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 94 
+
+Iteration : 7     Chi2nu: 1.107e+01     dChi2/Chi2: -1.68e-02   alamda: 1e-03     
+ sersic    : (  [27.85],  [28.63])  19.80      2.55   [1.00]   0.93    53.49
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   119.57  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 93 
+
+Iteration : 8     Chi2nu: 1.107e+01     dChi2/Chi2: -3.67e-08   alamda: 1e-02     
+ sersic    : (  [27.85],  [28.63])  19.80      2.55   [1.00]   0.93    53.49
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   119.57  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 10 
+
+Iteration : 9     Chi2nu: 1.107e+01     dChi2/Chi2: -3.67e-08   alamda: 1e-01     
+ sersic    : (  [27.85],  [28.63])  19.80      2.55   [1.00]   0.93    53.49
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   119.57  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 9 
+
+Iteration : 10    Chi2nu: 1.107e+01     dChi2/Chi2: -3.67e-08   alamda: 1e+00     
+ sersic    : (  [27.85],  [28.63])  19.80      2.55   [1.00]   0.93    53.49
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   119.57  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 8 
+
+Iteration : 11    Chi2nu: 1.106e+01     dChi2/Chi2: -8.24e-04   alamda: 1e-01     
+ sersic    : (  [27.85],  [28.63])  19.77      2.62   [1.00]   0.97    49.23
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   119.07  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 89 
+
+Iteration : 12    Chi2nu: 1.106e+01     dChi2/Chi2: -2.02e-08   alamda: 1e+00     
+ sersic    : (  [27.85],  [28.63])  19.77      2.62   [1.00]   0.97    49.23
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   119.07  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 10 
+
+Iteration : 13    Chi2nu: 1.106e+01     dChi2/Chi2: -1.76e-04   alamda: 1e-01     
+ sersic    : (  [27.85],  [28.63])  19.74      2.68   [1.00]   0.94    20.15
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   118.43  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 87 
+
+Iteration : 14    Chi2nu: 1.105e+01     dChi2/Chi2: -6.28e-04   alamda: 1e-02     
+ sersic    : (  [27.85],  [28.63])  19.67      2.92   [1.00]   0.94   -87.09
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   115.77  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 86 
+
+Iteration : 15    Chi2nu: 1.105e+01     dChi2/Chi2: -3.00e-04   alamda: 1e-03     
+ sersic    : (  [27.85],  [28.63])  19.63      3.07   [1.00]   0.94    16.48
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   114.06  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 85 
+
+Iteration : 16    Chi2nu: 1.105e+01     dChi2/Chi2: -2.60e-04   alamda: 1e-04     
+ sersic    : (  [27.85],  [28.63])  19.61      3.17   [1.00]   0.96    77.66
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   113.59  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 84 
+
+Iteration : 17    Chi2nu: 1.105e+01     dChi2/Chi2: 3.10e-08    alamda: 1e-03     
+ sersic    : (  [27.85],  [28.63])  19.61      3.17   [1.00]   0.96    77.66
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   113.59  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 10 
+
+Iteration : 18    Chi2nu: 1.105e+01     dChi2/Chi2: 3.10e-08    alamda: 1e-02     
+ sersic    : (  [27.85],  [28.63])  19.61      3.17   [1.00]   0.96    77.66
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   113.59  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 9 
+
+Iteration : 19    Chi2nu: 1.105e+01     dChi2/Chi2: 3.10e-08    alamda: 1e-01     
+ sersic    : (  [27.85],  [28.63])  19.61      3.17   [1.00]   0.96    77.66
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   113.59  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 8 
+
+Iteration : 20    Chi2nu: 1.105e+01     dChi2/Chi2: 3.10e-08    alamda: 1e+00     
+ sersic    : (  [27.85],  [28.63])  19.61      3.17   [1.00]   0.96    77.66
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   113.59  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 7 
+
+Iteration : 21    Chi2nu: 1.104e+01     dChi2/Chi2: -3.88e-04   alamda: 1e-01     
+ sersic    : (  [27.85],  [28.63])  19.61      3.18   [1.00]   0.97   -29.14
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   113.64  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 79 
+
+Iteration : 22    Chi2nu: 1.104e+01     dChi2/Chi2: -8.61e-05   alamda: 1e-02     
+ sersic    : (  [27.85],  [28.63])  19.62      3.51   [1.00]   0.81   -62.62
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   113.70  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 10 
+
+Iteration : 23    Chi2nu: 1.103e+01     dChi2/Chi2: -6.81e-04   alamda: 1e-03     
+ sersic    : (  [27.85],  [28.63])  19.60      3.55   [1.00]   0.86   -28.50
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   113.02  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 77 
+
+Iteration : 24    Chi2nu: 1.103e+01     dChi2/Chi2: -4.95e-04   alamda: 1e-04     
+ sersic    : (  [27.85],  [28.63])  19.57      3.96   [1.00]   0.71   -34.68
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   112.25  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 76 
+
+Iteration : 25    Chi2nu: 1.103e+01     dChi2/Chi2: -2.45e-04   alamda: 1e-05     
+ sersic    : (  [27.85],  [28.63])  19.54      4.21   [1.00]   0.70   -29.64
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   111.13  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 75 
+
+Iteration : 26    Chi2nu: 1.102e+01     dChi2/Chi2: -1.40e-04   alamda: 1e-06     
+ sersic    : (  [27.85],  [28.63])  19.52      4.44   [1.00]   0.66   -28.88
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   110.29  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 74 
+
+Iteration : 27    Chi2nu: 1.102e+01     dChi2/Chi2: -1.15e-04   alamda: 1e-07     
+ sersic    : (  [27.85],  [28.63])  19.50      4.65   [1.00]   0.64   -28.20
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   109.47  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 73 
+
+Iteration : 28    Chi2nu: 1.102e+01     dChi2/Chi2: -1.16e-04   alamda: 1e-08     
+ sersic    : (  [27.85],  [28.63])  19.47      4.87   [1.00]   0.62   -27.62
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   108.66  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 72 
+
+Iteration : 29    Chi2nu: 1.102e+01     dChi2/Chi2: -1.41e-04   alamda: 1e-09     
+ sersic    : (  [27.85],  [28.63])  19.45      5.11   [1.00]   0.60   -27.08
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   107.75  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 71 
+
+Iteration : 30    Chi2nu: 1.102e+01     dChi2/Chi2: -2.05e-04   alamda: 1e-10     
+ sersic    : (  [27.85],  [28.63])  19.42      5.40   [1.00]   0.57   -26.55
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   106.66  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 70 
+
+Iteration : 31    Chi2nu: 1.101e+01     dChi2/Chi2: -3.57e-04   alamda: 1e-11     
+ sersic    : (  [27.85],  [28.63])  19.39      5.78   [1.00]   0.54   -25.98
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   105.20  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 69 
+
+Iteration : 32    Chi2nu: 1.101e+01     dChi2/Chi2: -7.60e-04   alamda: 1e-12     
+ sersic    : (  [27.85],  [28.63])  19.33      6.37   [1.00]   0.50   -25.36
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]   103.01  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 68 
+
+Iteration : 33    Chi2nu: 1.098e+01     dChi2/Chi2: -2.00e-03   alamda: 1e-13     
+ sersic    : (  [27.85],  [28.63])  19.25      7.35   [1.00]   0.44   -24.67
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    99.31  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 67 
+
+Iteration : 34    Chi2nu: 1.091e+01     dChi2/Chi2: -6.31e-03   alamda: 1e-14     
+ sersic    : (  [27.85],  [28.63])  19.09      9.27   [1.00]   0.36   -23.95
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    92.09  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 66 
+
+Iteration : 35    Chi2nu: 1.071e+01     dChi2/Chi2: -1.93e-02   alamda: 1e-15     
+ sersic    : (  [27.85],  [28.63])  18.78     13.52   [1.00]   0.26   -23.40
+ psf       : (  [34.02],  [50.50])  17.33     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    76.42  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 65 
+
+Iteration : 36    Chi2nu: 1.038e+01     dChi2/Chi2: -3.11e-02   alamda: 1e-16     
+ sersic    : (  [27.85],  [28.63])  18.29     22.13   [1.00]   0.18   -22.95
+ psf       : (  [34.02],  [50.50])  17.34     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    48.17  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 64 
+
+Iteration : 37    Chi2nu: 1.022e+01     dChi2/Chi2: -1.63e-02   alamda: 1e-17     
+ sersic    : (  [27.85],  [28.63])  17.91     33.16   [1.00]   0.15   -22.49
+ psf       : (  [34.02],  [50.50])  17.34     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    26.61  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 63 
+
+Iteration : 38    Chi2nu: 1.018e+01     dChi2/Chi2: -4.17e-03   alamda: 1e-18     
+ sersic    : (  [27.85],  [28.63])  17.69     42.32   [1.00]   0.13   -22.23
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    19.84  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 62 
+
+Iteration : 39    Chi2nu: 1.017e+01     dChi2/Chi2: -5.99e-04   alamda: 1e-19     
+ sersic    : (  [27.85],  [28.63])  17.61     46.88   [1.00]   0.12   -22.13
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    18.13  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 61 
+
+Iteration : 40    Chi2nu: 1.017e+01     dChi2/Chi2: -2.39e-05   alamda: 1e-20     
+ sersic    : (  [27.85],  [28.63])  17.59     47.92   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.66  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 10 
+
+Iteration : 41    Chi2nu: 1.017e+01     dChi2/Chi2: -3.62e-07   alamda: 1e-21     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 9 
+
+Iteration : 42    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-20     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 8 
+
+Iteration : 43    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-19     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 7 
+
+Iteration : 44    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-18     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 6 
+
+Iteration : 45    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-17     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 5 
+
+Iteration : 46    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-16     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 4 
+
+Iteration : 47    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-15     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 3 
+
+Iteration : 48    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-14     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 2 
+
+Iteration : 49    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-13     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 1 
+
+Iteration : 50    Chi2nu: 1.017e+01     dChi2/Chi2: -1.30e-08   alamda: 1e-12     
+ sersic    : (  [27.85],  [28.63])  17.59     48.02   [1.00]   0.12   -22.07
+ psf       : (  [34.02],  [50.50])  17.35     ---     ---     ---     ---
+ sky       : [ 28.50,  30.00]    17.48  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 0 
+free(): invalid pointer

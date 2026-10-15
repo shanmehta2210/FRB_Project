@@ -1,0 +1,14 @@
+{
+  "frb": "20210410D",
+  "label": "n1_sky",
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 21.118,
+    "n": 6.0,
+    "pa": 56.0763,
+    "q": 0.336,
+    "re": 5.44
+  },
+  "production_sky_adu": 0.0007496,
+  "sky_fixed_adu": 0.0004544274160391804
+}

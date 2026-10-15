@@ -56,7 +56,7 @@ frb,ra_deg,dec_deg,ra_hms,dec_dms,coord_semantics,xmin,xmax,ymin,ymax,survey,ra_
 20240318A,150.3935642798215,37.61643226592607,10:01:34.36,+37:36:58.9,host,1114.0,1167.0,1116.0,1180.0,LS+PS1,0.54,0.79,0.82,0.5,-19.3,,256.4,,,pending,no,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298)"
 20240304B,182.997,11.813,12:11:59.28,+11:48:46.8,host,,,,,MeerKAT,,,,,,2.148,2458.2,28.11,2430.09,pending,no,"Caleb et al. 2025, arXiv:2508.01648 (doi:10.48550/arXiv.2508.01648)"
 20230521B,351.036,71.138,23:24:08.64,+71:08:16.8,host,,,,,DSA-110,,,,,,1.354,1342.9,138.75,1204.15,pending,no,"Connor et al. 2024, arXiv:2409.16952 (doi:10.48550/arXiv.2409.16952)"
-20240104A,348.874,72.821,23:15:29.76,+72:49:15.6,host,,,,,DSA-110,,,,,,1.33,1348.9,120.67,1228.23,pending,no,Verdi+2025 (in prep.)
+20240104A,348.874,72.821,23:15:29.76,+72:49:15.6,host,,,,,DSA-110,,,,,,1.33,1348.9,120.67,1228.23,pending,no,"Verdi et al. 2026, arXiv:2609.30616 (Table A1 localization; host via astropath P>0.9; Keck/LRIS z)"
 20221029A,141.966,72.452,09:27:51.84,+72:27:07.2,host,,,,,DSA-110,,,,,,0.975,1391.05,43.91,1347.14,pending,no,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)"
 20240123A,68.263,71.945,04:33:03.12,+71:56:42.0,host,,,,,DSA-110,,,,,,0.968,1462.0,90.28,1371.72,pending,no,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)"
 20220222C,203.904,-28.027,13:35:36.96,-28:01:37.2,host,,,,,MeerKAT,,,,,,0.853,1071.2,56.01,1015.19,pending,no,"Pastor-Marazuela et al. 2026, MNRAS 545, f2144 (doi:10.1093/mnras/staf2144)"
@@ -79,7 +79,7 @@ frb,ra_deg,dec_deg,ra_hms,dec_dms,coord_semantics,xmin,xmax,ymin,ymax,survey,ra_
 20180301A,93.227,4.671,06:12:54.48,+04:40:15.6,host,,,,,RealFAST,,,,,,0.3304,536.0,151.62,384.38,pending,yes,"Bhandari et al. 2022, AJ 163, 69 (doi:10.3847/1538-3881/ac3aec)"
 20230626A,235.63,71.134,15:42:31.20,+71:08:02.4,host,,,,,DSA-110,,,,,,0.327,451.2,39.17,412.03,pending,no,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)"
 20230125D,150.205,-31.545,10:00:49.20,-31:32:42.0,host,,,,,MeerKAT,,,,,,0.3265,640.08,88.13,551.95,pending,no,"Pastor-Marazuela et al. 2026, MNRAS 545, f2144 (doi:10.1093/mnras/staf2144)"
-20230913,305.037,70.793,20:20:08.88,+70:47:34.8,host,,,,,DSA-110,,,,,,0.3024,518.6,74.5,444.1,pending,no,Verdi+2025 (in prep.)
+20230913G,305.03538,70.79171,20:20:08.49,+70:47:30.2,host,,,,,DSA-110,0.8,0.5,0.8,0.5,90.0,0.3024,518.7,74.5,444.2,pending,no,"Verdi et al. 2026, arXiv:2609.30616 (Table A1 localization; host via astropath P>0.9; Keck/LRIS z)"
 20230501A,340.027,70.922,22:40:06.48,+70:55:19.2,host,,,,,DSA-110,,,,,,0.301,532.5,125.57,406.93,pending,no,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)"
 20220506D,318.045,72.827,21:12:10.80,+72:49:37.2,host,,,,,DSA-110,,,,,,0.3004,396.97,84.49,312.48,pending,no,"Law et al. 2024, ApJ 967, 29 (doi:10.3847/1538-4357/ad3736)"
 20240229A,169.984,70.676,11:19:56.16,+70:40:33.6,host,,,,,DSA-110,,,,,,0.287,491.15,37.94,453.21,pending,no,"Hussaini et al. 2025, ApJL 993, L27 (doi:10.3847/2041-8213/ae0a49)"
@@ -95,6 +95,9 @@ frb,ra_deg,dec_deg,ra_hms,dec_dms,coord_semantics,xmin,xmax,ymin,ymax,survey,ra_
 20201124A,77.015,26.061,05:08:03.60,+26:03:39.6,host,,,,,DSA-110,,,,,,0.098,413.52,139.94,273.58,pending,yes,"Fong et al. 2021, ApJL 919, L23 (doi:10.3847/2041-8213/ac242b)"
 20230124A,231.917,70.968,15:27:40.08,+70:58:04.8,host,,,,,DSA-110,,,,,,0.0939,590.57,38.53,552.05,pending,no,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)"
 20230930A,10.507,41.417,00:42:01.68,+41:25:01.2,host,,,,,RealFAST,,,,,,0.0925,456.0,68.09,387.91,pending,no,"Anna-Thomas et al. 2025, ApJ 993, 221 (doi:10.3847/1538-4357/ae1014)"
-20240203,312.621,73.9,20:50:29.04,+73:54:00.0,host,,,,,DSA-110,,,,,,0.074,272.4,76.22,196.18,pending,no,Verdi+2025 (in prep.; not in Hussaini et al. 2025)
+20240203D,312.62107,73.90010,20:50:29.06,+73:54:00.4,host,,,,,DSA-110,0.8,0.6,0.8,0.6,90.0,0.074,272.6,76.22,196.38,pending,no,"Verdi et al. 2026, arXiv:2609.30616 (Table A1 localization; host via astropath P>0.9; Keck/LRIS z)"
 20231120A,143.985,73.285,09:35:56.40,+73:17:06.0,host,,,,,DSA-110,,,,,,0.07,438.9,43.77,395.13,pending,no,"Sharma et al. 2024, Nature 635, 61 (doi:10.1038/s41586-024-08074-9)"
 20201123A,263.66,-50.764,17:34:38.40,-50:45:50.4,host,,,,,MeerKAT,,,,,,0.0507,433.55,252.56,180.99,pending,no,"Rajwade et al. 2022, MNRAS 514, 1961 (doi:10.1093/mnras/stac1450)"
+20240224A,70.11356,73.51327,04:40:27.25,+73:30:47.8,host,,,,,DSA-110,0.6,0.5,0.6,0.5,90.0,0.3726,881.2,,,pending,no,"Verdi et al. 2026, arXiv:2609.30616 (Table A1 localization; host via astropath P>0.9; Keck/LRIS z)"
+20240525A,6.782874999999999,-6.889305555555555,00:27:07.89,-06:53:22.6,host,,,,,ASKAP,0.48,0.42,0.48,0.42,90.0,0.3266,,,,pending,no,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298); host position Table 1, localisation ellipse Table 5 (statistical sigma_a, sigma_b, PA); DM not yet published"
+20240615B,33.963375,-14.624611111111111,02:15:51.27,-14:37:28.2,host,,,,,ASKAP,0.66,0.32,0.66,0.32,90.0,0.073,,,,pending,no,"Gordon et al. 2025, ApJ 993, 119 (doi:10.3847/1538-4357/ae0298); host position Table 1, localisation ellipse Table 5 (statistical sigma_a, sigma_b, PA); DM not yet published"

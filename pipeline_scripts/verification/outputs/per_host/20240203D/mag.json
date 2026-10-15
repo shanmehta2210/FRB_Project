@@ -1,0 +1,41 @@
+{
+  "_check": "mag",
+  "_frb": "20240203D",
+  "_runtime_s": 0.015,
+  "chi2nu_global": 1.038,
+  "dmag_flag": false,
+  "dmag_ref": -0.1678999999999995,
+  "flux_outside_stamp_frac": 0.013349491840330185,
+  "in_53": true,
+  "mag_at_bound": false,
+  "mag_final_source": "galfit_calibrated_zp",
+  "mag_galfit": 18.8402,
+  "mag_galfit_err": 0.022,
+  "n_at_bound": false,
+  "n_at_ceiling": false,
+  "n_at_floor": false,
+  "n_bounds": [
+    0.5,
+    6.0
+  ],
+  "n_sersic": 4.2819,
+  "q_galfit": 0.7825,
+  "re_arcsec": 0.393,
+  "re_at_bound": true,
+  "re_bounds": [
+    1.5,
+    100.0
+  ],
+  "re_px": 1.5,
+  "ref_mag": 19.0081,
+  "ref_mag_err": 0.0155,
+  "ref_sep_arcsec": 0.054,
+  "ref_survey": "PS1_DR1",
+  "sky_fitted_adu": -8.4385,
+  "sky_offset_adu": -22.28739000872487,
+  "sky_offset_sigma": -0.2373815629578554,
+  "sky_ref_adu": 13.848890008724872,
+  "snr_win": 193.25928,
+  "status": "ok",
+  "zp_ok": true
+}

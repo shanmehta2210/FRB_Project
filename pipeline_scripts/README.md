@@ -85,12 +85,12 @@ pipeline_scripts/Output/20190608B_all/
 
 RA/Dec for any FRB in the project lives in `master_frb_localization.csv`.
 
-### Production `Output/` (64 hosts)
+### Production `Output/` (67 hosts)
 
-`pipeline_scripts/Output/<FRB>_all/` holds exactly the **64** hosts that are
+`pipeline_scripts/Output/<FRB>_all/` holds exactly the **67** hosts that are
 *confirmed correct*: published host localization, a parseable `fit.log` /
 `chi2nu`, and a current-policy Phase 3a ROI. `pipeline_galfit_results.csv` and
-`production_confirmed_lit_hosts.csv` are both 64 rows and must stay in sync —
+`production_confirmed_lit_hosts.csv` are both 67 rows and must stay in sync —
 verify with:
 
 ```powershell
@@ -102,7 +102,8 @@ Everything else is out of the production tree:
 | Removed | Where it went | Why |
 |---------|---------------|-----|
 | `20240304B` | deleted (inputs kept in `large_cutouts/`) | z = 2.148, host undetected — [`docs/EXCLUDED_RUNS.md`](docs/EXCLUDED_RUNS.md) |
-| `20210214G`, `20230913`, `20240104A`, `20240203`, `20250518` | `Output/_unconfirmed/<FRB>_all/` | no published host lit — [`docs/WEAK_ASSOCIATIONS_PRODUCTION67.md`](docs/WEAK_ASSOCIATIONS_PRODUCTION67.md) |
+| `20210214G`, `20240104A`, `20250518` | `Output/_unconfirmed/<FRB>_all/` | no published / usable host — [`docs/WEAK_ASSOCIATIONS_PRODUCTION67.md`](docs/WEAK_ASSOCIATIONS_PRODUCTION67.md) |
+| `20230913`, `20240203` (old names) | promoted to `Output/20230913G_all`, `Output/20240203D_all` (2026-10-11) | published in Verdi et al. 2026 (arXiv:2609.30616); re-run on fresh PS1 DR2 cutouts together with the new `20240224A` |
 
 `_unconfirmed/` sits outside the production glob (the comparison script only
 walks direct `Output/*_all` children), so those stale fits cannot leak into the
@@ -114,13 +115,17 @@ Hosts whose Phase 2 zero-point failed carry a corrected magnitude in `mag_final`
 trials in that tree — record them in
 [`docs/EXCLUDED_RUNS.md`](docs/EXCLUDED_RUNS.md) instead.
 
-**Association quality.** The five quarantined hosts lack published host
-literature *and* pipeline AstroPath \(P(O)>0.95\): `20210214G` (signal
-semantics, no host paper) and `20230913` / `20240104A` / `20240203` / `20250518`
-(Verdi+2025 *in prep.* only). Rebuild the cohort list with:
+**Association quality.** The three quarantined hosts lack a usable published
+host: `20210214G` (signal semantics, no host paper), `20250518` (Verdi+2025
+*in prep.* only) and `20240104A` (published in Verdi et al. 2026 but z = 1.33,
+fitted object may be a star). `20230913` / `20240203` were promoted on
+2026-10-11 as `20230913G` / `20240203D` once Verdi et al. 2026
+(arXiv:2609.30616) appeared, together with the new `20240224A`; all three run
+on PS1 DR2 stacks reprojected by `scripts/cutout_resample.py`. Rebuild the
+cohort list with:
 
 ```powershell
-python scripts/build_confirmed_lit_cohort.py   # -> production_confirmed_lit_hosts.csv (64 rows)
+python scripts/build_confirmed_lit_cohort.py   # -> production_confirmed_lit_hosts.csv (67 rows)
 ```
 
 **Phase 3a neighbor ROI (2026-08-02):** containment-fraction thresholds
@@ -606,14 +611,16 @@ Result is written to `reference_photometry.json` and embedded in
 `ref_mag`, `ref_mag_err`, `ref_sep_arcsec`, `mag_final`, `mag_final_err`,
 `mag_final_source` — **use `mag_final`, not `mag`, for science**. Network
 failure is non-fatal (`status` records the reason). Note the high-dec DSA-110
-plane fields (`20240104A`, `20230913`, `20221116A`) are outside the Legacy
+plane fields (`20240104A`, `20221116A`) are outside the Legacy
 Surveys footprint (LS DR9/DR10 have zero sources there) and their hosts are
 below / missing from the PS1 DR1 catalog, so no reference match exists — they
-are the current `unavailable` set. Backfill existing folders:
+are the current `unavailable` set. (`20230913G` left this set on 2026-10-11:
+with a correctly reprojected PS1 cutout Phase 2 calibrates on >80 PS1 stars and
+the PS1 DR1 Kron match lands at 0.04″.) Backfill existing folders:
 
 ```powershell
 python pipeline_scripts/reference_photometry.py --backfill            # all Output/*_all
-python pipeline_scripts/reference_photometry.py --backfill --frb 20230913 --force
+python pipeline_scripts/reference_photometry.py --backfill --frb 20221116A --force
 ```
 
 **Phase 3b only (no Phases 1–2):**

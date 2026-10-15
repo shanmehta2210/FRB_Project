@@ -32,11 +32,11 @@ Cuts use production catalog `mag` and `b_a` from `pipeline_galfit_results.csv`
 
 After triage:
 
-- Science cut size: **53**
-- Confirmed in cut (paper sample): **50**
-- Rejected in cut (review pile): **3** — `20190711A` (wrong object / star), `20221101B` (morphology uncertain; MW star contaminates host), `20230930A` (structured diffuse light / bad sky)
+- Science cut size: **56** (2026-10-11; 53 before the Verdi+2026 PS1 hosts)
+- Confirmed in cut (paper sample): **52** (51 + `20240224A`)
+- Rejected in cut (review pile): **4** — `20190711A` (wrong object / star), `20221101B` (morphology uncertain; MW star contaminates host), `20230930A` (structured diffuse light / bad sky), `20240203D` (PS1; unresolved, $R_e$ floor on every leg)
 
-Total CSV rows: **64**. Recompute with:
+Total CSV rows: **67**. Recompute with:
 
 ```python
 import pandas as pd

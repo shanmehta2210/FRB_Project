@@ -1,0 +1,24 @@
+{
+  "frb": "20221101B",
+  "label": "n1_psf",
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 18.3164,
+    "n": 4.1817,
+    "pa": -34.1047,
+    "q": 0.7516,
+    "re": 17.474
+  },
+  "production_sky_adu": 6.2246,
+  "psf": {
+    "dmag": 2.0,
+    "host_mag": 18.3164,
+    "mag_seed": 16.3164,
+    "npix": 393,
+    "seg_id": 1371,
+    "xc": 34.2363529312432,
+    "yc": 50.062819940092155
+  },
+  "psf_added": true,
+  "sky_fixed_adu": null
+}

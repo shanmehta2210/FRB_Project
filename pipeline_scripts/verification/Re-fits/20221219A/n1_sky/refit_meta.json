@@ -1,0 +1,14 @@
+{
+  "frb": "20221219A",
+  "label": "n1_sky",
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 21.9678,
+    "n": 0.5,
+    "pa": 1.162,
+    "q": 0.4269,
+    "re": 3.9771
+  },
+  "production_sky_adu": 0.0007384,
+  "sky_fixed_adu": 6.327033770503476e-05
+}

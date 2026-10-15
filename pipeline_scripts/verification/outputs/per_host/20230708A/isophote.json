@@ -1,0 +1,9 @@
+{
+  "_check": "isophote",
+  "_frb": "20230708A",
+  "_runtime_s": 1.389,
+  "iso_error_model": "only 0 isophotes",
+  "iso_maxsma": 4.5,
+  "iso_minsma": 2.0,
+  "status": "isophote_fit_failed"
+}

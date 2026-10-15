@@ -1,0 +1,14 @@
+{
+  "frb": "20211127I",
+  "label": "n1",
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 14.2521,
+    "n": 3.142,
+    "pa": -30.94,
+    "q": 0.9682,
+    "re": 100.0
+  },
+  "production_sky_adu": -74.7938,
+  "sky_fixed_adu": null
+}

@@ -1,0 +1,9 @@
+{
+  "_check": "visual",
+  "_frb": "20220307B",
+  "_runtime_s": 1.019,
+  "had_fourier": true,
+  "had_isophotes": true,
+  "panel_png": "outputs\\per_host\\20220307B\\panel.png",
+  "status": "ok"
+}

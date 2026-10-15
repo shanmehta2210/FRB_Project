@@ -1,0 +1,241 @@
+
+GALFIT Version 3.0.5 -- Apr. 23, 2013
+
+
+
+
+#  Input menu file: galfit.feedme
+
+
+================================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) host_cutout.fits      # Input data image (FITS file)
+B) out.fits            # Output data image block
+C) host_sigma.fits      # Sigma image name (made from data if blank or "none") 
+D) proto_image.fits #        # Input PSF image and (optional) diffusion kernel
+E) 1                   # PSF fine sampling factor relative to data 
+F) host_mask.fits      # Bad pixel mask (FITS image or ASCII coord list)
+G) constraints.txt      # File with parameter constraints (ASCII file) 
+H) 1    122  1    106  # Image region to fit (xmin xmax ymin ymax)
+I) 146    130          # Size of the convolution box (x y)
+J) 22.568              # Magnitude photometric zeropoint 
+K) 0.262  0.262        # Plate scale (dx dy)   [arcsec per pixel]
+O) regular             # Display type (regular, curses, both)
+P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
+
+# INITIAL FITTING PARAMETERS
+#
+#   For component type, the allowed functions are: 
+#       sersic, expdisk, edgedisk, devauc, king, nuker, psf, 
+#       gaussian, moffat, ferrer, and sky. 
+#  
+#   Hidden parameters will only appear when they're specified:
+#       Bn (n=integer, Bending Modes).
+#       C0 (diskyness/boxyness), 
+#       Fn (n=integer, Azimuthal Fourier Modes).
+#       R0-R10 (coordinate rotation, for creating spiral structures).
+#       To, Ti, T0-T10 (truncation function).
+# 
+# ------------------------------------------------------------------------------
+#   par)    par value(s)    fit toggle(s)    # parameter description 
+# ------------------------------------------------------------------------------
+
+# Component number: 1
+ 0) sersic                 #  Component type
+ 1) 70.4122  55.5472  1 1  #  Position x, y
+ 3) 16.6570     1          #  Integrated magnitude 
+ 4) 12.6230     1          #  R_e (effective radius)   [pix]
+ 5) 0.5000      1          #  Sersic index n (de Vaucouleurs n=4) 
+ 6) 0.0000      0          #     ----- 
+ 7) 0.0000      0          #     ----- 
+ 8) 0.0000      0          #     ----- 
+ 9) 0.3797      1          #  Axis ratio (b/a)  
+10) -59.1610    1          #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+# Component number: 2
+ 0) sky                    #  Component type
+ 1) 2.671e-04      0       #  Sky background at center of fitting region [ADUs]
+ 2) 0.000e+00      0       #  dsky/dx (sky gradient in x)     [ADUs/pix]
+ 3) 0.000e+00      0       #  dsky/dy (sky gradient in y)     [ADUs/pix]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+================================================================================
+
+
+
+-- WARNING: The exposure time header is missing.  Default to 1 second.
+
+-- No CCD charge diffusion kernel found or applied.
+
+================================================================================
+Initial parameters:
+ sersic    : (   70.41,    55.55)   16.66     12.62    0.50    0.38   -59.16
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+================================================================================
+
+Iteration : 1     Chi2nu: 1.127e+02     dChi2/Chi2: -7.04e+20   alamda: 1e-03     
+ sersic    : (   70.41,    55.55)   16.62     12.88    0.53    0.38   -59.16
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 99 
+
+Iteration : 2     Chi2nu: 1.126e+02     dChi2/Chi2: -1.09e-03   alamda: 1e-04     
+ sersic    : (   70.45,    55.57)   16.61     13.03    0.57    0.38   -59.17
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 98 
+
+Iteration : 3     Chi2nu: 1.125e+02     dChi2/Chi2: -7.07e-04   alamda: 1e-05     
+ sersic    : (   70.51,    55.62)   16.60     13.13    0.59    0.38   -59.20
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 97 
+
+Iteration : 4     Chi2nu: 1.124e+02     dChi2/Chi2: -5.49e-04   alamda: 1e-06     
+ sersic    : (   70.58,    55.66)   16.59     13.19    0.62    0.38   -59.24
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 96 
+
+Iteration : 5     Chi2nu: 1.124e+02     dChi2/Chi2: -4.75e-04   alamda: 1e-07     
+ sersic    : (   70.66,    55.71)   16.58     13.25    0.64    0.38   -59.28
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 95 
+
+Iteration : 6     Chi2nu: 1.123e+02     dChi2/Chi2: -4.34e-04   alamda: 1e-08     
+ sersic    : (   70.73,    55.76)   16.58     13.29    0.67    0.38   -59.32
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 94 
+
+Iteration : 7     Chi2nu: 1.123e+02     dChi2/Chi2: -4.18e-04   alamda: 1e-09     
+ sersic    : (   70.82,    55.81)   16.57     13.32    0.69    0.38   -59.36
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 93 
+
+Iteration : 8     Chi2nu: 1.122e+02     dChi2/Chi2: -4.13e-04   alamda: 1e-10     
+ sersic    : (   70.90,    55.86)   16.57     13.35    0.71    0.38   -59.40
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 92 
+
+Iteration : 9     Chi2nu: 1.122e+02     dChi2/Chi2: -4.33e-04   alamda: 1e-11     
+ sersic    : (   70.99,    55.92)   16.56     13.38    0.73    0.38   -59.44
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 91 
+
+Iteration : 10    Chi2nu: 1.121e+02     dChi2/Chi2: -4.90e-04   alamda: 1e-12     
+ sersic    : (   71.07,    55.97)   16.56     13.41    0.76    0.38   -59.48
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 90 
+
+Iteration : 11    Chi2nu: 1.120e+02     dChi2/Chi2: -5.81e-04   alamda: 1e-13     
+ sersic    : (   71.18,    56.04)   16.55     13.44    0.79    0.38   -59.52
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 89 
+
+Iteration : 12    Chi2nu: 1.120e+02     dChi2/Chi2: -7.59e-04   alamda: 1e-14     
+ sersic    : (   71.29,    56.10)   16.55     13.47    0.82    0.38   -59.56
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 88 
+
+Iteration : 13    Chi2nu: 1.118e+02     dChi2/Chi2: -1.05e-03   alamda: 1e-15     
+ sersic    : (   71.42,    56.18)   16.54     13.50    0.86    0.38   -59.61
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 87 
+
+Iteration : 14    Chi2nu: 1.117e+02     dChi2/Chi2: -1.52e-03   alamda: 1e-16     
+ sersic    : (   71.57,    56.27)   16.53     13.54    0.91    0.38   -59.66
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 86 
+
+Iteration : 15    Chi2nu: 1.114e+02     dChi2/Chi2: -2.37e-03   alamda: 1e-17     
+ sersic    : (   71.77,    56.39)   16.53     13.58    0.96    0.38   -59.73
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 85 
+
+Iteration : 16    Chi2nu: 1.110e+02     dChi2/Chi2: -3.90e-03   alamda: 1e-18     
+ sersic    : (   72.01,    56.53)   16.51     13.64    1.05    0.39   -59.80
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 84 
+
+Iteration : 17    Chi2nu: 1.102e+02     dChi2/Chi2: -7.23e-03   alamda: 1e-19     
+ sersic    : (   72.33,    56.72)   16.50     13.72    1.17    0.39   -59.89
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 83 
+
+Iteration : 18    Chi2nu: 1.086e+02     dChi2/Chi2: -1.46e-02   alamda: 1e-20     
+ sersic    : (   72.75,    56.97)   16.47     13.85    1.37    0.39   -60.00
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 82 
+
+Iteration : 19    Chi2nu: 1.055e+02     dChi2/Chi2: -2.98e-02   alamda: 1e-21     
+ sersic    : (   73.32,    57.30)   16.43     14.12    1.71    0.39   -60.14
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 81 
+
+Iteration : 20    Chi2nu: 9.950e+01     dChi2/Chi2: -5.98e-02   alamda: 1e-22     
+ sersic    : (   74.00,    57.69)   16.35     14.83    2.38    0.39   -60.31
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 80 
+
+Iteration : 21    Chi2nu: 9.127e+01     dChi2/Chi2: -9.02e-02   alamda: 1e-23     
+ sersic    : (   74.65,    58.05)   16.22     17.01    3.77    0.38   -60.50
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 79 
+
+Iteration : 22    Chi2nu: 8.658e+01     dChi2/Chi2: -5.41e-02   alamda: 1e-24     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 78 
+
+Iteration : 23    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-23     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 10 
+
+Iteration : 24    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-22     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 9 
+
+Iteration : 25    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-21     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 8 
+
+Iteration : 26    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-20     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 7 
+
+Iteration : 27    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-19     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 6 
+
+Iteration : 28    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-18     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 5 
+
+Iteration : 29    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-17     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 4 
+
+Iteration : 30    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-16     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 3 
+
+Iteration : 31    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-15     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 2 
+
+Iteration : 32    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-14     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 1 
+
+Iteration : 33    Chi2nu: 8.658e+01     dChi2/Chi2: -2.94e-08   alamda: 1e-13     
+ sersic    : (   75.07,    58.29)   15.98     24.18    6.00    0.37   -60.68
+ sky       : [ 61.50,  53.50]  [2.67e-04]  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 0 
+free(): invalid pointer

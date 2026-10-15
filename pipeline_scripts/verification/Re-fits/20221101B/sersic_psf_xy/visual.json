@@ -1,0 +1,9 @@
+{
+  "_check": "visual",
+  "_frb": "20221101B",
+  "_runtime_s": 1.242,
+  "had_fourier": true,
+  "had_isophotes": false,
+  "panel_png": "Re-fits\\20221101B\\sersic_psf_xy\\panel.png",
+  "status": "ok"
+}

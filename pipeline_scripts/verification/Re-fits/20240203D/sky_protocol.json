@@ -1,0 +1,280 @@
+{
+  "analysis_box_arcsec": [
+    180.7799999999998,
+    180.7799999999998
+  ],
+  "analysis_box_yx": [
+    801,
+    1491,
+    800,
+    1490
+  ],
+  "band": "r",
+  "band_index": 1,
+  "box_stability": {
+    "boxes": [
+      {
+        "agree": false,
+        "consensus_sky_adu": -0.4510314444232335,
+        "estimates_adu": {
+          "B_growth": 4.614026422882363,
+          "E_mask_growth": -1.3092385191170641,
+          "F_empty_patches": -2.3923497581170903,
+          "F_plane": 0.4071756302705971
+        },
+        "halfbox_arcsec": 60.0,
+        "span_adu": 7.006376180999453
+      },
+      {
+        "agree": true,
+        "consensus_sky_adu": 0.0,
+        "estimates_adu": {
+          "B_growth": 0.0,
+          "E_mask_growth": 0.0,
+          "F_empty_patches": 0.0,
+          "F_plane": 0.8348816782773674
+        },
+        "halfbox_arcsec": 90.0,
+        "span_adu": 0.8348816782773674
+      },
+      {
+        "agree": true,
+        "consensus_sky_adu": 0.0,
+        "estimates_adu": {
+          "B_growth": 0.0,
+          "E_mask_growth": 0.0,
+          "F_empty_patches": 0.0,
+          "F_plane": -0.748209855260747
+        },
+        "halfbox_arcsec": 120.0,
+        "span_adu": 0.748209855260747
+      }
+    ],
+    "sky_median_adu": 0.0,
+    "sky_span_adu": 0.4510314444232335
+  },
+  "consensus": {
+    "agree": true,
+    "methods_used": [
+      "B_growth",
+      "E_mask_growth",
+      "F_empty_patches",
+      "F_plane"
+    ],
+    "n_methods": 4,
+    "sky_adu": 0.0,
+    "sky_sigma_adu": 0.36151437127119346,
+    "span_adu": 0.8348816782773674
+  },
+  "delta_vs_production_adu": 8.44,
+  "estimates_adu": {
+    "B_growth": 0.0,
+    "E_mask_growth": 0.0,
+    "F_empty_patches": 0.0,
+    "F_plane": 0.8348816782773674
+  },
+  "flux_path": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\large_cutouts\\20240203D_flux.fits",
+  "frb": "20240203D",
+  "halfbox_arcsec": 90.0,
+  "host_number": 494,
+  "host_xy_full": [
+    1144.985294117647,
+    1145.0514705882354
+  ],
+  "methods": {
+    "B": {
+      "annulus_median_adu": [
+        -12.939873647708692,
+        -19.891435837538673,
+        -19.43034953420657,
+        -8.02067882678436,
+        -9.616368298393157,
+        -2.256114127884823,
+        -1.0838364377021485,
+        2.822629094029441,
+        1.3809431134150074,
+        4.326306762237276,
+        10.964872007158995,
+        8.38992557070409,
+        3.7006310512668623,
+        4.898744985843393,
+        3.8729538318352006,
+        5.3348519878093335,
+        -0.4865542537702811,
+        1.074031372480483,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "annulus_n": [
+        2645,
+        3470,
+        4355,
+        5143,
+        6045,
+        6862,
+        7603,
+        8352,
+        9377,
+        9911,
+        10671,
+        11463,
+        12307,
+        13451,
+        14313,
+        15185,
+        16142,
+        16902,
+        17136,
+        17704,
+        18701,
+        19473,
+        20154,
+        20882
+      ],
+      "annulus_r_arcsec": [
+        9.52330557598039,
+        12.569916727941171,
+        15.616527879901952,
+        18.663139031862734,
+        21.709750183823516,
+        24.756361335784295,
+        27.802972487745073,
+        30.849583639705855,
+        33.89619479166664,
+        36.94280594362742,
+        39.989417095588195,
+        43.03602824754897,
+        46.08263939950976,
+        49.129250551470534,
+        52.17586170343131,
+        55.222472855392105,
+        58.26908400735288,
+        61.31569515931367,
+        64.36230631127444,
+        67.40891746323521,
+        70.455528615196,
+        73.50213976715678,
+        76.54875091911758,
+        79.59536207107837
+      ],
+      "n_plateau_bins": 6,
+      "plateau_r_start_arcsec": 64.36230631127444,
+      "r_max_arcsec": 81.11866764705874,
+      "r_min_arcsec": 8.0,
+      "sky_adu": 0.0,
+      "sky_sigma_adu": 0.0,
+      "status": "ok"
+    },
+    "E": {
+      "curve": [
+        {
+          "dilation_px": 0,
+          "masked_frac": 0.01840369670237345,
+          "n_pix": 456469,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.12028770912296444
+        },
+        {
+          "dilation_px": 2,
+          "masked_frac": 0.033198907792480574,
+          "n_pix": 450796,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.12232710124106619
+        },
+        {
+          "dilation_px": 4,
+          "masked_frac": 0.04575509346775888,
+          "n_pix": 445310,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.12346911600271167
+        },
+        {
+          "dilation_px": 6,
+          "masked_frac": 0.058097038437303086,
+          "n_pix": 439669,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.12446403052210767
+        },
+        {
+          "dilation_px": 8,
+          "masked_frac": 0.07118252467968914,
+          "n_pix": 433672,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.12556548256391922
+        },
+        {
+          "dilation_px": 12,
+          "masked_frac": 0.09984457046838899,
+          "n_pix": 420450,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.12798784797469426
+        },
+        {
+          "dilation_px": 16,
+          "masked_frac": 0.13195967233774417,
+          "n_pix": 405501,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.13069178909235393
+        },
+        {
+          "dilation_px": 24,
+          "masked_frac": 0.20455366519638732,
+          "n_pix": 371701,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.13707277446413627
+        },
+        {
+          "dilation_px": 32,
+          "masked_frac": 0.2851060701533291,
+          "n_pix": 334158,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.14517679225192598
+        },
+        {
+          "dilation_px": 48,
+          "masked_frac": 0.45965553455156477,
+          "n_pix": 252649,
+          "sky_adu": 0.0,
+          "sky_sigma_adu": 0.1675148679556768
+        }
+      ],
+      "dilation_px_used": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        12,
+        16,
+        24,
+        32,
+        48
+      ],
+      "sky_adu": 0.0,
+      "sky_sigma_adu": 0.0,
+      "stability_span_adu": 0.0,
+      "status": "ok"
+    },
+    "F": {
+      "n_patches": 120,
+      "patch_px": 16,
+      "plane_coefs": {
+        "a0": -0.20794832898041046,
+        "ax": 0.012728978837380332,
+        "ay": -0.009732498730635222
+      },
+      "plane_sky_adu": 0.8348816782773674,
+      "plane_used": true,
+      "sky_adu": 0.0,
+      "sky_sigma_adu": 1.2180891679625816,
+      "status": "ok"
+    }
+  },
+  "pixscale_arcsec": 0.26199999999999973,
+  "production_sky_final_adu": -8.44,
+  "production_sky_ref_adu": 13.848890008724872
+}

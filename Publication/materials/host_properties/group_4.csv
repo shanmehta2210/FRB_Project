@@ -1,0 +1,1041 @@
+frb,quantity,value,err_plus,err_minus,unit,method,source_short,arxiv_id,doi,location,notes
+20220207C,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220207C,AV,0.11,0.03,0.02,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220207C,AV_old,0.1,0.02,0.02,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220207C,B_parallel_host_uG,1.97,0.16,0.84,uG,1.23*RM_host/DM_host,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220207C,DM_MW,76.0,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220207C,DM_MW,79.3,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220207C,DM_exgal,186.3,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220207C,DM_exgal,170,,,pc cm^-3,DM_obs-NE2001-halo10,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,"DM_IGM + DM_host/(1+z) = 170 assuming DM_halo,MW = 10"
+20220207C,DM_host,149,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220207C,DM_host,136.98,39.31,38.72,pc cm^-3,dm_budget_pdf_NE2001_halo0-20_zhang2021IGM,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,expectation value of DM_host PDF (Connor+2023 method); eq. 5 is written for DM_host/(1+z) so frame is ambiguous
+20220207C,DM_obs,262.3,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220207C,DM_obs,262.38,0.01,0.01,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220207C,DM_obs,262.3,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220207C,DM_obs,262.3,0.01,0.01,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220207C,EBV_MW,0.813,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220207C,Halpha_flux,8.65e-16,,,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,"not corrected for Galactic or host extinction; Hbeta 5.11e-17, [OIII]5007 5(1)e-17, [NII]6584 1.81(7)e-16"
+20220207C,L_PRS_erg_s_Hz,<2.3e28,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20220207C,M_r_abs,-20.2,0.0,0.0,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220207C,M_r_abs,-20.33,0.17,0.21,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220207C,PATH_posterior,0.99,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Pan-STARRS1"
+20220207C,PATH_posterior,0.97,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter PS1 r
+20220207C,RM_MW,-5.22,16.93,16.93,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220207C,RM_host,181.28,18.42,18.42,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20220207C,RM_ion,1.35,0.07,0.07,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20220207C,RM_rad_m2,162.48,0.04,0.04,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20220207C,RM_rad_m2,162.48,0.04,0.04,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20220207C,RM_rad_m2,161.5,0.4,0.4,rad m^-2,rm_synthesis_subcomponent,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Sec 5,first sub-component; second sub-component 173.5 +/- 7.2
+20220207C,Re_arcsec,8.356,,,arcsec,kron_radius,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220207C,Re_kpc,3.6,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220207C,SFR,1.16,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20220207C,SFR,1.16,0.1,0.08,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220207C,SFR,0.49,0.02,0.02,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220207C,SFR,0.71,0.12,0.13,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220207C,U_neb,-3.24,0.02,0.02,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220207C,circular_pol_frac,14.8,1.7,1.7,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = 11.1 +/- 1.7
+20220207C,f_AGN,0.0,0.0,0.0,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20220207C,fluence_Jy_ms,16.2,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220207C,frb_dec_dms,+72:52:56.378,0.54,0.54,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220207C,frb_dec_dms,+72:52:56.38,0.54,0.54,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220207C,frb_ra_hms,20:40:47.886,0.63,0.63,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220207C,frb_ra_hms,20:40:47.89,0.63,0.63,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Zach
+20220207C,g_r_color,0.3,0.01,0.0,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220207C,g_r_color,0.38,0.01,0.01,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220207C,galaxy_type,star-forming,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code SF
+20220207C,host_dec_deg,72.88275,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +72:52:57.90 (J2000) in Table 2
+20220207C,host_dec_deg,72.88275,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +72:52:57.90
+20220207C,host_name,PSO J310.1977+72.8826,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220207C,host_ra_deg,310.197579,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 20:40:47.419 (J2000) in Table 2
+20220207C,host_ra_deg,310.197583,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 20:40:47.42
+20220207C,inclination_deg,80,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220207C,inclination_deg,74,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220207C,linear_pol_frac,74.9,4.5,4.5,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220207C,logMstar,9.91,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 0.81 x 1e10 Msun; converted to log10
+20220207C,logMstar,9.91,0.03,0.02,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy, 2MASS HKs, ALLWISE W1W2"
+20220207C,logMstar,9.95,0.03,0.03,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20220207C,log_sSFR,-9.85,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220207C,luminosity_distance_Mpc,193.53,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220207C,m_H,15.45,0.04,0.04,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20220207C,m_W1,16.43,0.01,0.01,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220207C,m_W2,17.1,0.03,0.03,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220207C,m_W3,15.84,0.11,0.11,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220207C,m_W4,15.14,0.46,0.46,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220207C,m_g,16.43,0.03,0.03,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220207C,m_i,15.96,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220207C,m_r,18.24,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220207C,m_r,16.15,0.01,0.01,AB mag,catalog_ps1,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Pan-STARRS1
+20220207C,m_r,16.15,0.01,0.01,AB mag,ps1_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter PS1 r; corrected for MW extinction (E(B-V)=0.813)
+20220207C,m_r,16.15,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220207C,m_y,15.67,0.02,0.02,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220207C,m_z,15.77,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220207C,metallicity_logZ,-0.7,0.06,0.05,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220207C,morphology,"disk-dominated, viewed nearly edge-on",,,,visual,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,
+20220207C,offset_kpc,2.21,0.84,0.77,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220207C,polarization_subgroup,2ia (Intermediate),,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220207C,q_PAH,3.24,0.8,0.95,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20220207C,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220207C,sSFR_per_Gyr,0.05,0.01,0.01,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220207C,snr,60.0,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220207C,snr,72.57,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220207C,tau_AGN,46.76,53.66,29.7,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20220207C,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220207C,tm_Gyr,6.53,0.84,0.72,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220207C,tm_Gyr,6.12,0.45,0.48,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220207C,u_r_color,2.7,0.02,0.02,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220207C,width_ms,0.5,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220207C,z,0.043,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20220207C,z,0.043,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220207C,z,0.04304,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Keck/LRIS"
+20220207C,z,0.0433,0.0001,0.0001,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220207C,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Keck/LRIS
+20220307B,AGN_in_SED,N,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220307B,AV,1.57,0.33,0.32,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220307B,AV_old,1.87,0.07,0.08,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220307B,B_parallel_host_uG,-13.16,5.72,5.3,uG,1.23*RM_host/DM_host,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220307B,DM_MW,128.2,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220307B,DM_MW,135.7,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220307B,DM_excess_note,>200,,,pc cm^-3,macquart_excess,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,listed among four DSA-110 FRBs with >200 pc cm^-3 excess DM over Macquart relation
+20220307B,DM_exgal,371.0,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220307B,DM_host,126,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220307B,DM_host,169.77,76.15,83.96,pc cm^-3,dm_budget_pdf_NE2001_halo0-20_zhang2021IGM,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,expectation value of DM_host PDF (Connor+2023 method); eq. 5 is written for DM_host/(1+z) so frame is ambiguous
+20220307B,DM_obs,499.15,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220307B,DM_obs,499.27,0.06,0.06,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220307B,DM_obs,499.15,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220307B,DM_obs,499.15,0.03,0.03,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220307B,EBV_MW,0.438,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220307B,L_PRS_erg_s_Hz,<1.0e30,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20220307B,M_r_abs,-19.97,0.0,0.0,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220307B,M_r_abs,-19.84,0.43,0.13,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220307B,PATH_posterior,0.99,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Pan-STARRS1"
+20220307B,PATH_posterior,0.98,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter PS1 r
+20220307B,RM_MW,-4.11,28.64,28.64,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220307B,RM_host,-1477.8,48.74,48.74,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20220307B,RM_ion,1.85,0.09,0.09,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20220307B,RM_rad_m2,-947.23,12.27,12.27,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20220307B,RM_rad_m2,-947.2,12.3,12.3,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20220307B,Re_arcsec,1.393,,,arcsec,kron_radius,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220307B,Re_kpc,3.7,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220307B,SFR,2.71,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20220307B,SFR,2.71,0.76,0.61,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220307B,SFR,2.66,0.82,0.65,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220307B,SFR,3.17,1.35,1.03,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220307B,U_neb,-2.85,0.12,0.11,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220307B,circular_pol_frac,18.9,8.0,8.0,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = -10.3 +/- 8.0
+20220307B,fluence_Jy_ms,3.2,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220307B,frb_dec_dms,+72:11:32.6,1.26,1.26,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220307B,frb_dec_dms,+72:11:32.59,1.26,1.26,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220307B,frb_ra_hms,23:23:29.88,1.72,1.72,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220307B,frb_ra_hms,23:23:29.88,1.72,1.72,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Alex
+20220307B,g_r_color,0.85,0.01,0.01,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220307B,g_r_color,0.77,0.02,0.02,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220307B,galaxy_type,star-forming,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code SF
+20220307B,host_dec_deg,72.191889,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +72:11:30.80 (J2000) in Table 2
+20220307B,host_dec_deg,72.191889,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +72:11:30.80
+20220307B,host_name,PSO J350.8747+72.1918,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220307B,host_ra_deg,350.874687,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 23:23:29.925 (J2000) in Table 2
+20220307B,host_ra_deg,350.874667,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 23:23:29.92
+20220307B,inclination_deg,44,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220307B,inclination_deg,47,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220307B,line_fluxes_note,see notes,,,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,"two values tabulated (5.9(1)e-15, 2.3(1)e-15) but column assignment ambiguous in PDF extraction"
+20220307B,linear_pol_frac,69.8,16.0,16.0,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220307B,logMstar,10.04,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 1.10 x 1e10 Msun; converted to log10
+20220307B,logMstar,10.04,0.02,0.01,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy, WIRC JH"
+20220307B,logMstar,10.14,0.03,0.04,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: N
+20220307B,log_sSFR,-9.61,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220307B,luminosity_distance_Mpc,1264.64,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220307B,m_H,18.82,0.02,0.02,AB mag,p200_wirc_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey P200/WIRC
+20220307B,m_J,19.5,0.02,0.02,AB mag,p200_wirc_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey P200/WIRC
+20220307B,m_g,21.11,0.13,0.13,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220307B,m_i,20.14,0.09,0.09,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220307B,m_r,19.93,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220307B,m_r,20.45,0.05,0.05,AB mag,catalog_ps1,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Pan-STARRS1
+20220307B,m_r,20.45,0.13,0.13,AB mag,ps1_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter PS1 r; corrected for MW extinction (E(B-V)=0.438)
+20220307B,m_r,20.45,0.05,0.05,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220307B,m_y,19.43,0.09,0.09,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220307B,m_z,19.82,0.06,0.06,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220307B,metallicity_logZ,-1.51,0.07,0.12,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220307B,offset_kpc,7.09,9.8,4.65,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220307B,polarization_subgroup,1 (Consistent with 100%),,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220307B,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220307B,sSFR_per_Gyr,0.09,0.04,0.03,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220307B,snr,11.9,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220307B,snr,15.72,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220307B,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220307B,tm_Gyr,0.65,0.04,0.04,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220307B,tm_Gyr,3.64,0.45,0.43,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220307B,u_r_color,1.69,0.07,0.06,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220307B,width_ms,0.5,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220307B,z,0.2481,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20220307B,z,0.2507,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),0.2507 differs from Law+2024 (0.248123) and Sharma+2024 (0.2481)
+20220307B,z,0.248123,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Hale/DBSP"
+20220307B,z,0.2481,0.0001,0.0001,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220307B,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Hale/DBSP
+20220310F,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220310F,AV,0.04,0.08,0.03,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220310F,AV_old,0.04,0.06,0.03,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220310F,B_parallel_host_uG,2.64,0.9,2.1,uG,1.23*RM_host/DM_host,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220310F,DM_MW,46.3,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220310F,DM_MW,45.4,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220310F,DM_exgal,415.9,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220310F,DM_host,22,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220310F,DM_host,66.5,49.16,48.46,pc cm^-3,dm_budget_pdf_NE2001_halo0-20_zhang2021IGM,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,expectation value of DM_host PDF (Connor+2023 method); eq. 5 is written for DM_host/(1+z) so frame is ambiguous
+20220310F,DM_obs,462.15,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220310F,DM_obs,462.24,0.005,0.005,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220310F,DM_obs,462.15,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220310F,DM_obs,462.15,0.004,0.004,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220310F,EBV_MW,0.029,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220310F,Halpha_flux,8.924e-17,,,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,"Hbeta 1.93e-17, [OIII]5007 2.6(4)e-17, [NII]6584 2.3(6)e-17; uncorrected"
+20220310F,L_PRS_erg_s_Hz,<4.6e30,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20220310F,M_r_abs,-20.79,0.03,0.03,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220310F,M_r_abs,-20.94,0.37,0.4,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220310F,PATH_posterior,0.99,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Pan-STARRS1"
+20220310F,PATH_posterior,0.97,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter PS1 r
+20220310F,RM_MW,-14.33,7.43,7.43,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220310F,RM_host,55.9,16.26,16.26,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20220310F,RM_ion,0.51,0.09,0.09,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20220310F,RM_rad_m2,11.39,0.19,0.19,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20220310F,RM_rad_m2,11.4,0.2,0.2,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20220310F,RM_rad_m2,10.1,0.6,0.6,rad m^-2,rm_synthesis_subcomponent,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Sec 5,first sub-component
+20220310F,Re_arcsec,1.909,,,arcsec,kron_radius,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220310F,Re_kpc,4.59,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220310F,SFR,4.25,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20220310F,SFR,4.25,2.45,1.67,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220310F,SFR,0.41,0.15,0.08,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220310F,SFR,0.97,0.32,0.29,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220310F,U_neb,-3.03,0.14,0.2,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220310F,circular_pol_frac,16.6,1.6,1.6,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = -7.4 +/- 1.6
+20220310F,f_AGN,1.49,0.84,1.09,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20220310F,fluence_Jy_ms,26.2,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220310F,frb_dec_dms,+73:29:27.0,1.4,1.4,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220310F,frb_dec_dms,+73:29:27.00,1.4,1.4,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220310F,frb_ra_hms,8:58:52.9,1.9,1.9,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220310F,frb_ra_hms,08:58:52.92,1.9,1.9,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Whitney
+20220310F,g_r_color,0.99,0.06,0.05,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220310F,g_r_color,0.98,0.02,0.02,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220310F,galaxy_type,star-forming,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code SF
+20220310F,host_dec_deg,73.490958,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +73:29:27.45 (J2000) in Table 2
+20220310F,host_dec_deg,73.490956,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +73:29:27.44
+20220310F,host_name,PSO J134.7211+73.4910,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220310F,host_ra_deg,134.721058,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 08:58:53.054 (J2000) in Table 2
+20220310F,host_ra_deg,134.721042,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 8:58:53.05
+20220310F,inclination_deg,39,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220310F,inclination_deg,41,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220310F,linear_pol_frac,60.6,4.7,4.7,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220310F,logMstar,9.97,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 0.93 x 1e10 Msun; converted to log10
+20220310F,logMstar,9.97,0.05,0.05,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 riz"
+20220310F,logMstar,9.98,0.08,0.06,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20220310F,log_sSFR,-9.34,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220310F,luminosity_distance_Mpc,2722.79,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220310F,m_H,20.29,0.23,0.23,AB mag,p200_wirc_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey P200/WIRC
+20220310F,m_J,20.22,0.21,0.21,AB mag,p200_wirc_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey P200/WIRC
+20220310F,m_Ks,20.41,0.3,0.3,AB mag,p200_wirc_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey P200/WIRC
+20220310F,m_NUV,22.51,0.07,0.07,AB mag,galex_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey GALEX
+20220310F,m_W1,20.0,0.23,0.23,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220310F,m_W2,20.48,0.36,0.36,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220310F,m_i,20.72,0.12,0.12,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220310F,m_r,20.72,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220310F,m_r,21.2,0.08,0.08,AB mag,catalog_ps1,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Pan-STARRS1
+20220310F,m_r,21.2,0.08,0.08,AB mag,ps1_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter PS1 r; corrected for MW extinction (E(B-V)=0.029)
+20220310F,m_r,21.2,0.08,0.08,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220310F,m_z,20.71,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220310F,metallicity_logZ,-1.2,0.14,0.15,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220310F,offset_kpc,4.39,19.94,3.06,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220310F,polarization_subgroup,2ia (Intermediate),,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220310F,q_PAH,5.03,0.98,1.0,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20220310F,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220310F,sSFR_per_Gyr,0.07,0.02,0.02,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220310F,snr,68.4,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220310F,snr,98.32,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220310F,tau_AGN,60.63,31.91,26.61,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20220310F,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220310F,tm_Gyr,2.13,1.06,0.6,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220310F,tm_Gyr,2.88,0.75,0.67,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220310F,u_r_color,1.35,0.04,0.03,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220310F,width_ms,1.0,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220310F,z,0.478,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20220310F,z,0.479,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220310F,z,0.477958,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Keck/LRIS"
+20220310F,z,0.478,0.0004,0.0004,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220310F,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Keck/LRIS
+20220319D,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220319D,AV,0.2,0.2,0.1,mag,prospector_sed,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,"internal A_V, uniform dust slab"
+20220319D,AV,0.36,0.08,0.07,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220319D,AV_MW,2.209,,,mag,schlafly_finkbeiner,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 4,Galactic extinction along sightline
+20220319D,AV_old,0.34,0.01,0.01,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220319D,DM_IGM,7,,,pc cm^-3,macquart_fIGM0.7,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 5,
+20220319D,DM_MW,139.8,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220319D,DM_MW,133.3,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220319D,DM_MW,132.9,,,pc cm^-3,NE2001,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 3,exceeds DM_obs; Law+2024 Table 1 lists 133.3
+20220319D,DM_MW,187.7,,,pc cm^-3,YMW16,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 3,exceeds DM_obs
+20220319D,DM_MW,46.7,,,pc cm^-3,nearby_pulsar_DM_conservative,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 3,DM of nearby PSRpi pulsar used as conservative DM_ISM estimate
+20220319D,DM_MW,65.3,,,pc cm^-3,nearby_pulsar_DM_less_conservative,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 3,"PSR J0325+6744 DM, 7.4 deg away"
+20220319D,DM_MW,89,,,pc cm^-3,halpha_emission_measure,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 3,H-alpha EM-based DM_ISM estimate
+20220319D,DM_MW_CGM,<28.7,,,pc cm^-3,upper_limit,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 5,MW CGM upper limit; alternative <47.3 for conservative DM_ISM
+20220319D,DM_exgal,-28.8,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220319D,DM_exgal,<45.7,,,pc cm^-3,upper_limit,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 5,DM_CGM+DM_IGM+DM_host upper limit for DM_ISM=65.3; alternative 64.3 for DM_ISM=46.7
+20220319D,DM_host,16,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220319D,DM_host,10,,,pc cm^-3,assumed_nominal,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 5,"nominal assumption, not a measurement"
+20220319D,DM_host,unconstrained,,,pc cm^-3,dm_budget_pdf,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,not constrained because DM_obs < model DM_MW (Ravi+2025)
+20220319D,DM_obs,110.95,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220319D,DM_obs,110.98,0.02,0.02,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220319D,DM_obs,110.95,0.01,0.01,pc cm^-3,structure_optimized,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,
+20220319D,DM_obs,110.95,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220319D,DM_obs,110.95,0.01,0.01,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220319D,EBV_MW,0.806,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220319D,Halpha_flux,2.00e-14,3e-16,3e-16,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,nuclear spectrum (Ravi et al.); second tabulated value 1.46(4)e-14 is [NII]6584 (Hbeta/[OIII] not detected per Ravi+2025); uncorrected
+20220319D,L_PRS_erg_s_Hz,<1.8e26,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,dedicated VLA follow-up at 1.4 and 5 GHz (21 uJy/beam rms)
+20220319D,M_r_abs,-20.23,0.01,0.01,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220319D,M_r_abs,-20.24,0.1,0.09,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220319D,PATH_posterior,0.99,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Pan-STARRS1"
+20220319D,PATH_posterior,0.99,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter PS1 r
+20220319D,RM_MW,-14,18,18,rad m^-2,hutschenreuter2022,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 3,
+20220319D,RM_MW,-13.82,17.68,17.68,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220319D,RM_host,73.63,23.26,23.26,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20220319D,RM_ion,2.07,0.09,0.09,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20220319D,RM_rad_m2,50,15,15,rad m^-2,rm_synthesis,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,
+20220319D,RM_rad_m2,59.94,14.33,14.33,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20220319D,RM_rad_m2,59.9,14.3,14.3,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20220319D,Re_arcsec,11.764,,,arcsec,kron_radius,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220319D,Re_kpc,2.7,0.2,0.2,kpc,isophote_ps1_i,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,isophotal fit to PS1 i-band
+20220319D,Re_kpc,2.09,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220319D,SFR,0.21,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20220319D,SFR,0.21,0.12,0.05,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220319D,SFR,1.8,0.7,0.7,Msun/yr,prospector_sed_100Myr,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,integrated over past 100 Myr
+20220319D,SFR,0.38,0.01,0.01,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220319D,SFR,0.42,0.02,0.02,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220319D,U_neb,-3.2,0.01,0.02,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220319D,circular_pol_frac,4,3,3,%,dsa110_polarimetry,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,|V/I| = 0.04(3)
+20220319D,circular_pol_frac,4.0,2.0,2.0,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = -3.0 +/- 2.0
+20220319D,f_AGN,0.01,0.0,0.0,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20220319D,fluence_Jy_ms,8.0,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220319D,fluence_Jy_ms,11.2,0.2,0.2,Jy ms,dsa110,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,Law+2024 Table 1 lists 8.0 (90%-flux definition)
+20220319D,frb_dec_dms,+71:02:06.9,0.55,0.55,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220319D,frb_dec_dms,+71:02:06.9,0.6,0.6,dms / arcsec err,dsa110_interferometric,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,
+20220319D,frb_dec_dms,+71:02:06.94,0.55,0.55,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220319D,frb_ra_hms,02:08:42.70,0.58,0.58,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220319D,frb_ra_hms,02:08:42.7,0.1,0.1,hms / s err,dsa110_interferometric,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,error in last digit (seconds of time)
+20220319D,frb_ra_hms,02:08:42.70,0.58,0.58,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Mark
+20220319D,g_r_color,0.46,0.03,0.02,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220319D,g_r_color,0.44,0.0,0.0,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220319D,galaxy_type,LINER-like nuclear line ratios,,,,bpt,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,line ratio measured on the nucleus only
+20220319D,galaxy_type,LINER-like nucleus (log [NII]/Ha = -0.23 +/- 0.02); star-forming disk,,,,bpt_partial,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 4,<10% chance nuclear ionization is purely SF; Hb and [OIII] undetected
+20220319D,galaxy_type,transition,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code T
+20220319D,host_dec_deg,71.036014,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +71:02:09.65 (J2000) in Table 2
+20220319D,host_dec_deg,71.035875,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +71:02:09.15
+20220319D,host_name,IRAS 02044+7048,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220319D,host_name,IRAS 02044+7048,,,,,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 3,
+20220319D,host_ra_deg,32.17005,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 02:08:40.812 (J2000) in Table 2
+20220319D,host_ra_deg,32.17025,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 02:08:40.86
+20220319D,inclination_deg,25,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220319D,inclination_deg,37,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220319D,inclination_deg,23,3,3,deg,isophote_ps1_i,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,isophotal analysis of PS1 i-band image
+20220319D,linear_pol_frac,16,3,3,%,dsa110_polarimetry,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,L/I = 0.16(3)
+20220319D,linear_pol_frac,16.1,4.0,4.0,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220319D,logMstar,10.16,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 1.45 x 1e10 Msun; converted to log10
+20220319D,logMstar,10.16,0.03,0.06,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy, 2MASS HKs, ALLWISE W1W2"
+20220319D,logMstar,9.93,0.07,0.07,log10 Msun,prospector_sed,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,non-parametric SFH; PS1+2MASS+ALLWISE aperture photometry; MAP values
+20220319D,logMstar,10.1,0.0,0.0,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20220319D,log_sSFR,-10.84,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220319D,luminosity_distance_Mpc,49.6,,,Mpc,cosmology,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,
+20220319D,luminosity_distance_Mpc,48.86,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220319D,m_H,12.35,0.02,0.02,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20220319D,m_J,12.53,0.02,0.02,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20220319D,m_Ks,12.55,0.02,0.02,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20220319D,m_W1,12.91,0.03,0.03,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220319D,m_W2,13.42,0.03,0.03,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220319D,m_W3,12.16,0.03,0.03,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220319D,m_W4,12.0,0.04,0.04,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220319D,m_g,13.63,0.02,0.02,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220319D,m_g,13.67,0.02,0.02,AB mag,sdss_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey SDSS
+20220319D,m_i,13.0,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220319D,m_i,12.95,0.01,0.01,AB mag,sdss_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey SDSS
+20220319D,m_r,15.39,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220319D,m_r,13.25,0.01,0.01,AB mag,catalog_ps1,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Pan-STARRS1
+20220319D,m_r,13.25,0.01,0.01,AB mag,ps1_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter PS1 r; corrected for MW extinction (E(B-V)=0.806)
+20220319D,m_r,13.25,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220319D,m_r,13.19,0.01,0.01,AB mag,sdss_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey SDSS
+20220319D,m_u,14.2,0.14,0.14,AB mag,sdss_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey SDSS
+20220319D,m_y,12.45,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220319D,m_z,12.81,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220319D,m_z,12.67,0.02,0.02,AB mag,sdss_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey SDSS
+20220319D,metallicity_logZ,0.1,0.2,0.2,log(Z/Zsun),prospector_sed,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,
+20220319D,metallicity_logZ,0.19,0.0,0.0,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220319D,morphology,face-on barred spiral; FRB significantly offset,,,,visual,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,citing Ravi et al. 2023b
+20220319D,morphology,"barred spiral, SBa",,,,visual,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 3,FRB appears associated with eastern spiral arm
+20220319D,offset_kpc,2.3,0.3,0.3,kpc,projected_offset,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,
+20220319D,offset_kpc,2.14,0.23,0.21,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220319D,offset_normalized,0.85,,,Re,offset_over_Re,ravi2025,2301.01000,10.3847/1538-3881/adc725,Sec 4,'offset of ~85% of the effective radius'
+20220319D,polarization_subgroup,1i (low L/I),,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220319D,q_PAH,5.18,0.3,0.44,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20220319D,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220319D,sSFR_per_Gyr,0.02,0.0,0.0,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220319D,scintillation_bandwidth_MHz,3.6,0.2,0.2,MHz,acf,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,decorrelation bandwidth nu_d at ~1.4 GHz; NE2001 predicts 0.2 MHz
+20220319D,snr,41.7,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220319D,snr,56.37,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220319D,spectral_energy_erg_Hz,3.3e28,0.1e28,0.1e28,erg Hz^-1,dsa110,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,
+20220319D,tau_AGN,73.73,5.2,4.52,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20220319D,tau_scatt_ms,<0.061,,,ms,upper_limit,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Appendix J,scattering upper limit at ~1.4 GHz used in RM-scattering depolarization scenario; sigma_RM = 20.81 rad m^-2 implied
+20220319D,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220319D,telescope_localization,DSA-110,,,,,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,90% region 3.7 x 2.2 arcsec
+20220319D,tm_Gyr,6.3,1.51,1.82,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220319D,tm_Gyr,6.12,0.07,0.06,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220319D,u_r_color,1.66,0.01,0.01,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220319D,width_ms,0.3,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220319D,width_ms,0.16,0.01,0.01,ms,fwhm,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 1,
+20220319D,z,0.0112,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20220319D,z,0.0111,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220319D,z,0.011228,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Hale/DBSP"
+20220319D,z,0.0111,0.0004,0.0004,,spec_z,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,"Palomar/DBSP H-alpha, [NII], [SII]"
+20220319D,z,0.0112,0.0001,0.0001,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220319D,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Hale/DBSP
+20220319D,z_type,spec,,,,spec_z,ravi2025,2301.01000,10.3847/1538-3881/adc725,Table 3,
+20220418A,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220418A,AV,0.02,0.02,0.01,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220418A,AV_old,0.02,0.02,0.01,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220418A,B_parallel_host_uG,-0.17,0.61,0.6,uG,1.23*RM_host/DM_host,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220418A,DM_MW,36.7,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220418A,DM_MW,37.6,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220418A,DM_exgal,586.8,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220418A,DM_host,109.04,76.21,76.92,pc cm^-3,dm_budget_pdf_NE2001_halo0-20_zhang2021IGM,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,expectation value of DM_host PDF (Connor+2023 method); eq. 5 is written for DM_host/(1+z) so frame is ambiguous
+20220418A,DM_obs,623.45,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220418A,DM_obs,623.25,0.01,0.01,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220418A,DM_obs,623.45,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220418A,DM_obs,623.45,0.01,0.01,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220418A,EBV_MW,0.019,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220418A,L_PRS_erg_s_Hz,<8.6e30,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20220418A,M_r_abs,-20.88,0.01,0.01,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220418A,M_r_abs,-20.81,0.09,0.35,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220418A,PATH_posterior,0.97,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Legacy Survey DR9"
+20220418A,PATH_posterior,0.97,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter BASS r
+20220418A,RM_MW,7.96,13.96,13.96,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220418A,RM_host,-5.76,41.67,41.67,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20220418A,RM_ion,0.63,0.1,0.1,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20220418A,RM_rad_m2,6.13,7.48,7.48,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20220418A,RM_rad_m2,6.1,7.5,7.5,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20220418A,Re_arcsec,1.29,,,arcsec,legacy_half_light,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220418A,Re_kpc,9.51,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220418A,SFR,29.41,18.28,10.7,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220418A,SFR,1.27,0.19,0.1,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220418A,SFR,1.31,0.15,0.13,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220418A,U_neb,-3.19,0.02,0.03,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220418A,circular_pol_frac,21.4,7.7,7.7,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = 2.7 +/- 7.7
+20220418A,f_AGN,0.06,0.06,0.03,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20220418A,fluence_Jy_ms,4.2,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220418A,frb_dec_dms,+70:05:45.4,0.761,0.761,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220418A,frb_dec_dms,+70:05:45.40,0.76,0.76,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220418A,frb_ra_hms,14:36:25.34,1.356,1.356,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220418A,frb_ra_hms,14:36:25.34,1.36,1.36,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Quincy
+20220418A,g_r_color,0.64,0.04,0.03,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220418A,g_r_color,0.87,0.02,0.02,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220418A,galaxy_type,star-forming,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code SF
+20220418A,host_dec_deg,70.095444,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +70:05:43.60 (J2000) in Table 2
+20220418A,host_dec_deg,70.095444,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +70:05:43.60
+20220418A,host_name,PSO J219.1065+70.0953,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220418A,host_ra_deg,219.1066,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 14:36:25.584 (J2000) in Table 2
+20220418A,host_ra_deg,219.106583,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 14:36:25.58
+20220418A,line_fluxes_note,see notes,,,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,"two values tabulated (4.89e-17, 2.1(5)e-17); columns ambiguous"
+20220418A,linear_pol_frac,64.1,13.3,13.3,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220418A,logMstar,10.31,0.06,0.05,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy, WIRC JH (Legacy Survey photometry used in SED fit)"
+20220418A,logMstar,10.26,0.02,0.02,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20220418A,luminosity_distance_Mpc,3740.05,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220418A,m_J,20.78,0.1,0.1,AB mag,p200_wirc_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey P200/WIRC
+20220418A,m_NUV,22.58,0.07,0.07,AB mag,galex_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey GALEX
+20220418A,m_W1,20.69,0.06,0.06,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220418A,m_g,22.18,0.2,0.2,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20220418A,m_i,21.29,0.08,0.08,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220418A,m_r,22.22,0.2,0.2,AB mag,catalog_legacy,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Legacy Survey DR9
+20220418A,m_r,21.22,0.19,0.19,AB mag,bass_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter BASS r; corrected for MW extinction (E(B-V)=0.019)
+20220418A,m_r,21.27,0.18,0.18,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220418A,m_r,21.22,0.19,0.19,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20220418A,m_z,21.0,0.21,0.21,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220418A,m_z,21.0,0.18,0.18,AB mag,mzls_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey MzLS
+20220418A,metallicity_logZ,-0.46,0.09,0.05,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220418A,offset_kpc,15.15,12.12,7.8,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220418A,polarization_subgroup,3a,,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220418A,q_PAH,0.86,0.35,0.24,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20220418A,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220418A,sSFR_per_Gyr,0.05,0.01,0.01,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220418A,snr,10.9,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220418A,snr,16.84,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220418A,tau_AGN,46.3,15.21,13.01,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20220418A,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220418A,tm_Gyr,4.62,1.2,0.98,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220418A,tm_Gyr,2.59,0.27,0.29,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220418A,u_r_color,1.16,0.02,0.03,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220418A,width_ms,1.0,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220418A,z,0.622,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220418A,z,0.622,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Keck/LRIS"
+20220418A,z,0.6214,0.0001,0.0001,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220418A,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Keck/LRIS
+20220509G,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220509G,AV,0.19,0.04,0.04,mag,prospector_sed,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220509G,AV,0.05,0.03,0.02,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220509G,AV_old,0.05,0.02,0.02,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220509G,B_parallel_host_uG,-1.98,0.88,0.33,uG,1.23*RM_host/DM_host,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220509G,DM_ICM,16-172,,,pc cm^-3,dm_budget_90pct,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 3.2,cluster frame 90% CI
+20220509G,DM_IGM,76,,,pc cm^-3,illustrisTNG_excl_massive_halos,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 3.2,mean; 90% CI 39-175
+20220509G,DM_MW,46,,,pc cm^-3,YMW16,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,Galactic ISM
+20220509G,DM_MW,55,,,pc cm^-3,NE2001,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,Galactic ISM
+20220509G,DM_MW,70,30,30,pc cm^-3,NE2001_YMW16_plus_halo_gaussian,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 3.2,"ISM+halo adopted as Gaussian mean 70, sigma 30 for DM budget"
+20220509G,DM_MW,55.6,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220509G,DM_MW,55.2,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220509G,DM_exgal,213.9,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220509G,DM_host,154,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220509G,DM_host,129.16,47.13,49.62,pc cm^-3,dm_budget_pdf_NE2001_halo0-20_zhang2021IGM,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,expectation value of DM_host PDF (Connor+2023 method); eq. 5 is written for DM_host/(1+z) so frame is ambiguous
+20220509G,DM_obs,269.53,,,pc cm^-3,snr_maximizing,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220509G,DM_obs,269.5,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220509G,DM_obs,269.53,0.02,0.02,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220509G,DM_obs,269.5,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220509G,DM_obs,269.5,0.007,0.007,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220509G,EBV_MW,0.06,,,mag,schlafly_finkbeiner,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,tabulated with a spurious minus sign in the PDF
+20220509G,EBV_MW,0.063,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220509G,L_PRS_erg_s_Hz,<1.1e29,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20220509G,M_r_abs,-21.34,0.0,0.0,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220509G,M_r_abs,-21.38,0.01,0.01,mag,prospector_sed_restframe,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220509G,M_r_abs,-21.4,0.11,0.05,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220509G,PATH_posterior,0.99,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Legacy Survey DR9"
+20220509G,PATH_posterior,0.99,,,,PATH,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Sec 2,quoted as 1% false-association probability with P(U)=0.1 (6%/8% for 509G/914A with P(U)=0.5); FRB 90% ellipse 4.7 x 3.2 arcsec (90%)
+20220509G,PATH_posterior,0.97,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter BASS r
+20220509G,RM_MW,-9,16,16,rad m^-2,hutschenreuter2022,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.2,Galactic RM foreground
+20220509G,RM_MW,14.03,14.05,14.05,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220509G,RM_host,-146.54,16.73,16.73,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20220509G,RM_ion,0.69,0.08,0.08,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20220509G,RM_rad_m2,-110,1,1,rad m^-2,rm_synthesis,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,observer frame; text quotes -111.5 +/- 1.5
+20220509G,RM_rad_m2,-111.54,1.5,1.5,rad m^-2,rm_synthesis,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Sec 2,observer frame
+20220509G,RM_rad_m2,-109.0,1.17,1.17,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20220509G,RM_rad_m2,-109.0,1.2,1.2,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20220509G,Re_arcsec,3.938,,,arcsec,legacy_half_light,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220509G,Re_kpc,6.64,,,kpc,isophote,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,effective radius
+20220509G,Re_kpc,8.31,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220509G,SFR,0.23,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20220509G,SFR,0.08,0.06,0.04,Msun/yr,prospector_sed_100Myr,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.2.2,
+20220509G,SFR,0.23,0.04,0.03,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220509G,SFR,0.08,0.06,0.04,Msun/yr,prospector_sed_100Myr,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,recent SFR averaged over last 100 Myr
+20220509G,SFR,0.27,0.01,0.01,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220509G,SFR,0.25,0.07,0.04,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220509G,U_neb,-3.53,0.22,0.27,log,prospector_sed,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220509G,U_neb,-3.74,0.07,0.08,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220509G,circular_pol_frac,6.0,2.8,2.8,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = 5.4 +/- 2.8
+20220509G,cluster_impact_parameter_kpc,870,50,50,kpc,xray_centroid_offset,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,projected offset of host from X-ray centroid of Abell 2311
+20220509G,environment,cluster (Abell 2311),,,,desi_legacy_cluster_catalog,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 2 / Sec 2.2.1,"cluster z=0.0899, richness 190, M500=1.6e14 Msun (M180=2.5e14), R500=800 kpc, LX=4.7e43 erg/s, Y5R500=0.81+/-0.36e-3 arcmin^2; host just beyond R500"
+20220509G,f_AGN,0.04,0.01,0.01,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20220509G,fluence_Jy_ms,5.5,,,Jy ms,dsa110,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220509G,fluence_Jy_ms,5.8,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220509G,frb_dec_deg,70.2438,,,deg,dsa110_interferometric,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220509G,frb_dec_dms,+70:14:37.8,1.5,1.5,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220509G,frb_dec_dms,+70:14:37.80,1.5,1.5,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220509G,frb_ra_deg,282.67,,,deg,dsa110_interferometric,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220509G,frb_ra_hms,18:50:40.8,2.2,2.2,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220509G,frb_ra_hms,18:50:40.80,2.2,2.2,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Jackie
+20220509G,g_r_color,0.78,0.0,0.0,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220509G,g_r_color,0.89,0.01,0.01,mag,prospector_sed_restframe,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220509G,g_r_color,0.72,0.01,0.01,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220509G,galaxy_type,"massive, low-SFR, old (quiescent)",,,,sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.2,
+20220509G,galaxy_type,"quiescent, early-type",,,,sed_sfms,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Fig 5 / Sec 4,"red, old stellar population; first early-type quiescent FRB host"
+20220509G,galaxy_type,quiescent,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code Q
+20220509G,host_dec_deg,70.242764,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +70:14:33.95 (J2000) in Table 2
+20220509G,host_dec_deg,70.242764,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +70:14:33.95
+20220509G,host_name,PSO J282.6748+70.2427,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220509G,host_name,2MASX J18504127+7014359 (J1850+70),,,,,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Sec 2,
+20220509G,host_ra_deg,282.67465,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 18:50:41.916 (J2000) in Table 2
+20220509G,host_ra_deg,282.674667,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 18:50:41.92
+20220509G,inclination_deg,60,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220509G,inclination_deg,57,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220509G,line_fluxes_note,none detected,,,,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,no emission lines detected; redshift from absorption lines
+20220509G,linear_pol_frac,~100,,,%,dsa110_polarimetry,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.2,nearly 100% linearly polarized; flat PA
+20220509G,linear_pol_frac,98.5,11.1,11.1,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220509G,logMstar,10.79,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 6.17 x 1e10 Msun; converted to log10
+20220509G,logMstar,11.13,0.02,0.02,log10 Msun,prospector_sed,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.2.2,quoting Sharma et al. (in prep = Sharma+2023)
+20220509G,logMstar,10.79,0.01,0.01,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy, 2MASS HKs, ALLWISE W1W2"
+20220509G,logMstar,11.13,0.02,0.02,log10 Msun,prospector_sed,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,non-parametric SFH; 16/50/84 percentiles
+20220509G,logMstar,10.7,0.01,0.01,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20220509G,log_sSFR,-11.43,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220509G,log_sSFR,-3.23,0.23,0.29,log10 Gyr^-1,prospector_sed_100Myr,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,NOTE unit is log(Gyr^-1) as tabulated; subtract 9 for log(yr^-1)
+20220509G,luminosity_distance_Mpc,412.95,,,Mpc,cosmology,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220509G,luminosity_distance_Mpc,412.95,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220509G,m_FUV,21.05,0.16,0.16,AB mag,galex_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey GALEX
+20220509G,m_H,15.68,0.04,0.04,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20220509G,m_J,15.67,0.04,0.04,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20220509G,m_Ks,15.8,0.05,0.05,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20220509G,m_NUV,19.93,0.07,0.07,AB mag,galex_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey GALEX
+20220509G,m_W1,16.48,0.01,0.01,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220509G,m_W2,17.08,0.02,0.02,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220509G,m_W3,16.55,0.03,0.03,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220509G,m_W4,15.84,0.23,0.23,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220509G,m_g,17.2,0.02,0.02,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220509G,m_g,17.26,0.21,0.21,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20220509G,m_i,16.24,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220509G,m_r,17.73,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220509G,m_r,16.51,0.01,0.01,AB mag,catalog_legacy,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Legacy Survey DR9
+20220509G,m_r,16.51,0.21,0.21,AB mag,bass_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter BASS r; corrected for MW extinction (E(B-V)=0.063)
+20220509G,m_r,16.51,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220509G,m_r,16.51,0.21,0.21,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20220509G,m_y,15.87,0.02,0.02,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220509G,m_z,16.11,0.01,0.01,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220509G,m_z,16.05,0.19,0.19,AB mag,mzls_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey MzLS
+20220509G,metallicity_logZ,-0.11,0.03,0.03,log(Z/Zsun),prospector_sed,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220509G,metallicity_logZ,-0.58,0.03,0.04,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220509G,morphology,early-type elliptical,,,,visual,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.2.2,"quiescent, insignificant ongoing SF"
+20220509G,offset_kpc,3.8,,,kpc,projected_offset,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,projected physical offset from galaxy center
+20220509G,offset_kpc,11.54,5.76,5.02,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220509G,polarization_subgroup,1ia,,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220509G,q_PAH,3.99,1.07,1.69,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20220509G,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220509G,sSFR_per_Gyr,0.0,0.0,0.0,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220509G,snr,21.5,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220509G,snr,40.32,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220509G,tau_AGN,124.17,17.46,22.9,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20220509G,tau_scatt_ms,0.08,0.02,0.02,ms,scattering_fit,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,referenced to 1.4 GHz
+20220509G,tau_scatt_ms,0.08,0.02,0.02,ms,scattering_fit,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Sec 2,at 1498.75 MHz (Sherman et al. in prep)
+20220509G,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220509G,tm_Gyr,9.03,0.46,0.42,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220509G,tm_Gyr,7.75,0.18,0.18,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220509G,u_r_color,2.6,0.03,0.02,mag,prospector_sed_restframe,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220509G,u_r_color,2.16,0.02,0.01,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220509G,width_ms,0.03,0.01,0.01,ms,gaussian_component,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.2,Gaussian component 30+/-10 us plus scattering tail 80+/-20 us
+20220509G,width_ms,0.5,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220509G,z,0.0894,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20220509G,z,0.0894,,,,spec_z,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220509G,z,0.0894,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220509G,z,0.0894,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,pPXF redshift; absorption lines (no emission lines detected); spectrograph Keck/LRIS (blue side)
+20220509G,z,0.0894,0.0001,0.0001,,spec_z,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,"Keck-I/LRIS, pPXF"
+20220509G,z,0.0894,0.0001,0.0001,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220509G,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Keck/LRIS (blue side)
+20220825A,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220825A,AV,1.54,0.26,0.21,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220825A,AV_old,1.5,0.06,0.07,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220825A,B_parallel_host_uG,4.49,0.63,1.77,uG,1.23*RM_host/DM_host,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220825A,DM_MW,78.5,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220825A,DM_MW,79.7,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220825A,DM_excess_note,>200,,,pc cm^-3,macquart_excess,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,listed among four DSA-110 FRBs with >200 pc cm^-3 excess DM over Macquart relation
+20220825A,DM_exgal,572.7,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220825A,DM_host,445,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220825A,DM_host,395.77,112.01,123.38,pc cm^-3,dm_budget_pdf_NE2001_halo0-20_zhang2021IGM,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,expectation value of DM_host PDF (Connor+2023 method); eq. 5 is written for DM_host/(1+z) so frame is ambiguous
+20220825A,DM_obs,651.2,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220825A,DM_obs,651.24,0.06,0.06,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220825A,DM_obs,651.2,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220825A,DM_obs,651.2,0.02,0.02,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220825A,EBV_MW,0.543,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220825A,L_PRS_erg_s_Hz,<9.4e29,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20220825A,M_r_abs,-19.46,0.07,0.02,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220825A,M_r_abs,-19.35,0.76,0.39,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220825A,PATH_posterior,1.0,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Pan-STARRS1"
+20220825A,PATH_posterior,0.99,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter PS1 r
+20220825A,RM_MW,-3.53,15.26,15.26,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220825A,RM_host,1161.38,25.67,25.67,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20220825A,RM_ion,0.32,0.03,0.03,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20220825A,RM_rad_m2,750.23,6.67,6.67,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20220825A,RM_rad_m2,750.2,6.7,6.7,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20220825A,Re_arcsec,1.935,,,arcsec,kron_radius,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220825A,Re_kpc,4.12,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220825A,SFR,1.62,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20220825A,SFR,1.62,0.47,0.31,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220825A,SFR,9.62,2.68,2.0,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220825A,SFR,7.91,1.26,0.94,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220825A,U_neb,-3.29,0.11,0.05,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220825A,circular_pol_frac,9.0,5.9,5.9,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = -7.4 +/- 5.9
+20220825A,f_AGN,0.0,0.0,0.0,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20220825A,fluence_Jy_ms,5.8,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220825A,frb_dec_dms,+72:35:05.9,0.69,0.69,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220825A,frb_dec_dms,+72:35:05.89,0.69,0.69,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220825A,frb_ra_hms,20:47:55.55,0.78,0.78,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220825A,frb_ra_hms,20:47:55.55,0.78,0.78,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Ansel
+20220825A,g_r_color,0.87,0.06,0.16,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220825A,g_r_color,0.76,0.04,0.02,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220825A,galaxy_type,star-forming,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code SF
+20220825A,host_dec_deg,72.585139,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +72:35:06.5 (J2000) in Table 2
+20220825A,host_dec_deg,72.585139,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +72:35:06.50
+20220825A,host_name,PSO J311.9820+72.5848,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220825A,host_ra_deg,311.981667,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 20:47:55.6 (J2000) in Table 2
+20220825A,host_ra_deg,311.981667,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 20:47:55.60
+20220825A,inclination_deg,46,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220825A,inclination_deg,46,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220825A,line_fluxes_note,see notes,,,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,"two values tabulated (1.23(3)e-16, 4.0(2)e-17); columns ambiguous"
+20220825A,linear_pol_frac,53.7,11.4,11.4,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220825A,logMstar,9.95,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 0.89 x 1e10 Msun; converted to log10
+20220825A,logMstar,9.95,0.17,0.15,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy"
+20220825A,logMstar,10.01,0.06,0.06,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20220825A,log_sSFR,-9.74,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220825A,luminosity_distance_Mpc,1225.88,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220825A,m_W1,18.8,0.09,0.09,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220825A,m_W2,18.98,0.1,0.1,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220825A,m_W3,17.72,0.3,0.3,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220825A,m_g,21.36,0.1,0.1,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220825A,m_i,20.34,0.03,0.03,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220825A,m_r,20.03,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220825A,m_r,19.36,0.16,0.16,AB mag,catalog_ps1,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Pan-STARRS1
+20220825A,m_r,20.74,0.16,0.16,AB mag,ps1_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter PS1 r; corrected for MW extinction (E(B-V)=0.543)
+20220825A,m_r,20.74,0.16,0.16,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220825A,m_y,19.56,0.1,0.1,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220825A,m_z,19.97,0.07,0.07,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220825A,metallicity_logZ,0.09,0.05,0.08,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220825A,offset_kpc,2.52,4.86,1.76,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220825A,polarization_subgroup,1ia,,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220825A,q_PAH,0.78,0.35,0.2,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20220825A,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220825A,sSFR_per_Gyr,0.31,0.09,0.07,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220825A,snr,15.1,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220825A,snr,32.8,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220825A,tau_AGN,39.02,22.59,16.22,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20220825A,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220825A,tm_Gyr,3.46,1.49,1.02,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220825A,tm_Gyr,5.15,0.32,0.31,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220825A,u_r_color,1.58,0.09,0.06,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220825A,width_ms,1.0,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220825A,z,0.2414,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20220825A,z,0.2414,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220825A,z,0.241397,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Keck/LRIS (blue side)"
+20220825A,z,0.2414,0.0001,0.0001,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220825A,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Keck/LRIS (blue side)
+20220912A,AV,0.5,,,mag,ppxf,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2,internal A_V from pPXF spectral fit
+20220912A,DM_exgal,85,,,pc cm^-3,DM_obs-NE2001/YMW16-halo10,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 4,DM_cosmic ~85 assuming MW halo 10 (NE2001/YMW16 ISM implied ~125)
+20220912A,DM_host,34,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220912A,DM_host,30,,,pc cm^-3,macquart_fIGM0.7_mean,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 4,DM_cosmic(z=0.0771)=55 predicted -> host ~30 (frame not specified; z small)
+20220912A,DM_host,<53,,,pc cm^-3,upper_limit,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 4,90% conf upper limit using Macquart+2020 DM_cosmic lower limit of 32
+20220912A,DM_obs,219.377,0.009,0.009,pc cm^-3,microshot_alignment,hewitt2023,2308.12118,10.1093/mnras/stad2847,Table 1,"burst B2 (NRT); B1 219.356(12), B3 219.8(1)"
+20220912A,DM_obs,219.37,,,pc cm^-3,reference_dm,hewitt2024,2312.14490,10.1093/mnras/stae632,Table A1 note,DM used to refer burst TOAs to infinite frequency
+20220912A,DM_obs,219.46,,,pc cm^-3,chime_structure_optimized,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 1,adopted CHIME/FRB DM; DSA bursts had approximate DMs 228 and 223
+20220912A,DM_obs,219.775,,,pc cm^-3,snr_maximizing_ATA,sheikh2024,2312.07756,10.1093/mnras/stad3630,Sec 3,ATA; applied to 33 of 35 bursts
+20220912A,DM_obs,219.46,0.04,0.04,pc cm^-3,chime_compiled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 4,
+20220912A,DM_obs,220.7,1.83,1.83,pc cm^-3,per_burst_median_FAST,zhang2023,2304.14665,10.3847/1538-4357/aced0b,Sec 3,median and std over 1076 bursts; no trend dDM/dt < 8e-3 per day
+20220912A,Halpha_flux,1.23e-15,0.05e-15,0.05e-15,erg s^-1 cm^-2,ppxf,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 3.1,central square arcsecond
+20220912A,L_PRS_erg_s_Hz,<1.2e28,,,erg s^-1 Hz^-1,upper_limit,hewitt2024,2312.14490,10.1093/mnras/stae632,Fig 4 / Sec 4,"5-sigma, EVN 1.4 GHz, rms 16 uJy/beam combined epochs"
+20220912A,PATH_posterior,0.95,,,,PATH,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 3,5% false-association probability with standard priors and P(U)=0.5
+20220912A,RM_MW,-16,,,rad m^-2,hutschenreuter2022,zhang2023,2304.14665,10.3847/1538-4357/aced0b,Sec 3,
+20220912A,RM_rad_m2,0.6,,,rad m^-2,chime,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 1,adopted CHIME/FRB RM; independent DSA search consistent
+20220912A,RM_rad_m2,0.6,0.1,0.1,rad m^-2,chime_compiled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 4,CHIME RM as compiled
+20220912A,RM_rad_m2,-0.08,5.39,5.39,rad m^-2,rm_synthesis_mean_881_bursts,zhang2023,2304.14665,10.3847/1538-4357/aced0b,Abstract / Sec 3,FAST 1-1.5 GHz; mean RM; no secular trend (slope 0.017 +/- 0.018 per day)
+20220912A,Re_kpc,2.2,0.1,0.1,kpc,sersic_2d_keck_esi,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2,2D Sersic fit to Keck-II/ESI R-band image
+20220912A,SFR,2.5,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [48] Ravi+2023
+20220912A,SFR,2.5,,,Msun/yr,radio_1.4GHz_murphy2011,hewitt2024,2312.14490,10.1093/mnras/stae632,Sec 5,SFR required to explain APTF J230904+484222 flux if star formation
+20220912A,SFR,>0.1,,,Msun/yr,halpha_lower_limit,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2 / Sec 3.1,H-alpha in central 1 arcsec^2 only (~0.1 Msun/yr); off-nuclear H-alpha present so global SFR is higher
+20220912A,burst_rate_per_hr,124,,,hr^-1,fast_1076_bursts_8.67hr,zhang2023,2304.14665,10.3847/1538-4357/aced0b,Sec 2,average observed event rate; peak 390 hr^-1 reported in ATel
+20220912A,fluence_Jy_ms,1089,,,Jy ms,nrt_1.4GHz,hewitt2023,2308.12118,10.1093/mnras/stad2847,Table 1,"burst B1; B2 474, B3 411 Jy ms"
+20220912A,fluence_Jy_ms,4-431,,,Jy ms,ata_range,sheikh2024,2312.07756,10.1093/mnras/stad3630,Abstract,"35 bursts, median 48.27 Jy ms; brightest 1128 Jy ms in Sec 5"
+20220912A,frb_dec_dms,+48:42:23.9078,0.005,0.005,dms / arcsec err,evn_vlbi,hewitt2024,2312.14490,10.1093/mnras/stae632,Sec 4,+/-5 mas
+20220912A,frb_dec_dms,+48:42:25.4,1,1,dms / arcsec err,dsa110_interferometric,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 4,90% conf +/-1 arcsec in Dec
+20220912A,frb_ra_hms,23:09:04.8988,0.005,0.005,hms / arcsec err,evn_vlbi,hewitt2024,2312.14490,10.1093/mnras/stae632,Sec 4,EVN-Lite 1.4 GHz; +/-5 mas; combined two epochs
+20220912A,frb_ra_hms,23:09:04.90,2,2,hms / arcsec err,dsa110_interferometric,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 4,90% conf +/-2 arcsec in RA; Sharma+2024 revised DSA position to 23:09:04.83 +48:42:23.6 after calibration issue
+20220912A,galaxy_type,composite (BPT),,,,bpt,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2,"log([OIII]/Hb)=0.00+/-0.05, log([NII]/Ha)=-0.04+/-0.01, log([SII]/Ha)=-0.43+/-0.02, log([OI]/Ha)=-1.2+/-0.1"
+20220912A,host_name,PSO J347.2702+48.7066,,,,,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 3,PSO J347+48
+20220912A,inclination_deg,43,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220912A,inclination_deg,46,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220912A,inclination_deg,51,,,deg,half_light_isophote,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 3.1,assuming a disk-like galaxy; from half-light isophote fit to Keck-II/ESI image
+20220912A,linear_pol_frac,80.3,24.3,24.3,%,literature_compilation_FAST_1400MHz,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 4,compiled from FAST (Zhang+2023); V/I 5.2 +/- 0.2%
+20220912A,logMstar,10.0,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 1.00 x 1e10 Msun; converted to log10
+20220912A,logMstar,10.0,0.1,0.1,log10 Msun,prospector_sed_delay_tau,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2,PS1 grizy + ALLWISE W1W2; delay-tau SFH; dust fixed to pPXF A_V
+20220912A,log_sSFR,-9.6,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220912A,luminosity_distance_Mpc,362.4,0.1,0.1,Mpc,cosmology,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2,
+20220912A,m_r,19.65,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220912A,m_r,19.65,,,AB mag,ps1_catalog,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 3,Pan-STARRS r (Magnier et al. 2020)
+20220912A,metallicity_logZ,-0.8,0.3,0.6,log(Z/Zsun),prospector_sed_delay_tau,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2,printed as -0.8 -0.3/-0.6 in PDF extraction; interpreted as +0.3/-0.6
+20220912A,morphology,late-type (disk-like),,,,sersic_size_mass,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 3.1,size consistent with z~0 late-type size-mass relation
+20220912A,offset_kpc,0.8,,,kpc,vlbi_minus_optical_centre,hewitt2024,2312.14490,10.1093/mnras/stae632,Sec 5,transverse offset from host optical centre; 'significantly closer to centre than Ravi+2023 position'
+20220912A,radio_continuum_mJy,0.27,0.04,0.04,mJy,wsrt_apertif_1355MHz,hewitt2024,2312.14490,10.1093/mnras/stae632,Sec 5,"APTF J230904+484222, 1.6 arcsec from VLBI position, L~3.9e28 erg/s/Hz; attributed to star formation (implies SFR ~2.5 Msun/yr via Murphy+2011)"
+20220912A,repeater,yes,,,,,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 1,hyperactive repeater discovered by CHIME/FRB (McKinven & CHIME 2022)
+20220912A,scintillation_bandwidth_MHz,0.3,0.03,0.03,MHz,acf,hewitt2023,2308.12118,10.1093/mnras/stad2847,Abstract / Sec 3,at ~1.4 GHz (NRT); CHIME reported 390(20) kHz scaled
+20220912A,telescope_localization,"EVN (VLBI, mas)",,,,,hewitt2024,2312.14490,10.1093/mnras/stae632,Sec 4,DSA-110 published position was ~0.6 arcsec off (Sharma+2024 Methods)
+20220912A,telescope_localization,DSA-110,,,,,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Sec 2,arcsecond localization from two bursts; later superseded by EVN VLBI (Hewitt+2024)
+20220912A,z,0.077,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [48] Ravi+2023
+20220912A,z,0.0771,0.0001,0.0001,,spec_z,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2,"Keck-I/LRIS emission lines, pPXF"
+20220912A,z_type,spec,,,,spec_z,ravi2023,2211.09049,10.3847/2041-8213/acc4b6,Table 2,
+20220914A,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220914A,AV,1.64,0.22,0.23,mag,prospector_sed,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220914A,AV,0.71,0.15,0.12,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220914A,AV_old,0.58,0.15,0.11,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220914A,DM_ICM,265-511,,,pc cm^-3,dm_budget_90pct,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 3.2,observer frame 90% CI; cluster frame 295-568
+20220914A,DM_IGM,93,,,pc cm^-3,illustrisTNG_excl_massive_halos,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 3.2,mean; 90% CI 48-260
+20220914A,DM_MW,47,,,pc cm^-3,YMW16,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,Galactic ISM
+20220914A,DM_MW,55,,,pc cm^-3,NE2001,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,Galactic ISM
+20220914A,DM_MW,70,30,30,pc cm^-3,NE2001_YMW16_plus_halo_gaussian,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 3.2,"ISM+halo adopted as Gaussian mean 70, sigma 30 for DM budget"
+20220914A,DM_MW,54.7,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220914A,DM_MW,55.2,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220914A,DM_excess_note,>200,,,pc cm^-3,macquart_excess,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,listed among four DSA-110 FRBs with >200 pc cm^-3 excess DM over Macquart relation
+20220914A,DM_exgal,576.4,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220914A,DM_host,538,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220914A,DM_host,<20,,,pc cm^-3,upper_limit,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 3.2,prior assumption (uniform 0-20) motivated by non-detection of scattering; not a measurement
+20220914A,DM_obs,631.29,,,pc cm^-3,snr_maximizing,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220914A,DM_obs,631.05,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220914A,DM_obs,631.28,0.04,0.04,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220914A,DM_obs,631.05,0.02,0.02,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220914A,EBV_MW,0.36,,,mag,schlafly_finkbeiner,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,tabulated with a spurious minus sign in the PDF
+20220914A,EBV_MW,0.077,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220914A,L_PRS_erg_s_Hz,<1.8e29,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20220914A,M_r_abs,-18.31,0.02,0.02,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220914A,M_r_abs,-18.8,0.02,0.02,mag,prospector_sed_restframe,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220914A,M_r_abs,-18.44,0.26,0.31,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220914A,PATH_posterior,0.97,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Legacy Survey DR9"
+20220914A,PATH_posterior,0.97,,,,PATH,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Sec 2,quoted as 3% false-association probability with P(U)=0.1 (6%/8% for 509G/914A with P(U)=0.5); FRB 90% ellipse 2.0 x 1.6 arcsec (90%)
+20220914A,PATH_posterior,0.97,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter BASS r
+20220914A,RM_rad_m2,not detected,,,rad m^-2,rm_search,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1 / Sec 2.1,"no polarization detected; searched -1e6..+1e6 rad m^-2; L/I<15%, V/I<20%"
+20220914A,RM_rad_m2,not measured,,,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,insufficient L/I; sigma_RM ~0.3-1.0 rad m^-2 could depolarize (Sec 4)
+20220914A,Re_arcsec,1.278,,,arcsec,legacy_half_light,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220914A,Re_kpc,2.67,,,kpc,isophote,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,effective radius
+20220914A,Re_kpc,2.24,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220914A,SFR,0.72,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20220914A,SFR,0.72,0.2,0.15,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220914A,SFR,1.45,1.05,0.61,Msun/yr,prospector_sed_100Myr,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,recent SFR averaged over last 100 Myr
+20220914A,SFR,0.25,0.06,0.05,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220914A,SFR,0.46,0.05,0.06,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220914A,U_neb,-3.28,0.03,0.03,log,prospector_sed,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220914A,U_neb,-3.31,0.21,0.04,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220914A,circular_pol_frac,20.5,11.9,11.9,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = 11.9 +/- 11.9
+20220914A,cluster_impact_parameter_kpc,520,50,50,kpc,xray_centroid_offset,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,projected offset of host from X-ray centroid of Abell 2310
+20220914A,environment,cluster (Abell 2310),,,,desi_legacy_cluster_catalog,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 2 / Sec 2.1.1,"cluster z=0.1125, richness 124, M500=1.7e14 Msun, R500=810 kpc, LX(0.1-2.4 keV)=8.3e43 erg/s, Y5R500=0.85+/-0.35e-3 arcmin^2; host dz=-0.00129 wrt BCG (~390 km/s)"
+20220914A,environment,cluster (Abell 2310),,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,excess DM attributed to intracluster gas (Connor et al. 2023)
+20220914A,f_AGN,0.1,0.03,0.02,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20220914A,fluence_Jy_ms,2.2,,,Jy ms,dsa110,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220914A,fluence_Jy_ms,2.6,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220914A,frb_dec_deg,73.3369,,,deg,dsa110_interferometric,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220914A,frb_dec_dms,+73:20:12.9,0.73,0.73,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220914A,frb_dec_dms,+73:20:12.89,0.73,0.73,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220914A,frb_ra_deg,282.0568,,,deg,dsa110_interferometric,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220914A,frb_ra_hms,18:48:13.63,0.93,0.93,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220914A,frb_ra_hms,18:48:13.63,0.93,0.93,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Elektra
+20220914A,g_r_color,0.52,0.03,0.02,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220914A,g_r_color,0.69,0.04,0.04,mag,prospector_sed_restframe,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220914A,g_r_color,0.56,0.02,0.02,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220914A,galaxy_type,star-forming,,,,sed_sfms,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Fig 5 / Sec 4,typical star-forming galaxy on main sequence
+20220914A,galaxy_type,star-forming,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code SF
+20220914A,host_dec_deg,73.336306,,,deg,catalog_position,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.1.2,
+20220914A,host_dec_deg,73.336306,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +73:20:10.70 (J2000) in Table 2
+20220914A,host_dec_deg,73.3363,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +73:20:10.68
+20220914A,host_name,PSO J282.0585+73.3363,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220914A,host_name,J1848+73,,,,,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Sec 2,
+20220914A,host_ra_deg,282.058158,,,deg,catalog_position,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.1.2,converted from 18:48:13.9580 +73:20:10.703
+20220914A,host_ra_deg,282.058158,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 18:48:13.958 (J2000) in Table 2
+20220914A,host_ra_deg,282.058208,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 18:48:13.97
+20220914A,inclination_deg,45,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220914A,inclination_deg,46,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220914A,line_fluxes_note,see notes,,,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,"two values tabulated (9.0(2)e-17, 7.5(2)e-17); columns ambiguous"
+20220914A,linear_pol_frac,16.3,14.0,14.0,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220914A,logMstar,9.48,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 0.30 x 1e10 Msun; converted to log10
+20220914A,logMstar,9.99,0.09,0.09,log10 Msun,prospector_sed,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.1.2,
+20220914A,logMstar,9.48,0.07,0.09,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy"
+20220914A,logMstar,9.99,0.09,0.09,log10 Msun,prospector_sed,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,non-parametric SFH; 16/50/84 percentiles
+20220914A,logMstar,9.24,0.08,0.04,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20220914A,log_sSFR,-9.62,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220914A,log_sSFR,-0.82,0.2,0.22,log10 Gyr^-1,prospector_sed_100Myr,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,NOTE unit is log(Gyr^-1) as tabulated; subtract 9 for log(yr^-1)
+20220914A,luminosity_distance_Mpc,534.94,,,Mpc,cosmology,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220914A,luminosity_distance_Mpc,534.94,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220914A,m_W1,18.88,0.09,0.09,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220914A,m_W2,19.41,0.13,0.13,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220914A,m_g,20.55,0.04,0.04,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220914A,m_g,20.69,0.2,0.2,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20220914A,m_i,19.8,0.03,0.03,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220914A,m_r,19.77,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220914A,m_r,20.05,0.04,0.04,AB mag,catalog_legacy,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Legacy Survey DR9
+20220914A,m_r,20.2,0.19,0.19,AB mag,bass_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter BASS r; corrected for MW extinction (E(B-V)=0.077)
+20220914A,m_r,20.05,0.04,0.04,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220914A,m_r,20.2,0.19,0.19,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20220914A,m_z,19.73,0.02,0.02,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220914A,m_z,19.7,0.18,0.18,AB mag,mzls_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey MzLS
+20220914A,metallicity_logZ,-0.92,0.04,0.03,log(Z/Zsun),prospector_sed,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220914A,metallicity_logZ,-0.44,0.08,0.12,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220914A,morphology,late-type spiral,,,,visual,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.1.2,several starbursts over last 3.5 Gyr
+20220914A,offset_kpc,9.87,,,kpc,projected_offset,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,projected physical offset from galaxy center
+20220914A,offset_kpc,5.54,2.94,2.51,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220914A,polarization_subgroup,1i,,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220914A,q_PAH,1.43,0.81,0.59,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20220914A,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220914A,sSFR_per_Gyr,0.17,0.03,0.03,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220914A,snr,13.4,,,,dsa110,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.1,
+20220914A,snr,9.6,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220914A,snr,17.43,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220914A,tau_AGN,11.95,5.57,4.7,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20220914A,tau_scatt_ms,<0.080,,,ms,upper_limit,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,referenced to 1.4 GHz
+20220914A,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220914A,tm_Gyr,7.5,1.86,1.5,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220914A,tm_Gyr,4.55,0.29,0.28,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220914A,u_r_color,2.14,0.1,0.11,mag,prospector_sed_restframe,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,
+20220914A,u_r_color,1.75,0.07,0.08,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220914A,width_ms,0.14,,,ms,fwhm,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Sec 2.1,pulse FWHM 140 us
+20220914A,width_ms,0.5,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220914A,z,0.1139,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20220914A,z,0.1139,,,,spec_z,connor2023,2302.14788,10.3847/2041-8213/acd3ea,Table 1,
+20220914A,z,0.1138,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220914A,z,0.1139,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Keck/LRIS (blue side)"
+20220914A,z,0.1139,0.0001,0.0001,,spec_z,sharma2023,2302.14782,10.3847/1538-4357/accf1d,Table 2,"Keck-I/LRIS, pPXF"
+20220914A,z,0.1139,0.0001,0.0001,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220914A,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Keck/LRIS (blue side)
+20220920A,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20220920A,AV,0.47,0.09,0.09,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20220920A,AV_old,0.56,0.03,0.03,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20220920A,B_parallel_host_uG,-12.29,5.08,4.34,uG,1.23*RM_host/DM_host,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220920A,DM_MW,39.9,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20220920A,DM_MW,40.3,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20220920A,DM_exgal,275.1,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20220920A,DM_host,170,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20220920A,DM_host,136.33,57.15,62.41,pc cm^-3,dm_budget_pdf_NE2001_halo0-20_zhang2021IGM,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,expectation value of DM_host PDF (Connor+2023 method); eq. 5 is written for DM_host/(1+z) so frame is ambiguous
+20220920A,DM_obs,315.0,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220920A,DM_obs,314.99,0.01,0.01,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20220920A,DM_obs,315.0,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220920A,DM_obs,315.0,0.06,0.06,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20220920A,EBV_MW,0.028,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20220920A,Halpha_flux,1.08e-15,,,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,"Hbeta 3.41e-16, [OIII]5007 1.5(3)e-16, [NII]6584 3.1(1)e-16; uncorrected"
+20220920A,L_PRS_erg_s_Hz,<3.6e29,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20220920A,M_r_abs,-19.96,0.02,0.01,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220920A,M_r_abs,-20.02,0.11,0.42,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20220920A,PATH_posterior,0.99,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Legacy Survey DR9"
+20220920A,PATH_posterior,0.98,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter BASS r
+20220920A,RM_MW,0.72,13.12,13.12,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20220920A,RM_host,-1117.08,20.83,20.83,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20220920A,RM_ion,1.6,0.09,0.09,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20220920A,RM_rad_m2,-830.25,8.29,8.29,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20220920A,RM_rad_m2,-830.3,8.3,8.3,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20220920A,Re_arcsec,2.116,,,arcsec,legacy_half_light,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20220920A,Re_kpc,4.56,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20220920A,SFR,4.1,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20220920A,SFR,4.1,1.09,1.0,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20220920A,SFR,0.42,0.04,0.04,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20220920A,SFR,1.62,0.2,0.21,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20220920A,U_neb,-3.24,0.06,0.07,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20220920A,circular_pol_frac,19.7,8.1,8.1,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = -14.9 +/- 8.1
+20220920A,f_AGN,0.1,0.01,0.01,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20220920A,fluence_Jy_ms,3.9,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20220920A,frb_dec_dms,+70:55:07.7,0.6,0.6,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220920A,frb_dec_dms,+70:55:07.68,0.6,0.6,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20220920A,frb_ra_hms,16:01:01.70,1.02,1.02,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20220920A,frb_ra_hms,16:01:01.70,1.02,1.02,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Etienne
+20220920A,g_r_color,0.48,0.02,0.01,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20220920A,g_r_color,0.53,0.01,0.01,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20220920A,galaxy_type,star-forming,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code SF
+20220920A,host_dec_deg,70.918069,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +70:55:05.05 (J2000) in Table 2
+20220920A,host_dec_deg,70.918069,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +70:55:05.05
+20220920A,host_name,PSO J240.2568+70.9180,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20220920A,host_ra_deg,240.256808,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 16:01:01.634 (J2000) in Table 2
+20220920A,host_ra_deg,240.256792,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 16:01:01.63
+20220920A,inclination_deg,27,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20220920A,inclination_deg,29,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20220920A,linear_pol_frac,89.0,16.2,16.2,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20220920A,logMstar,9.81,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 0.65 x 1e10 Msun; converted to log10
+20220920A,logMstar,9.81,0.08,0.04,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy"
+20220920A,logMstar,9.87,0.01,0.01,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20220920A,log_sSFR,-9.2,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20220920A,luminosity_distance_Mpc,764.62,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20220920A,m_W1,18.15,0.03,0.03,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220920A,m_W2,18.52,0.04,0.04,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220920A,m_W3,16.9,0.06,0.06,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20220920A,m_g,19.59,0.07,0.07,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220920A,m_g,19.65,0.2,0.2,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20220920A,m_i,18.96,0.06,0.06,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220920A,m_r,18.16,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20220920A,m_r,19.46,0.03,0.03,AB mag,catalog_legacy,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Legacy Survey DR9
+20220920A,m_r,19.43,0.2,0.2,AB mag,bass_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter BASS r; corrected for MW extinction (E(B-V)=0.028)
+20220920A,m_r,19.46,0.03,0.03,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),"MW-extinction-corrected AB mag; survey PS1; tabulated with filter label 'g' (second g row) but value matches Law+2024 PS1 r = 19.46, so interpreted as r"
+20220920A,m_r,19.43,0.2,0.2,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20220920A,m_y,18.54,0.07,0.07,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220920A,m_z,18.99,0.05,0.05,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20220920A,m_z,19.05,0.19,0.19,AB mag,mzls_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey MzLS
+20220920A,metallicity_logZ,-0.37,0.07,0.08,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20220920A,offset_kpc,7.32,2.97,2.4,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20220920A,polarization_subgroup,1 (Consistent with 100%),,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20220920A,q_PAH,5.24,0.76,0.63,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20220920A,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20220920A,sSFR_per_Gyr,0.14,0.02,0.02,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20220920A,snr,14.4,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220920A,snr,18.88,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20220920A,tau_AGN,5.34,0.36,0.24,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20220920A,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20220920A,tm_Gyr,3.86,1.56,0.89,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20220920A,tm_Gyr,4.27,0.27,0.29,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20220920A,u_r_color,1.52,0.02,0.02,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20220920A,width_ms,0.5,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20220920A,z,0.1582,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20220920A,z,0.1585,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20220920A,z,0.158239,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Hale/DBSP"
+20220920A,z,0.1582,0.0002,0.0002,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20220920A,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Hale/DBSP
+20221012A,AGN_in_SED,Y,,,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,whether an AGN dust component was included
+20221012A,AV,0.21,0.05,0.04,mag,prospector_sed_young,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,young (dust attenuation of young stellar light)"
+20221012A,AV_old,0.21,0.05,0.04,mag,prospector_sed_old,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"A_V,old"
+20221012A,B_parallel_host_uG,3.27,0.65,1.96,uG,1.23*RM_host/DM_host,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20221012A,DM_MW,54.4,,,pc cm^-3,NE2001_plus_halo_connor2025,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),paper states NE2001 ISM plus halo; tabulated values are lower than Law+2024 NE2001 ISM for some sightlines (e.g. 76.0 vs 79.3 for 20220207C)
+20221012A,DM_MW,54.4,,,pc cm^-3,NE2001,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,Galactic ISM only (no halo)
+20221012A,DM_excess_note,>200,,,pc cm^-3,macquart_excess,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.1,listed among four DSA-110 FRBs with >200 pc cm^-3 excess DM over Macquart relation
+20221012A,DM_exgal,387.8,,,pc cm^-3,DM_obs-DM_MW,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),DM_ex = DM_obs - DM_MW
+20221012A,DM_host,190,,,pc cm^-3,DM_obs-NE2001-macquart_median,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,fiducial MW ISM (NE2001) and median Macquart-relation IGM subtracted from discovery-paper DM
+20221012A,DM_host,162.95,78.21,85.64,pc cm^-3,dm_budget_pdf_NE2001_halo0-20_zhang2021IGM,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,expectation value of DM_host PDF (Connor+2023 method); eq. 5 is written for DM_host/(1+z) so frame is ambiguous
+20221012A,DM_obs,442.2,,,pc cm^-3,dsa110,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),
+20221012A,DM_obs,441.08,0.7,0.7,pc cm^-3,snr_maximizing,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DM maximizing S/N of brightest component
+20221012A,DM_obs,442.2,,,pc cm^-3,dsa110,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20221012A,DM_obs,441.2,0.26,0.26,pc cm^-3,structure_optimized,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,differs slightly from Law+2024 Table 1 S/N-maximizing DM
+20221012A,EBV_MW,0.057,,,mag,schlafly_finkbeiner,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,Milky Way E(B-V)
+20221012A,L_PRS_erg_s_Hz,<1.4e30,,,erg s^-1 Hz^-1,upper_limit,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"VLASS 3 GHz, 3-sigma 0.5 mJy"
+20221012A,M_r_abs,-20.94,0.01,0.01,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20221012A,M_r_abs,-20.93,0.14,0.13,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,rest-frame M_r^0
+20221012A,PATH_posterior,1.0,,,,PATH,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,"astropath P(host); priors exp/inverse, P(U)=0.2 (PS1) or 0.1 (Legacy); catalog = Legacy Survey DR9"
+20221012A,PATH_posterior,0.99,,,,PATH,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,computed on filter BASS r
+20221012A,RM_MW,3.07,12.45,12.45,rad m^-2,hutschenreuter2022,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,
+20221012A,RM_host,265.86,35.62,35.62,rad m^-2,(RM-RM_MW-RM_ion)(1+z)^2,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,host rest frame; RM_IGM neglected
+20221012A,RM_ion,1.69,0.13,0.13,rad m^-2,ionFR,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,ionospheric RM
+20221012A,RM_rad_m2,165.7,17.66,17.66,rad m^-2,rm_synthesis,sherman2023,2308.06816,10.3847/2041-8213/ad0380,Table 1,observer frame
+20221012A,RM_rad_m2,165.7,17.7,17.7,rad m^-2,rm_synthesis,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,observer frame
+20221012A,Re_arcsec,3.096,,,arcsec,legacy_half_light,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,column 'r_e'; for PS1 sources the r-band Kron radius is used as the size proxy (Sec 2.3)
+20221012A,Re_kpc,5.48,,,kpc,sed_table,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,effective radius
+20221012A,SFR,0.15,,,Msun/yr,literature_0-100Myr,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,SFR_0-100Myr taken from [15] Law+2024
+20221012A,SFR,0.15,0.04,0.03,Msun/yr,prospector_sed_100Myr,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,SFR averaged over last 100 Myr
+20221012A,SFR,0.19,0.08,0.06,Msun/yr,prospector_sed_20Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 20 Myr
+20221012A,SFR,0.18,0.1,0.07,Msun/yr,prospector_sed_100Myr,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,SFR averaged over 100 Myr
+20221012A,U_neb,-3.16,0.29,0.34,log,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,nebular ionization parameter
+20221012A,circular_pol_frac,25.7,11.0,11.0,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,|V|/I; signed V/I = 0.6 +/- 10.9
+20221012A,f_AGN,0.79,0.17,0.16,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN dust emission fraction (Nenkova+2008 model)
+20221012A,fluence_Jy_ms,5.1,,,Jy ms,dsa110_90pct_flux,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,"fluence containing 90% of flux, 1.4 GHz"
+20221012A,frb_dec_dms,+70:31:27.2,0.74,0.74,dms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20221012A,frb_dec_dms,+70:31:27.15,0.74,0.74,dms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,
+20221012A,frb_ra_hms,18:43:11.69,1.12,1.12,hms / arcsec err,dsa110_interferometric,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,DSA-110 burst position; 1-sigma (stat+sys) error in arcsec
+20221012A,frb_ra_hms,18:43:11.69,1.12,1.12,hms / arcsec err,dsa110_interferometric,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,90% localization uncertainty in arcsec; nickname Juan
+20221012A,g_r_color,1.5,0.01,0.01,mag,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,
+20221012A,g_r_color,1.52,0.01,0.01,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(g-r)^0 rest frame
+20221012A,galaxy_type,"massive, low-SFR, old (quiescent)",,,,sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 4.2,
+20221012A,galaxy_type,quiescent,,,,sed_ssfr_class,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,class code Q
+20221012A,host_dec_deg,70.524222,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from +70:31:27.2 (J2000) in Table 2
+20221012A,host_dec_deg,70.524183,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from +70:31:27.06
+20221012A,host_name,PSO J280.8014+70.5242,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,
+20221012A,host_ra_deg,280.80125,,,deg,catalog_position,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,converted from 18:43:12.3 (J2000) in Table 2
+20221012A,host_ra_deg,280.801417,,,deg,catalog_position,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,converted from 18:43:12.34
+20221012A,inclination_deg,45,1,1,deg,parametric_profile_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg; r-band PS1 DR2 or DESI DR10 image (boldface flag not recoverable from PDF text)
+20221012A,inclination_deg,46,1,1,deg,elliptical_isophote_fit,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,1-sigma ~1 deg
+20221012A,line_fluxes_note,see notes,,,erg s^-1 cm^-2,ppxf,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 5,"two values tabulated (1.00(4)e-16, 2.0(3)e-17); columns ambiguous"
+20221012A,linear_pol_frac,63.0,21.4,21.4,%,dsa110_polarimetry,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,L/I
+20221012A,logMstar,10.99,,,log10 Msun,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,tabulated as Mass = 9.77 x 1e10 Msun; converted to log10
+20221012A,logMstar,10.99,0.02,0.02,log10 Msun,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"non-parametric continuity SFH, 7 bins, Chabrier IMF; photometry: PS1 grizy, 2MASS HKs, ALLWISE W1W2"
+20221012A,logMstar,10.96,0.02,0.02,log10 Msun,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,median and 68% CI; non-parametric SFH; AGN component included: Y
+20221012A,log_sSFR,-11.81,,,log10 yr^-1,literature,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,
+20221012A,luminosity_distance_Mpc,1480.38,,,Mpc,cosmology,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,
+20221012A,m_H,17.83,0.07,0.07,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20221012A,m_J,17.79,0.11,0.11,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20221012A,m_Ks,17.9,0.09,0.09,AB mag,2mass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey 2MASS
+20221012A,m_W1,17.83,0.05,0.05,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20221012A,m_W2,18.24,0.05,0.05,AB mag,allwise_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey ALLWISE
+20221012A,m_g,20.81,0.02,0.02,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20221012A,m_g,21.13,0.2,0.2,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20221012A,m_i,19.04,0.02,0.02,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20221012A,m_r,19.14,,,AB mag,bhardwaj2024_photometry,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,host m_r as tabulated; differs from Law+2024/Sharma+2024 catalog values for several hosts
+20221012A,m_r,19.67,0.03,0.03,AB mag,catalog_legacy,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 2,r-band magnitude used for PATH; catalog = Legacy Survey DR9
+20221012A,m_r,19.64,0.19,0.19,AB mag,bass_mw_extinction_corrected,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,filter BASS r; corrected for MW extinction (E(B-V)=0.057)
+20221012A,m_r,19.67,0.03,0.03,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20221012A,m_r,19.64,0.19,0.19,AB mag,bass_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey BASS
+20221012A,m_y,18.54,0.02,0.02,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20221012A,m_z,18.84,0.03,0.03,AB mag,ps1_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey PS1
+20221012A,m_z,18.75,0.19,0.19,AB mag,mzls_photometry,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Supplementary Table (photometry log),MW-extinction-corrected AB mag; survey MzLS
+20221012A,metallicity_logZ,0.18,0.01,0.02,log(Z/Zsun),prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,stellar metallicity
+20221012A,offset_kpc,14.14,8.15,7.16,kpc,projected_offset,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,projected galactocentric offset of FRB; uncertainties dominated by localization
+20221012A,polarization_subgroup,1 (marginal; derotated at reported RM),,,,sherman2024_classification,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 3,
+20221012A,q_PAH,5.03,1.1,1.14,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,PAH grain fraction
+20221012A,repeater,no,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Sec 3.1,no repeats on >1 s timescales in ~150 h nominal exposure during 2022
+20221012A,sSFR_per_Gyr,0.0,0.01,0.0,Gyr^-1,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,"specific SFR as tabulated (linear, Gyr^-1)"
+20221012A,snr,9.4,,,,dsa110_search,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20221012A,snr,9.33,,,,dsa110_polarimetry_downsampled,sherman2024,2308.06813,10.3847/1538-4357/ad275e,Table 2,S/N at optimal time/frequency downsampling
+20221012A,tau_AGN,124.86,17.34,23.25,,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,AGN torus optical depth
+20221012A,telescope_localization,DSA-110,,,,,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,
+20221012A,tm_Gyr,6.75,0.56,0.41,Gyr,prospector_sed,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,mass-weighted stellar age
+20221012A,tm_Gyr,6.74,0.26,0.21,Gyr,prospector_sed,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,mass-weighted age
+20221012A,u_r_color,3.4,0.07,0.07,mag,prospector_sed_restframe,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 2,(u-r)^0 rest frame
+20221012A,width_ms,2.0,,,ms,boxcar,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 1,temporal boxcar width maximizing S/N
+20221012A,z,0.2847,,,,spec_z,bhardwaj2024,2408.01876,10.1038/s41586-024-08065-w,Table 1,from [15] Law+2024
+20221012A,z,0.284,,,,spec_z_compiled,connor2025,2409.16952,10.1038/s41550-025-02566-y,Supplementary Table (FRB sample),0.2840 vs Law+2024 0.284669
+20221012A,z,0.284669,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3,"pPXF redshift; >=3 emission lines, pPXF; spectrograph Keck/LRIS (blue side)"
+20221012A,z,0.2847,0.0001,0.0001,,spec_z,sharma2024,2409.16964,10.1038/s41586-024-08074-9,Extended Data Table 1,pPXF
+20221012A,z_type,spec,,,,spec_z,law2024,2307.03344,10.3847/1538-4357/ad3736,Table 3 / Sec 2.5,Keck/LRIS (blue side)

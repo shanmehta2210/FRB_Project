@@ -1,0 +1,16 @@
+{
+  "query_ra_deg": 342.21652331900407,
+  "query_dec_deg": 70.6805464157147,
+  "search_radius_arcsec": 3.0,
+  "queried_utc": "2026-08-04T21:24:53+00:00",
+  "status": "ok",
+  "survey": "PS1_DR1",
+  "band": "r",
+  "mag": 19.4179,
+  "mag_err": 0.0411,
+  "mag_type": "kron_rKmag",
+  "ra_deg": 342.21547611,
+  "dec_deg": 70.68047045,
+  "sep_arcsec": 1.277,
+  "coord_source": "host_components.csv"
+}

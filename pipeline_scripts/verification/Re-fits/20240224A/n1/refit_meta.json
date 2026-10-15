@@ -1,0 +1,23 @@
+{
+  "frb": "20240224A",
+  "host_xy_fixed": false,
+  "label": "n1",
+  "moffat": null,
+  "moffat_added": false,
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 20.0968,
+    "n": 2.364,
+    "pa": -58.0833,
+    "q": 0.7373,
+    "re": 3.4708
+  },
+  "production_sky_adu": 2.3355,
+  "psf": null,
+  "psf_added": false,
+  "psf_xy_fixed": false,
+  "sersic": null,
+  "sersic_added": false,
+  "sky_fixed_adu": null,
+  "star_cut": null
+}

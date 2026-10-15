@@ -1,0 +1,17 @@
+{
+  "sky_ref_adu": 1.8639631,
+  "sky_ref_source": "host_row",
+  "sky_tolerance_adu": 3.0,
+  "sky_pass1_adu": 2.34,
+  "sky_pass2_adu": null,
+  "sky_final_adu": 2.34,
+  "retried": false,
+  "passed": true,
+  "galfit_pass1_ok": true,
+  "galfit_pass2_ok": null,
+  "failure_reason": null,
+  "host_number": 741,
+  "snr_win": 58.059486,
+  "snr_auto": 52.00319698546539,
+  "mag_40px_inst": -12.142666
+}

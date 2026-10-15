@@ -1642,3 +1642,159 @@ Lotz+2008: **late**. Mag vs LS: \(\Delta m_{\rm ref-m}=+0.33\).
 
 ### Decision
 **CONFIRMED** (user re-confirm after brief reject). Inclined late-type; \(q\) locked. Completes the 64-host triage.
+
+---
+
+# Verdi+2026 additions (2026-10-11; PS1 DR2 imaging, $\delta>+70^\circ$)
+
+Three DSA-110 hosts newly published in Verdi et al. (2026, arXiv:2609.30616;
+Table A1 localizations, Keck/LRIS redshifts, astropath $P>0.9$). No Legacy
+coverage at these declinations, so all three ran on PS1 DR2 $r$ stacks
+(reprojected to the standard $0.262''$ grid; PSFEx FWHM $\approx 4.3$ px $=1.1''$).
+Phase 2 calibrated on 86–233 PS1 stars ($\sigma_{\rm ZP}=0.05$); AstroPath
+$P(O)\ge 0.998$ for all three. Production now 67 hosts.
+
+## 20230913G — recommend REJECT (too unresolved / way too small $q$)
+
+**Panel:** `outputs/panels/20230913G.png`
+
+### Host character
+$z=0.3024$. $m=21.14$ (PS1 Kron 21.28), $R_e=1.5$ px (**floor**),
+$R_e/\mathrm{FWHM}\approx 0.36$, SNR $\sim 1.6$ per px. $q=0.042\pm 0.11$
+(**far below** cut; not in science cut), $n=4.4\pm 8.7$. PS1 $r_{\rm ext}=1.8\sigma$:
+star-like at PS1 resolution.
+
+### Geometry
+| test | result | reading |
+|---|---|---|
+| AstroPhot | $q_{\rm AP}\approx 0.011$; $\Delta q=-0.031$ | Both needles |
+| Sky $\pm1\sigma$ | $q_\pm=0.042$ | No leverage |
+| Isophotes | 1 annulus | No leverage |
+| Fourier | unusable | ignore |
+
+### Decision
+**REJECTED.** Same class as 20200430A / 20220717A: unresolved needle, $q$ meaningless.
+Outside the $b/a>0.2$ cut anyway.
+
+---
+
+## 20240203D — recommend REJECT (too unresolved; $R_e$ floor on every leg)
+
+**Panel:** `outputs/panels/20240203D.png`; legs `Re-fits/20240203D/{n1,sky,n1_sky}/panel.png`
+
+### Host character
+$z=0.074$. $m=18.84$ (PS1 Kron 18.99), $R_e=1.5$ px (**floor**, $0.39''\approx 0.55$ kpc),
+$R_e/\mathrm{FWHM}\approx 0.35$, SNR $\sim 13$ per px. $q=0.782\pm 0.027$, PA $=-36.8^\circ$,
+$n=4.28$. In science cut. Trust tier C.
+
+### Geometry
+| test | result | reading |
+|---|---|---|
+| AstroPhot | $q_{\rm AP}=0.86$; $\Delta q=+0.078$ ($2.9\sigma$) | Disagrees |
+| Sky $\pm1\sigma$ | $q_+=0.777$, $q_-=0.855$ ($\Delta q/\sigma_q=2.7$) | Sky-sensitive |
+| Isophotes | data $q(2R_e)\approx 0.88$ vs model $0.90$; inner $\lvert\Delta q\rvert$ up to 0.08 | Observed shape set by PSF |
+| Fourier | $\delta q=-0.37\pm 0.13$ inner, unusable | PSF-dominated |
+| Re-fit legs | n1: $R_e=1.5$, $q=0.80$; sky: $R_e=1.5$, $q=0.78$; n1_sky: $R_e=1.5$, $q=0.80$ | $R_e$ never leaves the floor |
+
+### Decision
+**REJECTED.** Bright but unresolved at PS1 resolution; $R_e$ pegged at the floor on
+production and all three standard legs, so $q$ is a PSF-trap value (same reasoning as
+20230708A / 20240310A). Needs better imaging before an inclination can be quoted.
+
+---
+
+## 20240224A — CONFIRMED (resolution caveat; quiescent host caveat)
+
+**Panel:** `outputs/panels/20240224A.png`; legs `Re-fits/20240224A/{n1,sky,n1_sky}/panel.png`
+
+### Host character
+$z=0.3726$. $m=20.10$ (PS1 Kron 20.30), $R_e=3.5$ px ($0.91''\approx 4.7$ kpc),
+$R_e/\mathrm{FWHM}\approx 0.77$, SNR $\sim 2.5$ per px. $q=0.737\pm 0.061$, PA $=-58.1^\circ$,
+$n=2.36\pm 0.48$. In science cut. Trust tier A. Lotz+2008: late.
+Spectrum (Verdi+2026 Fig. A2) is absorption-line only; PS1 $g-i\approx 3.4$: quiescent.
+
+### Geometry
+| test | result | reading |
+|---|---|---|
+| AstroPhot | $q_{\rm AP}=0.728$; $\Delta q=-0.010$ | Agree |
+| Sky $\pm1\sigma$ | $q_+=0.726$, $q_-=0.787$ ($\Delta q/\sigma_q=0.8$) | Stable |
+| Isophotes | data $q(1R_e)\approx 0.98\pm 0.1$ vs model $0.89$ | Consistent within the large data errors |
+| Fourier | $\delta q=+0.10\pm 0.11$ | No bias |
+| Re-fit legs | n1: $R_e=2.9$, $q=0.742$; sky: $R_e=4.3$, $n=3.3$, $q=0.756$; n1_sky: $R_e=3.1$, $q=0.746$ | $q$ locked at 0.73–0.76 |
+
+### Residual morphology
+- $\chi^2/\nu|_{2R_e,\rm corr}=1.24$; $\mathrm{RFF}_{2R_e}=0.000\pm 0.012$ — clean. A faint source $2.5''$ NW is masked.
+
+### Decision
+**CONFIRMED** on production (same class as 20180924B: barely resolved, $q$ stable on
+every leg and in AstroPhot). Caveats: $R_e/\mathrm{FWHM}<1$, and this is the only
+absorption-line (quiescent) host in the confirmed set — the thin-disk inclination
+reading of $q$ is doubtful for an early-type; flag in the paper table.
+
+---
+
+## 20240525A — CONFIRMED (Gordon+2025 host; LS imaging)
+
+**Panel:** `outputs/panels/20240525A.png`; legs `Re-fits/20240525A/{n1,sky,n1_sky}/panel.png`
+
+### Host character
+$z=0.3266$ (Gordon et al. 2025). $m=19.86$ (PS1 ref 19.93; Marnoch+2026 VLT $R$ 19.96),
+$R_e=6.6$ px ($1.74''$), $R_e/\mathrm{FWHM}=1.45$, SNR $\sim 3$ per px. $q=0.365\pm 0.004$,
+PA $=-2.2^\circ$, $n=0.55$. In science cut. Trust tier A. Lotz+2008: late.
+
+### Geometry
+| test | result | reading |
+|---|---|---|
+| AstroPhot | $q_{\rm AP}=0.357$; $\Delta q=-0.009$ | Agree |
+| Sky $\pm1\sigma$ | $q_+=0.364$, $q_-=0.367$ | Stable |
+| Isophotes | data $q(1R_e)=0.45$ vs model $0.50$ (PSF-convolved) | Consistent |
+| Fourier | $\delta q=-0.046\pm 0.013$ | Small; $q_{\rm corr}=0.32$ |
+| Re-fit legs | sky: $q=0.37$, $n=0.60$; n1: $q=0.36$; n1_sky: $q=0.37$ | $q$ locked at 0.36–0.37 |
+
+### Residual morphology
+- $\chi^2/\nu|_{2R_e,\rm corr}=1.90$; $\mathrm{RFF}_{2R_e}=0.012\pm 0.004$. A faint diffuse
+  residual $\sim 1.5R_e$ NW (companion or tidal feature) and a masked star NE.
+
+### Decision
+**CONFIRMED** on production. Marnoch+2026 measure $q=0.273$ on deeper VLT/FORS2 imaging;
+ours is rounder by 0.09 but stable on every leg. Second-largest VLT–LS discrepancy in the
+overlap; flag for the depth-comparison note.
+
+---
+
+## 20240615B — CONFIRMED (Gordon+2025 host; LS imaging)
+
+**Panel:** `outputs/panels/20240615B.png`; legs `Re-fits/20240615B/{n1,sky,n1_sky}/panel.png`
+
+### Host character
+$z=0.073$ (Gordon et al. 2025). $m=15.92$ (PS1 ref 16.29; Marnoch+2026 $R$ 16.02),
+$R_e=17.6$ px ($4.6''\approx 6.4$ kpc), $R_e/\mathrm{FWHM}=4.1$, SNR $\sim 16$ per px.
+$q=0.940\pm 0.002$, PA $=-41^\circ$, $n=1.42$. Bright face-on grand-design spiral (Gordon+2025
+flag spiral structure). In science cut. Trust tier A. Lotz+2008: late.
+
+### Geometry
+| test | result | reading |
+|---|---|---|
+| AstroPhot | $q_{\rm AP}=0.939$; $\Delta q=0.000$ | Agree |
+| Sky $\pm1\sigma$ | $q_\pm=0.940$ | Stable |
+| Isophotes | data $q(1R_e)=0.85$ (arm-dominated) vs model $0.94$; $q(2R_e)=0.96$ | Consistent outside the arms |
+| Fourier | $\delta q=-0.016\pm 0.001$ | Negligible |
+| Re-fit legs | sky: $q=0.94$; n1: $q=0.93$; n1_sky: $q=0.93$ | $q$ locked |
+
+### Residual morphology
+- $\chi^2/\nu|_{2R_e,\rm corr}=32.8$; $\mathrm{RFF}_{2R_e}=0.124$ — both flagged, both driven by
+  two spiral arms and a bar-like inner $m=2$ residual, not by the axis ratio. Same class as the
+  other bright face-on spirals in the confirmed set.
+
+### Decision
+**CONFIRMED** on production. Marnoch+2026 VLT $q=0.938$ — exact agreement.
+
+---
+
+## 20191228A — REJECTED (host not detected in Legacy Survey imaging)
+
+Bhandari+2022 host at 22:57:43.30, $-29$:35:38.7, $M_r=-18.26$ at $z=0.2432$ ($m_r\approx 22.3$).
+Phase 3a finds no galaxy within $5''$ of the host position in the LS cutout; the only nearby
+detection is a star-like source at $6.5''$. Marnoch+2026 fit it at $I=21.64$ on VLT/FORS2.
+Fails $m_r\le 22$ regardless. Not pursued.
+

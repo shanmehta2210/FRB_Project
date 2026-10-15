@@ -1,0 +1,88 @@
+{
+  "frb": "20221219A",
+  "legs": {
+    "n1": {
+      "fit": {
+        "converged": true,
+        "mag": 21.9464,
+        "n": 1.0,
+        "pa": -0.2674,
+        "q": 0.4014,
+        "q_err": 0.0728,
+        "re": 3.726,
+        "sky": 0.0007251,
+        "status": "ok"
+      },
+      "panel": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221219A\\panel_n1.png",
+      "runtime_s": 8.5,
+      "status": "ok",
+      "verification": {
+        "astrophot": "ok",
+        "chi2": "ok",
+        "fourier": "ok",
+        "isophote": "ok",
+        "mag": "ok",
+        "psf": "ok",
+        "rff": "ok",
+        "sky": "ok",
+        "visual": "ok"
+      }
+    },
+    "n1_sky": {
+      "fit": {
+        "converged": true,
+        "mag": 21.7248,
+        "n": 1.0,
+        "pa": -1.4705,
+        "q": 0.4996,
+        "q_err": 0.0467,
+        "re": 4.7697,
+        "sky": 6.327e-05,
+        "status": "ok"
+      },
+      "panel": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221219A\\panel_n1_sky.png",
+      "runtime_s": 10.0,
+      "status": "ok",
+      "verification": {
+        "astrophot": "ok",
+        "chi2": "ok",
+        "fourier": "ok",
+        "isophote": "ok",
+        "mag": "ok",
+        "psf": "ok",
+        "rff": "ok",
+        "sky": "ok",
+        "visual": "ok"
+      }
+    },
+    "sky": {
+      "fit": {
+        "converged": true,
+        "mag": 20.8058,
+        "n": 6.0,
+        "pa": -30.5963,
+        "q": 0.3798,
+        "q_err": 0.0388,
+        "re": 23.1935,
+        "sky": 6.327e-05,
+        "status": "ok"
+      },
+      "panel": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221219A\\panel_sky.png",
+      "runtime_s": 14.1,
+      "status": "ok",
+      "verification": {
+        "astrophot": "ok",
+        "chi2": "ok",
+        "fourier": "ok",
+        "isophote": "ok",
+        "mag": "ok",
+        "psf": "ok",
+        "rff": "ok",
+        "sky": "ok",
+        "visual": "ok"
+      }
+    }
+  },
+  "panel_production": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221219A\\panel_production.png",
+  "sky_protocol_adu": 6.327033770503476e-05
+}

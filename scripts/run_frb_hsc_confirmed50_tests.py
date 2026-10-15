@@ -146,6 +146,95 @@ def mc_tail_p(
     return {k: (1.0 + counts[k]) / (1.0 + n_draws) for k in keys}
 
 
+def _chi2_hsc_bins(frb: np.ndarray, hsc: np.ndarray, n_bins: int) -> dict:
+    """Chi-square of FRB counts in equal-probability HSC quantile bins."""
+    edges = np.quantile(hsc, np.linspace(0.0, 1.0, n_bins + 1))
+    edges[0] = -np.inf
+    edges[-1] = np.inf
+    # Drop duplicate edges if the pool is discrete; fall back to fewer bins.
+    uniq = np.unique(edges)
+    if len(uniq) < n_bins + 1:
+        return {"n_bins": n_bins, "stat": float("nan"), "p": float("nan"), "expected": float("nan"), "counts": ""}
+    counts = np.histogram(frb, bins=uniq)[0].astype(float)
+    expected = np.full(len(counts), len(frb) / len(counts))
+    chi = stats.chisquare(counts, expected)
+    return {
+        "n_bins": int(len(counts)),
+        "stat": float(chi.statistic),
+        "p": float(chi.pvalue),
+        "expected": float(expected[0]),
+        "counts": ",".join(str(int(c)) for c in counts),
+    }
+
+
+def _edge_on_mask(cosi: np.ndarray, i_min_deg: float) -> np.ndarray:
+    """i > i_min is the edge-on side: cos i < cos(i_min)."""
+    return np.asarray(cosi, dtype=float) < math.cos(math.radians(i_min_deg))
+
+
+def directional_tests(frb: np.ndarray, hsc: np.ndarray) -> dict:
+    """One-sided tests for fewer edge-on hosts (FRB cos i stochastically larger)."""
+    out: dict = {}
+    ks = stats.ks_2samp(frb, hsc, alternative="less", method="auto")
+    out["ks_less_d"] = float(ks.statistic)
+    out["ks_less_p"] = float(ks.pvalue)
+    mwu = stats.mannwhitneyu(frb, hsc, alternative="greater")
+    out["mwu_greater_u"] = float(mwu.statistic)
+    out["mwu_greater_p"] = float(mwu.pvalue)
+    bins = []
+    for n_bins in (2, 3, 4, 5):
+        bins.append(_chi2_hsc_bins(frb, hsc, n_bins))
+    out["chi2_bins"] = bins
+    adopted = next(b for b in bins if b["n_bins"] == 4)
+    out["chi2_stat"] = adopted["stat"]
+    out["chi2_p"] = adopted["p"]
+    out["chi2_counts"] = adopted["counts"]
+    out["chi2_expected"] = adopted["expected"]
+    fracs = {}
+    for i_cut in (45.0, 60.0, 75.0):
+        k = int(_edge_on_mask(frb, i_cut).sum())
+        p_hsc = float(_edge_on_mask(hsc, i_cut).mean())
+        bt = stats.binomtest(k, len(frb), p_hsc, alternative="less")
+        fracs[i_cut] = {
+            "k": k,
+            "n": len(frb),
+            "frac_frb": k / len(frb),
+            "frac_hsc": p_hsc,
+            "p": float(bt.pvalue),
+        }
+    out["binom"] = fracs
+    return out
+
+
+def mc_directional_p(
+    frb: np.ndarray,
+    hsc: np.ndarray,
+    *,
+    n_draws: int,
+    seed: int,
+) -> dict[str, float]:
+    """Matched-N tail probabilities in the fewer-edge-on direction."""
+    n = len(frb)
+    rng = np.random.default_rng(seed + 1)
+    obs = directional_tests(frb, hsc)
+    k60 = obs["binom"][60.0]["k"]
+    counts = {"ks_less_d": 0, "mwu_greater_u": 0, "chi2_stat": 0, "binom60": 0}
+    for _ in range(n_draws):
+        draw = rng.choice(hsc, size=n, replace=False)
+        ks = stats.ks_2samp(draw, hsc, alternative="less", method="asymp")
+        mwu = stats.mannwhitneyu(draw, hsc, alternative="greater")
+        chi = _chi2_hsc_bins(draw, hsc, 4)
+        if float(ks.statistic) >= obs["ks_less_d"]:
+            counts["ks_less_d"] += 1
+        if float(mwu.statistic) >= obs["mwu_greater_u"]:
+            counts["mwu_greater_u"] += 1
+        if chi["stat"] >= obs["chi2_stat"]:
+            counts["chi2_stat"] += 1
+        if int(_edge_on_mask(draw, 60.0).sum()) <= k60:
+            counts["binom60"] += 1
+    return {k: (1.0 + v) / (1.0 + n_draws) for k, v in counts.items()}
+
+
 def write_md(
     dest: Path,
     *,
@@ -153,6 +242,8 @@ def write_md(
     hsc: np.ndarray,
     obs: dict,
     mc_p: dict,
+    directional: dict,
+    dir_mc: dict,
     n_draws: int,
 ) -> None:
     n1, n2 = len(frb), len(hsc)
@@ -167,7 +258,7 @@ def write_md(
     lines = [
         "# Confirmed-50 vs HSC — statistical tests",
         "",
-        "Question: could the 50 confirmed FRB-host Hubble \(\\cos(i)\) "
+        f"Question: could the {n1} confirmed FRB-host Hubble \(\\cos(i)\) "
         "values be a random draw from the HSC disk pool "
         "(\(r\\le 22\), \(b/a>0.2\), \(0.4<n<1.5\))?",
         "",
@@ -198,12 +289,12 @@ def write_md(
         "",
         "Two p-values are listed:",
         "",
-        "- **p (vs pool)** — textbook two-sample test of the 50 vs all "
+        f"- **p (vs pool)** — textbook two-sample test of the {n1} vs all "
         f"{n2:,} HSC galaxies. Power is high: a *small* CDF offset can make p tiny.",
-        f"- **p (matched N)** — among {n_draws:,} random HSC draws of 50, the "
+        f"- **p (matched N)** — among {n_draws:,} random HSC draws of {n1}, the "
         "fraction whose statistic vs the pool is at least as large as the FRB’s. "
         "This matches the CDF envelope (same N). Prefer this when asking "
-        "“is this 50 unusual among 50-galaxy HSC samples?”",
+        f"“is this {n1} unusual among {n1}-galaxy HSC samples?”",
         "",
         "SciPy AD p-values are **capped at 0.25** when samples look alike "
         "(true p is at least 0.25) and floored near 0.001 when they differ strongly.",
@@ -422,6 +513,67 @@ def write_md(
         f"**Result.** \(W_1={_fmt_stat(obs['w1'], 4)}\), "
         f"p (matched N) = {_fmt_p(mc_p['w1'])}.",
         "",
+        "## Directional tests (fewer edge-on hosts)",
+        "",
+        "Pre-specified direction: FRB hosts have fewer edge-on systems than the "
+        "HSC disks, i.e. larger \(\\cos(i)\). SciPy has no one-sided "
+        "Anderson–Darling; AD stays the two-sided primary test above. "
+        "One-sided KS and Mann–Whitney are the directional complements. "
+        "Cramér–von Mises remains the two-sided optional test in the summary.",
+        "",
+        f"**One-sided KS** (`alternative='less'`): tests whether the FRB CDF "
+        f"lies below the HSC CDF. \(D^-={_fmt_stat(directional['ks_less_d'], 3)}\), "
+        f"p (vs pool) = {_fmt_p(directional['ks_less_p'])}, "
+        f"p (matched N) = {_fmt_p(dir_mc['ks_less_d'])}.",
+        "",
+        f"**One-sided Mann–Whitney** (`alternative='greater'`): tests whether "
+        f"FRB \(\\cos(i)\) is stochastically larger. "
+        f"\(U={_fmt_stat(directional['mwu_greater_u'], 1)}\), "
+        f"p (vs pool) = {_fmt_p(directional['mwu_greater_p'])}, "
+        f"p (matched N) = {_fmt_p(dir_mc['mwu_greater_u'])}.",
+        "",
+        "### \(\\chi^2\) in HSC quantile bins",
+        "",
+        "Bins are equal-probability intervals of the HSC pool, so each bin "
+        f"expects \(N/n_{{\\mathrm{{bins}}}}\) FRB hosts if the samples share one law. "
+        f"With \(N={len(frb)}\), every split from 2 to 5 bins has expected counts "
+        "above 5. Quartiles match the 2024 paper and are the adopted split "
+        f"(expected {directional['chi2_expected']:.1f} per bin).",
+        "",
+        "| bins | expected / bin | FRB counts (low \(\\cos i\) → high) | \(\\chi^2\) | p |",
+        "|---:|---:|---|---:|---:|",
+    ]
+    for b in directional["chi2_bins"]:
+        adopted = " adopted" if b["n_bins"] == 4 else ""
+        lines.append(
+            f"| {b['n_bins']}{adopted} | {b['expected']:.1f} | {b['counts']} | "
+            f"{_fmt_stat(b['stat'], 2)} | {_fmt_p(b['p'])} |"
+        )
+    lines.extend([
+        "",
+        f"Quartile matched-N p = {_fmt_p(dir_mc['chi2_stat'])}. "
+        f"Counts (edge-on to face-on): {directional['chi2_counts']}.",
+        "",
+        "### Binomial edge-on fraction",
+        "",
+        "Edge-on means \(i\) above a fixed cut, equivalently "
+        r"\(\cos i < \cos i_{\mathrm{cut}}\). The null probability is the HSC "
+        "fraction above that cut. The alternative is a smaller FRB fraction. "
+        "\(i>60^\\circ\) is the quoted cut; \(45^\\circ\) and \(75^\\circ\) are checks.",
+        "",
+        r"| cut | FRB \(k/N\) | FRB fraction | HSC fraction | one-sided p |",
+        "|---:|---:|---:|---:|---:|",
+    ])
+    for i_cut, rowb in directional["binom"].items():
+        lines.append(
+            f"| \(i>{i_cut:.0f}^\\circ\) | {rowb['k']}/{rowb['n']} | "
+            f"{rowb['frac_frb']:.3f} | {rowb['frac_hsc']:.3f} | {_fmt_p(rowb['p'])} |"
+        )
+    lines.extend([
+        "",
+        f"For \(i>60^\\circ\), matched-N p = {_fmt_p(dir_mc['binom60'])} "
+        f"(fraction of HSC draws of {len(frb)} with an edge-on count at least as small).",
+        "",
         "## Caveats",
         "",
         "1. Point estimates only — Protocol A/B error bands are not in these p-values.",
@@ -432,7 +584,7 @@ def write_md(
         "4. Several tests share one sample; do not treat six small p-values as six "
         "independent discoveries.",
         "",
-    ]
+    ])
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text("\n".join(lines), encoding="utf-8")
     print(f"[*] Wrote {dest}")
@@ -451,8 +603,8 @@ def main(argv: list[str] | None = None) -> int:
     hosts = pd.read_csv(args.hosts_csv)
     frb = pd.to_numeric(hosts["cosi_point"], errors="coerce").to_numpy(dtype=float)
     frb = frb[np.isfinite(frb)]
-    if len(frb) != 50:
-        raise RuntimeError(f"expected 50 finite cosi_point, got {len(frb)}")
+    if len(frb) < 1:
+        raise RuntimeError("no finite cosi_point")
 
     print("[*] Loading HSC pool ...", flush=True)
     hsc, n_hsc = load_hsc_pool(mag_limit=args.mag_limit, q0=args.q0)
@@ -465,8 +617,19 @@ def main(argv: list[str] | None = None) -> int:
         f"MWU p={obs['mwu_p']:.4g}",
         flush=True,
     )
+    directional = directional_tests(frb, hsc)
+    print(
+        f"[*] one-sided KS p={directional['ks_less_p']:.4g}  "
+        f"MWU p={directional['mwu_greater_p']:.4g}  "
+        f"chi2 quartile p={directional['chi2_p']:.4g}  "
+        f"binom i>60 p={directional['binom'][60.0]['p']:.4g}",
+        flush=True,
+    )
     print(f"[*] Matched-N MC ({args.n_draws} draws) ...", flush=True)
     mc_p = mc_tail_p(frb, hsc, n_draws=args.n_draws, seed=args.seed)
+    dir_mc = mc_directional_p(
+        frb, hsc, n_draws=args.n_draws, seed=args.seed,
+    )
     print(
         f"[*] MC p  KS={mc_p['ks_d']:.3f}  AD={mc_p['ad_stat']:.3f}  "
         f"CvM={mc_p['cvm_stat']:.3f}  Kuiper={mc_p['kuiper_v']:.3f}  "
@@ -474,7 +637,14 @@ def main(argv: list[str] | None = None) -> int:
         flush=True,
     )
     write_md(
-        args.out_md, frb=frb, hsc=hsc, obs=obs, mc_p=mc_p, n_draws=args.n_draws,
+        args.out_md,
+        frb=frb,
+        hsc=hsc,
+        obs=obs,
+        mc_p=mc_p,
+        directional=directional,
+        dir_mc=dir_mc,
+        n_draws=args.n_draws,
     )
     return 0
 

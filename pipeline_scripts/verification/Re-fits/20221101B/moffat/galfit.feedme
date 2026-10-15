@@ -1,0 +1,50 @@
+===============================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) host_cutout.fits  # Input data image (FITS file)
+B) out.fits  # Output data image block
+C) host_sigma.fits  # Sigma image name (none = let GALFIT auto-generate)
+D) proto_image.fits  # Input PSF file
+E) 1  # PSF fine sampling factor
+F) host_mask.fits  # Bad pixel mask
+G) constraints.txt  # File with parameter constraints
+H) 1 56 1 59  # Image region to fit (1-based full image)
+I) 80 83  # Size of convolution box
+J) 32.2766  # Photometric zeropoint
+K) 0.262 0.262  # Plate scale [arcsec/pixel]
+O) regular  # Display type
+P) 0  # Choose: 0=optimize
+
+# INITIAL FITTING PARAMETERS
+# Component number: 1
+ 0) sersic  # Component type
+ 1) 27.8498 28.6258 1 1  # position x y
+ 3) 18.3164 1  # Integrated magnitude
+ 4) 17.4740 1  # effective radius (pix)
+ 5) 4.1817 1  # sersic index
+ 6) 0.0000 0  # ----
+ 7) 0.0000 0  # ----
+ 8) 0.0000 0  # ----
+ 9) 0.7516 1  # Axis ratio (b/a)
+10) -34.1047 1  # Position angle
+ Z) 0  # Skip this model
+
+# Component number: 2
+ 0) moffat  # Component type
+ 1) 34.2364 50.0628 1 1  # position x y
+ 3) 16.3164 1  # Integrated magnitude
+ 4) 1.5000 1  # FWHM (pix)
+ 5) 3.5000 1  # power-law / concentration
+ 6) 0.0000 0  # ----
+ 7) 0.0000 0  # ----
+ 8) 0.0000 0  # ----
+ 9) 0.9509 1  # Axis ratio (b/a)
+10) 30.1114 1  # Position angle
+ Z) 0  # Skip this model
+
+# Component number: 3
+ 0) sky  # component type
+ 1) 6.22460000 1  # Sky background (SExtractor BACKGROUND, ADU)
+ 2) 0.0000 0  # dsky/dx
+ 3) 0.0000 0  # dsky/dy
+ Z) 0  # Skip this model
+================================================================================

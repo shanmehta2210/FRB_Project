@@ -6,8 +6,8 @@ Context: confirmed-50 CDFs currently have two error protocols ([README.md](READM
 
 | | Protocol A | Protocol B |
 |---|---|---|
-| \(\sigma_q\) | \(10\times q_{\rm err}\) | \(\sqrt{q_{\rm err}^2+\sigma_{q,{\rm sky}}^2+\sigma_{q,5^\circ}^2}\) |
-| extra term | \(i\leftarrow i+\mathcal{N}(0,5^\circ)\) after Hubble | \(5^\circ\) mapped into \(q\) *before* Hubble; no second floor |
+| \(\sigma_q\) | \(10\times q_{\rm err}\) | \(\sqrt{q_{\rm err}^2+\sigma_{q,{\rm sky}}^2}\) |
+| extra term | \(i\leftarrow i+\mathcal{N}(0,5^\circ)\) after Hubble | same \(5^\circ\) floor after Hubble; no mapping into \(q\) |
 | median \(\sigma_q\) (N=50) | 0.100 | 0.067 |
 
 \(q_{\rm err}\) is GALFIT’s formal \(1\sigma\) from the covariance matrix. \(\sigma_{q,{\rm sky}}=|q_+-q_-|/2\) from \(\pm1\sigma\) sky re-fits. Verification §4.4 uses \(\Delta q_{\rm sky}=\max(|q_+-q_0|,|q_--q_0|)\), which is a different estimator of the same experiment.
@@ -110,9 +110,10 @@ No GALFIT paper assigns a \(5^\circ\) floor to \(q\). That number lives in the H
 - Hubble (1926) formula with finite thickness \(q_0\). We and Bhardwaj (2024) use \(q_0=0.2\) (Vallejo, Unterborn & Ryden 2008).
 - Photometric \(i\) is biased by bars, arms, dust, and a non-universal \(q_0\) (Bhardwaj Methods). Comparing FRB hosts to a survey catalog measured the same way cancels a large part of that bias — which is why both Bhardwaj and our HSC test compare CDFs rather than to \(\mathrm{CDF}=\cos i\).
 - Tully–Fisher practice commonly adopts \(\sigma_i\sim5^\circ\) as a typical photometric inclination uncertainty (Tully & Fouqué 1985; Giovanelli et al. 1997; later TF samples). That is a floor on **\(i\)**, not a multiplier on \(\sigma_q\).
+- Barnes & Sellwood (2003, AJ 125, 1164): non-axisymmetric structure (bars, arms) introduces photometric inclination uncertainties of \(\approx5^\circ\) on average. This is the cleanest published number for a floor **on \(i\)**.
 - Bhardwaj’s empirical method-mismatch is \(3.7^\circ\), not \(5^\circ\).
 
-Protocol A adds \(\mathcal{N}(0,5^\circ)\) **after** Hubble. Protocol B converts \(\pm5^\circ\) into \(\sigma_q\) **before** Hubble. Adding both is double-counting the same geometric systematic.
+Protocol A and Protocol B both add \(\mathcal{N}(0,5^\circ)\) **after** Hubble. Mapping \(\pm5^\circ\) into \(\sigma_q\) before Hubble does not preserve a \(5^\circ\) floor: \({\rm d}q/{\rm d}i\to0\) at face-on and edge-on, so the term vanishes where photometric \(i\) is least trustworthy. Do not apply the floor in both \(q\) and \(i\).
 
 ---
 
@@ -178,15 +179,15 @@ Peng (2010) is explicit that the right operation for galaxy fitting is **the las
 - Not defensible as a \(q\) policy: Häussler’s large-factor result is for mag and \(n\); their own \(e\)-ratio scatter at bright \(\mu\) is \(0.04\), and \(q\) does not move when sky is wrong. van der Wel’s \(20\%\) is a faint-\(H\) relative error, not a licence to draw \(q\sim\mathcal{N}(q,1)\). Bhardwaj (2024) used \(\sim1^\circ\) covariance plus \(3.7^\circ\) method RMSD — the opposite of \(\times10\).
 - Adding \(5^\circ\) *after* a \(\sigma_q\) that is already \(\sim0.1\) double-smears edge-on.
 
-**Protocol B (formal \(\oplus\) sky half-range \(\oplus\) \(5^\circ\) in \(q\)).**
+**Protocol B (formal \(\oplus\) sky half-range on \(q\), then \(+5^\circ\) on \(i\)).**
 
-- Matches Peng (2010): combine named assumptions (sky, Hubble geometry) rather than trust the Hessian.
-- Sky term is exactly Huang / Gao & Ho’s experiment, applied to host \(q\). Häussler Tables 4–5 say that term should be **small** for disks, which is what we want the data to decide per host (`flag_sky_sensitive` is \(\Delta q_{\rm sky}>0.05\)).
+- Matches Peng (2010): combine named assumptions (sky) rather than trust the Hessian.
+- Sky term is exactly Huang / Gao \& Ho’s experiment, applied to host \(q\). Häussler Tables 4–5 say that term should be **small** for disks, which is what we want the data to decide per host (`flag_sky_sensitive` is \(\Delta q_{\rm sky}>0.05\)).
 - Formal \(q_{\rm err}\) is kept as the Poisson piece (Peng 2002, valid when \(S/N\) is high and the model is not terrible). It is **not** multiplied.
-- \(5^\circ\) is mapped into \(q\) so it is not applied twice. \(3.7^\circ\) (Bhardwaj) or \(5^\circ\) (TF) are the published scales for that term.
+- \(5^\circ\) is added once, after Hubble, following Barnes \& Sellwood (2003) and the TF convention. \(3.7^\circ\) (Bhardwaj) is the same-sample empirical scale.
 - van der Wel: at our \(S/N\), sky should be \(\lesssim30\%\) of the budget. Quadrature with a non-inflated \(q_{\rm err}\) is the right shape; \(\times10\) is not.
 
-**Neither protocol** does the two things the large-survey papers actually did for \(q\): (i) replace \(\sigma_q\) with simulation or deep–shallow scatter at the object’s \(\mu,n,S/N\), or (ii) MCMC. For N=50 nearby disks, (i) would give \(\sigma_q\sim0.04\) (Häussler bright) to \(\lesssim0.10\) (van der Wel 10–20% relative at much fainter \(H\)). Protocol B’s median \(0.067\) sits in that band. Protocol A’s median \(0.100\) is at the faint-end edge, with a heavy tail that those papers do not justify.
+**Neither protocol** does the two things the large-survey papers actually did for \(q\): (i) replace \(\sigma_q\) with simulation or deep–shallow scatter at the object’s \(\mu,n,S/N\), or (ii) MCMC. For N=50 nearby disks, (i) would give \(\sigma_q\sim0.04\) (Häussler bright) to \(\lesssim0.10\) (van der Wel 10–20% relative at much fainter \(H\)). Protocol B’s median measurement \(\sigma_q\) is \(0.011\) (formal \(\oplus\) sky only); the \(5^\circ\) floor on \(i\) is the dominant host-to-host smear. Protocol A’s median \(\sigma_q=0.100\) is at the faint-end edge, with a heavy tail that those papers do not justify.
 
 ---
 
@@ -196,7 +197,7 @@ Not a new implementation — the pieces the papers actually combine:
 
 1. **Keep formal \(q_{\rm err}\)** as the Poisson/covariance term. Do not \(\times10\). (Peng 2002; van der Wel’s high-\(S/N\) limit; Häussler \(e\)-ratio at bright \(\mu\).)
 2. **Keep sky \(\pm1\sigma\) re-fits**, object by object. Prefer a single estimator and stick to it: either Protocol B’s \(|q_+-q_-|/2\) or verification’s \(\max(|q_\pm-q_0|)\). (Huang 2013; Gao & Ho 2017; Peng 2010 “different assumptions.”)
-3. **Keep a Hubble-geometry / method term of a few degrees**, applied **once**, in \(q\) or in \(i\), not both. Calibrate to \(3.7^\circ\) (Bhardwaj same-sample RMSD) or \(5^\circ\) (TF convention). (Bhardwaj 2024; Tully–Fisher.)
+3. **Keep a Hubble-geometry / method term of a few degrees**, applied **once**, on \(i\) after Hubble, not mapped into \(q\). Calibrate to \(3.7^\circ\) (Bhardwaj same-sample RMSD) or \(5^\circ\) (Barnes \& Sellwood 2003; TF convention).
 4. **Optional, if we want Häussler/van der Wel literally:** a floor \(\sigma_q\gtrsim0.02\)–\(0.04\) so that hosts with \(q_{\rm err}\sim0.002\) are not treated as infinitely precise. That floor is the bright-disk simulation scatter, not \(10\times\) the Hessian.
 5. **Do not smear the HSC catalog** unless we also smear with a published HSC \(q\) error (Kawinwanichakij MCMC). Point-estimate HSC vs smeared FRB is conservative against claiming a difference.
 

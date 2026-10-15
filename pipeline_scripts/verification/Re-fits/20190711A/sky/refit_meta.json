@@ -1,0 +1,14 @@
+{
+  "frb": "20190711A",
+  "label": "sky",
+  "n_fixed": null,
+  "production": {
+    "mag": 18.088,
+    "n": 6.0,
+    "pa": -29.1108,
+    "q": 0.5556,
+    "re": 1.5
+  },
+  "production_sky_adu": -0.0005239,
+  "sky_fixed_adu": 0.0001406238880008459
+}

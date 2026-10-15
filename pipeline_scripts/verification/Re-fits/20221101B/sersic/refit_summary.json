@@ -1,0 +1,83 @@
+{
+  "components": [
+    {
+      "comp": 1,
+      "mag": 17.9578,
+      "mag_err": 0.4977,
+      "n": 2.4933,
+      "n_err": 0.829,
+      "pa": -82.6302,
+      "pa_err": 6.6382,
+      "q": 0.6708,
+      "q_err": 0.0545,
+      "re": 17.7603,
+      "re_err": 10.0492,
+      "type": "sersic",
+      "xc": 27.8899,
+      "xc_err": 0.2483,
+      "yc": 28.4141,
+      "yc_err": 0.1887
+    },
+    {
+      "comp": 2,
+      "mag": 16.9746,
+      "mag_err": 0.0086,
+      "n": 6.0,
+      "n_err": 0.3371,
+      "pa": 85.6666,
+      "pa_err": 0.677,
+      "q": 0.3509,
+      "q_err": 0.0101,
+      "re": 1.5,
+      "re_err": 0.031,
+      "type": "sersic",
+      "xc": 34.0495,
+      "xc_err": 0.0081,
+      "yc": 50.4962,
+      "yc_err": 0.0096
+    }
+  ],
+  "fit": {
+    "converged": true,
+    "mag": 17.9578,
+    "n": 2.4933,
+    "pa": -82.6302,
+    "q": 0.6708,
+    "q_err": 0.0545,
+    "re": 17.7603,
+    "sky": -124.7859,
+    "status": "ok"
+  },
+  "frb": "20221101B",
+  "label": "sersic",
+  "n_fixed": null,
+  "panel_png": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221101B\\sersic\\panel.png",
+  "psf_added": false,
+  "published_panel": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\outputs\\panels\\20221101B_sersic.png",
+  "sersic_added": true,
+  "sky": {
+    "comp": 3,
+    "level": -124.7859,
+    "level_err": 25.1502
+  },
+  "sky_fixed_adu": null,
+  "verification": {
+    "frb": "20221101B",
+    "host_dir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221101B\\sersic",
+    "notes": [],
+    "outdir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221101B\\sersic",
+    "status": {
+      "astrophot": "ok",
+      "chi2": "ok",
+      "fourier": "ok",
+      "isophote": "ok",
+      "mag": "ok",
+      "psf": "ok",
+      "rff": "ok",
+      "sky": "ok",
+      "visual": "ok"
+    }
+  },
+  "verification_runtime_s": 21.861,
+  "wkdir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20221101B\\sersic"
+}

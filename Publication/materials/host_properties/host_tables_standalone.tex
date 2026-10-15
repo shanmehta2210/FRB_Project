@@ -1,0 +1,19 @@
+% Standalone compile of the host-property tables.
+% pdflatex host_tables_standalone ; bibtex host_tables_standalone ; pdflatex x2
+\documentclass[longrotatetable]{aastex701}
+\usepackage{amsmath}
+\begin{document}
+\title{Host-galaxy properties of the 51-FRB working sample}
+\author{Working tables}
+\affiliation{Internal draft}
+\email{draft@example.org}
+
+\section{Sample table in the layout of Bhardwaj et al. (2024)}
+\input{host_table}
+
+\section{Extended published properties}
+\input{host_table_extended}
+
+\bibliographystyle{aasjournalv7}
+\bibliography{host_properties}
+\end{document}

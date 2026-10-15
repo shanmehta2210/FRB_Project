@@ -1,0 +1,16 @@
+{
+  "n_calibration_stars": 56,
+  "n_ps1_matches": 0,
+  "n_legacy_matches": 56,
+  "production_aperture_px": 40.0,
+  "pixel_scale_arcsec_px": 0.26200000000000007,
+  "zp_aper": 21.39935673208123,
+  "zp_aper_std": 0.40811398573263163,
+  "zp_psf": 20.821967387113375,
+  "zp_psf_std": 4.110279841844621,
+  "zp_auto": 21.354884991358574,
+  "zp_auto_std": 0.4146290433405439,
+  "filter_band": "r",
+  "reference_catalog": "LS DR10 Tractor (NOIRLab TAP)",
+  "match_radius_arcsec": 0.6
+}

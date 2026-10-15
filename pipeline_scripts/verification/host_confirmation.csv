@@ -63,3 +63,9 @@ frb,confirmed,notes
 20240304A,True,compact disk; q locked by sky; low SNR
 20240310A,False,needle q; PSF trap; AP tinier; below q cut
 20240318A,True,inclined disk; q locked; user re-confirm
+20230913G,False,too unresolved / way too small q (q~0.04); Re floor; PS1 imaging; below q cut
+20240203D,False,too unresolved; Re floor on every leg (n1/sky/n1_sky all Re=1.5 px); PSF trap; sky-sensitive; AP disagrees (0.86 vs 0.78); PS1 imaging; REVIEW PILE - user to retry with a corrected sky map (fit otherwise clean)
+20240224A,True,confirmed on production; barely resolved (Re/FWHM~0.8); q stable across n1/sky/n1_sky and AstroPhot; PS1 imaging; absorption-line (quiescent) host - disk assumption caveat
+20240525A,True,"confirmed on production; LS imaging; q=0.365 stable across n1/sky/n1_sky (0.36-0.37) and AstroPhot (0.357); Re/FWHM=1.45; n=0.55 disk; faint diffuse residual ~1.5 Re NW (companion/tidal?) masked-star NE; Marnoch+2026 VLT q=0.273 (ours rounder by 0.09)"
+20240615B,True,"confirmed on production; LS imaging; bright face-on spiral z=0.073 (m=15.9); q=0.94 locked on all legs and AstroPhot (0.939); chi2nu=18 and RFF_2Re=0.12 are spiral-arm residuals not a shape problem; Marnoch+2026 VLT q=0.938 (agree)"
+20191228A,False,"REJECTED - host not detected in LS cutout (no galaxy within 5 arcsec of Bhandari+2022 host position; only a star-like source at 6.5 arcsec); host is M_r=-18.26 at z=0.243 -> m_r~22.3, fails m_r<=22 anyway (Marnoch+2026 I=21.64 from VLT)"
