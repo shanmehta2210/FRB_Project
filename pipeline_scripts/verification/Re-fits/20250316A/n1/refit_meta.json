@@ -1,0 +1,23 @@
+{
+  "frb": "20250316A",
+  "host_xy_fixed": false,
+  "label": "n1",
+  "moffat": null,
+  "moffat_added": false,
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 14.0632,
+    "n": 0.8129,
+    "pa": 71.2846,
+    "q": 0.7844,
+    "re": 49.3316
+  },
+  "production_sky_adu": 0.0004367,
+  "psf": null,
+  "psf_added": false,
+  "psf_xy_fixed": false,
+  "sersic": null,
+  "sersic_added": false,
+  "sky_fixed_adu": null,
+  "star_cut": null
+}

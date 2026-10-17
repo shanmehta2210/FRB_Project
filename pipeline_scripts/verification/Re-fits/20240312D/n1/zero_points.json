@@ -1,0 +1,27 @@
+{
+  "n_calibration_stars": 56,
+  "n_ps1_matches": 0,
+  "n_legacy_matches": 56,
+  "production_aperture_px": 40.0,
+  "pixel_scale_arcsec_px": 0.26200000000000007,
+  "zp_aper": 22.470761577947645,
+  "zp_aper_std": 0.014176024545962616,
+  "zp_psf": 22.366616396390924,
+  "zp_psf_std": 0.5728578479604287,
+  "zp_auto": 22.421394329920165,
+  "zp_auto_std": 0.011271646886750402,
+  "filter_band": "r",
+  "reference_catalog": "LS DR10 Tractor (NOIRLab TAP)",
+  "match_radius_arcsec": 0.6,
+  "field_depth": {
+    "m_lim_5sigma_ab": 19.349,
+    "zp_aper": 22.470762,
+    "sigma_sky_adu_per_pix": 0.1,
+    "aperture_diameter_px": 40.0,
+    "aperture_area_pix2": 1256.6,
+    "flux_5sigma_adu": 17.7245,
+    "seeing_fwhm_arcsec": 1.834,
+    "pixel_scale_arcsec": 0.262,
+    "formula_note": "5\u03c3 in pi*(d/2)^2 px^2 at production aperture; not seeing disk"
+  }
+}

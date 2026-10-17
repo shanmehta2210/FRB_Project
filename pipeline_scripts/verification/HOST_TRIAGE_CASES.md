@@ -1701,6 +1701,9 @@ $n=4.28$. In science cut. Trust tier C.
 production and all three standard legs, so $q$ is a PSF-trap value (same reasoning as
 20230708A / 20240310A). Needs better imaging before an inclination can be quoted.
 
+**Update 2026-10-18: CONFIRMED on the n1_sky leg** (n fixed at 1, sky fixed at the protocol value 0.0; AstroPhot given the same fixed sky). GALFIT q=0.805, AstroPhot q=0.846 (dq/err=1.6); every leg gives 0.78-0.80. Re stays at the 1.5 px floor (Re/FWHM~0.35), so this is a barely resolved host; the leg-to-leg spread is inside the 5 deg inclination floor and the fit is visually clean. Panel outputs/panels/20240203D_n1_sky.png.
+
+
 ---
 
 ## 20240224A — CONFIRMED (resolution caveat; quiescent host caveat)
@@ -1797,4 +1800,62 @@ Bhandari+2022 host at 22:57:43.30, $-29$:35:38.7, $M_r=-18.26$ at $z=0.2432$ ($m
 Phase 3a finds no galaxy within $5''$ of the host position in the LS cutout; the only nearby
 detection is a star-like source at $6.5''$. Marnoch+2026 fit it at $I=21.64$ on VLT/FORS2.
 Fails $m_r\le 22$ regardless. Not pursued.
+
+---
+
+## 20240312D — CONFIRMED (Gordon+2025 host; LS imaging; bar caveat)
+
+**Panel:** `outputs/panels/20240312D.png`; legs `Re-fits/20240312D/{n1,sky,n1_sky}/panel.png`
+
+$z=0.0495$. $m=14.88$ (LS ref 15.04), $R_e=25.8$ px ($6.8''$), $R_e/\mathrm{FWHM}=6.7$, $n=1.35$.
+$q=0.917\pm 0.002$, PA $=-62^\circ$. Barred grand-design spiral (Gordon+2025 fit bulge + $n=0.5$ disk). Tier B.
+
+| test | result | reading |
+|---|---|---|
+| AstroPhot | $q_{\rm AP}=0.916$ | Agree |
+| Sky $\pm1\sigma$ | $q_\pm=0.917$ | Stable |
+| Re-fit legs | sky 0.92, n1 0.93, n1_sky 0.93 | Locked |
+| Isophotes | bar pulls inner $q$ to 0.58; outer disk $q\approx 0.83$–$0.84$ at 2–3 $R_e$ | Single-Sérsic $q$ rounder than outer disk by ~0.08 |
+
+$\chi^2/\nu$ and RFF are flagged by arm and bar residuals. **CONFIRMED** on production; the outer-isophote
+value ($i\approx 33^\circ$ vs $23.6^\circ$) is a known single-Sérsic limitation for barred face-on spirals. Flag in the table.
+
+---
+
+## 20180916B — REJECTED (R3; Galactic-plane crowding in PS1)
+
+Host at $b\approx 3.7^\circ$. Star masks truncate the fitting box well inside the model ellipse ($R_e=32$ px);
+legs are unstable ($R_e$ 12–99 px, $m$ 17.0–19.3, sky $-13$ to $+23$ ADU); $m_{\rm GALFIT}=18.29$ vs PS1 ref 19.55;
+isophote and Fourier checks unusable. Not recoverable from PS1; would need the HST imaging used by Gordon+2025.
+Also excluded on policy: the sample is restricted to non-repeaters (2026-10-18).
+
+---
+
+## 2026-10-18 literature batch (14 candidates; 11 CONFIRMED)
+
+**Association basis.** Nine are CRAFT HTR2 bursts from Dial+2026 (Table B1: FRB position, $\sigma$, DM, spectroscopic $z$;
+host papers in prep). No host coordinates are published, so the host is our AstroPATH pick on the FRB ellipse and the
+row is promoted to `host` semantics at the LS DR10 position. This is weaker than a published host localization and
+should be stated in the paper. 20231210F/20231010A are MeerTRAP (Pastor-Marazuela+2026; photo-$z$ only).
+20250316A is the CHIME/FRB Outriggers one-off in NGC 4141. 20220208A is DSA-110 (Sharma+2024, PATH $P=0.56$).
+
+| FRB | $P(O)$ | $m_r$ | $q$ prod | sky / n1 / n1_sky | $R_e/\mathrm{FWHM}$ | verdict |
+|---|---|---|---|---|---|---|
+| 20240807A | 0.98 | 21.52 | 0.41 | 0.41 / 0.41 / 0.41 | 0.67 | CONFIRMED (barely resolved) |
+| 20241014B | 0.93 | 19.58 | 0.66 | 0.66 / 0.68 / 0.68 | 0.81 | CONFIRMED |
+| 20250106B | 1.00 | 20.21 | 0.63 | 0.63 / 0.63 / 0.63 | 0.92 | CONFIRMED |
+| 20250511A | 1.00 | 20.10 | 0.86 | 0.86 / 0.85 / 0.85 | 0.34 | CONFIRMED on n1_sky (unresolved; as 20240203D) |
+| 20250607C | 1.00 | 19.30 | 0.36 | 0.36 / 0.36 / 0.36 | 1.17 | CONFIRMED (LS Tractor shreds host; summed $r\approx19.2$) |
+| 20251024B | 0.99 | 19.10 | 0.51 | 0.51 / 0.50 / 0.50 | 1.22 | CONFIRMED |
+| 20260324E | 1.00 | 19.32 | 0.93 | 0.92 / 0.91 / 0.91 | 0.59 | CONFIRMED (early-type-like, $n=5.4$; disk caveat) |
+| 20260331E | 0.98 | 19.69 | 0.56 | 0.56 / 0.55 / 0.55 | 0.72 | CONFIRMED |
+| 20260608D | 0.98 | 17.59 | 0.30 | 0.30 / 0.33 / 0.33 | 1.79 | CONFIRMED (bulge+disk residuals; tier B) |
+| 20231210F | 0.83 | 21.15 | 0.22 | 0.23 / 0.22 / 0.22 | 1.14 | CONFIRMED (weak association, photo-$z$; $q$ just above cut) |
+| 20250316A | 0.98 | 14.06 | 0.78 | 0.78 / 0.78 / 0.77 | 8.2 | CONFIRMED (NGC 4141; isophotes 0.66→0.89 bar/arms; tier B) |
+| 20231010A | 0.62 | 22.36 | 0.07 | — | 0.30 | REJECTED (fails $m_r$ and $q$ cuts) |
+| 20220208A | — | — | — | — | — | REJECTED (host undetected in PS1; $E(B-V)=0.81$) |
+| 20250520A | — | — | — | — | — | REJECTED (no LS/DES imaging) |
+
+AstroPhot agrees with GALFIT on every confirmed host ($|\Delta q|\le0.015$). Panels: `outputs/panels/<FRB>.png`
+(20250511A: `outputs/panels/20250511A_n1_sky.png`).
 

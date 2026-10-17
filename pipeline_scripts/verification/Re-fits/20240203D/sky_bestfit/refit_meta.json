@@ -1,0 +1,23 @@
+{
+  "frb": "20240203D",
+  "host_xy_fixed": false,
+  "label": "sky_bestfit",
+  "moffat": null,
+  "moffat_added": false,
+  "n_fixed": null,
+  "production": {
+    "mag": 18.8402,
+    "n": 4.2819,
+    "pa": -36.7707,
+    "q": 0.7825,
+    "re": 1.5
+  },
+  "production_sky_adu": -8.4385,
+  "psf": null,
+  "psf_added": false,
+  "psf_xy_fixed": false,
+  "sersic": null,
+  "sersic_added": false,
+  "sky_fixed_adu": -8.44,
+  "star_cut": null
+}

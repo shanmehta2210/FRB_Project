@@ -1,0 +1,23 @@
+{
+  "frb": "20180916B",
+  "host_xy_fixed": false,
+  "label": "n1",
+  "moffat": null,
+  "moffat_added": false,
+  "n_fixed": 1.0,
+  "production": {
+    "mag": 18.2882,
+    "n": 2.2541,
+    "pa": -29.2174,
+    "q": 0.7651,
+    "re": 32.3484
+  },
+  "production_sky_adu": 6.9432,
+  "psf": null,
+  "psf_added": false,
+  "psf_xy_fixed": false,
+  "sersic": null,
+  "sersic_added": false,
+  "sky_fixed_adu": null,
+  "star_cut": null
+}

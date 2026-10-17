@@ -1,0 +1,71 @@
+{
+  "components": [
+    {
+      "c": null,
+      "c_err": null,
+      "comp": 1,
+      "fwhm": null,
+      "fwhm_err": null,
+      "mag": 16.9649,
+      "mag_err": 0.5171,
+      "n": 3.038,
+      "n_err": 0.7151,
+      "pa": -30.3952,
+      "pa_err": 8.254,
+      "q": 0.7766,
+      "q_err": 0.0492,
+      "re": 98.8231,
+      "re_err": 59.8703,
+      "type": "sersic",
+      "xc": 28.6148,
+      "xc_err": 0.2164,
+      "yc": 31.1514,
+      "yc_err": 0.2615
+    }
+  ],
+  "fit": {
+    "converged": true,
+    "mag": 16.9649,
+    "n": 3.038,
+    "pa": -30.3952,
+    "q": 0.7766,
+    "q_err": 0.0492,
+    "re": 98.8231,
+    "sky": -13.2871,
+    "status": "ok"
+  },
+  "frb": "20180916B",
+  "host_xy_fixed": false,
+  "label": "sky",
+  "moffat_added": false,
+  "n_fixed": null,
+  "panel_png": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20180916B\\sky\\panel.png",
+  "psf_added": false,
+  "psf_xy_fixed": false,
+  "sersic_added": false,
+  "sky": {
+    "comp": 2,
+    "level": -13.2871,
+    "level_err": null
+  },
+  "sky_fixed_adu": -13.287051177830937,
+  "verification": {
+    "frb": "20180916B",
+    "host_dir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20180916B\\sky",
+    "notes": [],
+    "outdir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20180916B\\sky",
+    "status": {
+      "astrophot": "ok",
+      "chi2": "ok",
+      "fourier": "ok",
+      "isophote": "isophote_fit_failed",
+      "mag": "ok",
+      "psf": "ok",
+      "rff": "ok",
+      "sky": "ok",
+      "visual": "ok"
+    }
+  },
+  "verification_runtime_s": 20.693,
+  "wkdir": "C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\verification\\Re-fits\\20180916B\\sky"
+}

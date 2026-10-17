@@ -6,7 +6,7 @@ frb,confirmed,notes
 20190523A,True,confirmed on n=1 fixed re-fit; panel outputs/panels/20190523A_n1.png
 20190608B,True,spiral residual (winding ψ2'); sky+AP lock q
 20190611B,False,DOOMED — cannot be fit; do not revisit (mag>22; sky Δq~0.4; AP collapse)
-20190711A,False,"REJECTED — wrong object (star 6.3\" from Heintz host); true host GMOS-S r=23.54 fails mag cut; leave production star on review pile"
+20190711A,False,"REJECTED — wrong object (star 6.3\ from Heintz host); true host GMOS-S r=23.54 fails mag cut; leave production star on review pile"""
 20190714A,True,n at floor; barely resolved; sky+AP+iso lock q
 20191001A,True,spiral/merger residual; winding ψ2'; sky+AP lock q
 20200430A,False,way too unresolved / way too small q (q~0.04±0.18)
@@ -28,12 +28,12 @@ frb,confirmed,notes
 20220717A,False,too unresolved / way too small q
 20220725A,True,confirmed on n1+sky; unresolved; panel outputs/panels/20220725A_n1_sky.png; sky Re-fits/20220725A/sky_protocol.json
 20220825A,True,looks OK; too low SNR — confirm for now
-20220912A,True,sky+AP lock q; clean
+20220912A,False,EXCLUDED — known repeater (Ravi+2023); sample restricted to non-repeaters. Fit itself clean (sky+AP lock q)
 20220914A,True,barely resolved; sky+AP+iso lock q; clean
 20220918A,False,barely resolved; too small q / unconstrained
 20220920A,True,sky+AP+iso lock q; clean
 20221012A,True,barely resolved; sky+AP+iso lock q; clean
-20221101B,False,"REJECTED — morphology uncertain; MW star 6\" NE (Gaia) inflates Re; PSF/Moffat/Sersic companion legs all explode; leave on review pile"
+20221101B,False,"REJECTED — morphology uncertain; MW star 6\ NE (Gaia) inflates Re; PSF/Moffat/Sersic companion legs all explode; leave on review pile"""
 20221106A,True,sky+AP+iso lock q; clean
 20221116A,False,bullshit Re; sky-dominated / empty; no ref mag (zp_ok=false; 62% flux off-stamp)
 20221219A,True,confirmed on n1+sky; B/E/F poorly agree (F near 0); panel outputs/panels/20221219A_n1_sky.png
@@ -64,8 +64,24 @@ frb,confirmed,notes
 20240310A,False,needle q; PSF trap; AP tinier; below q cut
 20240318A,True,inclined disk; q locked; user re-confirm
 20230913G,False,too unresolved / way too small q (q~0.04); Re floor; PS1 imaging; below q cut
-20240203D,False,too unresolved; Re floor on every leg (n1/sky/n1_sky all Re=1.5 px); PSF trap; sky-sensitive; AP disagrees (0.86 vs 0.78); PS1 imaging; REVIEW PILE - user to retry with a corrected sky map (fit otherwise clean)
+20240203D,True,"confirmed on n=1 fixed-sky re-fit (Re-fits/20240203D/n1_sky); panel outputs/panels/20240203D_n1_sky.png; q=0.805 vs AstroPhot 0.846 with the same fixed sky (dq/err=1.6); Re at 1.5 px floor (Re/FWHM~0.35) - barely resolved, spread covered by the 5 deg floor; PS1 imaging; all legs q=0.78-0.80"
 20240224A,True,confirmed on production; barely resolved (Re/FWHM~0.8); q stable across n1/sky/n1_sky and AstroPhot; PS1 imaging; absorption-line (quiescent) host - disk assumption caveat
-20240525A,True,"confirmed on production; LS imaging; q=0.365 stable across n1/sky/n1_sky (0.36-0.37) and AstroPhot (0.357); Re/FWHM=1.45; n=0.55 disk; faint diffuse residual ~1.5 Re NW (companion/tidal?) masked-star NE; Marnoch+2026 VLT q=0.273 (ours rounder by 0.09)"
-20240615B,True,"confirmed on production; LS imaging; bright face-on spiral z=0.073 (m=15.9); q=0.94 locked on all legs and AstroPhot (0.939); chi2nu=18 and RFF_2Re=0.12 are spiral-arm residuals not a shape problem; Marnoch+2026 VLT q=0.938 (agree)"
+20240525A,True,confirmed on production; LS imaging; q=0.365 stable across n1/sky/n1_sky (0.36-0.37) and AstroPhot (0.357); Re/FWHM=1.45; n=0.55 disk; faint diffuse residual ~1.5 Re NW (companion/tidal?) masked-star NE; Marnoch+2026 VLT q=0.273 (ours rounder by 0.09)
+20240615B,True,confirmed on production; LS imaging; bright face-on spiral z=0.073 (m=15.9); q=0.94 locked on all legs and AstroPhot (0.939); chi2nu=18 and RFF_2Re=0.12 are spiral-arm residuals not a shape problem; Marnoch+2026 VLT q=0.938 (agree)
 20191228A,False,"REJECTED - host not detected in LS cutout (no galaxy within 5 arcsec of Bhandari+2022 host position; only a star-like source at 6.5 arcsec); host is M_r=-18.26 at z=0.243 -> m_r~22.3, fails m_r<=22 anyway (Marnoch+2026 I=21.64 from VLT)"
+20240312D,True,confirmed on production; LS imaging; bright barred face-on spiral z=0.0495 (m=14.9); q=0.917 locked on sky/n1/n1_sky (0.92-0.93) and AstroPhot (0.916); chi2nu and RFF are arm/bar residuals; outer isophotes q~0.83-0.84 at 2-3 Re (bar drags inner to 0.58) - single-Sersic q may be ~0.08 rounder than the outer disk (i 23.6 vs ~33 deg); tier B
+20180916B,False,"REJECTED - R3 host at b~3.7 deg in a crowded PS1 field; fit box truncated by star masks so the model ellipse (Re=32 px) extends far beyond the fitted pixels; legs unstable (Re 12-99 px, m 17.0-19.3, sky -13 to +23); m_galfit 18.29 vs PS1 ref 19.55; isophotes and Fourier unusable. Needs HST/deeper imaging"
+20240807A,True,confirmed on production; Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=0.98); LS imaging; q=0.41 stable on sky/n1/n1_sky (0.41) and AstroPhot; barely resolved (Re/FWHM=0.67); isophotes rounder (0.61-0.64) from PSF; m=21.52
+20241014B,True,"confirmed on production; Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=0.93); LS imaging; q=0.66 (n1 legs 0.68), AstroPhot agrees; Re/FWHM=0.81; companion 5 arcsec W masked"
+20250106B,True,confirmed on production; Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=1.00); LS imaging; q=0.63 locked on all legs and AstroPhot; Re/FWHM=0.92; tier A
+20250511A,True,"confirmed on n1_sky (outputs/panels/20250511A_n1_sky.png); Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=1.00); LS imaging; unresolved (Re/FWHM=0.34, production n=0.50); q=0.85-0.86 stable on all legs and AstroPhot; same footing as 20240203D"
+20250607C,True,confirmed on production; Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=1.00); LS imaging; clean inclined disk q=0.36 locked on all legs and AstroPhot; Re/FWHM=1.17; dmag flag is LS Tractor shredding (3 components sum to r~19.2 vs GALFIT 19.30)
+20251024B,True,confirmed on production; Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=0.99); LS imaging; q=0.51 locked on all legs and AstroPhot; Re/FWHM=1.22; tier A
+20260324E,True,"confirmed on production; Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=1.00); LS imaging; compact round early-type-like (n=5.4, q=0.93; n1 legs 0.91); Re/FWHM=0.59 - disk assumption caveat as for 20240224A"
+20260331E,True,confirmed on production; Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=0.98); LS imaging; q=0.56 locked on all legs and AstroPhot; Re/FWHM=0.72
+20260608D,True,"confirmed on production; Dial+2026 CRAFT HTR2 FRB position/z; host = our AstroPATH pick on the FRB position (P=0.98); LS/PS1-calibrated imaging; bright disk m=17.59, q=0.30 (n1 legs 0.33), n=2.5; bulge/disk residuals; tier B"
+20231210F,True,"confirmed on production; Pastor-Marazuela+2026 MeerTRAP FRB position, host G1 (their PATH 0.81, ours 0.83; photo-z 0.50 only); LS imaging; edge-on disk q=0.22 (just above cut) stable on all legs (0.22-0.23) and AstroPhot; m=21.15; weak-association caveat"
+20250316A,True,"confirmed on production; CHIME/FRB Outriggers one-off in NGC 4141 (CHIME/FRB 2025 ApJL 989 L48); LS imaging; m=14.06 spiral; q=0.78 locked on all legs and AstroPhot; isophotes 0.66 at 1Re to 0.89 at 2Re (bar/arms), single-Sersic between; chi2nu/RFF are arm residuals; tier B"
+20231010A,False,REJECTED - fails cuts: m=22.36 > 22 and q=0.07 at Re floor (unresolved); AstroPATH P=0.62; MeerTRAP photo-z host
+20220208A,False,REJECTED - host not detected in PS1 cutout (nearest detection 26 arcsec); no LS coverage; E(B-V)=0.81; Sharma+2024 PATH P=0.56
+20250520A,False,"REJECTED - no imaging: LS DR10 and DES full cutouts fail (Dec -45, coverage gap); PS1 below -30"
