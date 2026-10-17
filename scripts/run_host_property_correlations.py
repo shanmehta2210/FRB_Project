@@ -87,6 +87,32 @@ def any_value(L: pd.DataFrame, frb: str, q: str):
     return sub.value.iloc[0], sub.source_short.iloc[0] + " (fallback)"
 
 
+# Same quantity under different names in the group files; first source by priority wins.
+MERGED = {
+    "av": ["av"],
+    "av_old": ["av_old"],
+    "g_r_color": ["g_r_color"],
+    "rm_host_rest": ["rm_host_rad_m2", "rm_host"],
+    "b_par_host": ["b_parallel_host_ug"],
+    "lin_pol": ["linear_pol_frac", "pol_frac_linear", "pol_linear_frac"],
+    "circ_pol": ["circular_pol_frac", "pol_frac_circular"],
+    "metal_gas": ["metallicity_12logoh"],
+    "halpha_ew": ["halpha_ew_a"],
+    "q_pah": ["q_pah"],
+    "log_tau_rest": ["log_tau_1ghz_rest_ms", "log_tau_rest_1ghz_ms"],
+    "scint_bw": ["scint_bandwidth_mhz"],
+}
+
+
+def merged_value(L: pd.DataFrame, frb: str, names: list[str]):
+    sub = L[(L.frb == frb) & L.quantity.isin(names)]
+    sub = sub[np.isfinite(sub.value.map(num).astype(float))]
+    if sub.empty:
+        return float("nan"), None
+    sub = sub.assign(rank=sub.source_short.map(B.source_rank)).sort_values("rank")
+    return num(sub.value.iloc[0]), sub.source_short.iloc[0]
+
+
 def survey_group(s: str) -> str:
     s = str(s)
     for k in ("ASKAP", "DSA", "MeerKAT", "CHIME"):
@@ -117,6 +143,11 @@ def build_table() -> pd.DataFrame:
                 v, src = any_value(L, f, q)
             r[q] = v if q == "telescope_localization" else (num(v) if v is not None else float("nan"))
             r[q + "_src"] = src
+        for k, names in MERGED.items():
+            r[k], r[k + "_src"] = merged_value(L, f, names)
+        for k in ("lin_pol", "circ_pol"):
+            if r[k] > 1.5:  # Sherman+2024 quote percent; others fractions
+                r[k] /= 100.0
         m = master.loc[f]
         r["ra_deg"], r["dec_deg"] = float(m.ra_deg), float(m.dec_deg)
         r["gal_abs_b"] = abs(float(SkyCoord(r["ra_deg"] * u.deg, r["dec_deg"] * u.deg).galactic.b.deg))
@@ -138,6 +169,9 @@ def build_table() -> pd.DataFrame:
         r["log_ssfr"] = (math.log10(r["sfr"]) - r["logmstar"]) if r["sfr"] > 0 and np.isfinite(r["logmstar"]) else float("nan")
         r["log_sigma_star"] = (r["logmstar"] - math.log10(2 * math.pi * r["re_kpc"] ** 2)
                                if np.isfinite(r["logmstar"]) and r["re_kpc"] > 0 else float("nan"))
+        r["abs_rm_host_rest"] = abs(r["rm_host_rest"]) if np.isfinite(r["rm_host_rest"]) else float("nan")
+        r["b_par_proxy"] = (1.232 * r["abs_rm"] * (1 + z) ** 2 / r["dm_host_rest"]
+                            if np.isfinite(r["abs_rm"]) and r["dm_host_rest"] > 0 else float("nan"))
         rows.append(r)
     return pd.DataFrame(rows)
 
@@ -212,6 +246,19 @@ INCL_PROPS = [
     ("metallicity_logz", "stellar metallicity", "Glowacki+25"),
     ("u_r_color", "u - r colour", "Marnoch+26 (colour)"),
     ("re_kpc", "R_e [kpc]", "Li+25 (projected area)"),
+    ("av", "A_V young stars (birth clouds + diffuse; Prospector)", "dust"),
+    ("av_old", "A_V old stars (diffuse ISM; Prospector)", "positive control: diffuse disc dust rises edge-on"),
+    ("g_r_color", "g - r colour", "positive control (reddening)"),
+    ("abs_rm_host_rest", "|RM_host| rest (published)", "Verdi+26; Mannings+23"),
+    ("b_par_host", "B_par host (published)", "Verdi+26"),
+    ("b_par_proxy", "1.23 |RM| (1+z)^2 / DM_host,rest", "Verdi+26 style, RM_MW not removed"),
+    ("lin_pol", "linear polarisation fraction", "depolarisation through the disc"),
+    ("circ_pol", "circular polarisation fraction", "propagation"),
+    ("log_tau_rest", "log tau rest 1 GHz (published)", "Glowacki+25"),
+    ("metal_gas", "gas metallicity 12+log O/H", "Glowacki+25"),
+    ("halpha_ew", "H-alpha EW", "Glowacki+25"),
+    ("q_pah", "PAH fraction q_PAH", "dust"),
+    ("scint_bw", "scintillation bandwidth", "null check (Milky Way screen)"),
     ("z", "redshift", "selection"),
     ("m_r", "m_r (ours)", "selection; Marnoch m<21 cut"),
     ("sersic_n", "Sersic n (ours)", "selection; Marnoch n<2 cut"),
