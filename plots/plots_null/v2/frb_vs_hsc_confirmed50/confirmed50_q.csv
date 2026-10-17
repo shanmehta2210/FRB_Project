@@ -54,5 +54,4 @@ frb,leg,q_source,q,q_err,q_sky_plus,q_sky_minus,sigma_q_sky,sky_missing,sky_path
 20240312D,production,production,0.92,0,0.9169,0.9166,0.00015,False,pipeline_scripts/verification/outputs/per_host/20240312D/sky.json,14.88,pipeline_scripts/Output/20240312D_all,0.0333339,0,0.00015,0.916515
 20240318A,production,production,0.43,0,0.426,0.428,0.001,False,pipeline_scripts/verification/outputs/per_host/20240318A/sky.json,18.47,pipeline_scripts/Output/20240318A_all,0.0693393,0,0.001,0.388507
 20240525A,production,production,0.37,0,0.3641,0.3667,0.0013,False,pipeline_scripts/verification/outputs/per_host/20240525A/sky.json,19.86,pipeline_scripts/Output/20240525A_all,0.0675533,0,0.0013,0.317707
-20240615B,production,production,0.94,0,0.9395,0.9397,0.0001,False,pipeline_scripts/verification/outputs/per_host/20240615B/sky.json,15.92,pipeline_scripts/Output/20240615B_all,0.0290488,0,0.0001,0.937417
 20250316A,production,production,0.78,0,0.7845,0.7842,0.00015,False,pipeline_scripts/verification/outputs/per_host/20250316A/sky.json,14.06,pipeline_scripts/Output/20250316A_all,0.052695,0,0.00015,0.76947
