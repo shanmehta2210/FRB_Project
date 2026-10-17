@@ -73,12 +73,3 @@ frb,citation,cite_source,coord_semantics
 20231010A,"Pastor-Marazuela et al. 2026, MNRAS (arXiv:2507.05982) Table 1",master_frb_localization.csv,signal
 20231210F,"Pastor-Marazuela et al. 2026, MNRAS (arXiv:2507.05982) Table 1; host G1 via PATH",master_frb_localization.csv,host
 20250316A,"CHIME/FRB Collaboration 2025, ApJL 989, L48 (doi:10.3847/2041-8213/adf62f); host NGC 4141",master_frb_localization.csv,host
-20240807A,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host
-20241014B,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host
-20250106B,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host
-20250511A,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host
-20250607C,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host
-20251024B,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host
-20260324E,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host
-20260331E,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host
-20260608D,Dial et al. 2026 (arXiv:2609.21177) Table B1 FRB position and z; host = our AstroPATH pick (LS DR10 position),master_frb_localization.csv,host

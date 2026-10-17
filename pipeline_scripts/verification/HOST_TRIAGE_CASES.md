@@ -1831,25 +1831,26 @@ Also excluded on policy: the sample is restricted to non-repeaters (2026-10-18).
 
 ---
 
-## 2026-10-18 literature batch (14 candidates; 11 CONFIRMED)
+## 2026-10-18 literature batch (14 candidates; 2 CONFIRMED)
 
-**Association basis.** Nine are CRAFT HTR2 bursts from Dial+2026 (Table B1: FRB position, $\sigma$, DM, spectroscopic $z$;
-host papers in prep). No host coordinates are published, so the host is our AstroPATH pick on the FRB ellipse and the
-row is promoted to `host` semantics at the LS DR10 position. This is weaker than a published host localization and
-should be stated in the paper. 20231210F/20231010A are MeerTRAP (Pastor-Marazuela+2026; photo-$z$ only).
+**Policy (2026-10-18): only hosts claimed in the literature.** A published localization rests on PATH plus redshift,
+spectroscopy and deeper imaging; our PATH run alone is not a host association. The nine Dial+2026 CRAFT HTR2 bursts
+(FRB position, $\sigma$, DM, $z$; host papers in prep) are therefore **EXCLUDED** regardless of fit quality, removed
+from production, and reverted to `signal` semantics with status `awaiting_host_publication`. The verdicts below for
+those nine describe the fit only and become usable once the host papers appear. 20231210F/20231010A are MeerTRAP (Pastor-Marazuela+2026; photo-$z$ only).
 20250316A is the CHIME/FRB Outriggers one-off in NGC 4141. 20220208A is DSA-110 (Sharma+2024, PATH $P=0.56$).
 
 | FRB | $P(O)$ | $m_r$ | $q$ prod | sky / n1 / n1_sky | $R_e/\mathrm{FWHM}$ | verdict |
 |---|---|---|---|---|---|---|
-| 20240807A | 0.98 | 21.52 | 0.41 | 0.41 / 0.41 / 0.41 | 0.67 | CONFIRMED (barely resolved) |
-| 20241014B | 0.93 | 19.58 | 0.66 | 0.66 / 0.68 / 0.68 | 0.81 | CONFIRMED |
-| 20250106B | 1.00 | 20.21 | 0.63 | 0.63 / 0.63 / 0.63 | 0.92 | CONFIRMED |
-| 20250511A | 1.00 | 20.10 | 0.86 | 0.86 / 0.85 / 0.85 | 0.34 | CONFIRMED on n1_sky (unresolved; as 20240203D) |
-| 20250607C | 1.00 | 19.30 | 0.36 | 0.36 / 0.36 / 0.36 | 1.17 | CONFIRMED (LS Tractor shreds host; summed $r\approx19.2$) |
-| 20251024B | 0.99 | 19.10 | 0.51 | 0.51 / 0.50 / 0.50 | 1.22 | CONFIRMED |
-| 20260324E | 1.00 | 19.32 | 0.93 | 0.92 / 0.91 / 0.91 | 0.59 | CONFIRMED (early-type-like, $n=5.4$; disk caveat) |
-| 20260331E | 0.98 | 19.69 | 0.56 | 0.56 / 0.55 / 0.55 | 0.72 | CONFIRMED |
-| 20260608D | 0.98 | 17.59 | 0.30 | 0.30 / 0.33 / 0.33 | 1.79 | CONFIRMED (bulge+disk residuals; tier B) |
+| 20240807A | 0.98 | 21.52 | 0.41 | 0.41 / 0.41 / 0.41 | 0.67 | EXCLUDED (unpublished host; fit OK) (barely resolved) |
+| 20241014B | 0.93 | 19.58 | 0.66 | 0.66 / 0.68 / 0.68 | 0.81 | EXCLUDED (unpublished host; fit OK) |
+| 20250106B | 1.00 | 20.21 | 0.63 | 0.63 / 0.63 / 0.63 | 0.92 | EXCLUDED (unpublished host; fit OK) |
+| 20250511A | 1.00 | 20.10 | 0.86 | 0.86 / 0.85 / 0.85 | 0.34 | EXCLUDED (unpublished host; fit OK) on n1_sky (unresolved; as 20240203D) |
+| 20250607C | 1.00 | 19.30 | 0.36 | 0.36 / 0.36 / 0.36 | 1.17 | EXCLUDED (unpublished host; fit OK) (LS Tractor shreds host; summed $r\approx19.2$) |
+| 20251024B | 0.99 | 19.10 | 0.51 | 0.51 / 0.50 / 0.50 | 1.22 | EXCLUDED (unpublished host; fit OK) |
+| 20260324E | 1.00 | 19.32 | 0.93 | 0.92 / 0.91 / 0.91 | 0.59 | EXCLUDED (unpublished host; fit OK) (early-type-like, $n=5.4$; disk caveat) |
+| 20260331E | 0.98 | 19.69 | 0.56 | 0.56 / 0.55 / 0.55 | 0.72 | EXCLUDED (unpublished host; fit OK) |
+| 20260608D | 0.98 | 17.59 | 0.30 | 0.30 / 0.33 / 0.33 | 1.79 | EXCLUDED (unpublished host; fit OK) (bulge+disk residuals; tier B) |
 | 20231210F | 0.83 | 21.15 | 0.22 | 0.23 / 0.22 / 0.22 | 1.14 | CONFIRMED (weak association, photo-$z$; $q$ just above cut) |
 | 20250316A | 0.98 | 14.06 | 0.78 | 0.78 / 0.78 / 0.77 | 8.2 | CONFIRMED (NGC 4141; isophotes 0.66→0.89 bar/arms; tier B) |
 | 20231010A | 0.62 | 22.36 | 0.07 | — | 0.30 | REJECTED (fails $m_r$ and $q$ cuts) |
