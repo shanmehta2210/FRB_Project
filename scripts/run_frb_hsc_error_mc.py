@@ -76,15 +76,16 @@ def main() -> None:
         if (i + 1) % 500 == 0:
             print(f"draw {i + 1}", flush=True)
 
-    p_hsc_less = np.array([stats.binom.cdf(k, 50, p_hsc) for k in k60])
-    p_2024_ge = np.array([stats.binom.sf(k - 1, 50, P_2024) for k in k60])
-    p_scaled_ge = np.array([stats.binom.sf(k - 1, 50, p_scaled) for k in k60])
+    n = len(q)
+    p_hsc_less = np.array([stats.binom.cdf(k, n, p_hsc) for k in k60])
+    p_2024_ge = np.array([stats.binom.sf(k - 1, n, P_2024) for k in k60])
+    p_scaled_ge = np.array([stats.binom.sf(k - 1, n, p_scaled) for k in k60])
 
     def show(name: str, a: np.ndarray) -> None:
         lo, mid, hi = _pct(a)
         print(f"{name}: 16% {lo:.4g}  median {mid:.4g}  84% {hi:.4g}")
 
-    print(f"N_HSC {n_hsc}  draws {N_DRAWS}  median sigma_q_B {np.median(sig):.4f}")
+    print(f"N_FRB {n}  N_HSC {n_hsc}  draws {N_DRAWS}  median sigma_q_B {np.median(sig):.4f}")
     print(f"p_HSC(i>60) {p_hsc:.6f}  p_2024 {P_2024:.6f}  p_scaled {p_scaled:.6f}")
     show("median cos i", med)
     show("mean cos i", mean)

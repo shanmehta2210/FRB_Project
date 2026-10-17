@@ -1,16 +1,16 @@
 # Confirmed-50 vs HSC — statistical tests
 
-Question: could the 51 confirmed FRB-host Hubble \(\cos(i)\) values be a random draw from the HSC disk pool (\(r\le 22\), \(b/a>0.2\), \(0.4<n<1.5\))?
+Question: could the 57 confirmed FRB-host Hubble \(\cos(i)\) values be a random draw from the HSC disk pool (\(r\le 22\), \(b/a>0.2\), \(0.4<n<1.5\))?
 
 Tests use **point estimates** (winning-leg \(q \to\) Hubble \(\cos(i)\), \(q_0=0.2\)). They do **not** fold in Protocol A/B error smearing. Same convention as [`run_sdss_frb_inclination_tests.py`](../../../scripts/run_sdss_frb_inclination_tests.py).
 
 | | FRB | HSC |
 |---|---:|---:|
-| N | 51 | 24,450 |
-| median \(\cos(i)\) | 0.610 | 0.575 |
-| mean \(\cos(i)\) | 0.585 | 0.567 |
-| FRB − HSC (median) | +0.035 | |
-| FRB − HSC (mean) | +0.018 | |
+| N | 57 | 24,450 |
+| median \(\cos(i)\) | 0.642 | 0.575 |
+| mean \(\cos(i)\) | 0.593 | 0.567 |
+| FRB − HSC (median) | +0.067 | |
+| FRB − HSC (mean) | +0.026 | |
 
 ## How to read a p-value
 
@@ -25,8 +25,8 @@ p is the chance of a discrepancy **at least this large** if FRB and HSC really s
 
 Two p-values are listed:
 
-- **p (vs pool)** — textbook two-sample test of the 51 vs all 24,450 HSC galaxies. Power is high: a *small* CDF offset can make p tiny.
-- **p (matched N)** — among 10,000 random HSC draws of 51, the fraction whose statistic vs the pool is at least as large as the FRB’s. This matches the CDF envelope (same N). Prefer this when asking “is this 51 unusual among 51-galaxy HSC samples?”
+- **p (vs pool)** — textbook two-sample test of the 57 vs all 24,450 HSC galaxies. Power is high: a *small* CDF offset can make p tiny.
+- **p (matched N)** — among 10,000 random HSC draws of 57, the fraction whose statistic vs the pool is at least as large as the FRB’s. This matches the CDF envelope (same N). Prefer this when asking “is this 57 unusual among 57-galaxy HSC samples?”
 
 SciPy AD p-values are **capped at 0.25** when samples look alike (true p is at least 0.25) and floored near 0.001 when they differ strongly.
 
@@ -36,23 +36,23 @@ SciPy AD p-values are **capped at 0.25** when samples look alike (true p is at l
 
 | Test | statistic | p (vs pool) | p (matched N) | notes |
 |---|---:|---:|---:|---|
-| Kolmogorov–Smirnov | 0.115 | 0.476 | 0.467 | D = max \|F−G\| |
-| Anderson–Darling | -0.461 | >= 0.25 (SciPy cap) | 0.606 | tails weighted |
-| Cramér–von Mises | 2.109 | unreliable | 0.476 | vs-pool p broken at N2 >> N1 |
-| Kuiper | 0.169 | — | 0.443 | V = D+ + D−; p from MC only |
-| Mann–Whitney U | 654199.0 | 0.543 | — | rank-biserial = -0.049 |
-| Brunner–Munzel | -0.642 | 0.524 | — | location; unequal variance OK |
-| Epps–Singleton | 3.43 | 0.489 | — | characteristic function |
-| Welch t (means) | 0.601 | 0.551 | — | parametric; cos(i) is not Gaussian |
-| Wasserstein-1 | 0.0325 | — | 0.522 | mean \|quantile gap\|; p from MC |
+| Kolmogorov–Smirnov | 0.119 | 0.365 | 0.361 | D = max \|F−G\| |
+| Anderson–Darling | -0.221 | >= 0.25 (SciPy cap) | 0.460 | tails weighted |
+| Cramér–von Mises | 1.945 | unreliable | 0.337 | vs-pool p broken at N2 >> N1 |
+| Kuiper | 0.172 | — | 0.326 | V = D+ + D−; p from MC only |
+| Mann–Whitney U | 748141.0 | 0.336 | — | rank-biserial = -0.074 |
+| Brunner–Munzel | -0.959 | 0.341 | — | location; unequal variance OK |
+| Epps–Singleton | 3.78 | 0.437 | — | characteristic function |
+| Welch t (means) | 0.845 | 0.402 | — | parametric; cos(i) is not Gaussian |
+| Wasserstein-1 | 0.0346 | — | 0.404 | mean \|quantile gap\|; p from MC |
 
 ## Kolmogorov–Smirnov (two-sample)
 
 **How it works.** Sort both samples and form empirical CDFs \(F_{50}\) and \(G_{\mathrm{HSC}}\). The statistic is \(D=\sup_x |F_{50}(x)-G_{\mathrm{HSC}}(x)|\), the largest vertical gap. SciPy’s two-sided p uses the asymptotic (or exact, when cheap) null distribution of \(D\) under a shared continuous law.
 
-**How to read it.** \(D\) is a distance between CDFs on [0, 1]: here \(D=0.115\) means the curves never differ by more than that. p answers “would a gap this big show up often if both were draws from one law?” KS is most sensitive near the middle of the distribution and weaker in the tails than AD.
+**How to read it.** \(D\) is a distance between CDFs on [0, 1]: here \(D=0.119\) means the curves never differ by more than that. p answers “would a gap this big show up often if both were draws from one law?” KS is most sensitive near the middle of the distribution and weaker in the tails than AD.
 
-**Result.** \(D=0.115\), p (vs pool) = 0.476, p (matched N) = 0.467.
+**Result.** \(D=0.119\), p (vs pool) = 0.365, p (matched N) = 0.361.
 
 ## Anderson–Darling (k-sample)
 
@@ -60,7 +60,7 @@ SciPy AD p-values are **capped at 0.25** when samples look alike (true p is at l
 
 **How to read it.** Larger statistic → more evidence against a shared law, especially if the mismatch is at high/low \(\cos(i)\). Do **not** read the sign of the statistic (recent SciPy can return negative values when samples agree). Use the p-value. A printed p of 0.25 is a **cap** (true p ≥ 0.25).
 
-**Result.** AD = -0.461, p (vs pool) = >= 0.25 (SciPy cap), p (matched N) = 0.606.
+**Result.** AD = -0.221, p (vs pool) = >= 0.25 (SciPy cap), p (matched N) = 0.460.
 
 ## Cramér–von Mises (two-sample)
 
@@ -70,7 +70,7 @@ SciPy AD p-values are **capped at 0.25** when samples look alike (true p is at l
 
 SciPy vs-pool p is uncalibrated when N_HSC >> N_FRB. Use matched-N p.
 
-**Result.** T=2.109, p (vs pool) = ignore (6.74e-06, uncalibrated), p (matched N) = 0.476.
+**Result.** T=1.945, p (vs pool) = ignore (1.60e-05, uncalibrated), p (matched N) = 0.337.
 
 ## Kuiper (two-sample)
 
@@ -78,7 +78,7 @@ SciPy vs-pool p is uncalibrated when N_HSC >> N_FRB. Use matched-N p.
 
 **How to read it.** Sensitive to **shape** differences that flip sign (excess edge-on *and* excess face-on). A large \(V\) with a small KS \(D\) means the CDFs cross. p (matched N) is the fraction of HSC-50 draws with \(V\) at least this large vs the pool.
 
-**Result.** \(V=0.169\), p (matched N) = 0.443.
+**Result.** \(V=0.172\), p (matched N) = 0.326.
 
 ## Mann–Whitney U
 
@@ -86,7 +86,7 @@ SciPy vs-pool p is uncalibrated when N_HSC >> N_FRB. Use matched-N p.
 
 **How to read it.** p speaks only to a **shift**, not to variance or tail shape (AD/KS can fire when MWU does not). \(|r|\lesssim 0.1\) is a small location shift even if p is small against 24,450 HSC galaxies. Sign: \(r>0\) means FRB ranks **lower** \(\cos(i)\) (more edge-on) than HSC.
 
-**Result.** \(U=654199.0\), p (vs pool) = 0.543, rank-biserial \(r=-0.049\) (median \(\Delta\cos(i)=+0.035\)).
+**Result.** \(U=748141.0\), p (vs pool) = 0.336, rank-biserial \(r=-0.074\) (median \(\Delta\cos(i)=+0.067\)).
 
 ## Brunner–Munzel
 
@@ -94,7 +94,7 @@ SciPy vs-pool p is uncalibrated when N_HSC >> N_FRB. Use matched-N p.
 
 **How to read it.** Treat it as a robustness check on MWU. If BM and MWU p-values agree, the location conclusion is not an equal-spread artifact. Same p-scale.
 
-**Result.** \(W=-0.642\), p (vs pool) = 0.524.
+**Result.** \(W=-0.959\), p (vs pool) = 0.341.
 
 ## Epps–Singleton
 
@@ -102,44 +102,44 @@ SciPy vs-pool p is uncalibrated when N_HSC >> N_FRB. Use matched-N p.
 
 **How to read it.** The statistic is a \(\chi^2\)-like distance between characteristic functions. Large stat / small p → the full laws differ, without saying *where*. Use the CDF plot for direction.
 
-**Result.** \(W=3.43\), p (vs pool) = 0.489.
+**Result.** \(W=3.78\), p (vs pool) = 0.437.
 
 ## Welch \(t\) (means)
 
-**How it works.** Two-sample \(t\) on the means with unequal-variance standard errors. Assumes each sample mean is approximately normal (CLT is comfortable at \(N=51\), but \(\cos(i)\) is bounded).
+**How it works.** Two-sample \(t\) on the means with unequal-variance standard errors. Assumes each sample mean is approximately normal (CLT is comfortable at \(N=57\), but \(\cos(i)\) is bounded).
 
-**How to read it.** This is a **mean shift** test only. Do not prefer it over MWU/BM for the scientific claim; it is here because \(N=50\) is large enough that the mean is a stable summary. Mean \(\Delta\cos(i)=+0.018\).
+**How to read it.** This is a **mean shift** test only. Do not prefer it over MWU/BM for the scientific claim; it is here because \(N=50\) is large enough that the mean is a stable summary. Mean \(\Delta\cos(i)=+0.026\).
 
-**Result.** \(t=0.601\), p (vs pool) = 0.551.
+**Result.** \(t=0.845\), p (vs pool) = 0.402.
 
 ## Wasserstein-1
 
 **How it works.** Earth-mover distance between the two 1-D laws: \(\int |F^{-1}-G^{-1}|\,du\), the average absolute gap between quantile functions. Not a significance test by itself; p comes from the matched-N Monte Carlo.
 
-**How to read it.** \(W_1\) is in \(\cos(i)\) units. \(W_1=0.0325\) is the typical horizontal shift you would need to morph one CDF into the other. Compare it to the plot’s 68% band width, not to a 0–1 “agreement” scale.
+**How to read it.** \(W_1\) is in \(\cos(i)\) units. \(W_1=0.0346\) is the typical horizontal shift you would need to morph one CDF into the other. Compare it to the plot’s 68% band width, not to a 0–1 “agreement” scale.
 
-**Result.** \(W_1=0.0325\), p (matched N) = 0.522.
+**Result.** \(W_1=0.0346\), p (matched N) = 0.404.
 
 ## Directional tests (fewer edge-on hosts)
 
 Pre-specified direction: FRB hosts have fewer edge-on systems than the HSC disks, i.e. larger \(\cos(i)\). SciPy has no one-sided Anderson–Darling; AD stays the two-sided primary test above. One-sided KS and Mann–Whitney are the directional complements. Cramér–von Mises remains the two-sided optional test in the summary.
 
-**One-sided KS** (`alternative='less'`): tests whether the FRB CDF lies below the HSC CDF. \(D^-=0.115\), p (vs pool) = 0.241, p (matched N) = 0.237.
+**One-sided KS** (`alternative='less'`): tests whether the FRB CDF lies below the HSC CDF. \(D^-=0.119\), p (vs pool) = 0.184, p (matched N) = 0.178.
 
-**One-sided Mann–Whitney** (`alternative='greater'`): tests whether FRB \(\cos(i)\) is stochastically larger. \(U=654199.0\), p (vs pool) = 0.271, p (matched N) = 0.274.
+**One-sided Mann–Whitney** (`alternative='greater'`): tests whether FRB \(\cos(i)\) is stochastically larger. \(U=748141.0\), p (vs pool) = 0.168, p (matched N) = 0.166.
 
 ### \(\chi^2\) in HSC quantile bins
 
-Bins are equal-probability intervals of the HSC pool, so each bin expects \(N/n_{\mathrm{bins}}\) FRB hosts if the samples share one law. With \(N=51\), every split from 2 to 5 bins has expected counts above 5. Quartiles match the 2024 paper and are the adopted split (expected 12.8 per bin).
+Bins are equal-probability intervals of the HSC pool, so each bin expects \(N/n_{\mathrm{bins}}\) FRB hosts if the samples share one law. With \(N=57\), every split from 2 to 5 bins has expected counts above 5. Quartiles match the 2024 paper and are the adopted split (expected 14.2 per bin).
 
 | bins | expected / bin | FRB counts (low \(\cos i\) → high) | \(\chi^2\) | p |
 |---:|---:|---|---:|---:|
-| 2 | 25.5 | 21,30 | 1.59 | 0.208 |
-| 3 | 17.0 | 13,21,17 | 1.88 | 0.390 |
-| 4 adopted | 12.8 | 11,10,19,11 | 4.14 | 0.247 |
-| 5 | 10.2 | 8,8,12,15,8 | 4.00 | 0.406 |
+| 2 | 28.5 | 23,34 | 2.12 | 0.145 |
+| 3 | 19.0 | 15,20,22 | 1.37 | 0.504 |
+| 4 adopted | 14.2 | 13,10,19,15 | 3.00 | 0.392 |
+| 5 | 11.4 | 10,8,11,17,11 | 3.96 | 0.411 |
 
-Quartile matched-N p = 0.254. Counts (edge-on to face-on): 11,10,19,11.
+Quartile matched-N p = 0.408. Counts (edge-on to face-on): 13,10,19,15.
 
 ### Binomial edge-on fraction
 
@@ -147,11 +147,11 @@ Edge-on means \(i\) above a fixed cut, equivalently \(\cos i < \cos i_{\mathrm{c
 
 | cut | FRB \(k/N\) | FRB fraction | HSC fraction | one-sided p |
 |---:|---:|---:|---:|---:|
-| \(i>45^\circ\) | 34/51 | 0.667 | 0.681 | 0.465 |
-| \(i>60^\circ\) | 15/51 | 0.294 | 0.398 | 0.083 |
-| \(i>75^\circ\) | 4/51 | 0.078 | 0.102 | 0.396 |
+| \(i>45^\circ\) | 35/57 | 0.614 | 0.681 | 0.172 |
+| \(i>60^\circ\) | 17/57 | 0.298 | 0.398 | 0.079 |
+| \(i>75^\circ\) | 5/57 | 0.088 | 0.102 | 0.470 |
 
-For \(i>60^\circ\), matched-N p = 0.081 (fraction of HSC draws of 51 with an edge-on count at least as small).
+For \(i>60^\circ\), matched-N p = 0.078 (fraction of HSC draws of 57 with an edge-on count at least as small).
 
 ## Caveats
 

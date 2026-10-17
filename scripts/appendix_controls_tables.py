@@ -54,7 +54,7 @@ def tests(frb: np.ndarray, hsc: np.ndarray, rng: np.random.Generator) -> dict:
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     hosts = P.load_hosts()
-    assert len(hosts) == 51, len(hosts)
+    n_hosts = len(hosts)
     rng = np.random.default_rng(P.SEED + 11)
 
     # ---- q0 ---------------------------------------------------------------
@@ -112,7 +112,7 @@ def main() -> None:
                   f"{f3(r.frac_i_gt_60_frb)} / {f3(r.frac_i_gt_60_hsc)} | {f3(r.KS_D)} | {f3(r.KS_p_two_sided)} | "
                   f"{f3(r.KS_p_one_sided_edgeon)} | {f3(r.KS_p_matchedN)} | {f3(r.MWU_p_two_sided)} | {f3(r.MWU_p_one_sided_edgeon)} |")
     md += ["", "## 2. Sérsic-index window of the HSC control", "",
-           "FRB sample fixed (51, $q_0 = 0.2$). The HSC pool is re-selected with different $n$ windows "
+           f"FRB sample fixed ({n_hosts}, $q_0 = 0.2$). The HSC pool is re-selected with different $n$ windows "
            "(the adopted window is $0.4 < n < 1.5$).", "",
            "| $n$ window | $N_{\\rm HSC}$ | median $n$ | median $\\cos i$ HSC | $f(i>60^\\circ)$ HSC | KS $D$ | "
            "KS $p$ (2-sided) | KS $p$ (edge-on) | KS $p$ matched-$N$ | MWU $p$ (2-sided) | MWU $p$ (edge-on) |",
@@ -123,6 +123,7 @@ def main() -> None:
                   f"{f3(r.KS_p_matchedN)} | {f3(r.MWU_p_two_sided)} | {f3(r.MWU_p_one_sided_edgeon)} |")
     md += ["", f"FRB sample: median $\\cos i$ = {np.median(frb):.3f}, $f(i>60^\\circ)$ = {np.mean(frb < 0.5):.3f}.", ""]
     (OUT / "CONTROLS_Q0_NRANGE.md").write_text("\n".join(md), encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8")
     print("\n".join(md))
 
 
