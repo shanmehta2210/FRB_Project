@@ -91,7 +91,7 @@ Control: HSC-PDR2 (Kawinwanichakij+2021), $0.4 < n < 1.5$, `goodfits_flag = 1`, 
 | Wasserstein-1 matched-$N$ $p$ | 0.522 | 0.473 |
 | Mann–Whitney $p$ | 0.543 | 0.453 |
 | One-sided KS / MWU $p$ (FRB more face-on) | 0.241 / 0.271 | 0.226 / 0.226 |
-| $\chi^2$, HSC quartiles, $p$ | 0.254 (matched) | 0.392 |
+| $\chi^2$, HSC quartiles: counts edge-on to face-on; matched-$N$ $p$ | 11, 10, 19, 11; 0.254 | 13, 10, 19, 14; 0.404 |
 | Edge-on $i > 60^\circ$: $k/N$, binomial $p$ | 15/51, 0.083 | 17/56, 0.094 |
 
 Protocol B error Monte Carlo (2,000 draws):
