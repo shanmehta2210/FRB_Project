@@ -11,8 +11,11 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Generated pipeline outputs and large data directories
-pipeline_scripts/Output/
+# Generated pipeline outputs: keep GALFIT parameter files, logs, JSON metrics, PSF
+# models and CSVs; drop image products (regenerate with the pipeline)
+pipeline_scripts/Output/**/*.fits
+pipeline_scripts/Output/**/*.cat
+pipeline_scripts/Output/**/*.png
 
 # Per-phase run artifacts (FITS, catalogs, feedme, QA images) should never be
 # committed. Only the Python scripts + YAML defaults belong in the repo.
@@ -38,7 +41,7 @@ pipeline_scripts/galfit_fitting/galfit.feedme
 pipeline_scripts/galfit_fitting/galfit.[0-9]*
 pipeline_scripts/galfit_fitting/constraints.txt
 pipeline_scripts/galfit_fitting/out.fits
-large_cutouts/
+large_cutouts/**/*.fits
 psfs/
 Archive/psfs/
 

@@ -1,0 +1,134 @@
+diff --git a/astropath/bayesian.py b/astropath/bayesian.py
+index bd5dd7e..7c01382 100644
+--- a/astropath/bayesian.py
++++ b/astropath/bayesian.py
+@@ -55,6 +55,16 @@ def pw_Oi(theta, phi, theta_prior):
+             -theta_prior['max']))
+         if np.any(ok_w):
+             p[ok_w] = np.exp(-theta[ok_w]/phi) / norm
++    elif theta_prior['PDF'] == 'flat':
++        # Flat in arcsec: constant P(theta) inside a fixed angular radius
++        # (theta_max * phi), independent of galaxy size.  The area element
++        # is still 2*pi*theta*dtheta so the normalisation is the same as
++        # 'uniform' — the difference is conceptual: 'uniform' is phrased
++        # in units of phi while 'flat' treats the cutoff as an absolute
++        # angular scale.
++        norm = np.pi * (phi*theta_prior['max'])**2
++        if np.any(ok_w):
++            p[ok_w] = 1. / norm
+     else:
+         raise IOError("Bad theta PDF")
+     #
+diff --git a/astropath/localization.py b/astropath/localization.py
+index 996d7ff..cd69a5f 100644
+--- a/astropath/localization.py
++++ b/astropath/localization.py
+@@ -17,7 +17,7 @@ from IPython import embed
+ # Localization Data Model
+ localization_dmodel = {
+     'type': dict(dtype=(str),
+-                options=['eellipse', 'wcs', 'healpix'],
++                options=['eellipse', 'uniform_eellipse', 'wcs', 'healpix'],
+                 help='Localization type.'),
+     'center_coord': dict(dtype=(SkyCoord),
+                 help='"Central" coordinate'),
+@@ -42,6 +42,21 @@ localization_dmodel = {
+                 help='WCS of the localization.'),
+     }
+ 
++def _eellipse_xy_offsets(ra: np.ndarray, dec: np.ndarray, localiz: dict):
++    """Offset grid (x, y) in arcsec in the transient error-ellipse frame."""
++    eellipse = localiz['eellipse']
++    pa_ee = eellipse['theta']
++    dtheta = 90.0 - pa_ee
++    coord = SkyCoord(ra=ra, dec=dec, unit='deg')
++    coord.equinox = localiz['center_coord'].equinox
++    sep_box = localiz['center_coord'].separation(coord).to('arcsec')
++    pa_box = localiz['center_coord'].position_angle(coord).to('deg')
++    new_pa_box = pa_box + dtheta * units.deg
++    x_box = -sep_box.value * np.sin(new_pa_box).value
++    y_box = sep_box.value * np.cos(new_pa_box).value
++    return x_box, y_box, eellipse
++
++
+ def calc_LWx(ra:np.ndarray, dec:np.ndarray, localiz:dict):
+     """Calculate the grid of L(w-x) values for
+     the localization given an input ra, dec arrays
+@@ -61,24 +76,18 @@ def calc_LWx(ra:np.ndarray, dec:np.ndarray, localiz:dict):
+             
+     
+     if localiz['type'] == 'eellipse':
+-        # Setup
+-        eellipse = localiz['eellipse']  # convenience
+-        pa_ee = eellipse['theta'] # PA of error ellipse on the sky; deg
+-        dtheta = 90. - pa_ee  # Rotation to place the semi-major axis "a" of the ellipse along the x-axis we define
+-        #
+-        coord = SkyCoord(ra=ra, dec=dec, unit='deg')
+-        coord.equinox = localiz['center_coord'].equinox
+-        # Rotate to the transient frame
+-        sep_box = localiz['center_coord'].separation(coord).to('arcsec')
+-        pa_box = localiz['center_coord'].position_angle(coord).to('deg')
+-        new_pa_box = pa_box + dtheta * units.deg
+-        # x, y of the box in transient frame with x along major axis
+-        x_box = -sep_box.value * np.sin(new_pa_box).value
+-        y_box = sep_box.value * np.cos(new_pa_box).value
+-
+-        # Calculate
++        x_box, y_box, eellipse = _eellipse_xy_offsets(ra, dec, localiz)
+         L_wx = np.exp(-x_box ** 2 / (2 * eellipse['a'] ** 2)) * np.exp(
+             -y_box ** 2 / (2 * eellipse['b'] ** 2)) / (2*np.pi*eellipse['a']*eellipse['b'])
++    elif localiz['type'] == 'uniform_eellipse':
++        # Flat prior inside the error ellipse (top-hat / "box cut").
++        # For a=b this is a uniform disk; integrates to 1 over the ellipse area.
++        x_box, y_box, eellipse = _eellipse_xy_offsets(ra, dec, localiz)
++        inside = (x_box / eellipse['a']) ** 2 + (y_box / eellipse['b']) ** 2 <= 1.0
++        L_wx = np.zeros_like(x_box, dtype=float)
++        norm = np.pi * eellipse['a'] * eellipse['b']
++        if norm > 0:
++            L_wx[inside] = 1.0 / norm
+     elif localiz['type'] == 'healpix':
+         hp_index = hp.ang2pix(localiz['healpix_nside'], ra, dec, 
+                               lonlat=True)
+@@ -129,7 +138,7 @@ def vet_localization(localiz:dict):
+     chk, disallowed_keys, badtype_keys = utils.vet_data_model(localiz, localization_dmodel)
+ 
+     # Required keys
+-    if localiz['type'] == 'eellipse':
++    if localiz['type'] in ('eellipse', 'uniform_eellipse'):
+         required_keys = ['eellipse', 'center_coord']
+     elif localiz['type'] == 'healpix':
+         required_keys = ['healpix_data', 'healpix_ordering', 
+diff --git a/astropath/priors.py b/astropath/priors.py
+index fb3ddd9..c87f972 100644
+--- a/astropath/priors.py
++++ b/astropath/priors.py
+@@ -12,7 +12,7 @@ USR_raw_prior_Oi = None
+ 
+ theta_dmodel = {
+     'PDF': dict(dtype=(str),
+-                options=['exp', 'core', 'uniform'],
++                options=['exp', 'core', 'uniform', 'flat'],
+                 help='PDF shape for assumed transient offsets'),
+     'scale': dict(dtype=(float, np.floating, np.integer, int),
+                 help='Multiplicative scaling applied to phi [Default = 1.]'),
+@@ -22,7 +22,7 @@ theta_dmodel = {
+ 
+ cand_dmodel = {
+     'P_O_method': dict(dtype=(str),
+-                options=['inverse', 'inverse_half', 'inverse_half2', 'identical','user'],
++                options=['inverse', 'inverse_ang', 'inverse_ang2', 'identical', 'user'],
+                 help='Method for prior assignment of detected candidates.'),
+     'P_U': dict(dtype=(float, np.floating),
+                 help='Prior for an unseen host.'),
+diff --git a/requirements.txt b/requirements.txt
+index ab32452..2f903a5 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -10,7 +10,6 @@ pandas>=1.4
+ photutils>=1.5
+ healpy>=1.15
+ astropy-healpix>=0.7
+-ligo.skymap>=2.5
+ astroquery>=0.4.11
+ 
+ # docs

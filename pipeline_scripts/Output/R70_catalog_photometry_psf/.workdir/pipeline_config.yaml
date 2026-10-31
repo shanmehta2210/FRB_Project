@@ -1,0 +1,17 @@
+sextractor:
+  detect_thresh: 3
+  analysis_thresh: 3
+  deblend_mincont: 0.005
+  phot_apertures_px: 40.0
+  gain: 1.6
+  mag_zeropoint: 0.0
+  pixel_scale: 0.262
+  seeing_fwhm: 2.0
+  use_weight_map: false
+psfex:
+  psf_sampling: 1.0
+  psfvar_degrees: 0
+  sample_fwhm_range: 2.0,10
+  sample_variability: 0.4
+  sample_minsn: 30
+  sample_max_ellp: 0.2

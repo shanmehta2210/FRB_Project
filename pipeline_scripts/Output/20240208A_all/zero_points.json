@@ -1,0 +1,27 @@
+{
+  "n_calibration_stars": 40,
+  "n_ps1_matches": 40,
+  "n_legacy_matches": 31,
+  "production_aperture_px": 40.0,
+  "pixel_scale_arcsec_px": 0.26199999999999846,
+  "zp_aper": 26.090310616683958,
+  "zp_aper_std": 0.05172130475295597,
+  "zp_psf": 26.054721453094484,
+  "zp_psf_std": 0.05016941580118896,
+  "zp_auto": 26.039005709838868,
+  "zp_auto_std": 0.037105599410596705,
+  "filter_band": "r",
+  "reference_catalog": "II/349 (PS1 DR1)",
+  "match_radius_arcsec": 0.6,
+  "field_depth": {
+    "m_lim_5sigma_ab": 22.969,
+    "zp_aper": 26.090311,
+    "sigma_sky_adu_per_pix": 0.1,
+    "aperture_diameter_px": 40.0,
+    "aperture_area_pix2": 1256.6,
+    "flux_5sigma_adu": 17.7245,
+    "seeing_fwhm_arcsec": 2.096,
+    "pixel_scale_arcsec": 0.262,
+    "formula_note": "5\u03c3 in pi*(d/2)^2 px^2 at production aperture; not seeing disk"
+  }
+}

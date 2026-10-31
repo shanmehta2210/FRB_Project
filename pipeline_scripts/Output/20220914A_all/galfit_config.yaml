@@ -1,0 +1,6 @@
+plate_scale_x: 0.262
+plate_scale_y: 0.262
+sky_check_enabled: true
+sky_tolerance_adu: 3.0
+sky_max_retries: 1
+mag_zeropoint: 22.58204847561763

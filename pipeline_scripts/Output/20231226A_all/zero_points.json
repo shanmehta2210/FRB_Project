@@ -1,0 +1,16 @@
+{
+  "n_calibration_stars": 51,
+  "n_ps1_matches": 51,
+  "n_legacy_matches": 46,
+  "production_aperture_px": 40.0,
+  "pixel_scale_arcsec_px": 0.26200000000000007,
+  "zp_aper": 21.708895112991332,
+  "zp_aper_std": 0.4323374287547597,
+  "zp_psf": 20.834389556121828,
+  "zp_psf_std": 4.356340625539483,
+  "zp_auto": 21.67179908943176,
+  "zp_auto_std": 0.43028855744348987,
+  "filter_band": "r",
+  "reference_catalog": "II/349 (PS1 DR1)",
+  "match_radius_arcsec": 0.6
+}

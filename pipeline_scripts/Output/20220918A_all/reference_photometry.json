@@ -1,0 +1,8 @@
+{
+  "query_ra_deg": 17.58975132428798,
+  "query_dec_deg": -70.8106420429455,
+  "search_radius_arcsec": 3.0,
+  "queried_utc": "2026-08-04T21:22:57+00:00",
+  "status": "no_match: LS DR10: no source within 3.0 arcsec | PS1: no source within 3.0 arcsec",
+  "coord_source": "host_components.csv"
+}

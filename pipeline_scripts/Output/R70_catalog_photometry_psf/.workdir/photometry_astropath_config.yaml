@@ -1,0 +1,18 @@
+sextractor_psf:
+  detect_thresh: 3
+  analysis_thresh: 3
+  deblend_mincont: 0.005
+  gain: 1.6
+  mag_zeropoint: 0.0
+  pixel_scale: 0.262
+  seeing_fwhm: 2.0
+  phot_apertures_px: 40.0
+  use_weight_map: false
+  mag_mode: mag_40px
+astropath:
+  err_a_arcsec: 1.0
+  err_b_arcsec: 1.0
+  err_theta_deg: 0.0
+  p_u: 0.1
+  filter_band: r
+  target_snr_min: 0.0

@@ -1,0 +1,13 @@
+{
+  "sky_ref_adu": -4.294505,
+  "sky_ref_source": "host_row",
+  "sky_tolerance_adu": 3.0,
+  "sky_pass1_adu": -17.08,
+  "sky_pass2_adu": -7.29,
+  "sky_final_adu": -7.29,
+  "retried": true,
+  "passed": true,
+  "galfit_pass1_ok": true,
+  "galfit_pass2_ok": true,
+  "failure_reason": null
+}

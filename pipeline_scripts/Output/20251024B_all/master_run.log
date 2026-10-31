@@ -1,0 +1,1854 @@
+[02:39:36] INFO frb_pipeline.master | -- run configuration --
+[02:39:36] INFO frb_pipeline.master |   FRB name      : 20251024B
+[02:39:36] INFO frb_pipeline.master |   Outputs (tag) : all (is_all=True)
+[02:39:36] INFO frb_pipeline.master |   Phases to run : ['1', '2', '3a', 'statmorph', '3b']
+[02:39:36] INFO frb_pipeline.master |   Output folder : C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all
+[02:39:36] INFO frb_pipeline.master |   Workdir       : C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir
+[02:39:36] INFO frb_pipeline.master |   Image         : C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\large_cutouts\20251024B_flux.fits
+[02:39:36] INFO frb_pipeline.master |   Invvar        : C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\large_cutouts\20251024B_invvar.fits
+[02:39:36] INFO frb_pipeline.master |   RA, Dec [deg] : 37.37691666666666, -62.96284444444445
+[02:39:36] INFO frb_pipeline.master |   Weight map    : enabled (invvar provided)
+[02:39:36] INFO frb_pipeline.master |   YAML overrides: {'err_a_arcsec': 0.49, 'err_b_arcsec': 0.44, 'err_theta_deg': 90.0, 'use_astropath_host': True}
+[02:39:37] INFO frb_pipeline.master | WCS containment OK: pixel (1144.5, 1144.5) in 2290x2290 image.
+[02:39:37] INFO frb_pipeline.master | Wrote per-run configs: pipeline_config.yaml, photometry_astropath_config.yaml
+[02:39:37] INFO frb_pipeline.master | Production aperture: 40 px (MAG_APER index 14)
+[02:39:37] INFO frb_pipeline.master | Pixel scale from WCS: 0.262000 arcsec/px
+[02:39:37] INFO frb_pipeline.master | ========== Phase 1 / SExtractor + PSFEx ==========
+[02:39:37] INFO frb_pipeline.master | $ 'C:\\Python313\\python.exe' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\SExtractor + PSFEx\\run_psf_pipeline.py' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir\\image.fits' '--config' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir\\pipeline_config.yaml'
+[02:39:37] INFO frb_pipeline.phase1 | Phase 1 config: C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir\pipeline_config.yaml
+[02:39:37] INFO frb_pipeline.phase1 | Apertures (px): 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 20, 25, 30, 40 | production = 40 px (index 14)
+[02:39:37] INFO frb_pipeline.phase1 | Weight map: invvar.fits found and enabled.
+[02:39:37] INFO frb_pipeline.phase1 | Running SExtractor...
+[1M> 
+[1A----- Source Extractor 2.28.2 started on 2026-10-17 at 21:09:37 with 1 thread
+
+[1M> Setting catalog parameters
+[1A[1M> Reading detection filter
+[1A[1M> Initializing Neural Network
+[1A[1M> Reading Neural Network Weights
+[1A[1M> Initializing check-image(s)
+[1A[1M> Initializing catalog
+[1A[1M> Looking for image.fits
+[1A----- Measuring from: image.fits
+      "Unnamed" / no ext. header / 2290x2290 / 32 bits (floats)
+[1M> Looking for invvar.fits
+[1A----- Weighting from: invvar.fits
+      "Unnamed" / no ext. header / 2290x2290 / 32 bits (floats)
+Detection+Measurement image: [1M> Setting up background maps
+[1A[1M> Setting up background map at line: 1024
+[1A[1M> Setting up background map at line: 2048
+[1A[1M> Filtering background map(s)
+[1A[1M> Computing background d-map
+[1A[1M> Computing background-noise d-map
+[1A(M+D) Background: 0.000156203 RMS: 0.00243929 / Threshold: 0.00731786 
+[1M> Scanning image
+[1A[1M> Line:   25  Objects:       24 detected /        0 sextracted
+[1A[1M> Line:   50  Objects:       37 detected /        0 sextracted
+[1A[1M> Line:   75  Objects:       55 detected /        0 sextracted
+[1A[1M> Line:  100  Objects:       69 detected /        0 sextracted
+[1A[1M> Line:  125  Objects:       89 detected /        0 sextracted
+[1A[1M> Line:  150  Objects:      103 detected /        0 sextracted
+[1A[1M> Line:  175  Objects:      122 detected /        0 sextracted
+[1A[1M> Line:  200  Objects:      145 detected /        0 sextracted
+[1A[1M> Line:  225  Objects:      157 detected /        0 sextracted
+[1A[1M> Line:  250  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  275  Objects:      186 detected /        0 sextracted
+[1A[1M> Line:  300  Objects:      208 detected /        0 sextracted
+[1A[1M> Line:  325  Objects:      226 detected /        0 sextracted
+[1A[1M> Line:  350  Objects:      243 detected /        0 sextracted
+[1A[1M> Line:  375  Objects:      262 detected /        0 sextracted
+[1A[1M> Line:  400  Objects:      281 detected /        0 sextracted
+[1A[1M> Line:  425  Objects:      292 detected /        0 sextracted
+[1A[1M> Line:  450  Objects:      307 detected /        0 sextracted
+[1A[1M> Line:  475  Objects:      318 detected /        0 sextracted
+[1A[1M> Line:  500  Objects:      337 detected /        0 sextracted
+[1A[1M> Line:  525  Objects:      350 detected /        0 sextracted
+[1A[1M> Line:  550  Objects:      369 detected /        0 sextracted
+[1A[1M> Line:  575  Objects:      385 detected /        0 sextracted
+[1A[1M> Line:  600  Objects:      398 detected /        0 sextracted
+[1A[1M> Line:  625  Objects:      411 detected /        0 sextracted
+[1A[1M> Line:  650  Objects:      434 detected /        0 sextracted
+[1A[1M> Line:  675  Objects:      446 detected /        0 sextracted
+[1A[1M> Line:  700  Objects:      467 detected /        0 sextracted
+[1A[1M> Line:  725  Objects:      470 detected /        0 sextracted
+[1A[1M> Line:  750  Objects:      488 detected /        0 sextracted
+[1A[1M> Line:  775  Objects:      501 detected /        0 sextracted
+[1A[1M> Line:  800  Objects:      517 detected /        0 sextracted
+[1A[1M> Line:  825  Objects:      533 detected /        0 sextracted
+[1A[1M> Line:  850  Objects:      551 detected /        0 sextracted
+[1A[1M> Line:  875  Objects:      570 detected /        0 sextracted
+[1A[1M> Line:  900  Objects:      588 detected /        0 sextracted
+[1A[1M> Line:  925  Objects:      611 detected /        0 sextracted
+[1A[1M> Line:  950  Objects:      627 detected /        0 sextracted
+[1A[1M> Line:  975  Objects:      649 detected /        0 sextracted
+[1A[1M> Line: 1000  Objects:      665 detected /        0 sextracted
+[1A[1M> Line: 1023  Objects:      686 detected /        0 sextracted
+[1A[1M> Line: 1025  Objects:      686 detected /       25 sextracted
+[1A[1M> Line: 1050  Objects:      706 detected /       45 sextracted
+[1A[1M> Line: 1075  Objects:      720 detected /       58 sextracted
+[1A[1M> Line: 1100  Objects:      741 detected /       75 sextracted
+[1A[1M> Line: 1125  Objects:      762 detected /       91 sextracted
+[1A[1M> Line: 1150  Objects:      776 detected /      104 sextracted
+[1A[1M> Line: 1175  Objects:      793 detected /      124 sextracted
+[1A[1M> Line: 1200  Objects:      807 detected /      145 sextracted
+[1A[1M> Line: 1225  Objects:      826 detected /      156 sextracted
+[1A[1M> Line: 1250  Objects:      836 detected /      168 sextracted
+[1A[1M> Line: 1275  Objects:      845 detected /      188 sextracted
+[1A[1M> Line: 1300  Objects:      865 detected /      205 sextracted
+[1A[1M> Line: 1325  Objects:      884 detected /      218 sextracted
+[1A[1M> Line: 1350  Objects:      902 detected /      235 sextracted
+[1A[1M> Line: 1375  Objects:      916 detected /      249 sextracted
+[1A[1M> Line: 1400  Objects:      928 detected /      267 sextracted
+[1A[1M> Line: 1425  Objects:      943 detected /      279 sextracted
+[1A[1M> Line: 1450  Objects:      956 detected /      298 sextracted
+[1A[1M> Line: 1475  Objects:      974 detected /      307 sextracted
+[1A[1M> Line: 1500  Objects:      988 detected /      323 sextracted
+[1A[1M> Line: 1525  Objects:     1004 detected /      337 sextracted
+[1A[1M> Line: 1550  Objects:     1025 detected /      353 sextracted
+[1A[1M> Line: 1575  Objects:     1036 detected /      368 sextracted
+[1A[1M> Line: 1600  Objects:     1057 detected /      383 sextracted
+[1A[1M> Line: 1625  Objects:     1074 detected /      399 sextracted
+[1A[1M> Line: 1628  Objects:     1077 detected /      400 sextracted
+[1A[1M> Line: 1650  Objects:     1088 detected /      417 sextracted
+[1A[1M> Line: 1675  Objects:     1103 detected /      431 sextracted
+[1A[1M> Line: 1700  Objects:     1115 detected /      448 sextracted
+[1A[1M> Line: 1725  Objects:     1128 detected /      452 sextracted
+[1A[1M> Line: 1750  Objects:     1142 detected /      472 sextracted
+[1A[1M> Line: 1775  Objects:     1164 detected /      484 sextracted
+[1A[1M> Line: 1800  Objects:     1181 detected /      502 sextracted
+[1A[1M> Line: 1825  Objects:     1188 detected /      517 sextracted
+[1A[1M> Line: 1850  Objects:     1202 detected /      532 sextracted
+[1A[1M> Line: 1875  Objects:     1205 detected /      548 sextracted
+[1A[1M> Line: 1900  Objects:     1221 detected /      564 sextracted
+[1A[1M> Line: 1925  Objects:     1242 detected /      587 sextracted
+[1A[1M> Line: 1950  Objects:     1260 detected /      602 sextracted
+[1A[1M> Line: 1975  Objects:     1273 detected /      622 sextracted
+[1A[1M> Line: 2000  Objects:     1286 detected /      635 sextracted
+[1A[1M> Line: 2025  Objects:     1304 detected /      644 sextracted
+[1A[1M> Line: 2050  Objects:     1315 detected /      644 sextracted
+[1A[1M> Line: 2075  Objects:     1332 detected /      644 sextracted
+[1A[1M> Line: 2100  Objects:     1349 detected /      644 sextracted
+[1A[1M> Line: 2125  Objects:     1363 detected /      644 sextracted
+[1A[1M> Line: 2150  Objects:     1378 detected /      644 sextracted
+[1A[1M> Line: 2175  Objects:     1393 detected /      644 sextracted
+[1A[1M> Line: 2200  Objects:     1409 detected /      644 sextracted
+[1A[1M> Line: 2225  Objects:     1425 detected /      644 sextracted
+[1A[1M> Line: 2250  Objects:     1438 detected /      644 sextracted
+[1A[1M> Line: 2275  Objects:     1450 detected /      644 sextracted
+[1A[1M> Line: 2290  Objects:     1472 detected /      800 sextracted
+[1A[1M> Line: 2290  Objects:     1472 detected /     1200 sextracted
+[1A      Objects: detected 1472     / sextracted 1399            
+
+[1M> Closing files
+[1A[1M> 
+[1A> All done (in 3.8 s: 601.6 lines/s , 367.5 detections/s)
+[02:39:41] INFO frb_pipeline.phase1 | Executing PSFEx with SAMPLE_MINSN = 30
+
+> WARNING: NTHREADS != 1 ignored: this build of PSFEx is single-threaded
+
+
+> WARNING: No source with appropriate FWHM found!!
+
+
+> WARNING: No source with appropriate FWHM found!!
+
+
+> WARNING: Not a positive definite matrix in homogenization solver
+
+[02:39:42] INFO frb_pipeline.phase1 |   -> Stars Accepted: 0
+[02:39:42] INFO frb_pipeline.phase1 |   -> Insufficient stars. Attempting lower SNR...
+[02:39:42] INFO frb_pipeline.phase1 | Executing PSFEx with SAMPLE_MINSN = 20
+
+> WARNING: NTHREADS != 1 ignored: this build of PSFEx is single-threaded
+
+
+> WARNING: No source with appropriate FWHM found!!
+
+
+> WARNING: No source with appropriate FWHM found!!
+
+
+> WARNING: Not a positive definite matrix in homogenization solver
+
+[02:39:43] INFO frb_pipeline.phase1 |   -> Stars Accepted: 0
+[02:39:43] INFO frb_pipeline.phase1 |   -> Insufficient stars. Attempting lower SNR...
+[02:39:43] INFO frb_pipeline.phase1 | Executing PSFEx with SAMPLE_MINSN = 10
+
+> WARNING: NTHREADS != 1 ignored: this build of PSFEx is single-threaded
+
+
+> WARNING: No source with appropriate FWHM found!!
+
+
+> WARNING: No source with appropriate FWHM found!!
+
+
+> WARNING: Not a positive definite matrix in homogenization solver
+
+[02:39:45] INFO frb_pipeline.phase1 |   -> Stars Accepted: 0
+[02:39:45] INFO frb_pipeline.phase1 |   -> Insufficient stars. Attempting lower SNR...
+[02:39:45] INFO frb_pipeline.phase1 | Executing PSFEx with SAMPLE_MINSN = 5
+
+> WARNING: NTHREADS != 1 ignored: this build of PSFEx is single-threaded
+
+
+> WARNING: No source with appropriate FWHM found!!
+
+
+> WARNING: No source with appropriate FWHM found!!
+
+
+> WARNING: Not a positive definite matrix in homogenization solver
+
+[02:39:46] INFO frb_pipeline.phase1 |   -> Stars Accepted: 0
+[02:39:46] INFO frb_pipeline.phase1 |   -> Insufficient stars. Attempting lower SNR...
+[02:39:46] INFO frb_pipeline.phase1 | Executing PSFEx with SAMPLE_MINSN = 3
+
+> WARNING: NTHREADS != 1 ignored: this build of PSFEx is single-threaded
+
+[02:39:48] INFO frb_pipeline.phase1 |   -> Stars Accepted: 5
+[02:39:48] INFO frb_pipeline.phase1 |   -> Insufficient stars. Attempting lower SNR...
+[02:39:48] INFO frb_pipeline.phase1 | Executing PSFEx with SAMPLE_MINSN = 2.5
+
+> WARNING: NTHREADS != 1 ignored: this build of PSFEx is single-threaded
+
+[02:39:49] INFO frb_pipeline.phase1 |   -> Stars Accepted: 26
+[02:39:49] INFO frb_pipeline.phase1 |   -> Found >= 25 optimal stars! Halting iteration.
+[02:39:49] INFO frb_pipeline.phase1 | Success! Catalog and PSF generated in C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir
+[02:39:49] INFO frb_pipeline.phase1 | SExtractor DEBLEND_MINCONT = 0.005
+[02:39:49] INFO frb_pipeline.master | Phase 1 / SExtractor + PSFEx: OK
+[02:39:49] INFO frb_pipeline.master | ========== Phase 2 / Photometry + AstroPath ==========
+[02:39:49] INFO frb_pipeline.master | $ 'C:\\Python313\\python.exe' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\photometry + astropath\\run_photometry_astropath.py' '--image' 'image.fits' '--ra' '37.37691666666666' '--dec' '-62.96284444444445' '--config' 'photometry_astropath_config.yaml'  (cwd=C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir)
+[02:39:49] INFO frb_pipeline.phase2 | Phase 2 config: C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir\photometry_astropath_config.yaml
+[02:39:49] INFO frb_pipeline.phase2 | Apertures (px): 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 20, 25, 30, 40 | production = 40 px (index 14)
+[02:39:49] INFO frb_pipeline.phase2 | Weight map: invvar.fits found and enabled.
+[02:39:51] INFO frb_pipeline.phase2 | Measured SEEING_FWHM from proto_image.fits: 1.021 arcsec
+[02:39:51] INFO frb_pipeline.phase2 | Executing Subprocess SExtractor with PSF Model
+[1M> 
+[1A----- Source Extractor 2.28.2 started on 2026-10-17 at 21:09:51 with 1 thread
+
+[1M> Setting catalog parameters
+[1A[1M> Reading PSF information
+[1A[1M> Preparing profile models
+[1AFitting model: point source
+[1M> Reading detection filter
+[1A[1M> Initializing Neural Network
+[1A[1M> Reading Neural Network Weights
+[1A[1M> Initializing check-image(s)
+[1A[1M> Initializing catalog
+[1A[1M> Looking for image.fits
+[1A----- Measuring from: image.fits
+      "Unnamed" / no ext. header / 2290x2290 / 32 bits (floats)
+[1M> Looking for invvar.fits
+[1A----- Weighting from: invvar.fits
+      "Unnamed" / no ext. header / 2290x2290 / 32 bits (floats)
+Detection+Measurement image: [1M> Setting up background maps
+[1A[1M> Setting up background map at line:  128
+[1A[1M> Setting up background map at line:  256
+[1A[1M> Setting up background map at line:  384
+[1A[1M> Setting up background map at line:  512
+[1A[1M> Setting up background map at line:  640
+[1A[1M> Setting up background map at line:  768
+[1A[1M> Setting up background map at line:  896
+[1A[1M> Setting up background map at line: 1024
+[1A[1M> Setting up background map at line: 1152
+[1A[1M> Setting up background map at line: 1280
+[1A[1M> Setting up background map at line: 1408
+[1A[1M> Setting up background map at line: 1536
+[1A[1M> Setting up background map at line: 1664
+[1A[1M> Setting up background map at line: 1792
+[1A[1M> Setting up background map at line: 1920
+[1A[1M> Setting up background map at line: 2048
+[1A[1M> Setting up background map at line: 2176
+[1A[1M> Filtering background map(s)
+[1A[1M> Computing background d-map
+[1A[1M> Computing background-noise d-map
+[1A(M+D) Background: 0.00011731 RMS: 0.00241929 / Threshold: 0.00725786 
+[1M> Scanning image
+[1A[1M> Line:    1  Objects:        0 detected /        0 sextracted
+[1A[1M> Line:    2  Objects:        0 detected /        0 sextracted
+[1A[1M> Line:    3  Objects:        1 detected /        0 sextracted
+[1A[1M> Line:    4  Objects:        2 detected /        0 sextracted
+[1A[1M> Line:    5  Objects:        3 detected /        0 sextracted
+[1A[1M> Line:    6  Objects:        4 detected /        0 sextracted
+[1A[1M> Line:    7  Objects:        4 detected /        0 sextracted
+[1A[1M> Line:    8  Objects:        7 detected /        0 sextracted
+[1A[1M> Line:    9  Objects:        8 detected /        0 sextracted
+[1A[1M> Line:   10  Objects:       10 detected /        0 sextracted
+[1A[1M> Line:   11  Objects:       10 detected /        0 sextracted
+[1A[1M> Line:   12  Objects:       11 detected /        0 sextracted
+[1A[1M> Line:   13  Objects:       11 detected /        0 sextracted
+[1A[1M> Line:   14  Objects:       11 detected /        0 sextracted
+[1A[1M> Line:   15  Objects:       13 detected /        0 sextracted
+[1A[1M> Line:   16  Objects:       15 detected /        0 sextracted
+[1A[1M> Line:   17  Objects:       16 detected /        0 sextracted
+[1A[1M> Line:   18  Objects:       17 detected /        0 sextracted
+[1A[1M> Line:   19  Objects:       17 detected /        0 sextracted
+[1A[1M> Line:   20  Objects:       18 detected /        0 sextracted
+[1A[1M> Line:   21  Objects:       21 detected /        0 sextracted
+[1A[1M> Line:   22  Objects:       22 detected /        0 sextracted
+[1A[1M> Line:   23  Objects:       23 detected /        0 sextracted
+[1A[1M> Line:   24  Objects:       24 detected /        0 sextracted
+[1A[1M> Line:   25  Objects:       26 detected /        0 sextracted
+[1A[1M> Line:   26  Objects:       27 detected /        0 sextracted
+[1A[1M> Line:   27  Objects:       27 detected /        0 sextracted
+[1A[1M> Line:   28  Objects:       27 detected /        0 sextracted
+[1A[1M> Line:   29  Objects:       28 detected /        0 sextracted
+[1A[1M> Line:   30  Objects:       28 detected /        0 sextracted
+[1A[1M> Line:   31  Objects:       28 detected /        0 sextracted
+[1A[1M> Line:   32  Objects:       29 detected /        0 sextracted
+[1A[1M> Line:   33  Objects:       29 detected /        0 sextracted
+[1A[1M> Line:   34  Objects:       29 detected /        0 sextracted
+[1A[1M> Line:   35  Objects:       30 detected /        0 sextracted
+[1A[1M> Line:   36  Objects:       31 detected /        0 sextracted
+[1A[1M> Line:   37  Objects:       33 detected /        0 sextracted
+[1A[1M> Line:   38  Objects:       33 detected /        0 sextracted
+[1A[1M> Line:   39  Objects:       33 detected /        0 sextracted
+[1A[1M> Line:   40  Objects:       36 detected /        0 sextracted
+[1A[1M> Line:   41  Objects:       37 detected /        0 sextracted
+[1A[1M> Line:   42  Objects:       37 detected /        0 sextracted
+[1A[1M> Line:   43  Objects:       37 detected /        0 sextracted
+[1A[1M> Line:   44  Objects:       39 detected /        0 sextracted
+[1A[1M> Line:   45  Objects:       39 detected /        0 sextracted
+[1A[1M> Line:   46  Objects:       39 detected /        0 sextracted
+[1A[1M> Line:   47  Objects:       40 detected /        0 sextracted
+[1A[1M> Line:   48  Objects:       40 detected /        0 sextracted
+[1A[1M> Line:   49  Objects:       40 detected /        0 sextracted
+[1A[1M> Line:   50  Objects:       40 detected /        0 sextracted
+[1A[1M> Line:   51  Objects:       41 detected /        0 sextracted
+[1A[1M> Line:   52  Objects:       41 detected /        0 sextracted
+[1A[1M> Line:   53  Objects:       42 detected /        0 sextracted
+[1A[1M> Line:   54  Objects:       42 detected /        0 sextracted
+[1A[1M> Line:   55  Objects:       43 detected /        0 sextracted
+[1A[1M> Line:   56  Objects:       44 detected /        0 sextracted
+[1A[1M> Line:   57  Objects:       44 detected /        0 sextracted
+[1A[1M> Line:   58  Objects:       46 detected /        0 sextracted
+[1A[1M> Line:   59  Objects:       47 detected /        0 sextracted
+[1A[1M> Line:   60  Objects:       48 detected /        0 sextracted
+[1A[1M> Line:   61  Objects:       49 detected /        0 sextracted
+[1A[1M> Line:   62  Objects:       50 detected /        0 sextracted
+[1A[1M> Line:   63  Objects:       50 detected /        0 sextracted
+[1A[1M> Line:   64  Objects:       51 detected /        0 sextracted
+[1A[1M> Line:   65  Objects:       51 detected /        0 sextracted
+[1A[1M> Line:   66  Objects:       53 detected /        0 sextracted
+[1A[1M> Line:   67  Objects:       53 detected /        0 sextracted
+[1A[1M> Line:   68  Objects:       55 detected /        0 sextracted
+[1A[1M> Line:   69  Objects:       55 detected /        0 sextracted
+[1A[1M> Line:   70  Objects:       55 detected /        0 sextracted
+[1A[1M> Line:   71  Objects:       55 detected /        0 sextracted
+[1A[1M> Line:   72  Objects:       56 detected /        0 sextracted
+[1A[1M> Line:   73  Objects:       56 detected /        0 sextracted
+[1A[1M> Line:   74  Objects:       56 detected /        0 sextracted
+[1A[1M> Line:   75  Objects:       58 detected /        0 sextracted
+[1A[1M> Line:   76  Objects:       58 detected /        0 sextracted
+[1A[1M> Line:   77  Objects:       58 detected /        0 sextracted
+[1A[1M> Line:   78  Objects:       58 detected /        0 sextracted
+[1A[1M> Line:   79  Objects:       61 detected /        0 sextracted
+[1A[1M> Line:   80  Objects:       61 detected /        0 sextracted
+[1A[1M> Line:   81  Objects:       63 detected /        0 sextracted
+[1A[1M> Line:   82  Objects:       64 detected /        0 sextracted
+[1A[1M> Line:   83  Objects:       64 detected /        0 sextracted
+[1A[1M> Line:   84  Objects:       64 detected /        0 sextracted
+[1A[1M> Line:   85  Objects:       65 detected /        0 sextracted
+[1A[1M> Line:   86  Objects:       65 detected /        0 sextracted
+[1A[1M> Line:   87  Objects:       65 detected /        0 sextracted
+[1A[1M> Line:   88  Objects:       65 detected /        0 sextracted
+[1A[1M> Line:   89  Objects:       65 detected /        0 sextracted
+[1A[1M> Line:   90  Objects:       65 detected /        0 sextracted
+[1A[1M> Line:   91  Objects:       65 detected /        0 sextracted
+[1A[1M> Line:   92  Objects:       66 detected /        0 sextracted
+[1A[1M> Line:   93  Objects:       67 detected /        0 sextracted
+[1A[1M> Line:   94  Objects:       67 detected /        0 sextracted
+[1A[1M> Line:   95  Objects:       67 detected /        0 sextracted
+[1A[1M> Line:   96  Objects:       68 detected /        0 sextracted
+[1A[1M> Line:   97  Objects:       70 detected /        0 sextracted
+[1A[1M> Line:   98  Objects:       70 detected /        0 sextracted
+[1A[1M> Line:   99  Objects:       71 detected /        0 sextracted
+[1A[1M> Line:  100  Objects:       73 detected /        0 sextracted
+[1A[1M> Line:  101  Objects:       73 detected /        0 sextracted
+[1A[1M> Line:  102  Objects:       75 detected /        0 sextracted
+[1A[1M> Line:  103  Objects:       76 detected /        0 sextracted
+[1A[1M> Line:  104  Objects:       76 detected /        0 sextracted
+[1A[1M> Line:  105  Objects:       78 detected /        0 sextracted
+[1A[1M> Line:  106  Objects:       78 detected /        0 sextracted
+[1A[1M> Line:  107  Objects:       79 detected /        0 sextracted
+[1A[1M> Line:  108  Objects:       79 detected /        0 sextracted
+[1A[1M> Line:  109  Objects:       81 detected /        0 sextracted
+[1A[1M> Line:  110  Objects:       85 detected /        0 sextracted
+[1A[1M> Line:  111  Objects:       85 detected /        0 sextracted
+[1A[1M> Line:  112  Objects:       85 detected /        0 sextracted
+[1A[1M> Line:  113  Objects:       86 detected /        0 sextracted
+[1A[1M> Line:  114  Objects:       86 detected /        0 sextracted
+[1A[1M> Line:  115  Objects:       86 detected /        0 sextracted
+[1A[1M> Line:  116  Objects:       86 detected /        0 sextracted
+[1A[1M> Line:  117  Objects:       87 detected /        0 sextracted
+[1A[1M> Line:  118  Objects:       88 detected /        0 sextracted
+[1A[1M> Line:  119  Objects:       89 detected /        0 sextracted
+[1A[1M> Line:  120  Objects:       89 detected /        0 sextracted
+[1A[1M> Line:  121  Objects:       90 detected /        0 sextracted
+[1A[1M> Line:  122  Objects:       92 detected /        0 sextracted
+[1A[1M> Line:  123  Objects:       92 detected /        0 sextracted
+[1A[1M> Line:  124  Objects:       93 detected /        0 sextracted
+[1A[1M> Line:  125  Objects:       96 detected /        0 sextracted
+[1A[1M> Line:  126  Objects:       96 detected /        0 sextracted
+[1A[1M> Line:  127  Objects:       96 detected /        0 sextracted
+[1A[1M> Line:  128  Objects:       98 detected /        0 sextracted
+[1A[1M> Line:  129  Objects:       98 detected /        0 sextracted
+[1A[1M> Line:  130  Objects:       98 detected /        0 sextracted
+[1A[1M> Line:  131  Objects:       98 detected /        0 sextracted
+[1A[1M> Line:  132  Objects:       98 detected /        0 sextracted
+[1A[1M> Line:  133  Objects:       98 detected /        0 sextracted
+[1A[1M> Line:  134  Objects:       99 detected /        0 sextracted
+[1A[1M> Line:  135  Objects:       99 detected /        0 sextracted
+[1A[1M> Line:  136  Objects:       99 detected /        0 sextracted
+[1A[1M> Line:  137  Objects:      100 detected /        0 sextracted
+[1A[1M> Line:  138  Objects:      100 detected /        0 sextracted
+[1A[1M> Line:  139  Objects:      100 detected /        0 sextracted
+[1A[1M> Line:  140  Objects:      103 detected /        0 sextracted
+[1A[1M> Line:  141  Objects:      104 detected /        0 sextracted
+[1A[1M> Line:  142  Objects:      104 detected /        0 sextracted
+[1A[1M> Line:  143  Objects:      107 detected /        0 sextracted
+[1A[1M> Line:  144  Objects:      107 detected /        0 sextracted
+[1A[1M> Line:  145  Objects:      107 detected /        0 sextracted
+[1A[1M> Line:  146  Objects:      107 detected /        0 sextracted
+[1A[1M> Line:  147  Objects:      108 detected /        0 sextracted
+[1A[1M> Line:  148  Objects:      109 detected /        0 sextracted
+[1A[1M> Line:  149  Objects:      110 detected /        0 sextracted
+[1A[1M> Line:  150  Objects:      111 detected /        0 sextracted
+[1A[1M> Line:  151  Objects:      111 detected /        0 sextracted
+[1A[1M> Line:  152  Objects:      113 detected /        0 sextracted
+[1A[1M> Line:  153  Objects:      114 detected /        0 sextracted
+[1A[1M> Line:  154  Objects:      114 detected /        0 sextracted
+[1A[1M> Line:  155  Objects:      115 detected /        0 sextracted
+[1A[1M> Line:  156  Objects:      115 detected /        0 sextracted
+[1A[1M> Line:  157  Objects:      117 detected /        0 sextracted
+[1A[1M> Line:  158  Objects:      118 detected /        0 sextracted
+[1A[1M> Line:  159  Objects:      118 detected /        0 sextracted
+[1A[1M> Line:  160  Objects:      118 detected /        0 sextracted
+[1A[1M> Line:  161  Objects:      118 detected /        0 sextracted
+[1A[1M> Line:  162  Objects:      123 detected /        0 sextracted
+[1A[1M> Line:  163  Objects:      125 detected /        0 sextracted
+[1A[1M> Line:  164  Objects:      125 detected /        0 sextracted
+[1A[1M> Line:  165  Objects:      125 detected /        0 sextracted
+[1A[1M> Line:  166  Objects:      127 detected /        0 sextracted
+[1A[1M> Line:  167  Objects:      129 detected /        0 sextracted
+[1A[1M> Line:  168  Objects:      129 detected /        0 sextracted
+[1A[1M> Line:  169  Objects:      130 detected /        0 sextracted
+[1A[1M> Line:  170  Objects:      130 detected /        0 sextracted
+[1A[1M> Line:  171  Objects:      130 detected /        0 sextracted
+[1A[1M> Line:  172  Objects:      130 detected /        0 sextracted
+[1A[1M> Line:  173  Objects:      131 detected /        0 sextracted
+[1A[1M> Line:  174  Objects:      131 detected /        0 sextracted
+[1A[1M> Line:  175  Objects:      131 detected /        0 sextracted
+[1A[1M> Line:  176  Objects:      131 detected /        0 sextracted
+[1A[1M> Line:  177  Objects:      131 detected /        0 sextracted
+[1A[1M> Line:  178  Objects:      132 detected /        0 sextracted
+[1A[1M> Line:  179  Objects:      134 detected /        0 sextracted
+[1A[1M> Line:  180  Objects:      136 detected /        0 sextracted
+[1A[1M> Line:  181  Objects:      136 detected /        0 sextracted
+[1A[1M> Line:  182  Objects:      138 detected /        0 sextracted
+[1A[1M> Line:  183  Objects:      138 detected /        0 sextracted
+[1A[1M> Line:  184  Objects:      138 detected /        0 sextracted
+[1A[1M> Line:  185  Objects:      138 detected /        0 sextracted
+[1A[1M> Line:  186  Objects:      139 detected /        0 sextracted
+[1A[1M> Line:  187  Objects:      140 detected /        0 sextracted
+[1A[1M> Line:  188  Objects:      140 detected /        0 sextracted
+[1A[1M> Line:  189  Objects:      142 detected /        0 sextracted
+[1A[1M> Line:  190  Objects:      143 detected /        0 sextracted
+[1A[1M> Line:  191  Objects:      144 detected /        0 sextracted
+[1A[1M> Line:  192  Objects:      147 detected /        0 sextracted
+[1A[1M> Line:  193  Objects:      148 detected /        0 sextracted
+[1A[1M> Line:  194  Objects:      149 detected /        0 sextracted
+[1A[1M> Line:  195  Objects:      150 detected /        0 sextracted
+[1A[1M> Line:  196  Objects:      152 detected /        0 sextracted
+[1A[1M> Line:  197  Objects:      154 detected /        0 sextracted
+[1A[1M> Line:  198  Objects:      155 detected /        0 sextracted
+[1A[1M> Line:  199  Objects:      155 detected /        0 sextracted
+[1A[1M> Line:  200  Objects:      157 detected /        0 sextracted
+[1A[1M> Line:  201  Objects:      157 detected /        0 sextracted
+[1A[1M> Line:  202  Objects:      158 detected /        0 sextracted
+[1A[1M> Line:  203  Objects:      158 detected /        0 sextracted
+[1A[1M> Line:  204  Objects:      159 detected /        0 sextracted
+[1A[1M> Line:  205  Objects:      161 detected /        0 sextracted
+[1A[1M> Line:  206  Objects:      161 detected /        0 sextracted
+[1A[1M> Line:  207  Objects:      161 detected /        0 sextracted
+[1A[1M> Line:  208  Objects:      161 detected /        0 sextracted
+[1A[1M> Line:  209  Objects:      162 detected /        0 sextracted
+[1A[1M> Line:  210  Objects:      162 detected /        0 sextracted
+[1A[1M> Line:  211  Objects:      162 detected /        0 sextracted
+[1A[1M> Line:  212  Objects:      162 detected /        0 sextracted
+[1A[1M> Line:  213  Objects:      162 detected /        0 sextracted
+[1A[1M> Line:  214  Objects:      163 detected /        0 sextracted
+[1A[1M> Line:  215  Objects:      163 detected /        0 sextracted
+[1A[1M> Line:  216  Objects:      164 detected /        0 sextracted
+[1A[1M> Line:  217  Objects:      166 detected /        0 sextracted
+[1A[1M> Line:  218  Objects:      166 detected /        0 sextracted
+[1A[1M> Line:  219  Objects:      167 detected /        0 sextracted
+[1A[1M> Line:  220  Objects:      167 detected /        0 sextracted
+[1A[1M> Line:  221  Objects:      167 detected /        0 sextracted
+[1A[1M> Line:  222  Objects:      168 detected /        0 sextracted
+[1A[1M> Line:  223  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  224  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  225  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  226  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  227  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  228  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  229  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  230  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  231  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  232  Objects:      169 detected /        0 sextracted
+[1A[1M> Line:  233  Objects:      171 detected /        0 sextracted
+[1A[1M> Line:  234  Objects:      171 detected /        0 sextracted
+[1A[1M> Line:  235  Objects:      173 detected /        0 sextracted
+[1A[1M> Line:  236  Objects:      173 detected /        0 sextracted
+[1A[1M> Line:  237  Objects:      173 detected /        0 sextracted
+[1A[1M> Line:  238  Objects:      173 detected /        0 sextracted
+[1A[1M> Line:  239  Objects:      173 detected /        0 sextracted
+[1A[1M> Line:  240  Objects:      174 detected /        0 sextracted
+[1A[1M> Line:  241  Objects:      175 detected /        0 sextracted
+[1A[1M> Line:  242  Objects:      175 detected /        0 sextracted
+[1A[1M> Line:  243  Objects:      176 detected /        0 sextracted
+[1A[1M> Line:  244  Objects:      176 detected /        0 sextracted
+[1A[1M> Line:  245  Objects:      178 detected /        0 sextracted
+[1A[1M> Line:  246  Objects:      178 detected /        0 sextracted
+[1A[1M> Line:  247  Objects:      179 detected /        0 sextracted
+[1A[1M> Line:  248  Objects:      181 detected /        0 sextracted
+[1A[1M> Line:  249  Objects:      181 detected /        0 sextracted
+[1A[1M> Line:  250  Objects:      182 detected /        0 sextracted
+[1A[1M> Line:  251  Objects:      182 detected /        0 sextracted
+[1A[1M> Line:  252  Objects:      184 detected /        0 sextracted
+[1A[1M> Line:  253  Objects:      184 detected /        0 sextracted
+[1A[1M> Line:  254  Objects:      184 detected /        0 sextracted
+[1A[1M> Line:  255  Objects:      186 detected /        0 sextracted
+[1A[1M> Line:  256  Objects:      187 detected /        0 sextracted
+[1A[1M> Line:  257  Objects:      187 detected /        0 sextracted
+[1A[1M> Line:  258  Objects:      187 detected /        0 sextracted
+[1A[1M> Line:  259  Objects:      188 detected /        0 sextracted
+[1A[1M> Line:  260  Objects:      190 detected /        0 sextracted
+[1A[1M> Line:  261  Objects:      192 detected /        0 sextracted
+[1A[1M> Line:  262  Objects:      192 detected /        0 sextracted
+[1A[1M> Line:  263  Objects:      193 detected /        0 sextracted
+[1A[1M> Line:  264  Objects:      193 detected /        0 sextracted
+[1A[1M> Line:  265  Objects:      193 detected /        0 sextracted
+[1A[1M> Line:  266  Objects:      193 detected /        0 sextracted
+[1A[1M> Line:  267  Objects:      193 detected /        0 sextracted
+[1A[1M> Line:  268  Objects:      194 detected /        0 sextracted
+[1A[1M> Line:  269  Objects:      195 detected /        0 sextracted
+[1A[1M> Line:  270  Objects:      196 detected /        0 sextracted
+[1A[1M> Line:  271  Objects:      197 detected /        0 sextracted
+[1A[1M> Line:  272  Objects:      198 detected /        0 sextracted
+[1A[1M> Line:  273  Objects:      199 detected /        0 sextracted
+[1A[1M> Line:  274  Objects:      199 detected /        0 sextracted
+[1A[1M> Line:  275  Objects:      200 detected /        0 sextracted
+[1A[1M> Line:  276  Objects:      201 detected /        0 sextracted
+[1A[1M> Line:  277  Objects:      203 detected /        0 sextracted
+[1A[1M> Line:  278  Objects:      204 detected /        0 sextracted
+[1A[1M> Line:  279  Objects:      204 detected /        0 sextracted
+[1A[1M> Line:  280  Objects:      206 detected /        0 sextracted
+[1A[1M> Line:  281  Objects:      206 detected /        0 sextracted
+[1A[1M> Line:  282  Objects:      206 detected /        0 sextracted
+[1A[1M> Line:  283  Objects:      207 detected /        0 sextracted
+[1A[1M> Line:  284  Objects:      211 detected /        0 sextracted
+[1A[1M> Line:  285  Objects:      212 detected /        0 sextracted
+[1A[1M> Line:  286  Objects:      214 detected /        0 sextracted
+[1A[1M> Line:  287  Objects:      216 detected /        0 sextracted
+[1A[1M> Line:  288  Objects:      216 detected /        0 sextracted
+[1A[1M> Line:  289  Objects:      216 detected /        0 sextracted
+[1A[1M> Line:  290  Objects:      216 detected /        0 sextracted
+[1A[1M> Line:  291  Objects:      217 detected /        0 sextracted
+[1A[1M> Line:  292  Objects:      217 detected /        0 sextracted
+[1A[1M> Line:  293  Objects:      217 detected /        0 sextracted
+[1A[1M> Line:  294  Objects:      219 detected /        0 sextracted
+[1A[1M> Line:  295  Objects:      220 detected /        0 sextracted
+[1A[1M> Line:  296  Objects:      221 detected /        0 sextracted
+[1A[1M> Line:  297  Objects:      222 detected /        0 sextracted
+[1A[1M> Line:  298  Objects:      222 detected /        0 sextracted
+[1A[1M> Line:  299  Objects:      222 detected /        0 sextracted
+[1A[1M> Line:  300  Objects:      222 detected /        0 sextracted
+[1A[1M> Line:  301  Objects:      222 detected /        0 sextracted
+[1A[1M> Line:  302  Objects:      223 detected /        0 sextracted
+[1A[1M> Line:  303  Objects:      226 detected /        0 sextracted
+[1A[1M> Line:  304  Objects:      227 detected /        0 sextracted
+[1A[1M> Line:  305  Objects:      230 detected /        0 sextracted
+[1A[1M> Line:  306  Objects:      230 detected /        0 sextracted
+[1A[1M> Line:  307  Objects:      232 detected /        0 sextracted
+[1A[1M> Line:  308  Objects:      234 detected /        0 sextracted
+[1A[1M> Line:  309  Objects:      234 detected /        0 sextracted
+[1A[1M> Line:  310  Objects:      234 detected /        0 sextracted
+[1A[1M> Line:  311  Objects:      234 detected /        0 sextracted
+[1A[1M> Line:  312  Objects:      234 detected /        0 sextracted
+[1A[1M> Line:  313  Objects:      235 detected /        0 sextracted
+[1A[1M> Line:  314  Objects:      237 detected /        0 sextracted
+[1A[1M> Line:  315  Objects:      237 detected /        0 sextracted
+[1A[1M> Line:  316  Objects:      237 detected /        0 sextracted
+[1A[1M> Line:  317  Objects:      237 detected /        0 sextracted
+[1A[1M> Line:  318  Objects:      239 detected /        0 sextracted
+[1A[1M> Line:  319  Objects:      240 detected /        0 sextracted
+[1A[1M> Line:  320  Objects:      240 detected /        0 sextracted
+[1A[1M> Line:  321  Objects:      240 detected /        0 sextracted
+[1A[1M> Line:  322  Objects:      240 detected /        0 sextracted
+[1A[1M> Line:  323  Objects:      240 detected /        0 sextracted
+[1A[1M> Line:  324  Objects:      241 detected /        0 sextracted
+[1A[1M> Line:  325  Objects:      241 detected /        0 sextracted
+[1A[1M> Line:  326  Objects:      244 detected /        0 sextracted
+[1A[1M> Line:  327  Objects:      244 detected /        0 sextracted
+[1A[1M> Line:  328  Objects:      246 detected /        0 sextracted
+[1A[1M> Line:  329  Objects:      247 detected /        0 sextracted
+[1A[1M> Line:  330  Objects:      247 detected /        0 sextracted
+[1A[1M> Line:  331  Objects:      247 detected /        0 sextracted
+[1A[1M> Line:  332  Objects:      248 detected /        0 sextracted
+[1A[1M> Line:  333  Objects:      249 detected /        0 sextracted
+[1A[1M> Line:  334  Objects:      249 detected /        0 sextracted
+[1A[1M> Line:  335  Objects:      249 detected /        0 sextracted
+[1A[1M> Line:  336  Objects:      250 detected /        0 sextracted
+[1A[1M> Line:  337  Objects:      251 detected /        0 sextracted
+[1A[1M> Line:  338  Objects:      251 detected /        0 sextracted
+[1A[1M> Line:  339  Objects:      252 detected /        0 sextracted
+[1A[1M> Line:  340  Objects:      252 detected /        0 sextracted
+[1A[1M> Line:  341  Objects:      252 detected /        0 sextracted
+[1A[1M> Line:  342  Objects:      252 detected /        0 sextracted
+[1A[1M> Line:  343  Objects:      252 detected /        0 sextracted
+[1A[1M> Line:  344  Objects:      253 detected /        0 sextracted
+[1A[1M> Line:  345  Objects:      255 detected /        0 sextracted
+[1A[1M> Line:  346  Objects:      256 detected /        0 sextracted
+[1A[1M> Line:  347  Objects:      258 detected /        0 sextracted
+[1A[1M> Line:  348  Objects:      258 detected /        0 sextracted
+[1A[1M> Line:  349  Objects:      260 detected /        0 sextracted
+[1A[1M> Line:  350  Objects:      260 detected /        0 sextracted
+[1A[1M> Line:  351  Objects:      260 detected /        0 sextracted
+[1A[1M> Line:  352  Objects:      262 detected /        0 sextracted
+[1A[1M> Line:  353  Objects:      262 detected /        0 sextracted
+[1A[1M> Line:  354  Objects:      264 detected /        0 sextracted
+[1A[1M> Line:  355  Objects:      264 detected /        0 sextracted
+[1A[1M> Line:  356  Objects:      266 detected /        0 sextracted
+[1A[1M> Line:  357  Objects:      266 detected /        0 sextracted
+[1A[1M> Line:  358  Objects:      266 detected /        0 sextracted
+[1A[1M> Line:  359  Objects:      267 detected /        0 sextracted
+[1A[1M> Line:  360  Objects:      268 detected /        0 sextracted
+[1A[1M> Line:  361  Objects:      269 detected /        0 sextracted
+[1A[1M> Line:  362  Objects:      270 detected /        0 sextracted
+[1A[1M> Line:  363  Objects:      271 detected /        0 sextracted
+[1A[1M> Line:  364  Objects:      271 detected /        0 sextracted
+[1A[1M> Line:  365  Objects:      271 detected /        0 sextracted
+[1A[1M> Line:  366  Objects:      273 detected /        0 sextracted
+[1A[1M> Line:  367  Objects:      273 detected /        0 sextracted
+[1A[1M> Line:  368  Objects:      273 detected /        0 sextracted
+[1A[1M> Line:  369  Objects:      274 detected /        0 sextracted
+[1A[1M> Line:  370  Objects:      274 detected /        0 sextracted
+[1A[1M> Line:  371  Objects:      275 detected /        0 sextracted
+[1A[1M> Line:  372  Objects:      276 detected /        0 sextracted
+[1A[1M> Line:  373  Objects:      276 detected /        0 sextracted
+[1A[1M> Line:  374  Objects:      277 detected /        0 sextracted
+[1A[1M> Line:  375  Objects:      278 detected /        0 sextracted
+[1A[1M> Line:  376  Objects:      280 detected /        0 sextracted
+[1A[1M> Line:  377  Objects:      280 detected /        0 sextracted
+[1A[1M> Line:  378  Objects:      281 detected /        0 sextracted
+[1A[1M> Line:  379  Objects:      283 detected /        0 sextracted
+[1A[1M> Line:  380  Objects:      283 detected /        0 sextracted
+[1A[1M> Line:  381  Objects:      285 detected /        0 sextracted
+[1A[1M> Line:  382  Objects:      285 detected /        0 sextracted
+[1A[1M> Line:  383  Objects:      286 detected /        0 sextracted
+[1A[1M> Line:  384  Objects:      287 detected /        0 sextracted
+[1A[1M> Line:  385  Objects:      287 detected /        0 sextracted
+[1A[1M> Line:  386  Objects:      287 detected /        0 sextracted
+[1A[1M> Line:  387  Objects:      290 detected /        0 sextracted
+[1A[1M> Line:  388  Objects:      290 detected /        0 sextracted
+[1A[1M> Line:  389  Objects:      291 detected /        0 sextracted
+[1A[1M> Line:  390  Objects:      291 detected /        0 sextracted
+[1A[1M> Line:  391  Objects:      292 detected /        0 sextracted
+[1A[1M> Line:  392  Objects:      293 detected /        0 sextracted
+[1A[1M> Line:  393  Objects:      294 detected /        0 sextracted
+[1A[1M> Line:  394  Objects:      295 detected /        0 sextracted
+[1A[1M> Line:  395  Objects:      295 detected /        0 sextracted
+[1A[1M> Line:  396  Objects:      297 detected /        0 sextracted
+[1A[1M> Line:  397  Objects:      297 detected /        0 sextracted
+[1A[1M> Line:  398  Objects:      297 detected /        0 sextracted
+[1A[1M> Line:  399  Objects:      298 detected /        0 sextracted
+[1A[1M> Line:  400  Objects:      298 detected /        0 sextracted
+[1A[1M> Line:  401  Objects:      298 detected /        0 sextracted
+[1A[1M> Line:  402  Objects:      299 detected /        0 sextracted
+[1A[1M> Line:  403  Objects:      299 detected /        0 sextracted
+[1A[1M> Line:  404  Objects:      300 detected /        0 sextracted
+[1A[1M> Line:  405  Objects:      300 detected /        0 sextracted
+[1A[1M> Line:  406  Objects:      300 detected /        0 sextracted
+[1A[1M> Line:  407  Objects:      303 detected /        0 sextracted
+[1A[1M> Line:  408  Objects:      304 detected /        0 sextracted
+[1A[1M> Line:  409  Objects:      304 detected /        0 sextracted
+[1A[1M> Line:  410  Objects:      305 detected /        0 sextracted
+[1A[1M> Line:  411  Objects:      305 detected /        0 sextracted
+[1A[1M> Line:  412  Objects:      305 detected /        0 sextracted
+[1A[1M> Line:  413  Objects:      305 detected /        0 sextracted
+[1A[1M> Line:  414  Objects:      305 detected /        0 sextracted
+[1A[1M> Line:  415  Objects:      305 detected /        0 sextracted
+[1A[1M> Line:  416  Objects:      305 detected /        0 sextracted
+[1A[1M> Line:  417  Objects:      305 detected /        0 sextracted
+[1A[1M> Line:  418  Objects:      306 detected /        0 sextracted
+[1A[1M> Line:  419  Objects:      307 detected /        0 sextracted
+[1A[1M> Line:  420  Objects:      309 detected /        0 sextracted
+[1A[1M> Line:  421  Objects:      309 detected /        0 sextracted
+[1A[1M> Line:  422  Objects:      309 detected /        0 sextracted
+[1A[1M> Line:  423  Objects:      310 detected /        0 sextracted
+[1A[1M> Line:  424  Objects:      310 detected /        0 sextracted
+[1A[1M> Line:  425  Objects:      310 detected /        0 sextracted
+[1A[1M> Line:  426  Objects:      310 detected /        0 sextracted
+[1A[1M> Line:  427  Objects:      311 detected /        0 sextracted
+[1A[1M> Line:  428  Objects:      311 detected /        0 sextracted
+[1A[1M> Line:  429  Objects:      311 detected /        0 sextracted
+[1A[1M> Line:  430  Objects:      311 detected /        0 sextracted
+[1A[1M> Line:  431  Objects:      312 detected /        0 sextracted
+[1A[1M> Line:  432  Objects:      312 detected /        0 sextracted
+[1A[1M> Line:  433  Objects:      312 detected /        0 sextracted
+[1A[1M> Line:  434  Objects:      312 detected /        0 sextracted
+[1A[1M> Line:  435  Objects:      313 detected /        0 sextracted
+[1A[1M> Line:  436  Objects:      313 detected /        0 sextracted
+[1A[1M> Line:  437  Objects:      313 detected /        0 sextracted
+[1A[1M> Line:  438  Objects:      314 detected /        0 sextracted
+[1A[1M> Line:  439  Objects:      314 detected /        0 sextracted
+[1A[1M> Line:  440  Objects:      316 detected /        0 sextracted
+[1A[1M> Line:  441  Objects:      317 detected /        0 sextracted
+[1A[1M> Line:  442  Objects:      317 detected /        0 sextracted
+[1A[1M> Line:  443  Objects:      317 detected /        0 sextracted
+[1A[1M> Line:  444  Objects:      318 detected /        0 sextracted
+[1A[1M> Line:  445  Objects:      318 detected /        0 sextracted
+[1A[1M> Line:  446  Objects:      320 detected /        0 sextracted
+[1A[1M> Line:  447  Objects:      324 detected /        0 sextracted
+[1A[1M> Line:  448  Objects:      325 detected /        0 sextracted
+[1A[1M> Line:  449  Objects:      325 detected /        0 sextracted
+[1A[1M> Line:  450  Objects:      325 detected /        0 sextracted
+[1A[1M> Line:  451  Objects:      326 detected /        0 sextracted
+[1A[1M> Line:  452  Objects:      326 detected /        0 sextracted
+[1A[1M> Line:  453  Objects:      327 detected /        0 sextracted
+[1A[1M> Line:  454  Objects:      328 detected /        0 sextracted
+[1A[1M> Line:  455  Objects:      329 detected /        0 sextracted
+[1A[1M> Line:  456  Objects:      331 detected /        0 sextracted
+[1A[1M> Line:  457  Objects:      332 detected /        0 sextracted
+[1A[1M> Line:  458  Objects:      332 detected /        0 sextracted
+[1A[1M> Line:  459  Objects:      334 detected /        0 sextracted
+[1A[1M> Line:  460  Objects:      334 detected /        0 sextracted
+[1A[1M> Line:  461  Objects:      334 detected /        0 sextracted
+[1A[1M> Line:  462  Objects:      335 detected /        0 sextracted
+[1A[1M> Line:  463  Objects:      335 detected /        0 sextracted
+[1A[1M> Line:  464  Objects:      335 detected /        0 sextracted
+[1A[1M> Line:  465  Objects:      335 detected /        0 sextracted
+[1A[1M> Line:  466  Objects:      335 detected /        0 sextracted
+[1A[1M> Line:  467  Objects:      335 detected /        0 sextracted
+[1A[1M> Line:  468  Objects:      335 detected /        0 sextracted
+[1A[1M> Line:  469  Objects:      336 detected /        0 sextracted
+[1A[1M> Line:  470  Objects:      336 detected /        0 sextracted
+[1A[1M> Line:  471  Objects:      336 detected /        0 sextracted
+[1A[1M> Line:  472  Objects:      336 detected /        0 sextracted
+[1A[1M> Line:  473  Objects:      336 detected /        0 sextracted
+[1A[1M> Line:  474  Objects:      337 detected /        0 sextracted
+[1A[1M> Line:  475  Objects:      338 detected /        0 sextracted
+[1A[1M> Line:  476  Objects:      338 detected /        0 sextracted
+[1A[1M> Line:  477  Objects:      338 detected /        0 sextracted
+[1A[1M> Line:  478  Objects:      340 detected /        0 sextracted
+[1A[1M> Line:  479  Objects:      340 detected /        0 sextracted
+[1A[1M> Line:  480  Objects:      340 detected /        0 sextracted
+[1A[1M> Line:  481  Objects:      341 detected /        0 sextracted
+[1A[1M> Line:  482  Objects:      341 detected /        0 sextracted
+[1A[1M> Line:  483  Objects:      342 detected /        0 sextracted
+[1A[1M> Line:  484  Objects:      343 detected /        0 sextracted
+[1A[1M> Line:  485  Objects:      346 detected /        0 sextracted
+[1A[1M> Line:  486  Objects:      347 detected /        0 sextracted
+[1A[1M> Line:  487  Objects:      347 detected /        0 sextracted
+[1A[1M> Line:  488  Objects:      349 detected /        0 sextracted
+[1A[1M> Line:  489  Objects:      349 detected /        0 sextracted
+[1A[1M> Line:  490  Objects:      349 detected /        0 sextracted
+[1A[1M> Line:  491  Objects:      349 detected /        0 sextracted
+[1A[1M> Line:  492  Objects:      350 detected /        0 sextracted
+[1A[1M> Line:  493  Objects:      352 detected /        0 sextracted
+[1A[1M> Line:  494  Objects:      354 detected /        0 sextracted
+[1A[1M> Line:  495  Objects:      355 detected /        0 sextracted
+[1A[1M> Line:  496  Objects:      355 detected /        0 sextracted
+[1A[1M> Line:  497  Objects:      356 detected /        0 sextracted
+[1A[1M> Line:  498  Objects:      357 detected /        0 sextracted
+[1A[1M> Line:  499  Objects:      357 detected /        0 sextracted
+[1A[1M> Line:  500  Objects:      357 detected /        0 sextracted
+[1A[1M> Line:  501  Objects:      358 detected /        0 sextracted
+[1A[1M> Line:  502  Objects:      359 detected /        0 sextracted
+[1A[1M> Line:  503  Objects:      359 detected /        0 sextracted
+[1A[1M> Line:  504  Objects:      359 detected /        0 sextracted
+[1A[1M> Line:  505  Objects:      360 detected /        0 sextracted
+[1A[1M> Line:  506  Objects:      360 detected /        0 sextracted
+[1A[1M> Line:  507  Objects:      361 detected /        0 sextracted
+[1A[1M> Line:  508  Objects:      361 detected /        0 sextracted
+[1A[1M> Line:  509  Objects:      362 detected /        0 sextracted
+[1A[1M> Line:  510  Objects:      362 detected /        0 sextracted
+[1A[1M> Line:  511  Objects:      363 detected /        0 sextracted
+[1A[1M> Line:  512  Objects:      363 detected /        0 sextracted
+[1A[1M> Line:  513  Objects:      364 detected /        0 sextracted
+[1A[1M> Line:  514  Objects:      364 detected /        0 sextracted
+[1A[1M> Line:  515  Objects:      364 detected /        0 sextracted
+[1A[1M> Line:  516  Objects:      366 detected /        0 sextracted
+[1A[1M> Line:  517  Objects:      367 detected /        0 sextracted
+[1A[1M> Line:  518  Objects:      368 detected /        0 sextracted
+[1A[1M> Line:  519  Objects:      369 detected /        0 sextracted
+[1A[1M> Line:  520  Objects:      369 detected /        0 sextracted
+[1A[1M> Line:  521  Objects:      369 detected /        0 sextracted
+[1A[1M> Line:  522  Objects:      369 detected /        0 sextracted
+[1A[1M> Line:  523  Objects:      370 detected /        0 sextracted
+[1A[1M> Line:  524  Objects:      370 detected /        0 sextracted
+[1A[1M> Line:  525  Objects:      370 detected /        0 sextracted
+[1A[1M> Line:  526  Objects:      370 detected /        0 sextracted
+[1A[1M> Line:  527  Objects:      372 detected /        0 sextracted
+[1A[1M> Line:  528  Objects:      372 detected /        0 sextracted
+[1A[1M> Line:  529  Objects:      373 detected /        0 sextracted
+[1A[1M> Line:  530  Objects:      374 detected /        0 sextracted
+[1A[1M> Line:  531  Objects:      374 detected /        0 sextracted
+[1A[1M> Line:  532  Objects:      374 detected /        0 sextracted
+[1A[1M> Line:  533  Objects:      374 detected /        0 sextracted
+[1A[1M> Line:  534  Objects:      374 detected /        0 sextracted
+[1A[1M> Line:  535  Objects:      374 detected /        0 sextracted
+[1A[1M> Line:  536  Objects:      375 detected /        0 sextracted
+[1A[1M> Line:  537  Objects:      377 detected /        0 sextracted
+[1A[1M> Line:  538  Objects:      378 detected /        0 sextracted
+[1A[1M> Line:  539  Objects:      379 detected /        0 sextracted
+[1A[1M> Line:  540  Objects:      379 detected /        0 sextracted
+[1A[1M> Line:  541  Objects:      380 detected /        0 sextracted
+[1A[1M> Line:  542  Objects:      380 detected /        0 sextracted
+[1A[1M> Line:  543  Objects:      380 detected /        0 sextracted
+[1A[1M> Line:  544  Objects:      381 detected /        0 sextracted
+[1A[1M> Line:  545  Objects:      384 detected /        0 sextracted
+[1A[1M> Line:  546  Objects:      384 detected /        0 sextracted
+[1A[1M> Line:  547  Objects:      386 detected /        0 sextracted
+[1A[1M> Line:  548  Objects:      388 detected /        0 sextracted
+[1A[1M> Line:  549  Objects:      388 detected /        0 sextracted
+[1A[1M> Line:  550  Objects:      390 detected /        0 sextracted
+[1A[1M> Line:  551  Objects:      390 detected /        0 sextracted
+[1A[1M> Line:  552  Objects:      390 detected /        0 sextracted
+[1A[1M> Line:  553  Objects:      391 detected /        0 sextracted
+[1A[1M> Line:  554  Objects:      392 detected /        0 sextracted
+[1A[1M> Line:  555  Objects:      392 detected /        0 sextracted
+[1A[1M> Line:  556  Objects:      393 detected /        0 sextracted
+[1A[1M> Line:  557  Objects:      396 detected /        0 sextracted
+[1A[1M> Line:  558  Objects:      396 detected /        0 sextracted
+[1A[1M> Line:  559  Objects:      397 detected /        0 sextracted
+[1A[1M> Line:  560  Objects:      397 detected /        0 sextracted
+[1A[1M> Line:  561  Objects:      397 detected /        0 sextracted
+[1A[1M> Line:  562  Objects:      398 detected /        0 sextracted
+[1A[1M> Line:  563  Objects:      398 detected /        0 sextracted
+[1A[1M> Line:  564  Objects:      398 detected /        0 sextracted
+[1A[1M> Line:  565  Objects:      401 detected /        0 sextracted
+[1A[1M> Line:  566  Objects:      402 detected /        0 sextracted
+[1A[1M> Line:  567  Objects:      402 detected /        0 sextracted
+[1A[1M> Line:  568  Objects:      404 detected /        0 sextracted
+[1A[1M> Line:  569  Objects:      406 detected /        0 sextracted
+[1A[1M> Line:  570  Objects:      406 detected /        0 sextracted
+[1A[1M> Line:  571  Objects:      406 detected /        0 sextracted
+[1A[1M> Line:  572  Objects:      406 detected /        0 sextracted
+[1A[1M> Line:  573  Objects:      406 detected /        0 sextracted
+[1A[1M> Line:  574  Objects:      406 detected /        0 sextracted
+[1A[1M> Line:  575  Objects:      406 detected /        0 sextracted
+[1A[1M> Line:  576  Objects:      406 detected /        0 sextracted
+[1A[1M> Line:  577  Objects:      407 detected /        0 sextracted
+[1A[1M> Line:  578  Objects:      409 detected /        0 sextracted
+[1A[1M> Line:  579  Objects:      409 detected /        0 sextracted
+[1A[1M> Line:  580  Objects:      409 detected /        0 sextracted
+[1A[1M> Line:  581  Objects:      409 detected /        0 sextracted
+[1A[1M> Line:  582  Objects:      409 detected /        0 sextracted
+[1A[1M> Line:  583  Objects:      411 detected /        0 sextracted
+[1A[1M> Line:  584  Objects:      413 detected /        0 sextracted
+[1A[1M> Line:  585  Objects:      413 detected /        0 sextracted
+[1A[1M> Line:  586  Objects:      413 detected /        0 sextracted
+[1A[1M> Line:  587  Objects:      413 detected /        0 sextracted
+[1A[1M> Line:  588  Objects:      413 detected /        0 sextracted
+[1A[1M> Line:  589  Objects:      413 detected /        0 sextracted
+[1A[1M> Line:  590  Objects:      413 detected /        0 sextracted
+[1A[1M> Line:  591  Objects:      414 detected /        0 sextracted
+[1A[1M> Line:  592  Objects:      414 detected /        0 sextracted
+[1A[1M> Line:  593  Objects:      414 detected /        0 sextracted
+[1A[1M> Line:  594  Objects:      415 detected /        0 sextracted
+[1A[1M> Line:  595  Objects:      415 detected /        0 sextracted
+[1A[1M> Line:  596  Objects:      416 detected /        0 sextracted
+[1A[1M> Line:  597  Objects:      417 detected /        0 sextracted
+[1A[1M> Line:  598  Objects:      418 detected /        0 sextracted
+[1A[1M> Line:  599  Objects:      419 detected /        0 sextracted
+[1A[1M> Line:  600  Objects:      420 detected /        0 sextracted
+[1A[1M> Line:  601  Objects:      420 detected /        0 sextracted
+[1A[1M> Line:  602  Objects:      421 detected /        0 sextracted
+[1A[1M> Line:  603  Objects:      422 detected /        0 sextracted
+[1A[1M> Line:  604  Objects:      423 detected /        0 sextracted
+[1A[1M> Line:  605  Objects:      423 detected /        0 sextracted
+[1A[1M> Line:  606  Objects:      423 detected /        0 sextracted
+[1A[1M> Line:  607  Objects:      423 detected /        0 sextracted
+[1A[1M> Line:  608  Objects:      423 detected /        0 sextracted
+[1A[1M> Line:  609  Objects:      423 detected /        0 sextracted
+[1A[1M> Line:  610  Objects:      423 detected /        0 sextracted
+[1A[1M> Line:  611  Objects:      424 detected /        0 sextracted
+[1A[1M> Line:  612  Objects:      424 detected /        0 sextracted
+[1A[1M> Line:  613  Objects:      425 detected /        0 sextracted
+[1A[1M> Line:  614  Objects:      425 detected /        0 sextracted
+[1A[1M> Line:  615  Objects:      425 detected /        0 sextracted
+[1A[1M> Line:  616  Objects:      425 detected /        0 sextracted
+[1A[1M> Line:  617  Objects:      425 detected /        0 sextracted
+[1A[1M> Line:  618  Objects:      427 detected /        0 sextracted
+[1A[1M> Line:  619  Objects:      427 detected /        0 sextracted
+[1A[1M> Line:  620  Objects:      430 detected /        0 sextracted
+[1A[1M> Line:  621  Objects:      430 detected /        0 sextracted
+[1A[1M> Line:  622  Objects:      430 detected /        0 sextracted
+[1A[1M> Line:  623  Objects:      430 detected /        0 sextracted
+[1A[1M> Line:  624  Objects:      433 detected /        0 sextracted
+[1A[1M> Line:  625  Objects:      433 detected /        0 sextracted
+[1A[1M> Line:  626  Objects:      435 detected /        0 sextracted
+[1A[1M> Line:  627  Objects:      435 detected /        0 sextracted
+[1A[1M> Line:  628  Objects:      435 detected /        0 sextracted
+[1A[1M> Line:  629  Objects:      437 detected /        0 sextracted
+[1A[1M> Line:  630  Objects:      439 detected /        0 sextracted
+[1A[1M> Line:  631  Objects:      442 detected /        0 sextracted
+[1A[1M> Line:  632  Objects:      443 detected /        0 sextracted
+[1A[1M> Line:  633  Objects:      444 detected /        0 sextracted
+[1A[1M> Line:  634  Objects:      444 detected /        0 sextracted
+[1A[1M> Line:  635  Objects:      445 detected /        0 sextracted
+[1A[1M> Line:  636  Objects:      446 detected /        0 sextracted
+[1A[1M> Line:  637  Objects:      449 detected /        0 sextracted
+[1A[1M> Line:  638  Objects:      450 detected /        0 sextracted
+[1A[1M> Line:  639  Objects:      450 detected /        0 sextracted
+[1A[1M> Line:  640  Objects:      451 detected /        0 sextracted
+[1A[1M> Line:  641  Objects:      452 detected /        0 sextracted
+[1A[1M> Line:  642  Objects:      452 detected /        0 sextracted
+[1A[1M> Line:  643  Objects:      454 detected /        0 sextracted
+[1A[1M> Line:  644  Objects:      455 detected /        0 sextracted
+[1A[1M> Line:  645  Objects:      455 detected /        0 sextracted
+[1A[1M> Line:  646  Objects:      455 detected /        0 sextracted
+[1A[1M> Line:  647  Objects:      457 detected /        0 sextracted
+[1A[1M> Line:  648  Objects:      457 detected /        0 sextracted
+[1A[1M> Line:  649  Objects:      458 detected /        0 sextracted
+[1A[1M> Line:  650  Objects:      458 detected /        0 sextracted
+[1A[1M> Line:  651  Objects:      459 detected /        0 sextracted
+[1A[1M> Line:  652  Objects:      460 detected /        0 sextracted
+[1A[1M> Line:  653  Objects:      461 detected /        0 sextracted
+[1A[1M> Line:  654  Objects:      461 detected /        0 sextracted
+[1A[1M> Line:  655  Objects:      461 detected /        0 sextracted
+[1A[1M> Line:  656  Objects:      462 detected /        0 sextracted
+[1A[1M> Line:  657  Objects:      462 detected /        0 sextracted
+[1A[1M> Line:  658  Objects:      462 detected /        0 sextracted
+[1A[1M> Line:  659  Objects:      462 detected /        0 sextracted
+[1A[1M> Line:  660  Objects:      462 detected /        0 sextracted
+[1A[1M> Line:  661  Objects:      463 detected /        0 sextracted
+[1A[1M> Line:  662  Objects:      463 detected /        0 sextracted
+[1A[1M> Line:  663  Objects:      463 detected /        0 sextracted
+[1A[1M> Line:  664  Objects:      464 detected /        0 sextracted
+[1A[1M> Line:  665  Objects:      464 detected /        0 sextracted
+[1A[1M> Line:  666  Objects:      464 detected /        0 sextracted
+[1A[1M> Line:  667  Objects:      464 detected /        0 sextracted
+[1A[1M> Line:  668  Objects:      465 detected /        0 sextracted
+[1A[1M> Line:  669  Objects:      465 detected /        0 sextracted
+[1A[1M> Line:  670  Objects:      465 detected /        0 sextracted
+[1A[1M> Line:  671  Objects:      466 detected /        0 sextracted
+[1A[1M> Line:  672  Objects:      466 detected /        0 sextracted
+[1A[1M> Line:  673  Objects:      470 detected /        0 sextracted
+[1A[1M> Line:  674  Objects:      471 detected /        0 sextracted
+[1A[1M> Line:  675  Objects:      471 detected /        0 sextracted
+[1A[1M> Line:  676  Objects:      471 detected /        0 sextracted
+[1A[1M> Line:  677  Objects:      472 detected /        0 sextracted
+[1A[1M> Line:  678  Objects:      473 detected /        0 sextracted
+[1A[1M> Line:  679  Objects:      473 detected /        0 sextracted
+[1A[1M> Line:  680  Objects:      473 detected /        0 sextracted
+[1A[1M> Line:  681  Objects:      474 detected /        0 sextracted
+[1A[1M> Line:  682  Objects:      476 detected /        0 sextracted
+[1A[1M> Line:  683  Objects:      476 detected /        0 sextracted
+[1A[1M> Line:  684  Objects:      476 detected /        0 sextracted
+[1A[1M> Line:  685  Objects:      476 detected /        0 sextracted
+[1A[1M> Line:  686  Objects:      477 detected /        0 sextracted
+[1A[1M> Line:  687  Objects:      480 detected /        0 sextracted
+[1A[1M> Line:  688  Objects:      481 detected /        0 sextracted
+[1A[1M> Line:  689  Objects:      482 detected /        0 sextracted
+[1A[1M> Line:  690  Objects:      483 detected /        0 sextracted
+[1A[1M> Line:  691  Objects:      485 detected /        0 sextracted
+[1A[1M> Line:  692  Objects:      486 detected /        0 sextracted
+[1A[1M> Line:  693  Objects:      488 detected /        0 sextracted
+[1A[1M> Line:  694  Objects:      488 detected /        0 sextracted
+[1A[1M> Line:  695  Objects:      489 detected /        0 sextracted
+[1A[1M> Line:  696  Objects:      490 detected /        0 sextracted
+[1A[1M> Line:  697  Objects:      491 detected /        0 sextracted
+[1A[1M> Line:  698  Objects:      491 detected /        0 sextracted
+[1A[1M> Line:  699  Objects:      492 detected /        0 sextracted
+[1A[1M> Line:  700  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  701  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  702  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  703  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  704  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  705  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  706  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  707  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  708  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  709  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  710  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  711  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  712  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  713  Objects:      493 detected /        0 sextracted
+[1A[1M> Line:  714  Objects:      494 detected /        0 sextracted
+[1A[1M> Line:  715  Objects:      494 detected /        0 sextracted
+[1A[1M> Line:  716  Objects:      494 detected /        0 sextracted
+[1A[1M> Line:  717  Objects:      494 detected /        0 sextracted
+[1A[1M> Line:  718  Objects:      495 detected /        0 sextracted
+[1A[1M> Line:  719  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  720  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  721  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  722  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  723  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  724  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  725  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  726  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  727  Objects:      496 detected /        0 sextracted
+[1A[1M> Line:  728  Objects:      498 detected /        0 sextracted
+[1A[1M> Line:  729  Objects:      498 detected /        0 sextracted
+[1A[1M> Line:  730  Objects:      499 detected /        0 sextracted
+[1A[1M> Line:  731  Objects:      500 detected /        0 sextracted
+[1A[1M> Line:  732  Objects:      500 detected /        0 sextracted
+[1A[1M> Line:  733  Objects:      502 detected /        0 sextracted
+[1A[1M> Line:  734  Objects:      503 detected /        0 sextracted
+[1A[1M> Line:  735  Objects:      503 detected /        0 sextracted
+[1A[1M> Line:  736  Objects:      503 detected /        0 sextracted
+[1A[1M> Line:  737  Objects:      504 detected /        0 sextracted
+[1A[1M> Line:  738  Objects:      506 detected /        0 sextracted
+[1A[1M> Line:  739  Objects:      506 detected /        0 sextracted
+[1A[1M> Line:  740  Objects:      507 detected /        0 sextracted
+[1A[1M> Line:  741  Objects:      508 detected /        0 sextracted
+[1A[1M> Line:  742  Objects:      509 detected /        0 sextracted
+[1A[1M> Line:  743  Objects:      509 detected /        0 sextracted
+[1A[1M> Line:  744  Objects:      510 detected /        0 sextracted
+[1A[1M> Line:  745  Objects:      511 detected /        0 sextracted
+[1A[1M> Line:  746  Objects:      511 detected /        0 sextracted
+[1A[1M> Line:  747  Objects:      512 detected /        0 sextracted
+[1A[1M> Line:  748  Objects:      513 detected /        0 sextracted
+[1A[1M> Line:  749  Objects:      513 detected /        0 sextracted
+[1A[1M> Line:  750  Objects:      514 detected /        0 sextracted
+[1A[1M> Line:  751  Objects:      515 detected /        0 sextracted
+[1A[1M> Line:  752  Objects:      515 detected /        0 sextracted
+[1A[1M> Line:  753  Objects:      515 detected /        0 sextracted
+[1A[1M> Line:  754  Objects:      515 detected /        0 sextracted
+[1A[1M> Line:  755  Objects:      516 detected /        0 sextracted
+[1A[1M> Line:  756  Objects:      516 detected /        0 sextracted
+[1A[1M> Line:  757  Objects:      518 detected /        0 sextracted
+[1A[1M> Line:  758  Objects:      518 detected /        0 sextracted
+[1A[1M> Line:  759  Objects:      518 detected /        0 sextracted
+[1A[1M> Line:  760  Objects:      519 detected /        0 sextracted
+[1A[1M> Line:  761  Objects:      520 detected /        0 sextracted
+[1A[1M> Line:  762  Objects:      520 detected /        0 sextracted
+[1A[1M> Line:  763  Objects:      520 detected /        0 sextracted
+[1A[1M> Line:  764  Objects:      521 detected /        0 sextracted
+[1A[1M> Line:  765  Objects:      521 detected /        0 sextracted
+[1A[1M> Line:  766  Objects:      522 detected /        0 sextracted
+[1A[1M> Line:  767  Objects:      522 detected /        0 sextracted
+[1A[1M> Line:  768  Objects:      522 detected /        0 sextracted
+[1A[1M> Line:  769  Objects:      523 detected /        0 sextracted
+[1A[1M> Line:  770  Objects:      523 detected /        0 sextracted
+[1A[1M> Line:  771  Objects:      524 detected /        0 sextracted
+[1A[1M> Line:  772  Objects:      525 detected /        0 sextracted
+[1A[1M> Line:  773  Objects:      526 detected /        0 sextracted
+[1A[1M> Line:  774  Objects:      526 detected /        0 sextracted
+[1A[1M> Line:  775  Objects:      527 detected /        0 sextracted
+[1A[1M> Line:  776  Objects:      528 detected /        0 sextracted
+[1A[1M> Line:  777  Objects:      528 detected /        0 sextracted
+[1A[1M> Line:  778  Objects:      528 detected /        0 sextracted
+[1A[1M> Line:  779  Objects:      530 detected /        0 sextracted
+[1A[1M> Line:  780  Objects:      530 detected /        0 sextracted
+[1A[1M> Line:  781  Objects:      530 detected /        0 sextracted
+[1A[1M> Line:  782  Objects:      530 detected /        0 sextracted
+[1A[1M> Line:  783  Objects:      530 detected /        0 sextracted
+[1A[1M> Line:  784  Objects:      530 detected /        0 sextracted
+[1A[1M> Line:  785  Objects:      532 detected /        0 sextracted
+[1A[1M> Line:  786  Objects:      532 detected /        0 sextracted
+[1A[1M> Line:  787  Objects:      532 detected /        0 sextracted
+[1A[1M> Line:  788  Objects:      532 detected /        0 sextracted
+[1A[1M> Line:  789  Objects:      534 detected /        0 sextracted
+[1A[1M> Line:  790  Objects:      536 detected /        0 sextracted
+[1A[1M> Line:  791  Objects:      537 detected /        0 sextracted
+[1A[1M> Line:  792  Objects:      537 detected /        0 sextracted
+[1A[1M> Line:  793  Objects:      538 detected /        0 sextracted
+[1A[1M> Line:  794  Objects:      538 detected /        0 sextracted
+[1A[1M> Line:  795  Objects:      538 detected /        0 sextracted
+[1A[1M> Line:  796  Objects:      539 detected /        0 sextracted
+[1A[1M> Line:  797  Objects:      540 detected /        0 sextracted
+[1A[1M> Line:  798  Objects:      540 detected /        0 sextracted
+[1A[1M> Line:  799  Objects:      541 detected /        0 sextracted
+[1A[1M> Line:  800  Objects:      544 detected /        0 sextracted
+[1A[1M> Line:  801  Objects:      544 detected /        0 sextracted
+[1A[1M> Line:  802  Objects:      545 detected /        0 sextracted
+[1A[1M> Line:  803  Objects:      545 detected /        0 sextracted
+[1A[1M> Line:  804  Objects:      545 detected /        0 sextracted
+[1A[1M> Line:  805  Objects:      546 detected /        0 sextracted
+[1A[1M> Line:  806  Objects:      548 detected /        0 sextracted
+[1A[1M> Line:  807  Objects:      548 detected /        0 sextracted
+[1A[1M> Line:  808  Objects:      548 detected /        0 sextracted
+[1A[1M> Line:  809  Objects:      550 detected /        0 sextracted
+[1A[1M> Line:  810  Objects:      551 detected /        0 sextracted
+[1A[1M> Line:  811  Objects:      552 detected /        0 sextracted
+[1A[1M> Line:  812  Objects:      553 detected /        0 sextracted
+[1A[1M> Line:  813  Objects:      553 detected /        0 sextracted
+[1A[1M> Line:  814  Objects:      553 detected /        0 sextracted
+[1A[1M> Line:  815  Objects:      554 detected /        0 sextracted
+[1A[1M> Line:  816  Objects:      554 detected /        0 sextracted
+[1A[1M> Line:  817  Objects:      554 detected /        0 sextracted
+[1A[1M> Line:  818  Objects:      554 detected /        0 sextracted
+[1A[1M> Line:  819  Objects:      554 detected /        0 sextracted
+[1A[1M> Line:  820  Objects:      555 detected /        0 sextracted
+[1A[1M> Line:  821  Objects:      556 detected /        0 sextracted
+[1A[1M> Line:  822  Objects:      557 detected /        0 sextracted
+[1A[1M> Line:  823  Objects:      559 detected /        0 sextracted
+[1A[1M> Line:  824  Objects:      559 detected /        0 sextracted
+[1A[1M> Line:  825  Objects:      559 detected /        0 sextracted
+[1A[1M> Line:  826  Objects:      561 detected /        0 sextracted
+[1A[1M> Line:  827  Objects:      561 detected /        0 sextracted
+[1A[1M> Line:  828  Objects:      564 detected /        0 sextracted
+[1A[1M> Line:  829  Objects:      566 detected /        0 sextracted
+[1A[1M> Line:  830  Objects:      568 detected /        0 sextracted
+[1A[1M> Line:  831  Objects:      568 detected /        0 sextracted
+[1A[1M> Line:  832  Objects:      569 detected /        0 sextracted
+[1A[1M> Line:  833  Objects:      569 detected /        0 sextracted
+[1A[1M> Line:  834  Objects:      569 detected /        0 sextracted
+[1A[1M> Line:  835  Objects:      569 detected /        0 sextracted
+[1A[1M> Line:  836  Objects:      570 detected /        0 sextracted
+[1A[1M> Line:  837  Objects:      571 detected /        0 sextracted
+[1A[1M> Line:  838  Objects:      571 detected /        0 sextracted
+[1A[1M> Line:  839  Objects:      571 detected /        0 sextracted
+[1A[1M> Line:  840  Objects:      571 detected /        0 sextracted
+[1A[1M> Line:  841  Objects:      571 detected /        0 sextracted
+[1A[1M> Line:  842  Objects:      573 detected /        0 sextracted
+[1A[1M> Line:  843  Objects:      577 detected /        0 sextracted
+[1A[1M> Line:  844  Objects:      578 detected /        0 sextracted
+[1A[1M> Line:  845  Objects:      578 detected /        0 sextracted
+[1A[1M> Line:  846  Objects:      578 detected /        0 sextracted
+[1A[1M> Line:  847  Objects:      578 detected /        0 sextracted
+[1A[1M> Line:  848  Objects:      579 detected /        0 sextracted
+[1A[1M> Line:  849  Objects:      579 detected /        0 sextracted
+[1A[1M> Line:  850  Objects:      580 detected /        0 sextracted
+[1A[1M> Line:  851  Objects:      581 detected /        0 sextracted
+[1A[1M> Line:  852  Objects:      582 detected /        0 sextracted
+[1A[1M> Line:  853  Objects:      583 detected /        0 sextracted
+[1A[1M> Line:  854  Objects:      584 detected /        0 sextracted
+[1A[1M> Line:  855  Objects:      584 detected /        0 sextracted
+[1A[1M> Line:  856  Objects:      586 detected /        0 sextracted
+[1A[1M> Line:  857  Objects:      586 detected /        0 sextracted
+[1A[1M> Line:  858  Objects:      587 detected /        0 sextracted
+[1A[1M> Line:  859  Objects:      587 detected /        0 sextracted
+[1A[1M> Line:  860  Objects:      588 detected /        0 sextracted
+[1A[1M> Line:  861  Objects:      588 detected /        0 sextracted
+[1A[1M> Line:  862  Objects:      589 detected /        0 sextracted
+[1A[1M> Line:  863  Objects:      591 detected /        0 sextracted
+[1A[1M> Line:  864  Objects:      592 detected /        0 sextracted
+[1A[1M> Line:  865  Objects:      592 detected /        0 sextracted
+[1A[1M> Line:  866  Objects:      592 detected /        0 sextracted
+[1A[1M> Line:  867  Objects:      592 detected /        0 sextracted
+[1A[1M> Line:  868  Objects:      592 detected /        0 sextracted
+[1A[1M> Line:  869  Objects:      594 detected /        0 sextracted
+[1A[1M> Line:  870  Objects:      596 detected /        0 sextracted
+[1A[1M> Line:  871  Objects:      596 detected /        0 sextracted
+[1A[1M> Line:  872  Objects:      598 detected /        0 sextracted
+[1A[1M> Line:  873  Objects:      600 detected /        0 sextracted
+[1A[1M> Line:  874  Objects:      601 detected /        0 sextracted
+[1A[1M> Line:  875  Objects:      601 detected /        0 sextracted
+[1A[1M> Line:  876  Objects:      601 detected /        0 sextracted
+[1A[1M> Line:  877  Objects:      602 detected /        0 sextracted
+[1A[1M> Line:  878  Objects:      602 detected /        0 sextracted
+[1A[1M> Line:  879  Objects:      604 detected /        0 sextracted
+[1A[1M> Line:  880  Objects:      605 detected /        0 sextracted
+[1A[1M> Line:  881  Objects:      607 detected /        0 sextracted
+[1A[1M> Line:  882  Objects:      608 detected /        0 sextracted
+[1A[1M> Line:  883  Objects:      609 detected /        0 sextracted
+[1A[1M> Line:  884  Objects:      609 detected /        0 sextracted
+[1A[1M> Line:  885  Objects:      612 detected /        0 sextracted
+[1A[1M> Line:  886  Objects:      613 detected /        0 sextracted
+[1A[1M> Line:  887  Objects:      613 detected /        0 sextracted
+[1A[1M> Line:  888  Objects:      613 detected /        0 sextracted
+[1A[1M> Line:  889  Objects:      613 detected /        0 sextracted
+[1A[1M> Line:  890  Objects:      613 detected /        0 sextracted
+[1A[1M> Line:  891  Objects:      615 detected /        0 sextracted
+[1A[1M> Line:  892  Objects:      616 detected /        0 sextracted
+[1A[1M> Line:  893  Objects:      617 detected /        0 sextracted
+[1A[1M> Line:  894  Objects:      617 detected /        0 sextracted
+[1A[1M> Line:  895  Objects:      617 detected /        0 sextracted
+[1A[1M> Line:  896  Objects:      617 detected /        0 sextracted
+[1A[1M> Line:  897  Objects:      618 detected /        0 sextracted
+[1A[1M> Line:  898  Objects:      618 detected /        0 sextracted
+[1A[1M> Line:  899  Objects:      618 detected /        0 sextracted
+[1A[1M> Line:  900  Objects:      619 detected /        0 sextracted
+[1A[1M> Line:  901  Objects:      620 detected /        0 sextracted
+[1A[1M> Line:  902  Objects:      620 detected /        0 sextracted
+[1A[1M> Line:  903  Objects:      622 detected /        0 sextracted
+[1A[1M> Line:  904  Objects:      623 detected /        0 sextracted
+[1A[1M> Line:  905  Objects:      625 detected /        0 sextracted
+[1A[1M> Line:  906  Objects:      627 detected /        0 sextracted
+[1A[1M> Line:  907  Objects:      628 detected /        0 sextracted
+[1A[1M> Line:  908  Objects:      628 detected /        0 sextracted
+[1A[1M> Line:  909  Objects:      628 detected /        0 sextracted
+[1A[1M> Line:  910  Objects:      629 detected /        0 sextracted
+[1A[1M> Line:  911  Objects:      631 detected /        0 sextracted
+[1A[1M> Line:  912  Objects:      633 detected /        0 sextracted
+[1A[1M> Line:  913  Objects:      634 detected /        0 sextracted
+[1A[1M> Line:  914  Objects:      634 detected /        0 sextracted
+[1A[1M> Line:  915  Objects:      634 detected /        0 sextracted
+[1A[1M> Line:  916  Objects:      636 detected /        0 sextracted
+[1A[1M> Line:  917  Objects:      637 detected /        0 sextracted
+[1A[1M> Line:  918  Objects:      638 detected /        0 sextracted
+[1A[1M> Line:  919  Objects:      639 detected /        0 sextracted
+[1A[1M> Line:  920  Objects:      639 detected /        0 sextracted
+[1A[1M> Line:  921  Objects:      640 detected /        0 sextracted
+[1A[1M> Line:  922  Objects:      640 detected /        0 sextracted
+[1A[1M> Line:  923  Objects:      640 detected /        0 sextracted
+[1A[1M> Line:  924  Objects:      641 detected /        0 sextracted
+[1A[1M> Line:  925  Objects:      643 detected /        0 sextracted
+[1A[1M> Line:  926  Objects:      643 detected /        0 sextracted
+[1A[1M> Line:  927  Objects:      643 detected /        0 sextracted
+[1A[1M> Line:  928  Objects:      643 detected /        0 sextracted
+[1A[1M> Line:  929  Objects:      643 detected /        0 sextracted
+[1A[1M> Line:  930  Objects:      643 detected /        0 sextracted
+[1A[1M> Line:  931  Objects:      643 detected /        0 sextracted
+[1A[1M> Line:  932  Objects:      643 detected /        0 sextracted
+[1A[1M> Line:  933  Objects:      645 detected /        0 sextracted
+[1A[1M> Line:  934  Objects:      646 detected /        0 sextracted
+[1A[1M> Line:  935  Objects:      648 detected /        0 sextracted
+[1A[1M> Line:  936  Objects:      649 detected /        0 sextracted
+[1A[1M> Line:  937  Objects:      649 detected /        0 sextracted
+[1A[1M> Line:  938  Objects:      649 detected /        0 sextracted
+[1A[1M> Line:  939  Objects:      649 detected /        0 sextracted
+[1A[1M> Line:  940  Objects:      650 detected /        0 sextracted
+[1A[1M> Line:  941  Objects:      650 detected /        0 sextracted
+[1A[1M> Line:  942  Objects:      650 detected /        0 sextracted
+[1A[1M> Line:  943  Objects:      650 detected /        0 sextracted
+[1A[1M> Line:  944  Objects:      652 detected /        0 sextracted
+[1A[1M> Line:  945  Objects:      653 detected /        0 sextracted
+[1A[1M> Line:  946  Objects:      654 detected /        0 sextracted
+[1A[1M> Line:  947  Objects:      654 detected /        0 sextracted
+[1A[1M> Line:  948  Objects:      656 detected /        0 sextracted
+[1A[1M> Line:  949  Objects:      657 detected /        0 sextracted
+[1A[1M> Line:  950  Objects:      659 detected /        0 sextracted
+[1A[1M> Line:  951  Objects:      660 detected /        0 sextracted
+[1A[1M> Line:  952  Objects:      660 detected /        0 sextracted
+[1A[1M> Line:  953  Objects:      661 detected /        0 sextracted
+[1A[1M> Line:  954  Objects:      661 detected /        0 sextracted
+[1A[1M> Line:  955  Objects:      663 detected /        0 sextracted
+[1A[1M> Line:  956  Objects:      664 detected /        0 sextracted
+[1A[1M> Line:  957  Objects:      665 detected /        0 sextracted
+[1A[1M> Line:  958  Objects:      668 detected /        0 sextracted
+[1A[1M> Line:  959  Objects:      669 detected /        0 sextracted
+[1A[1M> Line:  960  Objects:      669 detected /        0 sextracted
+[1A[1M> Line:  961  Objects:      670 detected /        0 sextracted
+[1A[1M> Line:  962  Objects:      670 detected /        0 sextracted
+[1A[1M> Line:  963  Objects:      670 detected /        0 sextracted
+[1A[1M> Line:  964  Objects:      670 detected /        0 sextracted
+[1A[1M> Line:  965  Objects:      672 detected /        0 sextracted
+[1A[1M> Line:  966  Objects:      673 detected /        0 sextracted
+[1A[1M> Line:  967  Objects:      676 detected /        0 sextracted
+[1A[1M> Line:  968  Objects:      676 detected /        0 sextracted
+[1A[1M> Line:  969  Objects:      676 detected /        0 sextracted
+[1A[1M> Line:  970  Objects:      677 detected /        0 sextracted
+[1A[1M> Line:  971  Objects:      677 detected /        0 sextracted
+[1A[1M> Line:  972  Objects:      677 detected /        0 sextracted
+[1A[1M> Line:  973  Objects:      679 detected /        0 sextracted
+[1A[1M> Line:  974  Objects:      681 detected /        0 sextracted
+[1A[1M> Line:  975  Objects:      681 detected /        0 sextracted
+[1A[1M> Line:  976  Objects:      681 detected /        0 sextracted
+[1A[1M> Line:  977  Objects:      681 detected /        0 sextracted
+[1A[1M> Line:  978  Objects:      682 detected /        0 sextracted
+[1A[1M> Line:  979  Objects:      683 detected /        0 sextracted
+[1A[1M> Line:  980  Objects:      683 detected /        0 sextracted
+[1A[1M> Line:  981  Objects:      684 detected /        0 sextracted
+[1A[1M> Line:  982  Objects:      686 detected /        0 sextracted
+[1A[1M> Line:  983  Objects:      688 detected /        0 sextracted
+[1A[1M> Line:  984  Objects:      688 detected /        0 sextracted
+[1A[1M> Line:  985  Objects:      690 detected /        0 sextracted
+[1A[1M> Line:  986  Objects:      691 detected /        0 sextracted
+[1A[1M> Line:  987  Objects:      692 detected /        0 sextracted
+[1A[1M> Line:  988  Objects:      692 detected /        0 sextracted
+[1A[1M> Line:  989  Objects:      692 detected /        0 sextracted
+[1A[1M> Line:  990  Objects:      692 detected /        0 sextracted
+[1A[1M> Line:  991  Objects:      692 detected /        0 sextracted
+[1A[1M> Line:  992  Objects:      692 detected /        0 sextracted
+[1A[1M> Line:  993  Objects:      693 detected /        0 sextracted
+[1A[1M> Line:  994  Objects:      693 detected /        0 sextracted
+[1A[1M> Line:  995  Objects:      694 detected /        0 sextracted
+[1A[1M> Line:  996  Objects:      696 detected /        0 sextracted
+[1A[1M> Line:  997  Objects:      696 detected /        0 sextracted
+[1A[1M> Line:  998  Objects:      697 detected /        0 sextracted
+[1A[1M> Line:  999  Objects:      699 detected /        0 sextracted
+[1A[1M> Line: 1000  Objects:      699 detected /        0 sextracted
+[1A[1M> Line: 1001  Objects:      700 detected /        0 sextracted
+[1A[1M> Line: 1002  Objects:      701 detected /        0 sextracted
+[1A[1M> Line: 1003  Objects:      701 detected /        0 sextracted
+[1A[1M> Line: 1004  Objects:      702 detected /        0 sextracted
+[1A[1M> Line: 1005  Objects:      706 detected /        0 sextracted
+[1A[1M> Line: 1006  Objects:      708 detected /        0 sextracted
+[1A[1M> Line: 1007  Objects:      708 detected /        0 sextracted
+[1A[1M> Line: 1008  Objects:      709 detected /        0 sextracted
+[1A[1M> Line: 1009  Objects:      710 detected /        0 sextracted
+[1A[1M> Line: 1010  Objects:      710 detected /        0 sextracted
+[1A[1M> Line: 1011  Objects:      710 detected /        0 sextracted
+[1A[1M> Line: 1012  Objects:      710 detected /        0 sextracted
+[1A[1M> Line: 1013  Objects:      712 detected /        0 sextracted
+[1A[1M> Line: 1014  Objects:      714 detected /        0 sextracted
+[1A[1M> Line: 1015  Objects:      715 detected /        0 sextracted
+[1A[1M> Line: 1016  Objects:      715 detected /        0 sextracted
+[1A[1M> Line: 1017  Objects:      718 detected /        0 sextracted
+[1A[1M> Line: 1018  Objects:      720 detected /        0 sextracted
+[1A[1M> Line: 1019  Objects:      720 detected /        0 sextracted
+[1A[1M> Line: 1020  Objects:      720 detected /        0 sextracted
+[1A[1M> Line: 1021  Objects:      720 detected /        0 sextracted
+[1A[1M> Line: 1022  Objects:      722 detected /        0 sextracted
+[1A[1M> Line: 1023  Objects:      722 detected /        0 sextracted
+[1A[1M> Line: 1023  Objects:      722 detected /       10 sextracted
+[1A[1M> Line: 1023  Objects:      722 detected /       20 sextracted
+[1A[1M> Line: 1025  Objects:      722 detected /       28 sextracted
+[1A[1M> Line: 1029  Objects:      726 detected /       30 sextracted
+[1A[1M> Line: 1038  Objects:      733 detected /       40 sextracted
+[1A[1M> Line: 1050  Objects:      743 detected /       48 sextracted
+[1A[1M> Line: 1055  Objects:      746 detected /       50 sextracted
+[1A[1M> Line: 1056  Objects:      747 detected /       50 sextracted
+[1A[1M> Line: 1057  Objects:      748 detected /       50 sextracted
+[1A[1M> Line: 1065  Objects:      752 detected /       60 sextracted
+[1A[1M> Line: 1066  Objects:      752 detected /       60 sextracted
+[1A[1M> Line: 1067  Objects:      753 detected /       60 sextracted
+[1A[1M> Line: 1068  Objects:      753 detected /       60 sextracted
+[1A[1M> Line: 1069  Objects:      754 detected /       60 sextracted
+[1A[1M> Line: 1070  Objects:      754 detected /       60 sextracted
+[1A[1M> Line: 1075  Objects:      757 detected /       62 sextracted
+[1A[1M> Line: 1080  Objects:      763 detected /       70 sextracted
+[1A[1M> Line: 1081  Objects:      763 detected /       70 sextracted
+[1A[1M> Line: 1082  Objects:      764 detected /       70 sextracted
+[1A[1M> Line: 1083  Objects:      764 detected /       70 sextracted
+[1A[1M> Line: 1099  Objects:      779 detected /       80 sextracted
+[1A[1M> Line: 1100  Objects:      779 detected /       80 sextracted
+[1A[1M> Line: 1100  Objects:      779 detected /       81 sextracted
+[1A[1M> Line: 1119  Objects:      794 detected /       90 sextracted
+[1A[1M> Line: 1120  Objects:      795 detected /       90 sextracted
+[1A[1M> Line: 1125  Objects:      801 detected /       98 sextracted
+[1A[1M> Line: 1129  Objects:      803 detected /      100 sextracted
+[1A[1M> Line: 1130  Objects:      804 detected /      100 sextracted
+[1A[1M> Line: 1131  Objects:      804 detected /      100 sextracted
+[1A[1M> Line: 1146  Objects:      813 detected /      110 sextracted
+[1A[1M> Line: 1147  Objects:      813 detected /      110 sextracted
+[1A[1M> Line: 1150  Objects:      815 detected /      113 sextracted
+[1A[1M> Line: 1156  Objects:      818 detected /      120 sextracted
+[1A[1M> Line: 1157  Objects:      819 detected /      120 sextracted
+[1A[1M> Line: 1168  Objects:      828 detected /      130 sextracted
+[1A[1M> Line: 1169  Objects:      828 detected /      130 sextracted
+[1A[1M> Line: 1170  Objects:      830 detected /      130 sextracted
+[1A[1M> Line: 1175  Objects:      833 detected /      132 sextracted
+[1A[1M> Line: 1184  Objects:      837 detected /      140 sextracted
+[1A[1M> Line: 1185  Objects:      837 detected /      140 sextracted
+[1A[1M> Line: 1194  Objects:      841 detected /      150 sextracted
+[1A[1M> Line: 1200  Objects:      847 detected /      156 sextracted
+[1A[1M> Line: 1203  Objects:      850 detected /      160 sextracted
+[1A[1M> Line: 1204  Objects:      852 detected /      160 sextracted
+[1A[1M> Line: 1225  Objects:      867 detected /      168 sextracted
+[1A[1M> Line: 1231  Objects:      869 detected /      170 sextracted
+[1A[1M> Line: 1232  Objects:      870 detected /      170 sextracted
+[1A[1M> Line: 1247  Objects:      876 detected /      180 sextracted
+[1A[1M> Line: 1248  Objects:      877 detected /      180 sextracted
+[1A[1M> Line: 1249  Objects:      877 detected /      180 sextracted
+[1A[1M> Line: 1250  Objects:      879 detected /      180 sextracted
+[1A[1M> Line: 1250  Objects:      879 detected /      181 sextracted
+[1A[1M> Line: 1258  Objects:      882 detected /      190 sextracted
+[1A[1M> Line: 1259  Objects:      882 detected /      190 sextracted
+[1A[1M> Line: 1272  Objects:      887 detected /      200 sextracted
+[1A[1M> Line: 1275  Objects:      888 detected /      203 sextracted
+[1A[1M> Line: 1283  Objects:      894 detected /      210 sextracted
+[1A[1M> Line: 1284  Objects:      895 detected /      210 sextracted
+[1A[1M> Line: 1300  Objects:      909 detected /      219 sextracted
+[1A[1M> Line: 1303  Objects:      910 detected /      220 sextracted
+[1A[1M> Line: 1323  Objects:      928 detected /      230 sextracted
+[1A[1M> Line: 1325  Objects:      930 detected /      233 sextracted
+[1A[1M> Line: 1335  Objects:      939 detected /      240 sextracted
+[1A[1M> Line: 1336  Objects:      939 detected /      240 sextracted
+[1A[1M> Line: 1337  Objects:      940 detected /      240 sextracted
+[1A[1M> Line: 1347  Objects:      950 detected /      250 sextracted
+[1A[1M> Line: 1348  Objects:      950 detected /      250 sextracted
+[1A[1M> Line: 1349  Objects:      950 detected /      250 sextracted
+[1A[1M> Line: 1350  Objects:      950 detected /      250 sextracted
+[1A[1M> Line: 1350  Objects:      950 detected /      251 sextracted
+[1A[1M> Line: 1369  Objects:      959 detected /      260 sextracted
+[1A[1M> Line: 1370  Objects:      960 detected /      260 sextracted
+[1A[1M> Line: 1371  Objects:      960 detected /      260 sextracted
+[1A[1M> Line: 1372  Objects:      961 detected /      260 sextracted
+[1A[1M> Line: 1375  Objects:      965 detected /      266 sextracted
+[1A[1M> Line: 1378  Objects:      967 detected /      270 sextracted
+[1A[1M> Line: 1391  Objects:      973 detected /      280 sextracted
+[1A[1M> Line: 1392  Objects:      973 detected /      280 sextracted
+[1A[1M> Line: 1393  Objects:      973 detected /      280 sextracted
+[1A[1M> Line: 1394  Objects:      973 detected /      280 sextracted
+[1A[1M> Line: 1400  Objects:      976 detected /      283 sextracted
+[1A[1M> Line: 1416  Objects:      987 detected /      290 sextracted
+[1A[1M> Line: 1425  Objects:      992 detected /      296 sextracted
+[1A[1M> Line: 1435  Objects:      999 detected /      300 sextracted
+[1A[1M> Line: 1436  Objects:      999 detected /      300 sextracted
+[1A[1M> Line: 1437  Objects:     1000 detected /      300 sextracted
+[1A[1M> Line: 1446  Objects:     1004 detected /      310 sextracted
+[1A[1M> Line: 1447  Objects:     1004 detected /      310 sextracted
+[1A[1M> Line: 1450  Objects:     1005 detected /      317 sextracted
+[1A[1M> Line: 1456  Objects:     1008 detected /      320 sextracted
+[1A[1M> Line: 1457  Objects:     1011 detected /      320 sextracted
+[1A[1M> Line: 1458  Objects:     1011 detected /      320 sextracted
+[1A[1M> Line: 1459  Objects:     1011 detected /      320 sextracted
+[1A[1M> Line: 1460  Objects:     1012 detected /      320 sextracted
+[1A[1M> Line: 1461  Objects:     1012 detected /      320 sextracted
+[1A[1M> Line: 1462  Objects:     1012 detected /      320 sextracted
+[1A[1M> Line: 1463  Objects:     1012 detected /      320 sextracted
+[1A[1M> Line: 1464  Objects:     1015 detected /      320 sextracted
+[1A[1M> Line: 1475  Objects:     1024 detected /      325 sextracted
+[1A[1M> Line: 1478  Objects:     1024 detected /      330 sextracted
+[1A[1M> Line: 1479  Objects:     1025 detected /      330 sextracted
+[1A[1M> Line: 1480  Objects:     1026 detected /      330 sextracted
+[1A[1M> Line: 1497  Objects:     1038 detected /      340 sextracted
+[1A[1M> Line: 1498  Objects:     1038 detected /      340 sextracted
+[1A[1M> Line: 1499  Objects:     1039 detected /      340 sextracted
+[1A[1M> Line: 1500  Objects:     1040 detected /      343 sextracted
+[1A[1M> Line: 1514  Objects:     1044 detected /      350 sextracted
+[1A[1M> Line: 1525  Objects:     1056 detected /      357 sextracted
+[1A[1M> Line: 1529  Objects:     1059 detected /      360 sextracted
+[1A[1M> Line: 1530  Objects:     1059 detected /      360 sextracted
+[1A[1M> Line: 1548  Objects:     1078 detected /      370 sextracted
+[1A[1M> Line: 1549  Objects:     1079 detected /      370 sextracted
+[1A[1M> Line: 1550  Objects:     1080 detected /      372 sextracted
+[1A[1M> Line: 1560  Objects:     1086 detected /      380 sextracted
+[1A[1M> Line: 1561  Objects:     1086 detected /      380 sextracted
+[1A[1M> Line: 1575  Objects:     1092 detected /      387 sextracted
+[1A[1M> Line: 1578  Objects:     1094 detected /      390 sextracted
+[1A[1M> Line: 1579  Objects:     1096 detected /      390 sextracted
+[1A[1M> Line: 1580  Objects:     1097 detected /      390 sextracted
+[1A[1M> Line: 1595  Objects:     1109 detected /      400 sextracted
+[1A[1M> Line: 1596  Objects:     1109 detected /      400 sextracted
+[1A[1M> Line: 1597  Objects:     1112 detected /      400 sextracted
+[1A[1M> Line: 1600  Objects:     1114 detected /      403 sextracted
+[1A[1M> Line: 1616  Objects:     1124 detected /      410 sextracted
+[1A[1M> Line: 1617  Objects:     1125 detected /      410 sextracted
+[1A[1M> Line: 1618  Objects:     1126 detected /      410 sextracted
+[1A[1M> Line: 1625  Objects:     1132 detected /      418 sextracted
+[1A[1M> Line: 1628  Objects:     1135 detected /      420 sextracted
+[1A[1M> Line: 1635  Objects:     1138 detected /      430 sextracted
+[1A[1M> Line: 1636  Objects:     1140 detected /      430 sextracted
+[1A[1M> Line: 1649  Objects:     1147 detected /      440 sextracted
+[1A[1M> Line: 1650  Objects:     1147 detected /      440 sextracted
+[1A[1M> Line: 1651  Objects:     1148 detected /      440 sextracted
+[1A[1M> Line: 1652  Objects:     1149 detected /      440 sextracted
+[1A[1M> Line: 1653  Objects:     1150 detected /      440 sextracted
+[1A[1M> Line: 1670  Objects:     1160 detected /      450 sextracted
+[1A[1M> Line: 1675  Objects:     1162 detected /      454 sextracted
+[1A[1M> Line: 1686  Objects:     1164 detected /      460 sextracted
+[1A[1M> Line: 1696  Objects:     1172 detected /      470 sextracted
+[1A[1M> Line: 1697  Objects:     1173 detected /      470 sextracted
+[1A[1M> Line: 1698  Objects:     1174 detected /      470 sextracted
+[1A[1M> Line: 1700  Objects:     1174 detected /      472 sextracted
+[1A[1M> Line: 1725  Objects:     1190 detected /      476 sextracted
+[1A[1M> Line: 1729  Objects:     1194 detected /      480 sextracted
+[1A[1M> Line: 1730  Objects:     1194 detected /      480 sextracted
+[1A[1M> Line: 1731  Objects:     1195 detected /      480 sextracted
+[1A[1M> Line: 1740  Objects:     1197 detected /      490 sextracted
+[1A[1M> Line: 1741  Objects:     1197 detected /      490 sextracted
+[1A[1M> Line: 1750  Objects:     1204 detected /      499 sextracted
+[1A[1M> Line: 1753  Objects:     1205 detected /      500 sextracted
+[1A[1M> Line: 1754  Objects:     1207 detected /      500 sextracted
+[1A[1M> Line: 1773  Objects:     1221 detected /      510 sextracted
+[1A[1M> Line: 1774  Objects:     1225 detected /      510 sextracted
+[1A[1M> Line: 1775  Objects:     1225 detected /      510 sextracted
+[1A[1M> Line: 1775  Objects:     1225 detected /      511 sextracted
+[1A[1M> Line: 1788  Objects:     1234 detected /      520 sextracted
+[1A[1M> Line: 1789  Objects:     1235 detected /      520 sextracted
+[1A[1M> Line: 1790  Objects:     1236 detected /      520 sextracted
+[1A[1M> Line: 1791  Objects:     1236 detected /      520 sextracted
+[1A[1M> Line: 1800  Objects:     1243 detected /      530 sextracted
+[1A[1M> Line: 1801  Objects:     1243 detected /      530 sextracted
+[1A[1M> Line: 1802  Objects:     1243 detected /      530 sextracted
+[1A[1M> Line: 1803  Objects:     1243 detected /      530 sextracted
+[1A[1M> Line: 1804  Objects:     1243 detected /      530 sextracted
+[1A[1M> Line: 1805  Objects:     1244 detected /      530 sextracted
+[1A[1M> Line: 1818  Objects:     1251 detected /      540 sextracted
+[1A[1M> Line: 1819  Objects:     1251 detected /      540 sextracted
+[1A[1M> Line: 1820  Objects:     1251 detected /      540 sextracted
+[1A[1M> Line: 1825  Objects:     1251 detected /      546 sextracted
+[1A[1M> Line: 1827  Objects:     1252 detected /      550 sextracted
+[1A[1M> Line: 1848  Objects:     1262 detected /      560 sextracted
+[1A[1M> Line: 1849  Objects:     1264 detected /      560 sextracted
+[1A[1M> Line: 1850  Objects:     1264 detected /      560 sextracted
+[1A[1M> Line: 1850  Objects:     1264 detected /      561 sextracted
+[1A[1M> Line: 1862  Objects:     1267 detected /      570 sextracted
+[1A[1M> Line: 1863  Objects:     1267 detected /      570 sextracted
+[1A[1M> Line: 1864  Objects:     1267 detected /      570 sextracted
+[1A[1M> Line: 1865  Objects:     1267 detected /      570 sextracted
+[1A[1M> Line: 1866  Objects:     1267 detected /      570 sextracted
+[1A[1M> Line: 1867  Objects:     1267 detected /      570 sextracted
+[1A[1M> Line: 1875  Objects:     1269 detected /      578 sextracted
+[1A[1M> Line: 1877  Objects:     1269 detected /      580 sextracted
+[1A[1M> Line: 1890  Objects:     1281 detected /      590 sextracted
+[1A[1M> Line: 1891  Objects:     1281 detected /      590 sextracted
+[1A[1M> Line: 1900  Objects:     1287 detected /      596 sextracted
+[1A[1M> Line: 1903  Objects:     1289 detected /      600 sextracted
+[1A[1M> Line: 1904  Objects:     1290 detected /      600 sextracted
+[1A[1M> Line: 1910  Objects:     1294 detected /      610 sextracted
+[1A[1M> Line: 1923  Objects:     1306 detected /      620 sextracted
+[1A[1M> Line: 1924  Objects:     1309 detected /      620 sextracted
+[1A[1M> Line: 1925  Objects:     1309 detected /      620 sextracted
+[1A[1M> Line: 1926  Objects:     1310 detected /      620 sextracted
+[1A[1M> Line: 1927  Objects:     1310 detected /      620 sextracted
+[1A[1M> Line: 1928  Objects:     1310 detected /      620 sextracted
+[1A[1M> Line: 1929  Objects:     1312 detected /      620 sextracted
+[1A[1M> Line: 1930  Objects:     1312 detected /      620 sextracted
+[1A[1M> Line: 1931  Objects:     1312 detected /      620 sextracted
+[1A[1M> Line: 1944  Objects:     1325 detected /      630 sextracted
+[1A[1M> Line: 1945  Objects:     1325 detected /      630 sextracted
+[1A[1M> Line: 1950  Objects:     1327 detected /      634 sextracted
+[1A[1M> Line: 1955  Objects:     1332 detected /      640 sextracted
+[1A[1M> Line: 1965  Objects:     1335 detected /      650 sextracted
+[1A[1M> Line: 1966  Objects:     1336 detected /      650 sextracted
+[1A[1M> Line: 1967  Objects:     1336 detected /      650 sextracted
+[1A[1M> Line: 1975  Objects:     1341 detected /      654 sextracted
+[1A[1M> Line: 1984  Objects:     1344 detected /      660 sextracted
+[1A[1M> Line: 1985  Objects:     1344 detected /      660 sextracted
+[1A[1M> Line: 2000  Objects:     1354 detected /      669 sextracted
+[1A[1M> Line: 2001  Objects:     1355 detected /      670 sextracted
+[1A[1M> Line: 2025  Objects:     1373 detected /      679 sextracted
+[1A[1M> Line: 2050  Objects:     1384 detected /      679 sextracted
+[1A[1M> Line: 2075  Objects:     1402 detected /      679 sextracted
+[1A[1M> Line: 2100  Objects:     1419 detected /      679 sextracted
+[1A[1M> Line: 2125  Objects:     1435 detected /      679 sextracted
+[1A[1M> Line: 2150  Objects:     1452 detected /      679 sextracted
+[1A[1M> Line: 2175  Objects:     1468 detected /      679 sextracted
+[1A[1M> Line: 2200  Objects:     1484 detected /      679 sextracted
+[1A[1M> Line: 2225  Objects:     1500 detected /      679 sextracted
+[1A[1M> Line: 2250  Objects:     1515 detected /      679 sextracted
+[1A[1M> Line: 2275  Objects:     1529 detected /      679 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      680 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      690 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      700 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      710 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      720 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      730 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      740 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      750 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      760 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      770 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      780 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      790 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      800 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      810 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      820 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      830 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      840 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      850 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      860 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      870 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      880 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      890 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      900 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      910 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      920 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      930 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      940 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      950 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      960 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      970 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      980 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /      990 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1000 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1010 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1020 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1030 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1040 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1050 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1060 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1070 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1080 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1090 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1100 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1110 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1120 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1130 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1140 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1150 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1160 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1170 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1180 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1190 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1200 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1210 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1220 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1230 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1240 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1250 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1260 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1270 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1280 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1290 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1300 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1310 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1320 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1330 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1340 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1350 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1360 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1370 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1380 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1390 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1400 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1410 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1420 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1430 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1440 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1450 sextracted
+[1A[1M> Line: 2290  Objects:     1554 detected /     1460 sextracted
+[1A      Objects: detected 1554     / sextracted 1468            
+
+[1M> Closing files
+[1A[1M> 
+[1A> All done (in 8.7 s: 264.5 lines/s , 169.5 detections/s)
+[02:40:00] INFO frb_pipeline.phase2 | Phase 2 SExtractor DEBLEND_MINCONT = 0.005
+[02:40:00] INFO frb_pipeline.phase2 | Generating WSL Native Conda Script
+[02:40:00] INFO frb_pipeline.phase2 | Triggering Conda `frb_project` Environment OS Bridge
+[*] Target FRB set to RA=37.37692, DEC=-62.96284
+[*] Pixel scale from WCS: 0.262000 arcsec/px
+[*] Calibration query footprint: 10.00' x 10.00' (2290 x 2290 px, image center RA=37.37684, Dec=-62.96281)
+[*] Querying PS1 for calibration stars...
+    PS1 candidates in field: 0
+[*] Querying Legacy Survey DR10 (Tractor) for calibration stars...
+    Legacy candidates in field: 67
+[*] Matched PSF stars within 0.6 arcsec: PS1=0, Legacy=67 (need >=3)
+[*] Using LS DR10 Tractor (NOIRLab TAP) for ZP (67 matched stars)
+[*] Calibration Complete (N_stars=67): Aper ZP = 22.483 (40px), PSF ZP = 22.348, Auto ZP = 22.434
+[*] Field depth (5Ïƒ @ 40.0 px): m_lim = 19.361 AB
+[*] Cross-matching 40 valid candidates within 60 arcsec (in region: 40; dropped by SNR_WIN <= 0.0: 0).
+    src   0: SPREAD_MODEL=0.0324+/-0.0506  mag=22.19  -> INCLUDED
+    src   1: SPREAD_MODEL=0.0445+/-0.0993  mag=23.46  -> INCLUDED
+    src   2: SPREAD_MODEL=0.0064+/-0.0458  mag=22.70  -> INCLUDED
+    src   3: SPREAD_MODEL=0.0069+/-0.0405  mag=22.43  -> INCLUDED
+    src   4: SPREAD_MODEL=0.0330+/-0.0865  mag=22.90  -> INCLUDED
+    src   5: SPREAD_MODEL=0.0022+/-0.0274  mag=21.81  -> INCLUDED
+    src   6: SPREAD_MODEL=-0.1181+/-3.0270  mag=27.66  -> INCLUDED
+    src   7: SPREAD_MODEL=0.0114+/-0.0456  mag=22.97  -> INCLUDED
+    src   8: SPREAD_MODEL=0.0161+/-0.0606  mag=22.87  -> INCLUDED
+    src   9: SPREAD_MODEL=0.0359+/-0.0860  mag=22.21  -> INCLUDED
+    src  10: SPREAD_MODEL=0.0114+/-0.0578  mag=22.77  -> INCLUDED
+    src  11: SPREAD_MODEL=0.0194+/-0.0376  mag=21.36  -> INCLUDED
+    src  12: SPREAD_MODEL=0.0289+/-0.1055  mag=22.79  -> INCLUDED
+    src  13: SPREAD_MODEL=0.0013+/-0.0679  mag=22.51  -> INCLUDED
+    src  14: SPREAD_MODEL=-0.0304+/-0.2866  mag=24.16  -> INCLUDED
+    src  15: SPREAD_MODEL=0.0008+/-0.0111  mag=18.48  -> INCLUDED
+    src  16: SPREAD_MODEL=0.0194+/-0.0444  mag=22.14  -> INCLUDED
+    src  17: SPREAD_MODEL=0.0007+/-0.0111  mag=18.48  -> INCLUDED
+    src  18: SPREAD_MODEL=-0.0000+/-0.0108  mag=16.95  -> INCLUDED
+    src  19: SPREAD_MODEL=0.0116+/-0.0602  mag=22.52  -> INCLUDED
+    src  20: SPREAD_MODEL=0.0264+/-0.1056  mag=23.38  -> INCLUDED
+    src  21: SPREAD_MODEL=0.0046+/-0.0589  mag=23.50  -> INCLUDED
+    src  22: SPREAD_MODEL=0.0177+/-0.0154  mag=17.74  -> INCLUDED
+    src  23: SPREAD_MODEL=0.0261+/-0.1411  mag=22.80  -> INCLUDED
+    src  24: SPREAD_MODEL=0.0251+/-0.0888  mag=23.77  -> INCLUDED
+    src  25: SPREAD_MODEL=0.0303+/-0.0375  mag=21.31  -> INCLUDED
+    src  26: SPREAD_MODEL=0.0156+/-0.0312  mag=20.94  -> INCLUDED
+    src  27: SPREAD_MODEL=0.0487+/-0.3456  mag=22.76  -> INCLUDED
+    src  28: SPREAD_MODEL=0.0186+/-0.0475  mag=22.58  -> INCLUDED
+    src  29: SPREAD_MODEL=0.0154+/-0.0430  mag=21.83  -> INCLUDED
+    src  30: SPREAD_MODEL=0.0240+/-0.0208  mag=19.10  -> INCLUDED
+    src  31: SPREAD_MODEL=0.0615+/-0.1790  mag=21.95  -> INCLUDED
+    src  32: SPREAD_MODEL=0.0168+/-0.0217  mag=19.57  -> INCLUDED
+    src  33: SPREAD_MODEL=0.0248+/-0.0555  mag=22.13  -> INCLUDED
+    src  34: SPREAD_MODEL=0.0278+/-0.0710  mag=22.40  -> INCLUDED
+    src  35: SPREAD_MODEL=0.0161+/-0.0899  mag=24.83  -> INCLUDED
+    src  36: SPREAD_MODEL=0.0114+/-0.0536  mag=22.52  -> INCLUDED
+    src  37: SPREAD_MODEL=0.0239+/-0.0648  mag=22.69  -> INCLUDED
+    src  38: SPREAD_MODEL=0.0274+/-0.0489  mag=22.44  -> INCLUDED
+    src  39: SPREAD_MODEL=0.0145+/-0.0488  mag=22.44  -> INCLUDED
+[*] Spinning up AstroPath Evaluation Engine for 40 candidates...
+[*] AstroPath config: P_O=inverse, theta_pdf=exp, theta_max=6.0, theta_scale=1.0
+[*] AstroPath integration step_size = 0.0440 (phi units); ~0.088 arcsec at largest candidate (phi_max=2.00 arcsec, sigma_loc_min=0.44 arcsec).
+[*] Search radius = 60 arcsec (P(U) normalisation radius)
+[*] ASTROPATH SUCCESS!
+    Most Probable Host ObjID: 30 (SExtractor NUMBER=1357)
+    Posterior P(O): 0.9883
+    Unseen P(U): 0.0117
+    Separation: 2.30 arcsec
+[*] Wrote sep_vs_shape_r.png and sep_vs_x_max_reff.png
+[02:40:20] INFO frb_pipeline.phase2 | Cleaning up templates
+[02:40:20] INFO frb_pipeline.phase2 | Phase 2 complete: photometry + AstroPath outputs verified.
+[02:40:20] INFO frb_pipeline.master | Phase 2 / Photometry + AstroPath: OK
+[02:40:20] INFO frb_pipeline.master | ========== Phase 3a / GALFIT cutouts ==========
+[02:40:20] INFO frb_pipeline.master | $ 'C:\\Python313\\python.exe' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\galfit_fitting\\generate_galfit_cutouts.py' '--image' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir\\image.fits' '--segmap' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir\\segmentation_map.fits' '--catalog' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir\\image.cat' '--ra' '37.37691666666666' '--dec' '-62.96284444444445' '--outdir' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir' '--mag-aper-index' '14' '--no-data-sigma' '1.0e30' '--sigma-rescale-min' '0.5' '--sigma-rescale-max' '2.0' '--psf-match-arcsec' '0.5' '--host-pad' '20' '--re-sep-factor' '3.0' '--neighbor-class-star-max' '0.75' '--max-roi-iterations' '8' '--max-fit-components' '25' '--max-cutout-side' '512' '--host-only-min-bbox-side' '400' '--host-only-min-elongation' '3.0' '--min-astropath-posterior' '0.05'
+[02:40:22] INFO frb_pipeline.phase3a | Phase 3a target: AstroPath host objid=30, NUMBER=1357 (P(O)=0.9883, mag=19.10) -> RA=37.376034, Dec=-62.963342
+[02:40:22] INFO frb_pipeline.phase3a | AstroPath sex_number=1357 (image.psf.cat) -> seg NUMBER=1296 (image.cat; 0.019")
+[02:40:22] INFO frb_pipeline.phase3a | Host pick: AstroPath sex_number=1357 -> seg NUMBER=1296 (SPREAD=0.0240+/-0.0208; 0.02" from association centre)
+[02:40:22] INFO frb_pipeline.phase3a | Assured Target Host NUMBER=1296
+[02:40:22] INFO frb_pipeline.phase3a | Neighbor policy (Re-separation): start from host seg bbox + 20 px pad; for every seg island that clips the ROI:
+      star / point-like SPREAD          -> mask (never expand)
+      sep > 3.00 × Re_neighbor  -> mask (Re = FLUX_RADIUS GALFIT seed)
+      sep <= 3.00 × Re_neighbor -> jointly fit; grow ROI so every fit member has a 20 px pad
+      Host is always GALFIT component 1
+[02:40:22] INFO frb_pipeline.phase3a |     objid 1267: sep/Re_n=9.24  far (sep>factor*Re_n) -> mask
+[02:40:22] INFO frb_pipeline.phase3a |     objid 1296: host -> fit
+[02:40:22] INFO frb_pipeline.phase3a | Final cutout: 1 Sérsic component(s), 1 mask-only object(s); bounds X=[1118:1184] Y=[1093:1174]
+[02:40:22] INFO frb_pipeline.phase3a | host_sigma scale OK (k=1; sigma_invvar=0.00293, sky_MAD*1.4826=0.00293).
+[02:40:22] INFO frb_pipeline.phase3a | Complete. 1 fitted + 1 masked. Saved to C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir
+[02:40:24] INFO frb_pipeline.phase3a | Visual QA Map saved to C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir\qa_cutout_mask.png
+[02:40:24] INFO frb_pipeline.master | Phase 3a / GALFIT cutouts: OK
+[02:40:24] INFO frb_pipeline.master | ========== Phase Statmorph / non-parametric morphology ==========
+[02:40:24] INFO frb_pipeline.master | $ 'C:\\Python313\\python.exe' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\galfit_fitting\\run_statmorph_pipeline.py' '--cutout' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir\\host_cutout.fits' '--sigma' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir\\host_sigma.fits' '--outdir' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir' '--psf' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir\\proto_image.fits'
+[02:40:28] INFO frb_pipeline.statmorph | Statmorph OK: Gini=0.440543, M20=-1.626819, C=2.435333, A=0.036835, S=-0.000396
+[02:40:28] INFO frb_pipeline.statmorph | Results written to C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir\statmorph_results.json
+[02:40:28] INFO frb_pipeline.master | Phase Statmorph / non-parametric morphology: OK
+[02:40:28] INFO frb_pipeline.master | GALFIT mag_zeropoint=22.4828 (source=zero_points.json)
+[02:40:28] INFO frb_pipeline.master | ========== Phase 3b / GALFIT fit ==========
+[02:40:28] INFO frb_pipeline.master | $ 'C:\\Python313\\python.exe' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\galfit_fitting\\run_galfit_fitting.py' '--dir' 'C:\\Users\\lenovo\\Desktop\\Bhardwajetal_2024_nature_inclination_angle-main\\pipeline_scripts\\Output\\20251024B_all\\.workdir'
+[02:40:30] INFO frb_pipeline.phase3b | host_sigma.fits found — using sigma-weighted fit.
+[02:40:30] INFO frb_pipeline.phase3b | GALFIT photometric zeropoint: 22.4828 (source=galfit_config)
+[02:40:30] INFO frb_pipeline.phase3b | Sérsic mag constraints: 8.0 to 40.0
+[02:40:30] INFO frb_pipeline.phase3b | SExtractor sky reference: 0.000482692 ADU (source=host_row, component=2)
+[02:40:30] INFO frb_pipeline.phase3b | GALFIT host #1296: SNR_WIN=3.586, SNR_AUTO=4.229
+[02:40:30] INFO frb_pipeline.phase3b | Wrote galfit.feedme and constraints.txt (sky free, seed=0.000482692 ADU)
+[02:40:30] INFO frb_pipeline.phase3b | Running wsl galfit...
+
+GALFIT Version 3.0.5 -- Apr. 23, 2013
+
+
+
+
+#  Input menu file: galfit.feedme
+
+
+================================================================================
+# IMAGE and GALFIT CONTROL PARAMETERS
+A) host_cutout.fits      # Input data image (FITS file)
+B) out.fits            # Output data image block
+C) host_sigma.fits      # Sigma image name (made from data if blank or "none") 
+D) proto_image.fits #        # Input PSF image and (optional) diffusion kernel
+E) 1                   # PSF fine sampling factor relative to data 
+F) host_mask.fits      # Bad pixel mask (FITS image or ASCII coord list)
+G) constraints.txt      # File with parameter constraints (ASCII file) 
+H) 1    66   1    81   # Image region to fit (xmin xmax ymin ymax)
+I) 90     105          # Size of the convolution box (x y)
+J) 22.483              # Magnitude photometric zeropoint 
+K) 0.262  0.262        # Plate scale (dx dy)   [arcsec per pixel]
+O) regular             # Display type (regular, curses, both)
+P) 0                   # Choose: 0=optimize, 1=model, 2=imgblock, 3=subcomps
+
+# INITIAL FITTING PARAMETERS
+#
+#   For component type, the allowed functions are: 
+#       sersic, expdisk, edgedisk, devauc, king, nuker, psf, 
+#       gaussian, moffat, ferrer, and sky. 
+#  
+#   Hidden parameters will only appear when they're specified:
+#       Bn (n=integer, Bending Modes).
+#       C0 (diskyness/boxyness), 
+#       Fn (n=integer, Azimuthal Fourier Modes).
+#       R0-R10 (coordinate rotation, for creating spiral structures).
+#       To, Ti, T0-T10 (truncation function).
+# 
+# ------------------------------------------------------------------------------
+#   par)    par value(s)    fit toggle(s)    # parameter description 
+# ------------------------------------------------------------------------------
+
+# Component number: 1
+ 0) sersic                 #  Component type
+ 1) 32.9561  45.9476  1 1  #  Position x, y
+ 3) 19.0979     1          #  Integrated magnitude 
+ 4) 5.2252      1          #  R_e (effective radius)   [pix]
+ 5) 1.0000      1          #  Sersic index n (de Vaucouleurs n=4) 
+ 6) 0.0000      0          #     ----- 
+ 7) 0.0000      0          #     ----- 
+ 8) 0.0000      0          #     ----- 
+ 9) 0.5929      1          #  Axis ratio (b/a)  
+10) -136.8164    1          #  Position angle (PA) [deg: Up=0, Left=90]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+# Component number: 2
+ 0) sky                    #  Component type
+ 1) 4.830e-04      1       #  Sky background at center of fitting region [ADUs]
+ 2) 0.000e+00      0       #  dsky/dx (sky gradient in x)     [ADUs/pix]
+ 3) 0.000e+00      0       #  dsky/dy (sky gradient in y)     [ADUs/pix]
+ Z) 0                      #  Skip this model in output image?  (yes=1, no=0)
+
+================================================================================
+
+
+
+-- WARNING: The exposure time header is missing.  Default to 1 second.
+
+-- No CCD charge diffusion kernel found or applied.
+
+================================================================================
+Initial parameters:
+ sersic    : (   32.96,    45.95)   19.10      5.23    1.00    0.59    43.18
+ sky       : [ 33.50,  41.00]  4.83e-04  [0.00e+00]  [0.00e+00]
+================================================================================
+
+Iteration : 1     Chi2nu: 1.089e+00     dChi2/Chi2: -1.75e+23   alamda: 1e-03     
+ sersic    : (   33.01,    45.71)   19.09      7.05    0.92    0.50    44.68
+ sky       : [ 33.50,  41.00]  6.94e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 99 
+
+Iteration : 2     Chi2nu: 9.926e-01     dChi2/Chi2: -9.70e-02   alamda: 1e-04     
+ sersic    : (   33.04,    45.65)   19.11      7.26    0.71    0.51    44.42
+ sky       : [ 33.50,  41.00]  7.55e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 98 
+
+Iteration : 3     Chi2nu: 9.913e-01     dChi2/Chi2: -1.23e-03   alamda: 1e-05     
+ sersic    : (   33.01,    45.69)   19.10      7.29    0.73    0.51    44.54
+ sky       : [ 33.50,  41.00]  7.40e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 97 
+
+Iteration : 4     Chi2nu: 9.913e-01     dChi2/Chi2: -2.38e-05   alamda: 1e-06     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 10 
+
+Iteration : 5     Chi2nu: 9.913e-01     dChi2/Chi2: -4.11e-07   alamda: 1e-07     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 9 
+
+Iteration : 6     Chi2nu: 9.913e-01     dChi2/Chi2: -7.14e-08   alamda: 1e-08     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 8 
+
+Iteration : 7     Chi2nu: 9.913e-01     dChi2/Chi2: -6.42e-09   alamda: 1e-09     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 7 
+
+Iteration : 8     Chi2nu: 9.913e-01     dChi2/Chi2: -6.42e-09   alamda: 1e-08     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 6 
+
+Iteration : 9     Chi2nu: 9.913e-01     dChi2/Chi2: -6.42e-09   alamda: 1e-07     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 5 
+
+Iteration : 10    Chi2nu: 9.913e-01     dChi2/Chi2: -6.42e-09   alamda: 1e-06     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 4 
+
+Iteration : 11    Chi2nu: 9.913e-01     dChi2/Chi2: -6.42e-09   alamda: 1e-05     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 3 
+
+Iteration : 12    Chi2nu: 9.913e-01     dChi2/Chi2: -6.42e-09   alamda: 1e-04     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 2 
+
+Iteration : 13    Chi2nu: 9.913e-01     dChi2/Chi2: -6.42e-09   alamda: 1e-03     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 1 
+
+Iteration : 14    Chi2nu: 9.913e-01     dChi2/Chi2: -6.42e-09   alamda: 1e-02     
+ sersic    : (   33.02,    45.68)   19.10      7.29    0.73    0.51    44.51
+ sky       : [ 33.50,  41.00]  7.44e-04  [0.00e+00]  [0.00e+00]
+COUNTDOWN = 0 
+free(): invalid pointer
+[02:40:31] WARNING frb_pipeline.phase3b | GALFIT exited with code 6 after writing fit.log/out.fits (known teardown issue on GALFIT 3.0.x + modern glibc; treating fit as successful).
+[02:40:31] INFO frb_pipeline.phase3b | Pass 1 fit.log sky: 0.000744 ADU (|delta|=0.000261308 vs ref)
+[02:40:31] INFO frb_pipeline.phase3b | Sky QA passed (final sky=0.000744 ADU)
+[02:40:31] INFO frb_pipeline.phase3b | Sky QA audit written to C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir\sky_fit_audit.json
+[02:40:32] INFO frb_pipeline.phase3b | Standardized visualization saved to C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir\galfit_results.png
+[02:40:32] INFO frb_pipeline.master | Phase 3b / GALFIT fit: OK
+[02:40:39] INFO frb_pipeline.master | Reference photometry: LS_DR10 r=19.1063 (err=0.0031, sep=0.005", coords from host_components.csv)
+[02:40:39] INFO frb_pipeline.master | Consolidated summary written to pipeline_summary.json
+[02:40:39] INFO frb_pipeline.master | ========== Collecting outputs ==========
+[02:40:40] INFO frb_pipeline.master | Phase exit codes: 1=0, 2=0, 3a=0, statmorph=0, 3b=0 (-1 = not run)
+[02:40:40] INFO frb_pipeline.master | Collected (32): ['astropath_association.png', 'astropath_posteriors.csv', 'calibrated_photometry_results.csv', 'constraints.txt', 'cutout_meta.json', 'fit.log', 'galfit.01', 'galfit.feedme', 'galfit_results.png', 'host_components.csv', 'host_cutout.fits', 'host_mask.fits', 'host_sigma.fits', 'image.cat', 'image.homo.fits', 'image.psf', 'image.psf.cat', 'out.fits', 'pipeline_summary.json', 'proto_image.fits', 'psf_models.fits', 'psf_resi.fits', 'psfex.xml', 'psfex_out.cat', 'qa_cutout_mask.png', 'reference_photometry.json', 'segmentation_map.fits', 'sep_vs_shape_r.png', 'sep_vs_x_max_reff.png', 'sky_fit_audit.json', 'statmorph_results.json', 'zero_points.json']
+[02:40:40] INFO frb_pipeline.master | Output folder: C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all
+[02:40:40] INFO frb_pipeline.master | Removed workdir: C:\Users\lenovo\Desktop\Bhardwajetal_2024_nature_inclination_angle-main\pipeline_scripts\Output\20251024B_all\.workdir

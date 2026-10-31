@@ -66,8 +66,11 @@ def corr(x: np.ndarray, y: np.ndarray) -> dict:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    t = parse_table(TEXT.read_text(encoding="utf-8", errors="replace"))
-    t.to_csv(OUT / "marnoch2026_table1.csv", index=False)
+    if TEXT.exists():
+        t = parse_table(TEXT.read_text(encoding="utf-8", errors="replace"))
+        t.to_csv(OUT / "marnoch2026_table1.csv", index=False)
+    else:  # paper text is not tracked; the parsed table is
+        t = pd.read_csv(OUT / "marnoch2026_table1.csv", dtype={"frb": str})
     lowq = set(t.loc[t.q < Q0, "frb"])
 
     variants = {

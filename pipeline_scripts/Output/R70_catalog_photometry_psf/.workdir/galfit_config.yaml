@@ -1,0 +1,7 @@
+plate_scale_x: 0.262
+plate_scale_y: 0.262
+mag_min: 8.0
+mag_max: 40.0
+sky_check_enabled: true
+sky_tolerance_adu: 3.0
+sky_max_retries: 1

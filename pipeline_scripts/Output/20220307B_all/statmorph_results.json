@@ -1,0 +1,15 @@
+{
+  "gini": 0.38831,
+  "m20": -1.442494,
+  "concentration": 2.211377,
+  "asymmetry": -0.212651,
+  "smoothness": -0.012036,
+  "rpetro_circ_px": 10.527171,
+  "r20_px": 3.00005,
+  "r80_px": 8.306228,
+  "sn_per_pixel": 2.574264,
+  "gini_m20_merger": -0.14308,
+  "gini_m20_bulge": -1.03822,
+  "flag": 0,
+  "flag_sersic": 0
+}

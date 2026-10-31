@@ -1,0 +1,112 @@
+{
+  "frb": "20220918A",
+  "ra_deg": 17.592125000000003,
+  "dec_deg": -70.81138888888889,
+  "plate_scale_arcsec_px": 0.262,
+  "timestamp_utc": "2026-08-04T21:23:00+00:00",
+  "phase_exit_codes": {
+    "phase1_sextractor_psfex": 0,
+    "phase2_photometry_astropath": 0,
+    "phase3a_galfit_cutouts": 0,
+    "phase_statmorph": 0,
+    "phase3b_galfit_fit": 0
+  },
+  "psf_quality": {
+    "FWHM_FromFluxRadius_Mean": 4.29099,
+    "FWHM_FromFluxRadius_Min": 4.29099,
+    "FWHM_FromFluxRadius_Max": 4.29099,
+    "Ellipticity_Mean": 0.00832664,
+    "Residuals_Mean": 0.0219265,
+    "NStars_Accepted_Total": 78,
+    "Chi2_Mean": 0.00966404
+  },
+  "photometry": {
+    "reference_catalog": "LS DR10 Tractor (NOIRLab TAP)",
+    "n_calibration_stars": 309,
+    "n_ps1_matches": 0,
+    "n_legacy_matches": 309,
+    "filter_band": "r",
+    "production_aperture_px": 40.0,
+    "match_radius_arcsec": 0.6,
+    "zp_aper": 21.932811865316534,
+    "zp_aper_std": 0.2672757206971664,
+    "zp_psf": 21.6628444271631,
+    "zp_psf_std": 0.4631246573698945,
+    "zp_auto": 21.876351716597128,
+    "zp_auto_std": 0.2525339958295462
+  },
+  "field_depth": null,
+  "astropath": {
+    "posterior_O": 0.0110643733273383,
+    "posterior_U": 0.9889356266726615,
+    "sep_arcsec": 3.880770542238909,
+    "mag": 23.044830331312323,
+    "ang_size": 0.5526341371536256,
+    "sex_number": 8295
+  },
+  "sky_qa": {
+    "sky_ref_adu": 1.093086e-05,
+    "sky_ref_source": "host_row",
+    "sky_tolerance_adu": 3.0,
+    "sky_pass1_adu": 5.17e-05,
+    "sky_pass2_adu": null,
+    "sky_final_adu": 5.17e-05,
+    "retried": false,
+    "passed": true,
+    "failure_reason": null
+  },
+  "statmorph": {
+    "gini": 0.419598,
+    "m20": -1.597719,
+    "concentration": 2.306883,
+    "asymmetry": -0.253065,
+    "smoothness": 0.0,
+    "rpetro_circ_px": 4.130119,
+    "r20_px": 1.195025,
+    "r80_px": 3.457432,
+    "sn_per_pixel": 4.322597,
+    "gini_m20_merger": -0.133681,
+    "gini_m20_bulge": -0.775769,
+    "flag": 1,
+    "flag_sersic": 2
+  },
+  "galfit_host": {
+    "selection_strategy": "last_sane_single_sersic",
+    "n_sersic_components": 1,
+    "chi2nu": 0.915,
+    "x": 23.22,
+    "y": 23.74,
+    "mag": 23.08,
+    "mag_err": 0.29,
+    "re_px": 1.5,
+    "re_px_err": 0.51,
+    "re_arcsec": 0.393,
+    "re_arcsec_err": 0.1336,
+    "n": 0.5,
+    "n_err": 1.19,
+    "b_a": 0.09,
+    "b_a_err": 1.52,
+    "pa_deg": -67.82,
+    "pa_deg_err": 39.01,
+    "inclination_deg": 90.0,
+    "inclination_deg_err": 45.0,
+    "inclination_mc": {
+      "median_deg": 90.0,
+      "err_lo_deg": 90.0,
+      "err_hi_deg": 0.0,
+      "p16_deg": 0.0,
+      "p84_deg": 90.0
+    },
+    "mag_final": 23.08,
+    "mag_final_err": 0.29,
+    "mag_final_source": "galfit_calibrated_zp"
+  },
+  "reference_photometry": {
+    "query_ra_deg": 17.58975132428798,
+    "query_dec_deg": -70.8106420429455,
+    "search_radius_arcsec": 3.0,
+    "queried_utc": "2026-08-04T21:22:57+00:00",
+    "status": "no_match: LS DR10: no source within 3.0 arcsec | PS1: no source within 3.0 arcsec",
+    "coord_source": "host_components.csv"
+  }
+}

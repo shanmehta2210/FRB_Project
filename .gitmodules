@@ -1,0 +1,3 @@
+[submodule "tools/AstroPath/astropath_pkg"]
+	path = tools/AstroPath/astropath_pkg
+	url = https://github.com/FRBs/astropath.git

@@ -1,0 +1,68 @@
+{
+  "frb": "20220208A",
+  "ra_deg": 322.57199999999995,
+  "dec_deg": 70.042,
+  "plate_scale_arcsec_px": 0.262,
+  "timestamp_utc": "2026-10-17T21:18:35+00:00",
+  "phase_exit_codes": {
+    "phase1_sextractor_psfex": 0,
+    "phase2_photometry_astropath": 0,
+    "phase3a_galfit_cutouts": 1,
+    "phase_statmorph": -1,
+    "phase3b_galfit_fit": -1
+  },
+  "psf_quality": {
+    "FWHM_FromFluxRadius_Mean": 4.61537,
+    "FWHM_FromFluxRadius_Min": 4.61537,
+    "FWHM_FromFluxRadius_Max": 4.61537,
+    "Ellipticity_Mean": 0.0214575,
+    "Residuals_Mean": 0.0186583,
+    "NStars_Accepted_Total": 221,
+    "Chi2_Mean": 1.17608
+  },
+  "photometry": {
+    "reference_catalog": "II/349 (PS1 DR1)",
+    "n_calibration_stars": 240,
+    "n_ps1_matches": 240,
+    "n_legacy_matches": 0,
+    "filter_band": "r",
+    "production_aperture_px": 40.0,
+    "match_radius_arcsec": 0.6,
+    "zp_aper": 32.360564422607425,
+    "zp_aper_std": 0.062153311859156735,
+    "zp_psf": 32.29009298095703,
+    "zp_psf_std": 0.05442837117881912,
+    "zp_auto": 32.278161521148675,
+    "zp_auto_std": 0.04365335468025876
+  },
+  "field_depth": {
+    "m_lim_5sigma_ab": 22.064,
+    "zp_aper": 32.360564,
+    "sigma_sky_adu_per_pix": 74.1684,
+    "aperture_diameter_px": 40.0,
+    "aperture_area_pix2": 1256.6,
+    "flux_5sigma_adu": 13146.0051,
+    "seeing_fwhm_arcsec": 2.096,
+    "pixel_scale_arcsec": 0.262,
+    "formula_note": "5\u03c3 in pi*(d/2)^2 px^2 at production aperture; not seeing disk"
+  },
+  "astropath": {
+    "posterior_O": 0.0,
+    "posterior_U": 1.0,
+    "sep_arcsec": 49.19258973072486,
+    "mag": 22.781284523010257,
+    "ang_size": 0.606037723064419,
+    "sex_number": 698
+  },
+  "sky_qa": null,
+  "statmorph": null,
+  "galfit_host": null,
+  "reference_photometry": {
+    "query_ra_deg": 322.57199999999995,
+    "query_dec_deg": 70.042,
+    "search_radius_arcsec": 3.0,
+    "queried_utc": "2026-10-17T21:18:30+00:00",
+    "status": "no_match: LS DR10: no source within 3.0 arcsec | PS1: no source within 3.0 arcsec",
+    "coord_source": "frb_localization"
+  }
+}

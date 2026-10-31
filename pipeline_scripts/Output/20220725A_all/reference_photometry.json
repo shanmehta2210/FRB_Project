@@ -1,0 +1,17 @@
+{
+  "query_ra_deg": 353.3153600676039,
+  "query_dec_deg": -35.99029321429685,
+  "search_radius_arcsec": 3.0,
+  "queried_utc": "2026-08-04T21:19:21+00:00",
+  "status": "ok",
+  "survey": "LS_DR10",
+  "band": "r",
+  "mag": 17.8053,
+  "mag_err": 0.0004,
+  "mag_type": "tractor_model_flux_r",
+  "ra_deg": 353.3153415320076,
+  "dec_deg": -35.99026830421361,
+  "sep_arcsec": 0.105,
+  "ls_type": "SER",
+  "coord_source": "host_components.csv"
+}

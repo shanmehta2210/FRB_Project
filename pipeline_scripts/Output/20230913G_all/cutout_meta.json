@@ -1,0 +1,21 @@
+{
+  "host_number": 579,
+  "extended_host": false,
+  "host_only_galfit": false,
+  "host_elongation": 1.5071563720703125,
+  "host_bbox_px": [
+    8,
+    6
+  ],
+  "cutout_bounds": [
+    1120,
+    1168,
+    1122,
+    1168
+  ],
+  "n_fit_components": 1,
+  "n_mask_objects": 0,
+  "host_pad": 20,
+  "re_sep_factor": 3.0,
+  "neighbor_policy": "re_separation"
+}

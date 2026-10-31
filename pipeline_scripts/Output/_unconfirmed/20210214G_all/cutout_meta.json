@@ -1,0 +1,18 @@
+{
+  "host_number": 763,
+  "extended_host": false,
+  "host_only_galfit": false,
+  "host_elongation": 1.2007728815078735,
+  "host_bbox_px": [
+    5,
+    4
+  ],
+  "cutout_bounds": [
+    1112,
+    1147,
+    1126,
+    1160
+  ],
+  "n_fit_components": 1,
+  "n_mask_objects": 0
+}
