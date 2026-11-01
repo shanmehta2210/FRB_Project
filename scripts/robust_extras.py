@@ -21,6 +21,7 @@ import pandas as pd
 from scipy import stats
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import marnoch_dm_combined as MDC  # noqa: E402
 import robust_correlations as RC  # noqa: E402
 
 ROOT = RC.ROOT
@@ -70,8 +71,9 @@ def samples() -> list[tuple[str, np.ndarray, np.ndarray]]:
         out.append((rf"DM$_{{\rm host}}$, {lab}", s.q.to_numpy(float), s.dm_host_rest.to_numpy(float)))
     m = pd.read_csv(MR / "marnoch2026_table1.csv", dtype={"frb": str})
     ours = h.dropna(subset=["dm_host_rest"])
-    mo = m[~m.frb.isin(ours.frb)]
     out.append(("Marnoch et al. (2026) sample", m.q.to_numpy(float), m.dm_host_rest.to_numpy(float)))
+    m, _ = MDC.marnoch_on_our_scale(m, ours)
+    mo = m[~m.frb.isin(ours.frb)]
     uq = np.r_[ours.q, mo.q]
     ud = np.r_[ours.dm_host_rest, mo.dm_host_rest]
     out.append(("Both samples (shared hosts from this work)", uq, ud))

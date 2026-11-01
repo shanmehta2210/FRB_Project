@@ -30,13 +30,27 @@ def rstats(x, y, rng):
                 tau=tau, p_tau=pt, jack_min=jack.min(), jack_max=jack.max())
 
 
+def marnoch_on_our_scale(m: pd.DataFrame, ours: pd.DataFrame) -> tuple[pd.DataFrame, float]:
+    """Shift Marnoch DM_host onto our definition (no MW halo term, median DM_cosmic).
+
+    The observer-frame difference is nearly independent of z, so a single median offset over
+    the shared hosts, scaled by (1+z) to the rest frame, converts their values.
+    """
+    sh = m.merge(ours[["frb", "dm_host_rest"]], on="frb", suffixes=("_m", ""))
+    off = float(np.median(sh.dm_host_rest / (1 + sh.z) - sh.dm_host_obs))
+    m = m.copy()
+    m["dm_host_rest"] = m.dm_host_rest + off * (1 + m.z)
+    return m, off
+
+
 def main() -> None:
     rng = np.random.default_rng(42)
-    m = pd.read_csv(MR / "marnoch2026_table1.csv", dtype={"frb": str})
+    m_raw = pd.read_csv(MR / "marnoch2026_table1.csv", dtype={"frb": str})
     h = RC.load()
     ours = h[["frb", "q", "dm_host_rest", "dm_host_fg", "dm_host_fg_excess"]].dropna(subset=["dm_host_rest"])
+    m, off = marnoch_on_our_scale(m_raw, ours)
 
-    sh = m.merge(ours, on="frb", suffixes=("_m", ""))
+    sh = m_raw.merge(ours, on="frb", suffixes=("_m", ""))
     sh = sh[["frb", "z", "q_m", "q", "dm_host_rest_m", "dm_host_rest", "dm_host_fg", "dm_host_fg_excess"]]
     sh.to_csv(MR / "dm_host_shared.csv", index=False)
     md = ["# DM_host: this work vs Marnoch et al. (2026)", "", f"Shared hosts with DM_host in both: {len(sh)}", ""]
@@ -46,11 +60,13 @@ def main() -> None:
         diff = d[col] - d.dm_host_rest_m
         md.append(f"- {lab}: N={len(d)}, r_S={stats.spearmanr(d[col], d.dm_host_rest_m)[0]:.2f}, "
                   f"median diff={diff.median():+.0f}, median |diff|={diff.abs().median():.0f} pc cm^-3")
+    md += ["", f"Union samples shift Marnoch DM_host onto our definition by {off:+.1f} pc cm^-3 (observer frame) "
+           "x (1+z)."]
 
     rows = []
     mo = m[~m.frb.isin(ours.frb)]
     variants = {
-        "Marnoch alone": (m.q, m.dm_host_rest),
+        "Marnoch alone": (m_raw.q, m_raw.dm_host_rest),
         "This work alone": (ours.q, ours.dm_host_rest),
         "Union, shared hosts from this work": (pd.concat([ours.q, mo.q]), pd.concat([ours.dm_host_rest, mo.dm_host_rest])),
         "Union, shared hosts from Marnoch": (

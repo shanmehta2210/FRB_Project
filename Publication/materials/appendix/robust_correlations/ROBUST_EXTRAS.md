@@ -15,6 +15,6 @@ Jackknife over all subsets with d hosts removed: range of $r_S$, range of its $p
 | DM$_{\rm host}$, n < 2 | 46 | -0.04 (0.806) | -0.10 to +0.00 | -0.16 to +0.04 | -0.22 to +0.08 | 0.00 / 0.00 / 0.00 | 0.580 |
 | DM$_{\rm host}$, bulge fits removed | 52 | -0.07 (0.637) | -0.12 to -0.04 | -0.18 to -0.01 | -0.22 to +0.02 | 0.00 / 0.00 / 0.00 | 0.255 |
 | Marnoch et al. (2026) sample | 34 | -0.43 (0.011) | -0.52 to -0.39 | -0.56 to -0.35 | -0.60 to -0.32 | 1.00 / 1.00 / 0.99 | 0.030 |
-| Both samples (shared hosts from this work) | 69 | -0.17 (0.174) | -0.21 to -0.14 | -0.25 to -0.12 | -0.29 to -0.09 | 0.00 / 0.00 / 0.00 | 0.121 |
-| Both samples (shared hosts from Marnoch) | 69 | -0.19 (0.116) | -0.24 to -0.17 | -0.28 to -0.15 | -0.32 to -0.13 | 0.00 / 0.02 / 0.03 | 0.156 |
-| Both samples, $q > 0.2$ | 65 | -0.15 (0.247) | -0.19 to -0.12 | -0.24 to -0.09 | -0.27 to -0.07 | 0.00 / 0.00 / 0.00 | 0.157 |
+| Both samples (shared hosts from this work) | 69 | -0.21 (0.082) | -0.26 to -0.19 | -0.30 to -0.17 | -0.34 to -0.15 | 0.06 / 0.09 / 0.12 | 0.037 |
+| Both samples (shared hosts from Marnoch) | 69 | -0.22 (0.070) | -0.27 to -0.20 | -0.31 to -0.18 | -0.35 to -0.16 | 0.12 / 0.15 / 0.17 | 0.117 |
+| Both samples, $q > 0.2$ | 65 | -0.16 (0.199) | -0.21 to -0.13 | -0.25 to -0.11 | -0.29 to -0.09 | 0.00 / 0.00 / 0.00 | 0.094 |
