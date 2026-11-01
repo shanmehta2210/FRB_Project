@@ -111,6 +111,7 @@
 %% This is the end of the preamble.  Indicate the beginning of the
 %% manuscript itself with \begin{document}.
 \usepackage{siunitx}
+\usepackage{float}
 \begin{document}
 
 \title{Template \aastex v7.0.1 Article with Examples\footnote{Footnotes can be added to titles}}
@@ -303,8 +304,23 @@ size, we draw 2{,}000 samples, with replacement, from the 23 published
 inclinations of \citet{Bhardwaj2024}; the AD test detects their reported
 deficit ($p < 0.05$) in more than 99\% of samples of 56 hosts and in 91\%
 of samples of 23. Rerunning the \texttt{AstroPhot} \citep{Astrophot} fits of \citet{Bhardwaj2024} with PSF convolution gives inclinations consistent with ours (RMS difference $\approx \ang{5}$; Figure~\ref{fig:cdf}b), while our fits without the PSF closely reproduce their published values (RMS difference \ang{3.4}; Appendix~\ref{app:psf}). This suggests that the difference between the two results arises mainly from the treatment of the PSF, rather than from the sample or the imaging.
- 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{fig1_cdf.pdf}
+\caption{CDFs of $\cos i$. (a) The 56 FRB hosts (red) and the control sample (blue), with the 68\% bound of 10{,}000 random samples of 56 control galaxies (shaded). (b) The 23 hosts of \citet{Bhardwaj2024}, using their published inclinations (grey) and our PSF-convolved remeasurements with \texttt{GALFIT} (red) and \texttt{AstroPhot} (orange), with the 68\% bound for samples of 23. The dashed line shows a uniform distribution.}
+\label{fig:cdf}
+\end{figure}
+
 Following \citet{Bhardwaj2024}, we also divide the control sample into four bins corresponding to the quartiles of its $\cos i$ distribution, so that each bin is expected to contain 14 of the 56 FRB hosts. From face-on to edge-on, the FRB hosts are distributed across these bins as 14, 19, 10, and 13 (Figure~\ref{fig:bins}; $p_{\rm m} = 0.40$). The most face-on bin ($i < \ang{41.0}$) and the most edge-on bin ($i > \ang{67.1}$) contain 14 and 13 hosts, respectively, close to the expected 14. For comparison, \citet{Bhardwaj2024} found 11 of their 23 hosts in the most face-on bin and one in the most edge-on bin, from which they estimated that FRB rates may be underestimated by a factor of two. With PSF-convolved inclinations, we find no excess of face-on hosts and no deficit of edge-on hosts, so a correction of this size does not appear to be needed. Including measurement uncertainties does not change these conclusions (Appendix~\ref{app:errors}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{fig2_bins.pdf}
+\caption{Number of FRB hosts in each of four inclination bins, defined by the quartiles of the control sample's $\cos i$ distribution; the bin ranges are marked on the horizontal axis. The dashed line marks the expected 14 hosts per bin, and the shaded band the 68\% range from random samples of 56 control
+galaxies.}
+\label{fig:bins}
+\end{figure}
 
 Even without a detection bias, a longer path through the host disk could
 raise the DM and scattering of bursts in inclined hosts, and
@@ -353,22 +369,7 @@ DM$_{\rm host}$ with scattering time ($r_S = 0.45$, $p = 0.014$) and
 $|{\rm RM}|$ ($r_S = 0.49$, $p = 0.001$), so the compiled properties are
 precise enough to reveal such trends.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{fig1_cdf.pdf}
-\caption{CDFs of $\cos i$. (a) The 56 FRB hosts (red) and the control sample (blue), with the 68\% bound of 10{,}000 random samples of 56 control galaxies (shaded). (b) The 23 hosts of \citet{Bhardwaj2024}, using their published inclinations (grey) and our PSF-convolved remeasurements with \texttt{GALFIT} (red) and \texttt{AstroPhot} (orange), with the 68\% bound for samples of 23. The dashed line shows a uniform distribution.}
-\label{fig:cdf}
-\end{figure*}
- 
-\begin{figure}[htb!]
-\centering
-\includegraphics[width=0.5\textwidth]{fig2_bins.pdf}
-\caption{Number of FRB hosts in each of four inclination bins, defined by the quartiles of the control sample's $\cos i$ distribution; the bin ranges are marked on the horizontal axis. The dashed line marks the expected 14 hosts per bin, and the shaded band the 68\% range from random samples of 56 control
-galaxies.}
-\label{fig:bins}
-\end{figure}
-
-\begin{figure*}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig3_correlations.pdf}
 \caption{Host and burst properties versus host axis ratio. (a) Rest-frame
@@ -384,7 +385,7 @@ parentheses beside each point, and filled symbols have $p < 0.05$. The columns
 at right give the number of hosts and the AD $p$-value comparing the hosts
 above and below the median $q$.}
 \label{fig:corr}
-\end{figure*}
+\end{figure}
 
 \section{Conclusions} \label{sec:conclusions}
 
@@ -541,10 +542,10 @@ All authors contributed equally to the Terra Mater collaboration.
  
 \section{Control Sample} \label{app:control}
  
-\begin{figure*}[htb!]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.49\textwidth]{figA_control_hist.png}\hfill
-\includegraphics[width=0.49\textwidth]{figB_gini_m20.png}
+\includegraphics[width=0.49\textwidth]{figA_control_hist.pdf}\hfill
+\includegraphics[width=0.49\textwidth]{figB_gini_m20.pdf}
 \caption{Left: distribution of $\cos i$ for the control sample, with the
 uniform distribution expected for randomly oriented disks (dashed line).
 Right: Gini--$M_{20}$ diagram of the 56 FRB hosts, with filled symbols for
@@ -552,7 +553,7 @@ reliable and open symbols for unreliable measurements. The lines show the
 boundaries of \citet{GiniM20boundaries} between Sb--Irr galaxies, E/S0/Sa galaxies, and
 mergers, and the four hosts outside the Sb--Irr region are labeled.}
 \label{fig:appendix}
-\end{figure*}
+\end{figure}
  
 Figure~\ref{fig:appendix} (left) shows the distribution of $\cos i$ for the
 24{,}450 galaxies in our control sample. The distribution is not uniform:
@@ -584,35 +585,35 @@ than this. Within the magnitude range it
 covers, however, restricting the control sample to brighter galaxies does
 not change our results. No variant gives $p_{\rm m} < 0.05$ in any test.
  
-\begin{figure*}[htb!]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figA_ctrl_sersic.png}
+\includegraphics[width=\textwidth]{figA_ctrl_sersic.pdf}
 \caption{CDFs of $\cos i$ for the 56 FRB hosts (red) and for control samples
 with different S\'ersic-index ranges (blue). The shaded region shows the 68\%
 bound of random samples from each control sample, of the same size as the
 FRB sample in that panel, and the dashed line a uniform distribution. Each
 panel gives the AD $p_{\rm m}$.}
 \label{fig:ctrl_sersic}
-\end{figure*}
+\end{figure}
  
-\begin{figure*}[htb!]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figA_ctrl_mag.png}
+\includegraphics[width=\textwidth]{figA_ctrl_mag.pdf}
 \caption{As Figure~\ref{fig:ctrl_sersic}, for control samples with different
 magnitude limits. In the left panels the limit is applied to the control
 sample only; in the right panels it is also applied to the FRB hosts.}
 \label{fig:ctrl_mag}
-\end{figure*}
+\end{figure}
  
-\begin{figure*}[htb!]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figA_ctrl_color.png}
+\includegraphics[width=\textwidth]{figA_ctrl_color.pdf}
 \caption{As Figure~\ref{fig:ctrl_sersic}, for control samples restricted to
 galaxies classified as star-forming from their rest-frame $u-r$ and $r-z$
 colors (\texttt{quiescent\_flag}~$= 0$; \citealt{Kawinwanichakij}; left) and
 by observed $g-i$ color (middle and right).}
 \label{fig:ctrl_color}
-\end{figure*}
+\end{figure}
  
 \begin{deluxetable*}{lccccc}
 \tabletypesize{\footnotesize}
@@ -690,7 +691,7 @@ MW $p_{\rm m} = 0.22$), as does keeping only the 36 hosts that are reliable
 Sb--Irr galaxies or disks in the literature (0.55, 0.48, and 0.24).
 
 \startlongtable
-\begin{deluxetable*}{lcccll p{2.6in}}
+\begin{deluxetable*}{lccclll}
 \tabletypesize{\scriptsize}
 \tablecolumns{7}
 \tablewidth{0pt}
@@ -701,38 +702,38 @@ Gini--$M_{20}$ classifications\label{tab:disk_evidence}}
 \colhead{$R_e/{\rm FWHM}$} & \colhead{$G$--$M_{20}$} & \colhead{Class} &
 \colhead{Literature}}
 \startdata
-20180924B & 3.9 & 3.3 & 0.93 & Sb--Irr & Disk (literature) & HST: spiral arms and bar in residuals \citep{mannings2021}; $b/a = 0.62$ disk-like profile \citep{bannister2019} \\
-20181112A & 1.0 & 0.8 & 0.59 & Sb--Irr & Disk (literature) & $n = 1.9$ \citep{prochaska2019} \\
-20190608B & 3.1 & 2.4 & 1.59 & E/S0/Sa & Disk (literature) & barred spiral; rotating gas disk, $i_{\rm gas} = 37^\circ$ \citep{chittidi2021} \\
-20211203C & 0.6 & 0.5 & 0.52 & Sb--Irr & Disk (literature) & $n = 0.6$ in deeper $R$-band imaging \citep{gordon2025} \\
-20220207C & 0.5 & 0.3 & 5.31 & Sb--Irr & Disk (literature) & disk-dominated, nearly edge-on \citep{law2024} \\
-20220319D & 6.0 & 16.2 & 6.38 & E/S0/Sa & Disk (literature) & barred spiral (SBa), FRB on a spiral arm \citep{ravi2025} \\
-20220914A & 2.5 & 1.7 & 0.68 & Sb--Irr & Disk (literature) & late-type spiral \citep{connor2023} \\
-20221219A & 0.5 & 0.0 & 0.65 & Sb--Irr & Disk (literature) & Milky Way-like late type \citep{faber2024} \\
-20230526A & 1.9 & 2.5 & 0.31 & Sb--Irr & Disk (literature) & disk, $n = 0.3$ ($R$) and 1.4 ($K$) \citep{gordon2025} \\
-20230902A & 0.9 & 0.8 & 0.38 & Sb--Irr & Disk (literature) & disk, $n = 1.0$ \citep{gordon2025} \\
-20231120A & 1.9 & 1.8 & 5.86 & E/S0/Sa & Disk (literature) & spiral arms \citep{sharma2024}; edge-on disk \citep{leung2025}; flat-galaxy catalog \citep{mitronova2004} \\
-20240304A & 1.2 & 1.0 & 0.85 & Sb--Irr & Disk (literature) & disk, $n = 1.2$ \citep{gordon2025} \\
-20190102C & 0.5 & 0.3 & 0.65 & Sb--Irr & Disk-like profile & star-forming \citep{Gordon2023} \\
-20190523A & 0.6 & 0.2 & 0.33 & Sb--Irr & Disk-like profile & massive, low SFR \citep{20190523AHost} \\
-20220310F & 1.5 & 1.2 & 0.90 & Sb--Irr & Disk-like profile & star-forming \citep{sharma2024} \\
-20220501C & 1.3 & 1.5 & 0.52 & Sb--Irr & Disk-like profile & star-forming \citep{glowacki2025} \\
-20220825A & 0.7 & 0.4 & 1.35 & Sb--Irr & Disk-like profile & star-forming \citep{sharma2024} \\
-20230124A & 1.9 & 1.7 & 0.62 & Sb--Irr & Disk-like profile & star-forming \citep{sharma2024} \\
-20230613A & 0.6 & 0.6 & 0.91 & Sb--Irr & Disk-like profile & \nodata \\
-20230628A & 1.0 & 0.9 & 0.73 & Sb--Irr & Disk-like profile & star-forming \citep{sharma2024} \\
-20231020B & 0.7 & 0.6 & 0.62 & Sb--Irr & Disk-like profile & \nodata \\
-20231220A & 0.6 & 0.5 & 0.58 & Sb--Irr & Disk-like profile & \nodata \\
-20240119A & 0.5 & 0.0 & 0.73 & Sb--Irr & Disk-like profile & \nodata \\
-20240208A & 1.1 & 1.0 & 0.72 & Sb--Irr & Disk-like profile & star-forming \citep{glowacki2025} \\
-20240215A & 2.0 & 1.5 & 0.49 & Sb--Irr & Disk-like profile & \nodata \\
-20240224A & 2.4 & 1.7 & 0.83 & Sb--Irr & Disk-like profile & \nodata \\
-20210410D & 6.0 & 4.0 & 0.64 & Sb--Irr & Ambiguous & transitioning \citep{Gordon2023} \\
-20221012A & 2.0 & 1.6 & 0.95 & Sb--Irr & Ambiguous & massive, quiescent \citep{law2024, sharma2024} \\
-20230626A & 6.0 & 6.2 & 0.32 & Sb--Irr & Ambiguous & transition \citep{sharma2024} \\
-20240203D & 4.3 & 2.5 & 0.34 & Sb--Irr & Ambiguous & \nodata \\
-20240229A & 6.0 & 5.9 & 0.31 & Sb--Irr & Ambiguous & \nodata \\
-20220509G & 0.5 & 5.2 & 2.81 & Merger & Early-type & early-type, quiescent \citep{sharma2023, connor2023} \\
+20180924B & 3.9 & 3.3 & 0.93 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright HST: spiral arms and bar in residuals \citep{mannings2021}; $b/a = 0.62$ disk-like profile \citep{bannister2019}} \\
+20181112A & 1.0 & 0.8 & 0.59 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright $n = 1.9$ \citep{prochaska2019}} \\
+20190608B & 3.1 & 2.4 & 1.59 & E/S0/Sa & Disk (literature) & \parbox[t]{2.6in}{\raggedright barred spiral; rotating gas disk, $i_{\rm gas} = 37^\circ$ \citep{chittidi2021}} \\
+20211203C & 0.6 & 0.5 & 0.52 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright $n = 0.6$ in deeper $R$-band imaging \citep{gordon2025}} \\
+20220207C & 0.5 & 0.3 & 5.31 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright disk-dominated, nearly edge-on \citep{law2024}} \\
+20220319D & 6.0 & 16.2 & 6.38 & E/S0/Sa & Disk (literature) & \parbox[t]{2.6in}{\raggedright barred spiral (SBa), FRB on a spiral arm \citep{ravi2025}} \\
+20220914A & 2.5 & 1.7 & 0.68 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright late-type spiral \citep{connor2023}} \\
+20221219A & 0.5 & 0.0 & 0.65 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright Milky Way-like late type \citep{faber2024}} \\
+20230526A & 1.9 & 2.5 & 0.31 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright disk, $n = 0.3$ ($R$) and 1.4 ($K$) \citep{gordon2025}} \\
+20230902A & 0.9 & 0.8 & 0.38 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright disk, $n = 1.0$ \citep{gordon2025}} \\
+20231120A & 1.9 & 1.8 & 5.86 & E/S0/Sa & Disk (literature) & \parbox[t]{2.6in}{\raggedright spiral arms \citep{sharma2024}; edge-on disk \citep{leung2025}; flat-galaxy catalog \citep{mitronova2004}} \\
+20240304A & 1.2 & 1.0 & 0.85 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright disk, $n = 1.2$ \citep{gordon2025}} \\
+20190102C & 0.5 & 0.3 & 0.65 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright star-forming \citep{Gordon2023}} \\
+20190523A & 0.6 & 0.2 & 0.33 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright massive, low SFR \citep{20190523AHost}} \\
+20220310F & 1.5 & 1.2 & 0.90 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright star-forming \citep{sharma2024}} \\
+20220501C & 1.3 & 1.5 & 0.52 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright star-forming \citep{glowacki2025}} \\
+20220825A & 0.7 & 0.4 & 1.35 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright star-forming \citep{sharma2024}} \\
+20230124A & 1.9 & 1.7 & 0.62 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright star-forming \citep{sharma2024}} \\
+20230613A & 0.6 & 0.6 & 0.91 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright \nodata} \\
+20230628A & 1.0 & 0.9 & 0.73 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright star-forming \citep{sharma2024}} \\
+20231020B & 0.7 & 0.6 & 0.62 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright \nodata} \\
+20231220A & 0.6 & 0.5 & 0.58 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright \nodata} \\
+20240119A & 0.5 & 0.0 & 0.73 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright \nodata} \\
+20240208A & 1.1 & 1.0 & 0.72 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright star-forming \citep{glowacki2025}} \\
+20240215A & 2.0 & 1.5 & 0.49 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright \nodata} \\
+20240224A & 2.4 & 1.7 & 0.83 & Sb--Irr & Disk-like profile & \parbox[t]{2.6in}{\raggedright \nodata} \\
+20210410D & 6.0 & 4.0 & 0.64 & Sb--Irr & Ambiguous & \parbox[t]{2.6in}{\raggedright transitioning \citep{Gordon2023}} \\
+20221012A & 2.0 & 1.6 & 0.95 & Sb--Irr & Ambiguous & \parbox[t]{2.6in}{\raggedright massive, quiescent \citep{law2024, sharma2024}} \\
+20230626A & 6.0 & 6.2 & 0.32 & Sb--Irr & Ambiguous & \parbox[t]{2.6in}{\raggedright transition \citep{sharma2024}} \\
+20240203D & 4.3 & 2.5 & 0.34 & Sb--Irr & Ambiguous & \parbox[t]{2.6in}{\raggedright \nodata} \\
+20240229A & 6.0 & 5.9 & 0.31 & Sb--Irr & Ambiguous & \parbox[t]{2.6in}{\raggedright \nodata} \\
+20220509G & 0.5 & 5.2 & 2.81 & Merger & Early-type & \parbox[t]{2.6in}{\raggedright early-type, quiescent \citep{sharma2023, connor2023}} \\
 \enddata
 \tablecomments{$n_{\rm free}$ is the S\'ersic index of our PSF-convolved
 \texttt{GALFIT} fit with $n$ left free (the adopted fit fixes $n = 1$ for some
@@ -742,7 +743,7 @@ hosts), and $n_{\rm sm}$ that of the \texttt{statmorph} S\'ersic fit. ``Disk
 evidence, for which star-formation classifications are listed where available.}
 \end{deluxetable*}
 
-\begin{figure*}[p]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{galaxy/gallery_1.pdf}\\[2pt]
 \includegraphics[width=\textwidth]{galaxy/gallery_2.pdf}
@@ -753,15 +754,15 @@ The model panel gives $n_{\rm free}$ and the adopted $q$, and the color panel
 the class of Table~\ref{tab:disk_evidence}. Spiral arms and bars appear in the
 residuals of the resolved hosts.}
 \label{fig:gallery1}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[p]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{galaxy/gallery_3.pdf}\\[2pt]
 \includegraphics[width=\textwidth]{galaxy/gallery_4.pdf}
 \caption{Continuation of Figure~\ref{fig:gallery1}.}
 \label{fig:gallery2}
-\end{figure*}
+\end{figure}
  
 \section{Robustness of the Inclination Measurements} \label{app:robust}
  
@@ -776,16 +777,16 @@ results are nearly unchanged. For $q_0 = 0.25$, the probabilities decrease,
 since the removed hosts are among the most inclined in our sample, but no
 test indicates a significant difference.
  
-\begin{figure*}[htb!]
+\begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{figC_q0.png}
+\includegraphics[width=\textwidth]{figC_q0.pdf}
 \caption{CDFs of $\cos i$ for the FRB hosts (red) and the control sample
 (blue) for four values of $q_0$. In each panel, the shaded region shows the
 68\% bound of random samples of the same size as the FRB sample, and the
 dashed line a uniform distribution. Each panel gives $q_0$ and the AD
 $p_{\rm m}$.}
 \label{fig:q0}
-\end{figure*}
+\end{figure}
  
 \begin{deluxetable}{cccccc}
 \tabletypesize{\footnotesize}
