@@ -47,6 +47,7 @@ def main() -> None:
         hdr = fits.getheader(ROOT / f"large_cutouts/{f}_flux.fits")
         survey = str(hdr.get("SURVEY", "")).strip()
         version = str(hdr.get("VERSION", "")).strip()
+        pixscale = abs(float(hdr.get("CD1_1") or hdr.get("CDELT1"))) * 3600.0
         if "HSC" in survey:
             imaging = "HSC-SSP PDR2"
         elif "Pan-STARRS" in survey or "PSLIB_V" in hdr:
@@ -78,7 +79,8 @@ def main() -> None:
             "m_r_galfit_err": P.mag_err,
             "ref_survey": P.ref_survey,
             "m_r_ref": P.ref_mag,
-            "re_arcsec_galfit": P.re,
+            "re_px_galfit": P.re,
+            "re_arcsec_galfit": round(P.re * pixscale, 3),
             "n_galfit": P.n,
             "q_galfit_production": P.b_a,
             "q_winning": w.q,

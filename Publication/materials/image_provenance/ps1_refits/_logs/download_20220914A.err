@@ -1,0 +1,20 @@
+C:\Users\lenovo\AppData\Roaming\Python\Python313\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.4.0) or chardet (7.7.0)/charset_normalizer (3.4.2) doesn't match a supported version!
+  warnings.warn(
+WARNING: FITSFixedWarning: PC001001= -1. 
+this form of the PCi_ja keyword is deprecated, use PCi_ja. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: PC001002= 0. 
+this form of the PCi_ja keyword is deprecated, use PCi_ja. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: PC002001= 0. 
+this form of the PCi_ja keyword is deprecated, use PCi_ja. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: PC002002= 1. 
+this form of the PCi_ja keyword is deprecated, use PCi_ja. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: 'datfix' made the change 'Set DATE-OBS to '2012-08-29T11:06:28.039' from MJD-OBS'. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: PC001001= -1. 
+this form of the PCi_ja keyword is deprecated, use PCi_ja. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: PC001002= 0. 
+this form of the PCi_ja keyword is deprecated, use PCi_ja. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: PC002001= 0. 
+this form of the PCi_ja keyword is deprecated, use PCi_ja. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: PC002002= 1. 
+this form of the PCi_ja keyword is deprecated, use PCi_ja. [astropy.wcs.wcs]
+WARNING: FITSFixedWarning: 'datfix' made the change 'Set DATE-OBS to '2012-08-29T11:06:28.039' from MJD-OBS'. [astropy.wcs.wcs]

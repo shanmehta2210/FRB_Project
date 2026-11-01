@@ -63,7 +63,7 @@ HSC $g - i$ is observed-frame (no $k$-correction); `quiescent_flag` is the Kawin
 
 `figB_gini_m20.pdf` (final version: `scripts/appendix_figures.py`). Lotz et al. (2008) boundaries: mergers $G > -0.14\,M_{20} + 0.33$; E/S0/Sa $G > 0.14\,M_{20} + 0.80$ (below the merger line); Sb–Irr otherwise.
 
-All 56: late 52, early 3, merger 1. Reliable only (`flag = 0`, $\langle S/N\rangle_{\rm pix} \ge 2.5$, $R_e/{\rm FWHM} \ge 1.0$; $N = 33$): late 29, early 3, merger 1. Marked unreliable: 23 (flag $\ne 0$: 8; low S/N: 4; marginally resolved: 18).
+All 56: late 52, early 3, merger 1. Reliable only (`flag = 0`, $\langle S/N\rangle_{\rm pix} \ge 2.5$, $R_e/{\rm FWHM} \ge 1.0$; $N = 28$): late 24, early 3, merger 1. Marked unreliable: 28 (flag $\ne 0$: 8; low S/N: 4; marginally resolved: 26).
 
 Hosts outside the late-type region:
 
@@ -81,7 +81,7 @@ Hosts described as quiescent in the literature:
 | 20190523A | late | False | 0.349 | -1.57 | -1.15 | flag; Re/FWHM<1.0 |
 | 20210807D | late | True | 0.456 | -1.80 | -0.46 |  |
 | 20220509G | merger | True | 0.539 | -1.03 | -0.58 |  |
-| 20221012A | late | True | 0.466 | -1.69 | -0.49 |  |
+| 20221012A | late | False | 0.466 | -1.69 | -0.49 | Re/FWHM<1.0 |
 
 Per-host values: `gini_m20_56.csv`.
 

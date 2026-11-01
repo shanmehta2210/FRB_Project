@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -121,9 +122,13 @@ def fwhm_arcsec(frb: str) -> float:
     path = REPO_ROOT / "pipeline_scripts" / "Output" / f"{frb}_all" / "psfex.xml"
     if not path.is_file():
         return np.nan
-    text = path.read_text(encoding="utf-8", errors="replace")
-    m = re.search(r"FWHM_WCS_Mean[^0-9]*([0-9]*\.?[0-9]+)", text)
-    return float(m.group(1)) if m else np.nan
+    root = ET.parse(path).getroot()
+    fields = root.findall(".//{*}FIELD")
+    tds = root.findall(".//{*}TR/{*}TD")
+    for fld, td in zip(fields, tds):
+        if fld.attrib.get("name") == "FWHM_WCS_Mean":
+            return float(td.text)
+    return np.nan
 
 
 def re_arcsec(frb: str, wkdir: str) -> float:

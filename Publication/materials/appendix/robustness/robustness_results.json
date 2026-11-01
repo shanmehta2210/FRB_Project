@@ -423,15 +423,15 @@
    "merger": 1
   },
   "lotz_counts_reliable": {
-   "late": 29,
+   "late": 24,
    "early": 3,
    "merger": 1
   },
-  "n_reliable": 33,
-  "n_unreliable": 23,
+  "n_reliable": 28,
+  "n_unreliable": 28,
   "n_flag": 8,
   "n_lowsn": 4,
-  "n_marginal": 18,
+  "n_marginal": 26,
   "not_late": [
    {
     "frb": "20190608B",
@@ -493,11 +493,11 @@
    {
     "frb": "20221012A",
     "lotz2008": "late",
-    "reliable": true,
+    "reliable": false,
     "sm_gini": 0.4655109150233172,
     "sm_m20": -1.6877784639283904,
     "sm_F_bulge": -0.4860904951322053,
-    "why_unreliable": ""
+    "why_unreliable": "Re/FWHM<1.0"
    }
   ]
  },

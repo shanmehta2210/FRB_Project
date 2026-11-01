@@ -260,6 +260,7 @@ def plate_scale_arcsec(frb: str) -> float:
 # --------------------------------------------------------------------------
 
 _PSFEX_KEYS = (
+    "FWHM_WCS_Mean",
     "FWHM_FromFluxRadius_Mean",
     "FWHM_FromFluxRadius_StDev",
     "Ellipticity_Mean",

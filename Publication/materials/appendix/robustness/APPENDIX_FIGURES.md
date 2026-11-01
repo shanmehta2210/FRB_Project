@@ -8,7 +8,7 @@ Histogram of $\cos i$ for the 24,450 control galaxies (adopted pool: `goodfits_f
 
 ## figB_gini_m20 (3.4 × 2.8 in, right panel)
 
-$G$ and $M_{20}$ from `gini_m20_56.csv`. Reliable = `flag = 0`, $\langle S/N\rangle_{\rm pix} \ge 2.5$, $R_e/{\rm FWHM} \ge 1.0$: 33 filled red circles; 23 unreliable as open red circles (s = 18). $x$ reversed, -0.5 to -3.0; $y$ 0.30 to 0.70. Lotz et al. (2008) boundaries (eqs. 4–6 of that paper, checked): merger line $G = -0.14\,M_{20} + 0.33$ across the full range; E/S0/Sa–Sb/Irr line $G = 0.14\,M_{20} + 0.80$ drawn only for $M_{20} \le -1.68$ (the lines meet at $G = 0.565$). Grey italic region labels. Only the four hosts outside Sb–Irr are labelled: 20190608B, 20220319D, 20220509G, 20231120A. Legend lower right (fewest points).
+$G$ and $M_{20}$ from `gini_m20_56.csv`. Reliable = `flag = 0`, $\langle S/N\rangle_{\rm pix} \ge 2.5$, $R_e/{\rm FWHM} \ge 1.0$: 28 filled red circles; 28 unreliable as open red circles (s = 18). $x$ reversed, -0.5 to -3.0; $y$ 0.30 to 0.70. Lotz et al. (2008) boundaries (eqs. 4–6 of that paper, checked): merger line $G = -0.14\,M_{20} + 0.33$ across the full range; E/S0/Sa–Sb/Irr line $G = 0.14\,M_{20} + 0.80$ drawn only for $M_{20} \le -1.68$ (the lines meet at $G = 0.565$). Grey italic region labels. Only the four hosts outside Sb–Irr are labelled: 20190608B, 20220319D, 20220509G, 20231120A. Legend lower right (fewest points).
 
 ## Control-variant CDFs: figA_ctrl_sersic, figA_ctrl_mag, figA_ctrl_color
 

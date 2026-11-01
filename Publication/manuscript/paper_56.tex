@@ -252,9 +252,9 @@ Fast radio bursts (FRBs) are millisecond-duration radio transients of extragalac
 
 The host galaxy itself can affect whether an FRB is detected. A burst from a source embedded in a galactic disk must propagate through the ionized interstellar medium of its host, which adds to its dispersion measure (DM) and broadens it through scattering \citep{xuHan2015, Ocker2022}. Both effects grow with the path length through the disk, and are therefore expected to be larger in hosts viewed edge-on \citep{xuHan2015, Orr2024}, which could lead to a potential selection bias against detecting FRBs in edge-on hosts. 
 
-\citet{Bhardwaj2024} reported empirical evidence for such an effect, finding that the inclination angles of 23 FRB hosts from untargeted surveys are strongly skewed toward lower inclination angles (face-on) compared with SDSS field galaxies. Their inclination angles, however, were derived from profile fits to ground-based imaging without accounting for the point spread function (PSF). Uncorrected seeing circularizes marginally resolved galaxies, which raises the projected axis ratio, $q = b/a$, and makes the inferred inclination angle appear more face-on \citep{Trujillo2001}. Since many FRB hosts are only marginally resolved in archival imaging, PSF-aware profile fits are required to distinguish a genuine edge-on deficit from one produced by PSF circularization. 
+\citet{Bhardwaj2024} provided the first empirical test of this idea, finding that the inclination angles of 23 FRB hosts from untargeted surveys are skewed toward lower inclination angles (face-on) compared with SDSS field galaxies. Their inclination angles were derived from profile fits to ground-based imaging that did not include the point spread function (PSF), which is well suited to resolved galaxies. Many FRB hosts, however, are only marginally resolved in archival imaging, and seeing circularizes such galaxies, which raises the projected axis ratio, $q = b/a$, and makes the inferred inclination angle appear more face-on \citep{Trujillo2001}. PSF-aware profile fits can therefore help separate a genuine edge-on deficit from the effect of PSF circularization.
 
-In this study, we revisit the inclination distribution of FRB hosts with two improvements. First, we expand the sample to 56 hosts of FRBs discovered by untargeted surveys, more than twice that of \citet{Bhardwaj2024} and including 22 of their 23 hosts. Second, we construct an empirical PSF model for each field, fit two-dimensional S\'ersic profiles convolved with the PSF, and convert the recovered $q$ to an inclination angle. We compare these inclinations with those of disk galaxies from the Hyper Suprime-Cam Subaru Strategic Program (HSC-SSP) structural catalog \citep{Kawinwanichakij}, whose axis ratios are measured with the same class of PSF-convolved model. We find that the inclination distribution of FRB hosts is consistent with that of field disk galaxies, and that a deficit of edge-on hosts of the size reported by \citet{Bhardwaj2024} is strongly disfavored. Their original 23 hosts, once remeasured, are themselves consistent with the field galaxies.
+In this study, we revisit the inclination distribution of FRB hosts with two additions. First, we expand the sample to 56 hosts of FRBs discovered by untargeted surveys, more than twice that of \citet{Bhardwaj2024} and including 22 of their 23 hosts. Second, we construct an empirical PSF model for each field, fit two-dimensional S\'ersic profiles convolved with the PSF, and convert the recovered $q$ to an inclination angle. We compare these inclinations with those of disk galaxies from the Hyper Suprime-Cam Subaru Strategic Program (HSC-SSP) structural catalog \citep{Kawinwanichakij}, whose axis ratios are measured with the same class of PSF-convolved model. We find that the inclination distribution of FRB hosts is consistent with that of field disk galaxies, and we do not recover a deficit of edge-on hosts. The original 23 hosts of \citet{Bhardwaj2024}, remeasured with PSF-convolved fits, are also consistent with the field galaxies, which suggests that the treatment of the PSF accounts for most of the difference between the two studies.
 
 We describe the sample and inclination measurements in Section~\ref{sec:methods}, present our results in Section~\ref{sec:results}, and discuss their implications in Section~\ref{sec:discussion}.
 
@@ -298,52 +298,48 @@ We draw this control sample from the HSC-SSP structural catalog \citep{Kawinwani
 
 Figure~\ref{fig:cdf}a shows the cumulative distribution functions (CDFs) of $\cos i$ for the 56 FRB hosts and the control sample. Following \citet{Bhardwaj2024}, we account for sampling effects by drawing 10{,}000 random samples of 56 galaxies from the control sample, and show the 68\% bound of these realizations in Figure~\ref{fig:cdf}a. For each test below, we quote $p_{\rm m}$, the fraction of these realizations that differ from the control sample at least as much as the FRB hosts do. The FRB hosts have a median $\cos i$ of 0.626 ($i \approx \ang{51.3}$), compared with 0.575 ($i \approx \ang{54.9}$) for the control sample.
  
-To compare the two distributions, we use the two-sample Anderson--Darling (AD) test \citep{KS-AD} and the Mann--Whitney (MW) $U$ test \citep{MW}, as in \citet{Bhardwaj2024}. Run two-sided, these give $p_{\rm m} = 0.54$ (AD) and $p_{\rm m} = 0.46$ (MW), compared with $p = 0.0003$ and $p = 0.00012$ found by \citet{Bhardwaj2024} against SDSS. To test specifically for the deficit of edge-on hosts that they reported, we also run the MW test one-sided in that direction, which gives $p_{\rm m} = 0.23$. None of these tests indicates a significant difference, and the inclination distribution of our FRB hosts is consistent with that of field disk galaxies. The same holds for the 23 hosts of \citet{Bhardwaj2024} alone once remeasured with our PSF-convolved fits (Figure~\ref{fig:cdf}b; AD $p_{\rm m} = 0.93$, two-sided MW $p_{\rm m} = 0.84$, one-sided MW $p_{\rm m} = 0.42$). We note that neither result is a consequence of limited sensitivity. For each sample
+To compare the two distributions, we use the two-sample Anderson--Darling (AD) test \citep{KS-AD} and the Mann--Whitney (MW) $U$ test \citep{MW}, as in \citet{Bhardwaj2024}. Run two-sided, these give $p_{\rm m} = 0.54$ (AD) and $p_{\rm m} = 0.46$ (MW); for reference, \citet{Bhardwaj2024} found $p = 0.0003$ and $p = 0.00012$ against SDSS. To test specifically for a deficit of edge-on hosts, we also run the MW test one-sided in that direction, which gives $p_{\rm m} = 0.23$. None of these tests indicates a significant difference, and the inclination distribution of our FRB hosts is consistent with that of field disk galaxies. The same holds for the 23 hosts of \citet{Bhardwaj2024} alone once remeasured with our PSF-convolved fits (Figure~\ref{fig:cdf}b; AD $p_{\rm m} = 0.93$, two-sided MW $p_{\rm m} = 0.84$, one-sided MW $p_{\rm m} = 0.42$). We note that neither result is a consequence of limited sensitivity. For each sample
 size, we draw 2{,}000 samples, with replacement, from the 23 published
 inclinations of \citet{Bhardwaj2024}; the AD test detects their reported
 deficit ($p < 0.05$) in more than 99\% of samples of 56 hosts and in 91\%
-of samples of 23. Rerunning the \texttt{AstroPhot} \citep{Astrophot} fits of \citet{Bhardwaj2024} with PSF convolution gives inclinations consistent with ours (RMS difference $\approx \ang{5}$; Figure~\ref{fig:cdf}b), indicating that the difference from their result arises from the treatment of the PSF.
+of samples of 23. Rerunning the \texttt{AstroPhot} \citep{Astrophot} fits of \citet{Bhardwaj2024} with PSF convolution gives inclinations consistent with ours (RMS difference $\approx \ang{5}$; Figure~\ref{fig:cdf}b), while our fits without the PSF closely reproduce their published values (RMS difference \ang{3.4}; Appendix~\ref{app:psf}). This suggests that the difference between the two results arises mainly from the treatment of the PSF, rather than from the sample or the imaging.
  
-Following \citet{Bhardwaj2024}, we also divide the control sample into four bins corresponding to the quartiles of its $\cos i$ distribution, so that each bin is expected to contain 14 of the 56 FRB hosts. From face-on to edge-on, the FRB hosts are distributed across these bins as 14, 19, 10, and 13 (Figure~\ref{fig:bins}; $p_{\rm m} = 0.40$). The most face-on bin ($i < \ang{41.0}$) and the most edge-on bin ($i > \ang{67.1}$) contain 14 and 13 hosts, respectively, close to the expected 14. In contrast, \citet{Bhardwaj2024} found 11 of their 23 hosts in the most face-on bin and only one in the most edge-on bin, which formed the basis of their estimate that FRB rates are underestimated by a factor of two. We find no such excess of face-on hosts, and no deficit of edge-on hosts. Including measurement uncertainties does not change these conclusions (Appendix~\ref{app:errors}).
+Following \citet{Bhardwaj2024}, we also divide the control sample into four bins corresponding to the quartiles of its $\cos i$ distribution, so that each bin is expected to contain 14 of the 56 FRB hosts. From face-on to edge-on, the FRB hosts are distributed across these bins as 14, 19, 10, and 13 (Figure~\ref{fig:bins}; $p_{\rm m} = 0.40$). The most face-on bin ($i < \ang{41.0}$) and the most edge-on bin ($i > \ang{67.1}$) contain 14 and 13 hosts, respectively, close to the expected 14. For comparison, \citet{Bhardwaj2024} found 11 of their 23 hosts in the most face-on bin and one in the most edge-on bin, from which they estimated that FRB rates may be underestimated by a factor of two. With PSF-convolved inclinations, we find no excess of face-on hosts and no deficit of edge-on hosts, so a correction of this size does not appear to be needed. Including measurement uncertainties does not change these conclusions (Appendix~\ref{app:errors}).
 
-\citet{marnoch2026} recently reported that the rest-frame DM$_{\rm host}$ of 34
-CRAFT FRBs anticorrelates with the axis ratio of their hosts (Spearman
-$r_S = -0.44$, $p = 0.01$), and that subtracting their fitted relation reduces
-the scatter about the Macquart relation by 40\%. We repeat their analysis on
-the 55 hosts with spectroscopic redshifts, using their definition of
-DM$_{\rm host}$, their Pearson and Spearman tests, and their \texttt{LTSFIT}
-\citep{Cappellari2013} linear fits with $2.6\sigma$ clipping. Since every host
-has $q > q_0$, $\cos i$ is a monotonic function of $q$, and rank correlations
-with either are identical. We find no correlation (Pearson $r_P = 0.02$,
-$p = 0.89$; Spearman $r_S = -0.04$, $p = 0.77$; Figure~\ref{fig:corr}a), and a
-fitted slope of $-1 \pm 65$~pc~cm$^{-3}$ per unit $q$, compared with their
-$-309 \pm 70$~pc~cm$^{-3}$. Their subsamples, restricted to $m_r < 21$ or
-$n < 2$ or with the three hosts fit by a bulge removed, give the same result
-(all $p > 0.7$; Figure~\ref{fig:corr}b). The 95\% confidence interval,
-$-0.30 < r_S < 0.23$, excludes their value, and a correlation as strong as
-theirs would be detected at $p < 0.05$ in more than 90\% of samples of our
-size. Their correlation rests largely on four hosts with $q < 0.2$ that they
-assign $i \approx \ang{90}$; without these, their $p$ rises to 0.052, and for
-the 20 hosts common to both samples, their own values give $r_S = -0.19$
-($p = 0.41$), even though our measurements of $q$ and DM$_{\rm host}$ agree
-closely with theirs ($r_S = 0.86$ and 0.99). The reduction in the Macquart
-scatter is also not an inclination effect. In their sample, subtracting a
-constant DM$_{\rm host}$ already lowers the root-mean-square deviation from
-181 to 115~pc~cm$^{-3}$, compared with 107~pc~cm$^{-3}$ for their
-$q$-dependent relation, and in ours, their relation (149~pc~cm$^{-3}$) does
-worse than a constant (138~pc~cm$^{-3}$; Figure~\ref{fig:corr}c). None of the
-other burst properties we compiled from the literature shows a significant
-correlation with inclination (all $p > 0.1$). For the rotation measure (RM;
-$N = 41$), the 95\% confidence interval also excludes a correlation as strong
-as that of \citet{marnoch2026}, but the smaller samples with scattering times
-($N = 29$) and polarization fractions ($N = 24$) cannot rule one out. The
-extinction of the older stellar population increases toward edge-on
-($r_S = -0.46$, $p = 0.010$, $N = 30$), as expected for dust in inclined disks,
-although this is not significant after correcting for the 41 host and burst
-properties tested \citep{BH1995}. The same compiled values recover the known
-correlations of DM$_{\rm host}$ with scattering time ($r_S = 0.45$,
-$p = 0.014$) and $|{\rm RM}|$ ($r_S = 0.49$, $p = 0.001$), so the absence of an
-inclination signal is not due to noise in the compiled properties.
+Even without a detection bias, a longer path through the host disk could
+raise the DM and scattering of bursts in inclined hosts, and
+\citet{marnoch2026} reported that the rest-frame DM$_{\rm host}$ of 34 CRAFT
+FRBs decreases with the axis ratio of their hosts ($r_S = -0.44$). We test
+for such a trend using the 55 hosts with spectroscopic redshifts
+(Figure~\ref{fig:corr}). Since every host has $q > q_0$, $\cos i$ is a
+monotonic function of $q$, and rank correlations with either are identical.
+We find no significant correlation between DM$_{\rm host}$ and $q$ (Spearman
+$r_S = -0.06$, $p = 0.64$; Kendall $\tau = -0.04$, $p = 0.63$;
+\citealt{Kendall1938}; Figure~\ref{fig:corr}a). To guard against outliers, we
+also compute bootstrap confidence intervals \citep{Efron1979}, leave-one-out
+jackknife values, and the Theil--Sen slope \citep{Sen1968}. The bootstrap
+95\% interval is $-0.32 < r_S < 0.20$, removing any single host keeps $r_S$
+between $-0.12$ and $-0.04$, and the Theil--Sen slope,
+$-38^{+197}_{-201}$~pc~cm$^{-3}$ per unit $q$, is consistent with zero. The
+result is unchanged for hosts with $m_r < 21$ or $n < 2$, or without the
+three hosts that \citet{marnoch2026} fit with a bulge component, and when we
+subtract the DM contributed by foreground galaxy halos along each sightline
+(Figure~\ref{fig:corr}b; Appendix~\ref{app:halo}). Our axis ratios agree
+closely with those of \citet{marnoch2026} for the 20 hosts in both samples
+(Appendix~\ref{app:marnoch}), so the difference is unlikely to come from the
+inclination measurements; a possible reason is the variance of the smaller
+sample, together with differences in sample selection between the two
+studies. None of the other burst properties we compiled from the literature
+correlates significantly with inclination (all $p > 0.1$), although the
+smaller samples with scattering times ($N = 29$) and polarization fractions
+($N = 24$) cannot exclude a moderate trend. The extinction of the older
+stellar population increases toward edge-on ($r_S = -0.46$, $p = 0.010$,
+$N = 30$), as expected for dust in inclined disks, although this is not
+significant after correcting for the 41 host and burst properties tested
+\citep{BH1995}. The same compiled values recover the known correlations of
+DM$_{\rm host}$ with scattering time ($r_S = 0.45$, $p = 0.014$) and
+$|{\rm RM}|$ ($r_S = 0.49$, $p = 0.001$), so the compiled properties are
+precise enough to reveal such trends.
 
 \begin{figure*}[t]
 \centering
@@ -363,18 +359,16 @@ galaxies.}
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{fig3_correlations.pdf}
-\caption{The analysis of \citet{marnoch2026} repeated on our hosts. (a)
-Rest-frame DM$_{\rm host}$ versus axis ratio for the 55 FRB hosts with
-spectroscopic redshifts, with our \texttt{LTSFIT} relation (solid) and its
-$1\sigma$ and $2.6\sigma$ intrinsic scatter (shaded); open symbols are clipped.
-Hosts shared with \citet{marnoch2026} are outlined, and the dashed line shows
-their relation. (b) Spearman $r_S$ and 95\% confidence interval for the values
-of \citet{marnoch2026} (grey), for DM$_{\rm host}$ in our sample and their
-subsamples (red), and for other properties (blue), with the number of hosts at
-right; filled symbols have $p < 0.05$, and the dashed line marks $r_S = -0.44$.
-(c) Root-mean-square deviation of DM$_{\rm exgal}$ from the mean Macquart
-relation before correction, after subtracting a constant DM$_{\rm host}$, and
-after subtracting the $q$-dependent relation of \citet{marnoch2026}.}
+\caption{Host and burst properties versus host axis ratio. (a) Rest-frame
+DM$_{\rm host}$ for the 55 FRB hosts with spectroscopic redshifts (filled), and
+after subtracting the DM of intersected foreground halos for the 49 hosts in
+the LS footprint (open; Appendix~\ref{app:halo}), with lines joining the two
+values. The solid line and shaded band show the Theil--Sen fit to the filled
+points and the 95\% range of its slope. (b) Spearman $r_S$ with bootstrap 95\%
+confidence intervals for DM$_{\rm host}$ in the full sample, after removing the
+total or the excess foreground halo contribution, and in subsamples (red), and
+for other host and burst properties (blue), with the number of hosts at right;
+filled symbols have $p < 0.05$.}
 \label{fig:corr}
 \end{figure*}
 
@@ -465,7 +459,7 @@ after subtracting the $q$-dependent relation of \citet{marnoch2026}.}
 \enddata
 \tablenotetext{a}{Boldface indicates FRB hosts for which Pan-STARRS1 DR1 (or, for FRB 20240208A, HSC-SSP PDR2) $r$-band images were used. For all other hosts we use Legacy Surveys DR10 $r$-band images (DR9 for FRBs 20190523A and 20230907D).}
 \tablenotetext{b}{Inclination from our \texttt{GALFIT} single-S\'ersic axis ratio $q$ (Equation~\ref{eq:HubbleFormula}, $q_0 = 0.2$). Bins are the quartiles of the control sample's $\cos i$ distribution, numbered from face-on to edge-on (edges at $i = 41.00^\circ$, $54.89^\circ$, and $67.14^\circ$; Figure~\ref{fig:bins}). For the seven hosts with $q \leq q_0$, the inclination is undefined and we list $q$: six are marginally resolved, and their fits collapse to unphysically thin profiles, while FRB 20240201A is a resolved edge-on disk. Propagated $q$ uncertainties (formal plus sky term) give a median $\sigma_i = 1.1^\circ$; with the $5^\circ$ systematic term added in quadrature, the adopted uncertainties range from $5.0^\circ$ to $15.3^\circ$ (median $5.1^\circ$).}
-\tablenotetext{c}{SFR and stellar mass are SED-fit values from the references in the last column; $\log({\rm sSFR})$ is computed from the two tabulated values. SFRs are averaged over the last 0--100\,Myr, except those marked $\dagger$, for which the published SED SFR is instantaneous or its timescale is not stated. DM$_{\rm host}$ is the rest-frame host contribution $[{\rm DM} - {\rm DM}_{\rm MW} - \widetilde{\rm DM}_{\rm cosmic}(z)]\,(1+z)$, with DM$_{\rm MW}$ from NE2001 \citep{NE2001} and $\widetilde{\rm DM}_{\rm cosmic}$ the median of the \citet{Macquart-reln} distribution ($F = 0.2$, Planck 2018 cosmology; \citealt{Planck2018}); no halo term is subtracted, similar to \citet{Bhardwaj2024}. Negative values reflect the scatter of DM$_{\rm cosmic}$ about its median.}
+\tablenotetext{c}{SFR and stellar mass are SED-fit values from the references in the last column; $\log({\rm sSFR})$ is computed from the two tabulated values. SFRs are averaged over the last 0--100\,Myr, except those marked $\dagger$, for which the published SED SFR is instantaneous or its timescale is not stated. DM$_{\rm host}$ is the rest-frame host contribution $[{\rm DM} - {\rm DM}_{\rm MW} - \widetilde{\rm DM}_{\rm cosmic}(z)]\,(1+z)$, with DM$_{\rm MW}$ from NE2001 \citep{NE2001} and $\widetilde{\rm DM}_{\rm cosmic}$ the median of the \citet{Macquart-reln} distribution ($F = 0.2$, Planck 2018 cosmology; \citealt{Planck2018}); no halo term is subtracted, similar to \citet{Bhardwaj2024}; foreground halos are considered in Appendix~\ref{app:halo}. Negative values reflect the scatter of DM$_{\rm cosmic}$ about its median.}
 \tablenotetext{d}{\texttt{GALFIT} $r$-band magnitude from this work.}
 \tablerefs{(1) \citet{20171020AHost}; (2) \citet{Gordon2023}; (3) \citet{shannon2025}; (4) \citet{20190523AHost}; (5) \citet{20210410DHost}; (6) \citet{sharma2024}; (7) \citet{li2025}; (8) \citet{leung2025}; (9) \citet{pastormarazuela2026}; (10) \citet{connor2025}; (11) \citet{verdi2026}; (12) \citet{glowacki2025}; (13) \citet{jahnsschindler2026}; (14) \citet{gordon2025}; (15) \citet{athukoralalage2026}; (16) \citet{rajwade2024}; (17) \citet{muller2026}; (18) \citet{chang2015}.}
 \end{deluxetable*}
@@ -653,9 +647,9 @@ the same images, PSF models, and masks as our \texttt{GALFIT} fits
 occupied by Sb--Irr galaxies \citep{GiniM20boundaries}, three lie in the E/S0/Sa region
 (FRBs 20190608B, 20220319D, and 20231120A), and one lies in the merger region
 (FRB 20220509G). Since $G$ and $M_{20}$ are unreliable for marginally resolved
-or faint galaxies, we flag 23 hosts with $R_e/{\rm FWHM} < 1$, a mean
+or faint galaxies, we flag 28 hosts with $R_e/{\rm FWHM} < 1$, a mean
 signal-to-noise ratio per pixel below 2.5, or a nonzero \texttt{statmorph}
-quality flag. Of the remaining 33 hosts, 29 lie in the Sb--Irr region, and the
+quality flag. Of the remaining 28 hosts, 24 lie in the Sb--Irr region, and the
 same four hosts lie outside it. The E/S0/Sa region includes early-type
 spirals, so these four hosts are not necessarily spheroidal. Our conclusions
 also do not depend on whether early-type galaxies are included: removing the
@@ -717,6 +711,156 @@ percentile range 0.29--0.74), and the two-sided and one-sided MW tests give
 realizations gives $p_{\rm m} < 0.05$ in the AD or two-sided MW test, and only
 0.4\% do in the one-sided MW test. Measurement uncertainties therefore do not
 change our conclusions.
+
+\section{The Role of the PSF} \label{app:psf}
+
+\subsection{Fits With and Without the PSF} \label{app:nopsf}
+
+To isolate the effect of the PSF, we refit all 56 hosts without PSF
+convolution, using both \texttt{GALFIT} and \texttt{AstroPhot} and keeping all
+other settings of our adopted fits; restoring the PSF in this setup reproduces
+the adopted fits exactly. Without the PSF, $q$ increases for 55 of the 56 hosts
+in both codes, by a median of 0.11, and the two codes agree closely with each
+other (median difference in $q$ below 0.001). The increase is larger for hosts
+smaller than the PSF (median $\Delta q = 0.18$ for the 26 hosts with
+$R_e/{\rm FWHM} < 1$, compared with 0.08 for the other 30), as expected from
+PSF circularization. As a result, the median inclination falls from
+\ang{51.3} to \ang{38}, 32 of the 56 hosts move into the most face-on bin, and
+every test differs from the control sample at $p_{\rm m} \leq 10^{-4}$
+(Table~\ref{tab:fitvariants}). PSF-convolved \texttt{AstroPhot} fits, in
+contrast, give the same result as \texttt{GALFIT}. For the 22 hosts shared
+with \citet{Bhardwaj2024}, our fits without the PSF reproduce their published
+inclinations (median difference \ang{0.0}, RMS \ang{3.4}), while our
+PSF-convolved fits are a median \ang{9} more inclined. Together, these results
+indicate that the face-on excess found by \citet{Bhardwaj2024} is mainly a
+consequence of fitting without the PSF, which is natural for resolved galaxies
+but becomes important for the many FRB hosts that are only marginally resolved
+in ground-based imaging.
+
+\begin{deluxetable*}{lcccccc}
+\tabletypesize{\footnotesize}
+\tablecolumns{7}
+\tablewidth{0pt}
+\tablecaption{Inclination tests with and without the PSF\label{tab:fitvariants}}
+\tablehead{
+\colhead{Axis ratios} & \colhead{$N_{\rm FRB}$} & \colhead{Median $i$} &
+\colhead{Bins} & \colhead{AD} & \colhead{MW (two-sided)} & \colhead{MW (one-sided)}}
+\startdata
+\texttt{GALFIT}, PSF-convolved (adopted) & 56 & \ang{51.3} & 14, 19, 10, 13 & 0.54 & 0.46 & 0.23 \\
+\texttt{AstroPhot}, PSF-convolved & 56 & \ang{53.2} & 13, 18, 8, 17 & 0.44 & 0.99 & 0.50 \\
+\texttt{GALFIT}, no PSF & 56 & \ang{38.0} & 32, 13, 6, 5 & $\leq 10^{-4}$ & $\leq 10^{-4}$ & $\leq 10^{-4}$ \\
+\texttt{AstroPhot}, no PSF & 56 & \ang{38.1} & 31, 14, 6, 5 & $\leq 10^{-4}$ & $\leq 10^{-4}$ & $\leq 10^{-4}$ \\
+\cutinhead{Hosts shared with \citet{Bhardwaj2024}}
+This work & 22 & \ang{52.8} & 5, 7, 4, 6 & 0.96 & 0.85 & 0.43 \\
+\citet{Bhardwaj2024} & 22 & \ang{42.5} & 11, 7, 2, 2 & 0.004 & 0.004 & 0.003 \\
+\enddata
+\tablecomments{Values are $p_{\rm m}$, as in Table~\ref{tab:control_robust},
+against the adopted control sample. Bins give the number of hosts in each
+quartile of the control sample's $\cos i$ distribution, from face-on to
+edge-on. With 10{,}000 random draws, the smallest possible $p_{\rm m}$ is
+$10^{-4}$.}
+\end{deluxetable*}
+
+\subsection{Imaging of the Hosts Shared with \citet{Bhardwaj2024}} \label{app:images}
+
+Of the 22 hosts shared with \citet{Bhardwaj2024}, 18 were fit on images from
+the same survey in both studies (11 from LS DR10 and 7 from Pan-STARRS), and
+none uses LS DR9. For the remaining four (FRBs 20190714A, 20210320C, 20220509G,
+and 20220914A), \citet{Bhardwaj2024} used Pan-STARRS, while we use LS DR10. To
+test whether the choice of survey matters, we refit these four hosts on
+Pan-STARRS images with our pipeline. With PSF convolution, the Pan-STARRS
+inclinations agree with our LS values to within \ang{4} for three hosts. The
+fourth, FRB 20210320C, is nearly round and smaller than the PSF, so its
+inclination is very sensitive to $q$, and it is \ang{12} more face-on in
+Pan-STARRS (\ang{35} compared with \ang{47}). Without the PSF, the same
+Pan-STARRS images give \ang{51}, \ang{28}, and \ang{45} for the three compact
+hosts, within \ang{1} of the values of \citet{Bhardwaj2024}, and the
+well-resolved FRB 20220509G ($R_e \approx 6\farcs6$) agrees with their value
+when fit with the PSF (\ang{58} compared with \ang{60}). The choice of survey
+therefore has a small effect compared with that of the PSF.
+
+\subsection{Hosts Shared with \citet{marnoch2026}} \label{app:marnoch}
+
+\citet{marnoch2026} also fit PSF-convolved single-S\'ersic profiles with
+\texttt{GALFIT}, but on deeper VLT/FORS2 imaging with a smaller PSF. For the
+20 hosts in both samples, our axis ratios agree closely with theirs
+($r_S = 0.86$, median $|\Delta q| = 0.03$). Four hosts differ by more than
+three times the median absolute deviation. Three of these, FRBs 20230902A,
+20220501C, and 20190102C, are smaller than our PSF ($R_e/{\rm FWHM} = 0.38$,
+0.52, and 0.65), and the smallest shared host, FRB 20230902A, shows the
+largest difference ($\Delta q = +0.24$). For such hosts, even a PSF-convolved
+fit to ground-based imaging retains some sensitivity to the PSF, and the
+sharper FORS2 imaging may give the more reliable axis ratio. For the fourth,
+FRB 20190608B, \citet{marnoch2026} fit a bulge and a disk, whereas we fit a
+single S\'ersic profile. Without these four hosts, $r_S = 0.99$ and the median
+$|\Delta q| = 0.02$. When the PSF is modeled, archival imaging therefore
+recovers the axis ratios measured in deeper, sharper imaging for all but the
+smallest hosts.
+
+\section{Foreground Halos and Robust Correlations} \label{app:halo}
+
+Galaxy halos intersected by the sightline add to the observed DM, and any part
+of this contribution not included in $\widetilde{\rm DM}_{\rm cosmic}$ is
+assigned to DM$_{\rm host}$. We estimate it following Appendix~B of
+\citet{Bhardwaj2025} for the 49 of our 55 hosts with spectroscopic redshifts
+that lie in the LS DR9 or DR10 footprint. For each FRB, we select galaxies
+within \ang{0.5} from the LS photometric-redshift catalog
+\citep{Dey2019, Zhou2021}, using spectroscopic redshifts from DESI DR1
+\citep{DESIDR1}, SDSS DR17 \citep{Abdurrouf2022}, and the Siena Galaxy Atlas
+\citep{Moustakas2023} where available. We estimate stellar masses from the
+$g-r$ color \citep{Bell2003}, convert them to halo masses with the relation of
+\citet{Moster2013}, and integrate a modified NFW gas profile
+\citep{Prochaska2019}, with concentrations from \citet{Dutton2014}, along the
+sightline. We make three small changes to this procedure, which otherwise let a
+few bright galaxies with uncertain photometric redshifts dominate the total: we
+$k$-correct the photometry by interpolating the observed spectral energy
+distribution, weight each galaxy by the probability that it lies in front of
+the host, and discard galaxies with only photometric redshifts and
+$M_r < -24$. Given the same inputs, our calculation reproduces the halo
+contributions computed with the code of \citet{Bhardwaj2025} for the galaxies
+intersected by FRB 20240114A to within 6\%.
+
+The foreground contribution in the host rest frame has a median of
+58~pc~cm$^{-3}$ (84th percentile 195~pc~cm$^{-3}$), exceeds 100~pc~cm$^{-3}$ for
+15 hosts, and is a median 24\% of DM$_{\rm host}$. Part of it, however, is
+already included in $\widetilde{\rm DM}_{\rm cosmic}$, which accounts for the
+average halo gas along random sightlines. Repeating the calculation for two
+random sightlines \ang{0.75} from each FRB gives a median of 43~pc~cm$^{-3}$,
+comparable to that of the FRB sightlines, and subtracting the full
+contribution makes DM$_{\rm host}$ negative for six hosts. We therefore
+consider both the full contribution and its excess over the random
+sightlines. The foreground
+contribution is uncorrelated with $q$ ($r_S = 0.14$, $p = 0.33$), as expected
+since it does not depend on the orientation of the host, and subtracting
+either version leaves the correlation of DM$_{\rm host}$ with $q$ unchanged
+(Table~\ref{tab:robustcorr}). Table~\ref{tab:robustcorr} also lists the
+outlier-robust statistics of Section~\ref{sec:results} for all properties.
+
+\begin{deluxetable*}{lcccc}
+\tabletypesize{\footnotesize}
+\tablecolumns{5}
+\tablewidth{0pt}
+\tablecaption{Correlations with host axis ratio\label{tab:robustcorr}}
+\tablehead{
+\colhead{Property} & \colhead{$N$} & \colhead{$r_S$ (95\% bootstrap)} &
+\colhead{Kendall $\tau$ ($p$)} & \colhead{Jackknife $r_S$ range}}
+\startdata
+DM$_{\rm host}$ & 55 & $-0.06$ ($-0.32$, $+0.20$) & $-0.04$ (0.63) & $-0.12$ to $-0.04$ \\
+DM$_{\rm host}$, foreground removed & 49 & $-0.04$ ($-0.33$, $+0.25$) & $-0.03$ (0.76) & $-0.09$ to $+0.00$ \\
+DM$_{\rm host}$, foreground excess removed & 49 & $-0.07$ ($-0.35$, $+0.21$) & $-0.05$ (0.58) & $-0.13$ to $-0.03$ \\
+DM$_{\rm host}$, $m_r < 21$ & 45 & $-0.09$ ($-0.38$, $+0.19$) & $-0.07$ (0.52) & $-0.16$ to $-0.06$ \\
+DM$_{\rm host}$, $n < 2$ & 46 & $-0.04$ ($-0.32$, $+0.26$) & $-0.02$ (0.85) & $-0.10$ to $+0.00$ \\
+DM$_{\rm host}$, bulge fits removed & 52 & $-0.07$ ($-0.34$, $+0.20$) & $-0.04$ (0.64) & $-0.12$ to $-0.04$ \\
+$|{\rm RM}|$ & 41 & $-0.02$ ($-0.31$, $+0.30$) & $-0.00$ (0.99) & $-0.09$ to $+0.04$ \\
+Scattering time & 29 & $-0.17$ ($-0.55$, $+0.27$) & $-0.11$ (0.41) & $-0.28$ to $-0.07$ \\
+Linear polarization & 24 & $-0.33$ ($-0.69$, $+0.12$) & $-0.24$ (0.10) & $-0.45$ to $-0.25$ \\
+$A_V$, old stars & 30 & $-0.46$ ($-0.67$, $-0.15$) & $-0.28$ (0.03) & $-0.53$ to $-0.41$ \\
+\enddata
+\tablecomments{Bootstrap intervals use 10{,}000 resamples. The jackknife range
+gives the smallest and largest $r_S$ obtained by removing one host at a time.
+``Bulge fits removed'' excludes the three hosts that \citet{marnoch2026} fit
+with a bulge component.}
+\end{deluxetable*}
  
 
 %% For this sample we use BibTeX plus aasjournalv7.bst to generate the
@@ -728,7 +872,7 @@ change our conclusions.
 %% pdflatex sample7.tex
 %% pdflatex sample7.tex
 
-\bibliography{paper}{}
+\bibliography{paper,new_refs}{}
 \bibliographystyle{aasjournalv7}
 
 %% This command is needed to show the entire author+affiliation list when
