@@ -1,7 +1,7 @@
 """Appendix figures, styled like Figure 1 (plot_results_figures.py / plot_paper_inclination_figures.py).
 
 figA_control_hist      control-pool cos i histogram vs uniform          (3.4 x 2.8 in)
-figB_gini_m20          Gini-M20 of the 51 hosts, Lotz+2008 boundaries   (3.4 x 2.8 in)
+figB_gini_m20          Gini-M20 of the hosts   , Lotz+2008 boundaries   (3.4 x 2.8 in)
 figA_control_variants  CDFs of the control variants of Table A1          (7.1 x 2.6 in, 3 panels)
 figC_q0                CDFs for q0 = 0.10, 0.15, 0.20, 0.25 with 68% bands (2 x 2)
 
@@ -77,9 +77,9 @@ def fig_control_hist(pool: np.ndarray) -> dict:
 
 
 # ----------------------------------------------------------------------------
-def fig_gini_m20() -> dict:
-    d = pd.read_csv(OUT / "gini_m20_51.csv", dtype={"frb": str})
-    assert len(d) == 51
+def fig_gini_m20(n: int) -> dict:
+    d = pd.read_csv(OUT / f"gini_m20_{n}.csv", dtype={"frb": str})
+    assert len(d) == n
     rel, unr = d[d.reliable], d[~d.reliable]
     xlo, xhi = -0.5, -3.0
     ylo, yhi = min(0.30, d.sm_gini.min() - 0.02), max(0.70, d.sm_gini.max() + 0.03)
@@ -163,7 +163,7 @@ def fig_ctrl_mag(parent: pd.DataFrame, hosts: pd.DataFrame) -> list:
     mag = hosts["mag"].to_numpy(dtype=float)
     items = []
     for m in (21.0, 20.0):
-        items.append((rf"$r \leq {m:.0f}$ (control only)", m, frb, pm("A3", "label", f"control $r \\le {m:.0f}$, all 51 hosts")))
+        items.append((rf"$r \leq {m:.0f}$ (control only)", m, frb, pm("A3", "label", f"control $r \\le {m:.0f}$, all {len(hosts)} hosts")))
         items.append((rf"$r \leq {m:.0f}$ (both samples)", m, frb[mag <= m], pm("A3", "label", f"both samples $r \\le {m:.0f}$")))
     fig, axes = plt.subplots(2, 2, figsize=(7.1, 5.6), sharex=True, sharey=True)
     log = []
@@ -223,14 +223,14 @@ def fig_q0(hosts: pd.DataFrame, parent: pd.DataFrame) -> list:
 
 # ----------------------------------------------------------------------------
 def main() -> None:
-    hosts = P.load_hosts(); assert len(hosts) == 51
+    hosts = P.load_hosts(); N = len(hosts)
     frb = hosts["cosi_point"].to_numpy(dtype=float)
     parent = R.load_parent()
     base = R.cosi_from_q(R.select(parent)["ba"].to_numpy(), P.Q0)
     assert len(base) == 24_450
 
     a = fig_control_hist(base)
-    b = fig_gini_m20()
+    b = fig_gini_m20(N)
     vs = fig_ctrl_sersic(parent, frb)
     vm = fig_ctrl_mag(parent, hosts)
     vc = fig_ctrl_color(parent, frb)
@@ -250,7 +250,7 @@ def main() -> None:
           f"\"Random orientation\". Top axis: inclination at 90, 75, 60, 45, 30, 0 deg via `top_inclination`. y from 0 to 1.15 × tallest bar ({a['max_density']:.2f}). "
           f"No median line, quartile edges or FRB hosts. Median $i = {a['median_i']:.1f}^\\circ$, $f(i > 60^\\circ) = {100*a['frac_i_gt60']:.1f}\\%$ go in the caption.", "",
           "## figB_gini_m20 (3.4 × 2.8 in, right panel)", "",
-          f"$G$ and $M_{{20}}$ from `gini_m20_51.csv`. Reliable = `flag = 0`, $\\langle S/N\\rangle_{{\\rm pix}} \\ge 2.5$, $R_e/{{\\rm FWHM}} \\ge 1.0$: "
+          f"$G$ and $M_{{20}}$ from `gini_m20_{N}.csv`. Reliable = `flag = 0`, $\\langle S/N\\rangle_{{\\rm pix}} \\ge 2.5$, $R_e/{{\\rm FWHM}} \\ge 1.0$: "
           f"{b['n_reliable']} filled red circles; {b['n_unreliable']} unreliable as open red circles (s = 18). $x$ reversed, {b['xlim'][0]} to {b['xlim'][1]}; "
           f"$y$ {b['ylim'][0]:.2f} to {b['ylim'][1]:.2f}. Lotz et al. (2008) boundaries (eqs. 4–6 of that paper, checked): merger line $G = -0.14\\,M_{{20}} + 0.33$ across the full range; "
           f"E/S0/Sa–Sb/Irr line $G = 0.14\\,M_{{20}} + 0.80$ drawn only for $M_{{20}} \\le {b['meet_M20']:.2f}$ (the lines meet at $G = {b['meet_G']:.3f}$). "
@@ -259,11 +259,11 @@ def main() -> None:
           "These replace `figA_control_variants`. One control variant per panel, in the style of `figC_q0`: uniform diagonal (dashed black, lw 0.6); "
           "the 68% band of 10,000 samples drawn from *that panel's* control pool, each of that panel's FRB sample size, on the 500-point $\\cos i$ grid (light blue); "
           "that variant's control CDF (solid blue, lw 1.0); the FRB step CDF (red, lw 1.5, `where='post'`, legend gives the panel's $N$); "
-          "\"AD $p_{\\rm m}$\" lower right from `robustness_results.json` (tables A2, A3, A5; the adopted configuration reproduces the main-text run, seed 42, AD $p_{\\rm m} = 0.61$); "
+          f"\"AD $p_{{\\rm m}}$\" lower right from `robustness_results.json` (tables A2, A3, A5; the adopted configuration reproduces the main-text run, seed 42, AD $p_{{\\rm m}} = {pm('A2', 'n_hi', 1.5):.2f}$); "
           "short title above. `sharex`/`sharey`; $y$ label on the left column, $x$ label on the bottom row, top inclination axis on the top row only.", "",
           "`figA_ctrl_sersic` (7.1 × 5.6 in, 2 × 2): $0.4 < n < 2.0$ | $0.4 < n < 2.5$ / $n < 2.5$ | no morphology cut.", "",
-          "`figA_ctrl_mag` (7.1 × 5.6 in, 2 × 2): left column the limit on the control only (all 51 hosts), right column on both samples "
-          "(the band then uses samples of 41 and 29); top row $r \\le 21$, bottom row $r \\le 20$.", "",
+          f"`figA_ctrl_mag` (7.1 × 5.6 in, 2 × 2): left column the limit on the control only (all {N} hosts), right column on both samples "
+          f"(the band then uses samples of {vm[1]['N_frb']} and {vm[3]['N_frb']}); top row $r \\le 21$, bottom row $r \\le 20$.", "",
           "`figA_ctrl_color` (7.1 × 2.6 in, 1 × 3): star-forming (`quiescent_flag = 0`) | $g - i < 1.2$ | $g - i \\ge 1.2$.", "",
           "| figure | panel | $N_{\\rm FRB}$ | $N_{\\rm pool}$ | AD $p_{\\rm m}$ |", "|---|---|---|---|---|"]
     for stem, rows in (("figA_ctrl_sersic", vs), ("figA_ctrl_mag", vm), ("figA_ctrl_color", vc)):

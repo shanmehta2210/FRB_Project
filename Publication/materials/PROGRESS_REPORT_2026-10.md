@@ -4,7 +4,7 @@
 
 - **Sample.** 56 confirmed, literature-localized, non-repeating FRB hosts with $m_r \le 22$ and $q > 0.2$. All 56 have a published DM. This replaces the 51-host sample in the committed paper results.
 - **Main test.** The host inclinations are consistent with HSC-PDR2 field discs (KS $p = 0.45$, matched-$N$ $p = 0.44$; AD matched-$N$ $p = 0.55$). Hosts are, if anything, slightly *more face-on* than the field. The edge-on deficit claimed by Bhardwaj et al. (2024) is not reproduced: our edge-on count has $P(K \ge k) = 0.002$ under their 4/23 edge-on fraction.
-- **DM_host.** No correlation with inclination: $r_S = -0.065$, $p = 0.64$, $N = 55$, 95% CI $[-0.34, +0.22]$. This excludes the $r_S \approx -0.44$ of Marnoch et al. (2026), which we would detect with about 90% probability.
+- **DM_host.** No correlation with inclination: $r_S = -0.065$, $p = 0.64$, $N = 55$, 95% CI $[-0.32, +0.20]$. This excludes the $r_S \approx -0.44$ of Marnoch et al. (2026), which we would detect with about 91% probability.
 - **Marnoch re-check.** Their numbers reproduce from their Table 1. Removing their four $q < 0.2$ hosts (set to $i = 90^\circ$) weakens the result to $p \approx 0.05$, and it fails in every subsample. On the 20 hosts both samples share, their own data give $r_S = -0.19$ ($p = 0.41$).
 - **Other properties.** 41 host and burst properties were tested against inclination. None is significant after a false-discovery correction. The one physically expected trend, old-star (diffuse) dust attenuation rising towards edge-on ($r_S = -0.46$, $p = 0.010$), does appear.
 
@@ -196,7 +196,7 @@ Old-star $A_V$ medians: 0.48 edge-on vs 0.13 face-on. 89% of Monte Carlo draws k
 Interpreting the null result (rest frame, $N = 55$):
 
 - **Shuffle test.** Randomly re-pairing DM_host with inclination 20,000 times gives $|r_S| \ge 0.065$ in 64% of shuffles. The 95% chance range is $\pm 0.27$.
-- **Confidence interval.** 95% CI $[-0.34, +0.22]$ (Fisher), $[-0.32, +0.20]$ (bootstrap).
+- **Confidence interval.** 95% CI $[-0.32, +0.20]$ (Fisher and bootstrap).
 - **Power.** A true $r_S = -0.44$ would give $p < 0.05$ in about 90% of samples of 55.
 - Weak correlations ($|r_S| \lesssim 0.2$) are not excluded.
 

@@ -52,3 +52,10 @@ frb,quantity,value,err_plus,err_minus,unit,method,source_short,arxiv_id,doi,loca
 20250316A,rm_host_rad_m2,0,5,5,rad m-2,|RM|host,athukoralalage2026,2608.23868,,Table 1,
 20250316A,logmstar,9.20,,,log Msun,compiled,athukoralalage2026,2608.23868,,Table 1,
 20250316A,repeater,no,,,,,athukoralalage2026,2608.23868,,,
+20230913G,dm_obs,518.7,,,pc cm-3,measured,verdi2026,2609.30616,,Table A1,DSA-110
+20230913G,z,0.3024,,,,spectroscopic (Keck/LRIS),verdi2026,2609.30616,,Table A1,
+20230913G,repeater,no,,,,,verdi2026,2609.30616,,,
+20230913G,dm_host,217.62,88.19,91.86,pc cm-3,rest frame,verdi2026,2609.30616,,Table A1,
+20230913G,rm_rad_m2,-61.98,8.67,8.67,rad m-2,measured,verdi2026,2609.30616,,Table A1,
+20230913G,rm_host_rad_m2,-130.82,27.71,27.71,rad m-2,rest frame,verdi2026,2609.30616,,Table A1,
+20230913G,tau_scatt_ms,<0.293,,,ms,at 1 GHz (limit),verdi2026,2609.30616,,Table A1,

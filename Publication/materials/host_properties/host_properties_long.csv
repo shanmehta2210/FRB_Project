@@ -4083,6 +4083,66 @@ frb,quantity,value,err_plus,err_minus,unit,method,source_short,arxiv_id,doi,loca
 20231120A,m_z,14.7216,0.0291,0.0291,AB mag,SGA2020_DR9,moustakas2023,2307.04888,10.3847/1538-4365/acfaa2,SGA-2020 (via SIMBAD),not extinction corrected,group_5.csv
 20231120A,z,0.066387,,,,photo_z,bilicki2014,1311.5246,10.1088/0067-0049/210/1/9,NED redshift entry for 2MFGC 07440 (2MPZ),2MPZ photometric redshift (cz=19902 km/s); NED flags origin as uncertain; not a spectroscopic value,group_5.csv
 20231120A,morphology,flat/edge-on (2MFGC selection),,,,2MASS_flat_galaxy_catalog,mitronova2004,astro-ph/0408257,,2MFGC catalogue entry 7440,2MFGC selects galaxies with J-band axial ratio a/b >= 3,group_5.csv
+20231210F,dm_obs,720.6,0.2,0.2,pc cm-3,measured,pastormarazuela2026,2507.05982,,Table 2,MeerTRAP,group_6.csv
+20231210F,z,0.43,0.01,0.01,,photometric (CIGALE SED),pastormarazuela2026,2507.05982,,Sec. 4.1.11,photo-z only; DESI Legacy photo-z 0.50 +0.08; no spectroscopic z,group_6.csv
+20231210F,logmstar,9.7,0.1,0.1,log Msun,photometric-z SED (CIGALE),pastormarazuela2026,2507.05982,,Sec. 4.1.11,mass at photo-z,group_6.csv
+20231210F,sfr,<0.2,,,Msun/yr,photometric-z SED limit,pastormarazuela2026,2507.05982,,Sec. 4.1.11,,group_6.csv
+20231210F,offset_kpc,19.6,3.7,3.7,kpc,photo-z,pastormarazuela2026,2507.05982,,Sec. 4.1.11,,group_6.csv
+20231210F,path_posterior,0.81,,,,PATH,pastormarazuela2026,2507.05982,,Sec. 4.1.11,G1,group_6.csv
+20231210F,repeater,no,,,,,pastormarazuela2026,2507.05982,,,,group_6.csv
+20240203D,dm_obs,272.60,,,pc cm-3,measured,verdi2026,2609.30616,,Table A1,DSA-110,group_6.csv
+20240203D,z,0.0740,,,,spectroscopic (Keck/LRIS),verdi2026,2609.30616,,Table A1; Fig. A2,,group_6.csv
+20240203D,dm_host,113.20,42.58,43.17,pc cm-3,rest frame,verdi2026,2609.30616,,Table A1,,group_6.csv
+20240203D,rm_rad_m2,222.41,12.34,12.34,rad m-2,measured,verdi2026,2609.30616,,Table A1,,group_6.csv
+20240203D,rm_host_rad_m2,271.76,22.63,22.63,rad m-2,rest frame,verdi2026,2609.30616,,Table A1,,group_6.csv
+20240203D,tau_scatt_ms,0.653,0.084,0.080,ms,at 1 GHz,verdi2026,2609.30616,,Table A1,,group_6.csv
+20240203D,repeater,no,,,,,verdi2026,2609.30616,,,,group_6.csv
+20240224A,dm_obs,881.20,,,pc cm-3,measured,verdi2026,2609.30616,,Table A1,DSA-110,group_6.csv
+20240224A,z,0.3726,,,,spectroscopic (Keck/LRIS),verdi2026,2609.30616,,Table A1; Fig. A2,,group_6.csv
+20240224A,dm_host,611.08,120.73,114.47,pc cm-3,rest frame,verdi2026,2609.30616,,Table A1,,group_6.csv
+20240224A,rm_rad_m2,-114.50,71.21,71.21,rad m-2,measured,verdi2026,2609.30616,,Table A1,,group_6.csv
+20240224A,rm_host_rad_m2,-137.60,136.15,136.15,rad m-2,rest frame,verdi2026,2609.30616,,Table A1,,group_6.csv
+20240224A,tau_scatt_ms,<0.178,,,ms,at 1 GHz (limit),verdi2026,2609.30616,,Table A1,,group_6.csv
+20240224A,repeater,no,,,,,verdi2026,2609.30616,,,,group_6.csv
+20240312D,dm_obs,334,,,pc cm-3,approximate dedispersion DM,jahnsschindler2026,2608.10452,,Sec. 2,fitted DM row not recoverable from the HTML table; budget 34+40+28+21+214 = 337,group_6.csv
+20240312D,z,0.04986,0.00002,0.00002,,spectroscopic (MUSE),jahnsschindler2026,2608.10452,,Table 1,Gordon 2025: 0.0495,group_6.csv
+20240312D,dm_host,225,17,30,pc cm-3,rest frame,jahnsschindler2026,2608.10452,,Table 1,,group_6.csv
+20240312D,tau_scatt_ms,300,48,48,ms,at 1 GHz,jahnsschindler2026,2608.10452,,Abstract; Table 1,,group_6.csv
+20240312D,logmstar,10.3,0.2,0.3,log Msun,MUSE spectral fit,jahnsschindler2026,2608.10452,,Table 1,2(1)e10 Msun,group_6.csv
+20240312D,sfr,2,0.06,0.06,Msun/yr,halpha (MUSE),jahnsschindler2026,2608.10452,,Table 1,,group_6.csv
+20240312D,offset_kpc,7.22,1.34,1.34,kpc,Galfit centroid,gordon2025,2506.06453,,Table 4,,group_6.csv
+20240312D,offset_normalized,1.09,0.20,0.20,re,,gordon2025,2506.06453,,Table 4,,group_6.csv
+20240312D,re_kpc,6.63,,,kpc,Galfit (r) disk component,gordon2025,2506.06453,,Table 3,,group_6.csv
+20240312D,path_posterior,0.99,,,,PATH,jahnsschindler2026,2608.10452,,Table 1,,group_6.csv
+20240312D,repeater,no,,,,,gordon2025,2506.06453,,,,group_6.csv
+20240525A,dm_obs,491.23,1.19,1.19,pc cm-3,structure-maximised,dial2026,2609.21177,,Table B1,CRAFT HTR2,group_6.csv
+20240525A,z,0.3266,,,,spectroscopic (VLT/FORS2),gordon2025,2506.06453,,Table A2,,group_6.csv
+20240525A,rm_rad_m2,-252.3,1.9,1.9,rad m-2,measured,dial2026,2609.21177,,Table B2,RM_MW 18.2,group_6.csv
+20240525A,offset_kpc,7.17,2.07,2.07,kpc,Galfit centroid,gordon2025,2506.06453,,Table 4,,group_6.csv
+20240525A,offset_normalized,0.91,0.26,0.26,re,,gordon2025,2506.06453,,Table 4,,group_6.csv
+20240525A,re_kpc,7.84,,,kpc,Galfit (R),gordon2025,2506.06453,,Table 3,,group_6.csv
+20240525A,logmstar,10.82,,,log Msun,K-band M/L,gordon2025,2506.06453,,Table 3,,group_6.csv
+20240525A,repeater,no,,,,,dial2026,2609.21177,,,,group_6.csv
+20240615B,z,0.073,,,,spectroscopic (VLT/FORS2),gordon2025,2506.06453,,Table A2,no published DM (Gordon 2025 defers radio properties),group_6.csv
+20240615B,offset_kpc,1.82,0.92,0.92,kpc,Galfit centroid,gordon2025,2506.06453,,Table 4,,group_6.csv
+20240615B,offset_normalized,0.35,0.18,0.18,re,,gordon2025,2506.06453,,Table 4,,group_6.csv
+20240615B,re_kpc,5.18,,,kpc,Galfit (R),gordon2025,2506.06453,,Table 3,,group_6.csv
+20240615B,logmstar,11.11,,,log Msun,K-band M/L,gordon2025,2506.06453,,Table 3,,group_6.csv
+20240615B,repeater,no,,,,,gordon2025,2506.06453,,,,group_6.csv
+20250316A,dm_obs,161.82,,,pc cm-3,measured,athukoralalage2026,2608.23868,,Table 1,CHIME/FRB Collaboration 2025 ApJL 989 L48,group_6.csv
+20250316A,z,0.0067,,,,spectroscopic (NGC 4141),athukoralalage2026,2608.23868,,Table 1,Roxburgh 2025 HI: 0.00635,group_6.csv
+20250316A,dm_host,69,16,16,pc cm-3,rest frame,athukoralalage2026,2608.23868,,Table 1,,group_6.csv
+20250316A,rm_rad_m2,16.79,0.85,0.85,rad m-2,measured,athukoralalage2026,2608.23868,,Table 1,,group_6.csv
+20250316A,rm_host_rad_m2,0,5,5,rad m-2,|RM|host,athukoralalage2026,2608.23868,,Table 1,,group_6.csv
+20250316A,logmstar,9.20,,,log Msun,compiled,athukoralalage2026,2608.23868,,Table 1,,group_6.csv
+20250316A,repeater,no,,,,,athukoralalage2026,2608.23868,,,,group_6.csv
+20230913G,dm_obs,518.7,,,pc cm-3,measured,verdi2026,2609.30616,,Table A1,DSA-110,group_6.csv
+20230913G,z,0.3024,,,,spectroscopic (Keck/LRIS),verdi2026,2609.30616,,Table A1,,group_6.csv
+20230913G,repeater,no,,,,,verdi2026,2609.30616,,,,group_6.csv
+20230913G,dm_host,217.62,88.19,91.86,pc cm-3,rest frame,verdi2026,2609.30616,,Table A1,,group_6.csv
+20230913G,rm_rad_m2,-61.98,8.67,8.67,rad m-2,measured,verdi2026,2609.30616,,Table A1,,group_6.csv
+20230913G,rm_host_rad_m2,-130.82,27.71,27.71,rad m-2,rest frame,verdi2026,2609.30616,,Table A1,,group_6.csv
+20230913G,tau_scatt_ms,<0.293,,,ms,at 1 GHz (limit),verdi2026,2609.30616,,Table A1,,group_6.csv
 20171020A,z_type,spec (HI 21cm),,,,HI_21cm,mahony2018,1810.04354,10.3847/2041-8213/aae7cb,Table 2 / Table 3,[audit_group_A:new] Optical emission-line spectrum (Mahony 2018 Sect. 4) and X-shooter HII-region spectra (Lee-Waddell 2023 Table 7) agree.,audit_group_A.csv
 20171020A,inclination_deg,68.75,,,deg,petrofit_sersic_axis_ratio; cos^2 i=(q^2-0.2^2)/(1-0.2^2) (Li 2025 eq. 2); DESI LS imaging (PS1 outside DESI),li2025,2507.01270,10.3847/1538-4357/adeb72,Table 2 row 20171020A,[audit_group_A:new] Table 2 of the published version (round-1 files call it Table 1).,audit_group_A.csv
 20171020A,host_name,ESO 601-G036,,,,,leewaddell2023,2305.17960,10.1017/pasa.2023.27,Table 1,[audit_group_A:new] = WISExSCOSPZ J221524.61-193504.8; HIPASS J2215-19,audit_group_A.csv

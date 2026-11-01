@@ -348,12 +348,17 @@ def bin_of(i: float) -> str:
     return f"Bin{1 + sum(i > e for e in edges)}"
 
 
-EXTRA_HOSTS = ["20200430A", "20220105A", "20220717A", "20230708A", "20240310A", "20240201A"]  # b/a <= 0.2
+EXTRA_HOSTS = ["20200430A", "20220105A", "20220717A", "20230708A", "20230913G", "20240310A",
+               "20240201A"]  # b/a <= 0.2
+NUM_WORDS = {5: "five", 6: "six", 7: "seven", 8: "eight"}
+# Table-reference keys renamed in the manuscript bibliography.
+CITE_RENAME = {"leewaddell2023": "20171020AHost", "gordon2023": "Gordon2023", "ravi2019": "20190523AHost",
+               "caleb2023": "20210410DHost", "ravi2023": "20220912AHost"}
 
 
 def load_seed() -> pd.DataFrame:
-    """51 working-sample hosts plus the six pre-cut hosts (q <= 0.2), flagged."""
-    seed = pd.read_csv(HP / "seed_51.csv", dtype={"frb": str})
+    """Working-sample hosts plus the pre-cut hosts (q <= 0.2), flagged."""
+    seed = pd.read_csv(HP / "seed_56.csv", dtype={"frb": str})
     seed["in_working_sample"] = True
     # Adopted sigma_q (GALFIT formal error in quadrature with the sky term) from the statistics run.
     cq = pd.read_csv(ROOT / "plots" / "plots_null" / "v2" / "frb_vs_hsc_confirmed50" / "confirmed50_q.csv",
@@ -366,8 +371,8 @@ def load_seed() -> pd.DataFrame:
         r = {c: np.nan for c in seed.columns}
         r.update({"frb": f, "in_working_sample": False, "in_bhardwaj2024": False})
         if f in loc.index:
-            for src, dst in (("z", "z"), ("DM_obs", "DM_obs"), ("DM_MW_NE2001", "DM_MW_NE2001"),
-                             ("loc_survey", "loc_survey"), ("repeater", "repeater")):
+            for src, dst in (("z", "z"), ("DM", "DM_obs"), ("DM_MW", "DM_MW_NE2001"),
+                             ("survey", "loc_survey"), ("repeater", "repeater")):
                 if src in loc.columns:
                     r[dst] = loc.loc[f, src]
         if f in prod.index:
@@ -661,7 +666,8 @@ def main() -> None:
             r"(Equation~\ref{eq:HubbleFormula}, $q_0 = 0.2$). Bins are the quartiles of the control sample's "
             r"$\cos i$ distribution, numbered from face-on to edge-on (edges at "
             f"$i = {e1:.2f}^\\circ$, ${e2:.2f}^\\circ$, and ${e3:.2f}^\\circ$; Figure~\\ref{{fig:bins}}). "
-            r"For the six hosts with $q \leq q_0$, the inclination is undefined and we list $q$: five are marginally "
+            f"For the {NUM_WORDS[len(W_extra)]} hosts with $q \\leq q_0$, the inclination is undefined and we list $q$: "
+            f"{NUM_WORDS[len(W_extra) - 1]} are marginally "
             r"resolved, and their fits collapse to unphysically thin profiles, while FRB 20240201A is a resolved "
             r"edge-on disk. " + sig_note + "}",
             r"\tablenotetext{c}{SFR and stellar mass are SED-fit values from the references in the last column; "
@@ -688,7 +694,7 @@ def main() -> None:
         if not re.search(r"^(\\textbf\{)?\d+\}? & 20", line):
             return line
         cells = [c.strip() for c in line[:-3].split(" & ")]  # strip trailing ' \\'
-        keys = re.findall(r"\\citealt\{([^}]+)\}", cells[-1])
+        keys = [CITE_RENAME.get(kk, kk) for kk in re.findall(r"\\citealt\{([^}]+)\}", cells[-1])]
         nums = []
         for kk in keys:
             if kk not in ref_order:

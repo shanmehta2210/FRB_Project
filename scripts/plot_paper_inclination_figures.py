@@ -159,8 +159,8 @@ def sigma_i_deg(q: np.ndarray, sig: np.ndarray, rng: np.random.Generator) -> np.
     return out
 
 
-def load_hosts() -> pd.DataFrame:
-    hosts = pd.read_csv(OUT_DIR / "confirmed50_q.csv", dtype={"frb": str})
+def load_hosts(path: Path | None = None) -> pd.DataFrame:
+    hosts = pd.read_csv(path or OUT_DIR / "confirmed50_q.csv", dtype={"frb": str})
     paper = []
     for line in NATURE.read_text(encoding="utf-8").splitlines()[1:]:
         parts = line.split("\t")

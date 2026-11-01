@@ -1,4 +1,4 @@
-"""Full statmorph pass over the 51-host working sample.
+"""Full statmorph pass over the working sample.
 
 Re-runs statmorph on the adopted cutout of each host (``wkdir`` in
 ``plots/paper_figures/fig_host_inputs.csv``), using the same segmentation
@@ -9,8 +9,8 @@ r_half), moment ellipticities, Gini, M20, C, A, S, F(G,M20), S(G,M20) and flags.
 Then compares the statmorph-derived inclinations with the GALFIT ones and
 summarises the disk/bulge classification.
 
-Outputs: pipeline_scripts/verification/outputs/tables/statmorph_51_full.csv
-         pipeline_scripts/verification/outputs/tables/statmorph_51_summary.md
+Outputs: pipeline_scripts/verification/outputs/tables/statmorph_{N}_full.csv
+         pipeline_scripts/verification/outputs/tables/statmorph_{N}_summary.md
 """
 from __future__ import annotations
 
@@ -93,7 +93,9 @@ def run_one(wkdir: str) -> dict:
 
 
 def main() -> None:
-    hosts = pd.read_csv(os.path.join(ROOT, "plots", "paper_figures", "fig_host_inputs.csv"), dtype={"frb": str})
+    sys.path.insert(0, os.path.join(ROOT, "scripts"))
+    import plot_paper_inclination_figures as P  # noqa: E402
+    hosts = P.load_hosts()
     prod = pd.read_csv(os.path.join(ROOT, "pipeline_galfit_results.csv"), dtype={"frb": str}).set_index("frb")
     rows = []
     for _, h in hosts.iterrows():
@@ -120,7 +122,7 @@ def main() -> None:
     d["di_moment"] = d.i_sm_moment - d.i_galfit
     d["lotz2008"] = [lotz2008(g, m) for g, m in zip(d.sm_gini, d.sm_m20)]
     os.makedirs(OUT, exist_ok=True)
-    d.to_csv(os.path.join(OUT, "statmorph_51_full.csv"), index=False)
+    d.to_csv(os.path.join(OUT, f"statmorph_{len(d)}_full.csv"), index=False)
 
     def stats(x: pd.Series) -> str:
         x = x.dropna()
@@ -131,7 +133,7 @@ def main() -> None:
 
     good = d[(d.sm_flag == 0)]
     good_s = d[(d.sm_flag == 0) & (d.sm_flag_sersic == 0)]
-    lines = ["# statmorph vs GALFIT, 51-host working sample", "",
+    lines = [f"# statmorph vs GALFIT, {len(d)}-host working sample", "",
              "Inclinations from cos^2 i = (q^2 - q0^2)/(1 - q0^2), q0 = 0.2, q = 1 - ellipticity.", "",
              f"- Sersic-fit ellipticity, all hosts: {stats(d.di_sersic)}",
              f"- Sersic-fit ellipticity, flag=0 & flag_sersic=0 ({len(good_s)}): {stats(good_s.di_sersic)}",
@@ -143,7 +145,7 @@ def main() -> None:
              f"- statmorph Sersic n < 2.5: {(d.sm_sersic_n < 2.5).sum()}; GALFIT n < 2.5: {(pd.to_numeric(d.get('n_galfit'), errors='coerce') < 2.5).sum()}",
              f"- Concentration C < 3.5 (Conselice 2003 late-type side): {(d.sm_C < 3.5).sum()}",
              ""]
-    (open(os.path.join(OUT, "statmorph_51_summary.md"), "w", encoding="utf-8")).write("\n".join(lines))
+    (open(os.path.join(OUT, f"statmorph_{len(d)}_summary.md"), "w", encoding="utf-8")).write("\n".join(lines))
     print("\n".join(lines))
 
 

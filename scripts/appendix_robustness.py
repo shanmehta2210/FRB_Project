@@ -1,4 +1,4 @@
-"""Appendix robustness checks for the inclination analysis (51 hosts vs HSC).
+"""Appendix robustness checks for the inclination analysis (FRB hosts vs HSC).
 
 A. Control sample: cos i histogram vs uniform; Sersic-n window; magnitude cuts;
    magnitude-matched draws; colour / quiescent cut.
@@ -40,7 +40,7 @@ from plot_frb_inflated_error_cdf import _hubble_inc_deg  # noqa: E402
 warnings.filterwarnings("ignore")
 
 OUT = REPO_ROOT / "Publication" / "materials" / "appendix" / "robustness"
-STATMORPH_FULL = REPO_ROOT / "pipeline_scripts" / "verification" / "outputs" / "tables" / "statmorph_51_full.csv"
+STATMORPH_FULL = REPO_ROOT / "pipeline_scripts" / "verification" / "outputs" / "tables" / "statmorph_56_full.csv"
 HSC_PARENT = P.HSC_PARENT
 Q0 = P.Q0
 MAIN_SEED = 42        # run_frb_hsc_confirmed50_tests.SEED: the main-text p_m run (AD stream = SEED, MW / chi^2 stream = SEED + 1)
@@ -210,7 +210,7 @@ def fig_control_hist(pool_cosi: np.ndarray) -> dict:
 def fig_gini_m20(hosts: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     sm = pd.read_csv(STATMORPH_FULL, dtype={"frb": str})
     sm = sm.merge(hosts[["frb", "mag"]], on="frb", how="inner")
-    assert len(sm) == 51, len(sm)
+    assert len(sm) == len(hosts), len(sm)
     sm["reliable"] = (sm["sm_flag"] == 0) & (sm["sm_sn_per_pixel"] >= SN_MIN) & (sm["re_over_fwhm"] >= RES_MIN)
     sm["why_unreliable"] = [
         "; ".join([s for s, c in (("flag", r.sm_flag != 0), (f"S/N<{SN_MIN}", r.sm_sn_per_pixel < SN_MIN),
@@ -245,7 +245,7 @@ def fig_gini_m20(hosts: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
             "sm_F_bulge", "sm_C", "sm_A", "lotz2008", "reliable", "why_unreliable", "quiescent_lit", "lit_note"]
     cols = [c for c in cols if c in sm.columns]
     tab = sm[cols].sort_values("frb")
-    tab.to_csv(OUT / "gini_m20_51.csv", index=False)
+    tab.to_csv(OUT / f"gini_m20_{len(tab)}.csv", index=False)
     summ = {
         "lotz_counts_all": tab.lotz2008.value_counts().to_dict(),
         "lotz_counts_reliable": tab[tab.reliable].lotz2008.value_counts().to_dict(),
@@ -327,7 +327,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(P.SEED + 101)
 
-    hosts = P.load_hosts(); assert len(hosts) == 51
+    hosts = P.load_hosts(); N = len(hosts)
     frb = hosts["cosi_point"].to_numpy(dtype=float)
     parent = load_parent()
     base = select(parent)
@@ -360,7 +360,7 @@ def main() -> None:
             r.update(matched_tests(frb, cosi_from_q(sel["ba"].to_numpy(), Q0), rng, args.draws)); rows.append(r)
             print("[A2]", lab, {k: r[k] for k in ("N_pool", "ad_pm", "mw2_pm", "mw1_pm", "chi2_pm")})
         df = pd.DataFrame(rows); df.to_csv(OUT / "A2_sersic_window.csv", index=False); res["A2"] = rows
-        md += ["## A2. Sérsic-index window of the control", "", "FRB sample fixed (51). Pool re-selected; quartile bins recomputed from each pool.", "",
+        md += ["## A2. Sérsic-index window of the control", "", f"FRB sample fixed ({N}). Pool re-selected; quartile bins recomputed from each pool.", "",
                ROW_HDR, ROW_SEP] + [md_row(r["label"] + f" (median $n$ = {r['median_n_pool']:.2f})", r) for r in rows] + [""]
 
     # ---- A3 magnitude cuts ---------------------------------------------------
@@ -369,7 +369,7 @@ def main() -> None:
         for mag in (22.0, 21.0, 20.0):
             sel = select(parent, mag=mag)
             pool = cosi_from_q(sel["ba"].to_numpy(), Q0)
-            r = {"label": f"control $r \\le {mag:.0f}$, all 51 hosts", "mag": mag, "frb_cut": False}
+            r = {"label": f"control $r \\le {mag:.0f}$, all {N} hosts", "mag": mag, "frb_cut": False}
             r.update(matched_tests(frb, pool, rng, args.draws)); rows.append(r)
             print("[A3]", r["label"], {k: r[k] for k in ("N_pool", "ad_pm", "mw2_pm", "mw1_pm", "chi2_pm")})
             if mag < 22:
@@ -411,7 +411,7 @@ def main() -> None:
                  "n_control_per_bin": ",".join(str(len(idx_by_bin[b])) for b in range(nbd))}
             r.update(matched_tests(frb[mask_frb], base_cosi, rng, args.draws, draw_fn=draw))
             return r
-        rows = [run_matched(np.ones(51, bool), "all 51, bright end merged into one $r \\le 19$ bin"),
+        rows = [run_matched(np.ones(N, bool), f"all {N}, bright end merged into one $r \\le 19$ bin"),
                 run_matched(fmag > 19.0, "hosts with $r > 19$ only")]
         for r in rows:
             print("[A4]", r["label"], {k: r[k] for k in ("N_frb", "ad_pm", "mw2_pm", "mw1_pm", "chi2_pm")})
@@ -419,11 +419,11 @@ def main() -> None:
         md += ["## A4. Magnitude-matched control draws", "",
                "Each null draw takes, from every $r$ bin, the same number of control galaxies as there are FRB hosts in that bin (without replacement); "
                "$p_{\\rm m}$ is the fraction of such magnitude-matched draws that differ from the full pool at least as much as the FRB hosts. "
-               "The FRB statistic itself is unchanged (51 hosts vs the full pool); only the null changes.", "",
+               f"The FRB statistic itself is unchanged ({N} hosts vs the full pool); only the null changes.", "",
                "| $r$ bin | FRB hosts | control galaxies | hosts |", "|---|---|---|---|"]
         md += [f"| {bt['bin']} | {bt['n_frb']} | {bt['n_control']:,} | {bt['frb_hosts']} |" for bt in bins_tab]
         md += ["", "The HSC pool is essentially empty brighter than $r = 18$ (bright galaxies saturate / are excluded from the Kawinwanichakij et al. fits), so a bin-by-bin match "
-               "of the ten $r \\le 18$ hosts is impossible. Two runs are made: the bright end merged into a single $r \\le 19$ bin "
+               f"of the {bins_tab[0]['n_frb']} $r \\le 18$ hosts is impossible. Two runs are made: the bright end merged into a single $r \\le 19$ bin "
                f"({draw_bins[0]['n_frb']} hosts drawn from {draw_bins[0]['n_control']} control galaxies, so those draws are strongly repeated), and hosts with $r > 19$ only.", "",
                ROW_HDR, ROW_SEP] + [md_row(r["label"], r) for r in rows] + [""]
 
@@ -449,7 +449,7 @@ def main() -> None:
         lc, lr = summ["lotz_counts_all"], summ["lotz_counts_reliable"]
         md += ["## B. Gini–$M_{20}$ (statmorph on the GALFIT cutouts, PSF and masks)", "",
                f"`figB_gini_m20.pdf` (final version: `scripts/appendix_figures.py`). Lotz et al. (2008) boundaries: mergers $G > -0.14\\,M_{{20}} + 0.33$; E/S0/Sa $G > 0.14\\,M_{{20}} + 0.80$ (below the merger line); Sb–Irr otherwise.", "",
-               f"All 51: late {lc.get('late',0)}, early {lc.get('early',0)}, merger {lc.get('merger',0)}. "
+               f"All {N}: late {lc.get('late',0)}, early {lc.get('early',0)}, merger {lc.get('merger',0)}. "
                f"Reliable only (`flag = 0`, $\\langle S/N\\rangle_{{\\rm pix}} \\ge {SN_MIN}$, $R_e/{{\\rm FWHM}} \\ge {RES_MIN}$; $N = {summ['n_reliable']}$): "
                f"late {lr.get('late',0)}, early {lr.get('early',0)}, merger {lr.get('merger',0)}. "
                f"Marked unreliable: {summ['n_unreliable']} (flag $\\ne 0$: {summ['n_flag']}; low S/N: {summ['n_lowsn']}; marginally resolved: {summ['n_marginal']}).", "",
@@ -457,7 +457,7 @@ def main() -> None:
         md += [f"| {r['frb']} | {r['lotz2008']} | {r['reliable']} | {r['sm_gini']:.3f} | {r['sm_m20']:.2f} |" for r in summ["not_late"]]
         md += ["", "Hosts described as quiescent in the literature:", "", "| FRB | class | reliable | $G$ | $M_{20}$ | $F(G,M_{20})$ | note |", "|---|---|---|---|---|---|---|"]
         md += [f"| {r['frb']} | {r['lotz2008']} | {r['reliable']} | {r['sm_gini']:.3f} | {r['sm_m20']:.2f} | {r['sm_F_bulge']:+.2f} | {r['why_unreliable']} |" for r in summ["quiescent"]]
-        md += ["", "Per-host values: `gini_m20_51.csv`.", ""]
+        md += ["", f"Per-host values: `gini_m20_{N}.csv`.", ""]
 
     # ---- C1 q0 ---------------------------------------------------------------
     if "C1" not in skip:
@@ -487,7 +487,7 @@ def main() -> None:
                f"{c['n_mc']} realizations. Each host: $q \\sim \\mathcal{{N}}(q, \\sigma_q)$ truncated to $q_0 < q \\le 1$ (redrawn, not clipped; median $\\sigma_q = {c['median_sigma_q']:.3f}$), "
                f"converted to $i$, plus $\\mathcal{{N}}(0, {FLOOR_DEG:.0f}^\\circ)$ reflected at $0^\\circ$ and $90^\\circ$. "
                f"The same $5^\\circ$ reflected scatter is applied to every control galaxy in every realization, so both samples are treated alike. "
-               f"$p_{{\\rm m}}$ in each realization is read against a null of {c['n_draws_null']:,} draws of 51 from scattered control pools.", "",
+               f"$p_{{\\rm m}}$ in each realization is read against a null of {c['n_draws_null']:,} draws of {N} from scattered control pools.", "",
                "| quantity | 16% | median | 84% | fraction of realizations with $p_{\\rm m} < 0.05$ |", "|---|---|---|---|---|"]
         for k, lab in (("ad_pm", "AD $p_{\\rm m}$"), ("mw2_pm", "MW two-sided $p_{\\rm m}$"), ("mw1_pm", "MW one-sided $p_{\\rm m}$"), ("chi2_pm", "quartile $\\chi^2$ $p_{\\rm m}$")):
             md.append(f"| {lab} | {pc[k][0]:.2f} | {pc[k][1]:.2f} | {pc[k][2]:.2f} | {100*c['frac_pm_lt_0.05'][k]:.1f}% |")
@@ -500,10 +500,10 @@ def main() -> None:
         old = json.loads((OUT / "robustness_results.json").read_text(encoding="utf-8"))
         res = {**old, **res}
     (OUT / "robustness_results.json").write_text(json.dumps(res, indent=1, default=str), encoding="utf-8")
-    head = ["# Appendix robustness checks (51 hosts vs HSC)", "",
+    head = [f"# Appendix robustness checks ({N} hosts vs HSC)", "",
             f"Source: `scripts/appendix_robustness.py` (draws per null: {args.draws:,}; error-MC realizations: {args.mc:,}; matched-N draws use the main-text streams, seed {MAIN_SEED} for AD and {MAIN_SEED + 1} for MW / $\\chi^2$, "
             f"so the adopted row equals the main-text run; error-MC seed {P.SEED + 101}). "
-            "Hosts: `plots/plots_null/v2/frb_vs_hsc_confirmed50/confirmed50_q.csv` (51, winning-leg $q$). Control: Kawinwanichakij et al. (2021) HSC-SSP parent, `goodfits_flag = 1`, "
+            f"Hosts: `plots/plots_null/v2/frb_vs_hsc_confirmed50/confirmed50_q.csv` ({N}, winning-leg $q$). Control: Kawinwanichakij et al. (2021) HSC-SSP parent, `goodfits_flag = 1`, "
             "$r \\le 22$, $0.4 < n < 1.5$, $q > 0.2$ unless stated. Inclinations from $\\cos^2 i = (q^2 - q_0^2)/(1 - q_0^2)$, $q_0 = 0.2$.", "",
             "$p_{\\rm m}$ = fraction of random control subsamples of the FRB sample size whose statistic against the full pool is at least as extreme as the FRB value "
             "(two-sided AD statistic; two-sided MW $|U - nm/2|$; one-sided MW $U$ in the edge-on-deficit direction, i.e. FRB $\\cos i$ larger; quartile $\\chi^2$ with bins at the pool quartiles). "

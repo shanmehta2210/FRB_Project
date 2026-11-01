@@ -26,7 +26,6 @@
 | 20220509G | x | x | x | x | x | x | x | x | x | x |
 | 20220725A | x | x | x | x | x | x | x | x | x | x |
 | 20220825A | x | x | x | x | x | x | x | x | x | x |
-| 20220912A | x | x | x | x | x | x | x | x | x | x |
 | 20220914A | x | x | x | x | x | x | x | x | x | x |
 | 20220920A | x | x | x | x | x | x | x | x | x | x |
 | 20221012A | x | x | x | x | x | x | x | x | x | x |
@@ -43,31 +42,38 @@
 | 20231020B | x | x | x | x | x | x | x | x | x | x |
 | 20231120A | x | x | x | x | x | x | x | x | x | x |
 | 20231123B | x | x | x | x | x | x | x | x | x | x |
+| 20231210F |  | x | x |  |  |  |  | x |  |  |
 | 20231220A | x | x | x | x | x | x | x |  |  | x |
 | 20231226A | x | x | x | x | x | x | x | x | x | x |
 | 20240119A | x | x | x | x | x | x | x |  |  | x |
+| 20240203D | x | x | x |  |  |  |  |  |  | x |
 | 20240208A | x | x | x |  |  |  |  |  |  | x |
 | 20240210A | x | x | x | x | x | x | x | x | x | x |
 | 20240213A | x | x | x | x | x | x | x |  |  | x |
 | 20240215A | x | x | x | x | x | x | x |  |  | x |
+| 20240224A | x | x | x |  |  |  |  |  |  | x |
 | 20240229A | x | x | x | x | x | x | x |  |  | x |
 | 20240304A | x | x | x |  |  |  | x | x | x | x |
+| 20240312D | x | x | x | x | x | x |  | x | x | x |
 | 20240318A | x | x | x |  |  |  |  | x | x | x |
+| 20240525A | x | x | x |  |  |  |  | x | x | x |
+| 20250316A | x | x | x |  |  |  |  |  |  | x |
 | 20200430A (pre-cut) | x | x | x | x | x | x | x | x | x | x |
 | 20220105A (pre-cut) | x | x | x | x | x | x | x | x | x | x |
 | 20220717A (pre-cut) | x | x | x | x | x | x | x | x |  | x |
 | 20230708A (pre-cut) | x | x | x | x | x | x | x | x | x | x |
+| 20230913G (pre-cut) | x | x | x |  |  |  |  |  |  | x |
 | 20240310A (pre-cut) | x | x | x | x | x | x | x | x | x | x |
 | 20240201A (pre-cut) | x | x | x | x | x | x | x | x | x | x |
 
 Counts (51 working sample):
-- z: 51/51
-- dm_obs: 51/51
-- dm_mw: 51/51
+- z: 55/51
+- dm_obs: 56/51
+- dm_mw: 56/51
 - logmstar: 47/51
 - sfr: 46/51
 - log_ssfr: 46/51
-- m_r: 48/51
-- offset_kpc: 44/51
-- re_kpc: 44/51
-- dm_host_restframe_calc: 51/51
+- m_r: 47/51
+- offset_kpc: 46/51
+- re_kpc: 45/51
+- dm_host_restframe_calc: 55/51

@@ -1,10 +1,10 @@
-"""Seed table for the 51-host property sweep.
+﻿"""Seed table for the 56-host property sweep.
 
 Collects what the repository already holds per host (localization, DM, z,
 repeater flag, literature cite, pipeline photometry, GALFIT / AstroPhot /
 isophote axis ratios, imaging survey) into one CSV that the literature
 sweep agents extend. Output:
-    Publication/materials/host_properties/seed_51.csv
+    Publication/materials/host_properties/seed_56.csv
 """
 from __future__ import annotations
 
@@ -32,7 +32,8 @@ def load_json(p: Path) -> dict:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    win = pd.read_csv(ROOT / "plots/paper_figures/fig_host_inputs.csv", dtype={"frb": str})
+    win = pd.read_csv(ROOT / "plots/plots_null/v2/frb_vs_hsc_confirmed50/confirmed50_q.csv", dtype={"frb": str})
+    win["i_deg"] = [hubble_i(float(q)) for q in win.q]
     loc = pd.read_csv(ROOT / "master_frb_localization.csv", dtype={"frb": str}).set_index("frb")
     prod = pd.read_csv(ROOT / "pipeline_galfit_results.csv", dtype={"frb": str}).set_index("frb")
     audit = pd.read_csv(ROOT / "production67_lit_astropath_audit.csv", dtype={"frb": str}).set_index("frb")
@@ -48,7 +49,7 @@ def main() -> None:
         version = str(hdr.get("VERSION", "")).strip()
         if "HSC" in survey:
             imaging = "HSC-SSP PDR2"
-        elif "Pan-STARRS" in survey:
+        elif "Pan-STARRS" in survey or "PSLIB_V" in hdr:
             imaging = "PS1 DR1"
         else:
             imaging = f"LS {version}" if version else "LS"
@@ -97,8 +98,8 @@ def main() -> None:
         }
         rows.append(r)
     df = pd.DataFrame(rows)
-    df.to_csv(OUT / "seed_51.csv", index=False)
-    print(f"wrote {OUT / 'seed_51.csv'} ({len(df)} rows)")
+    df.to_csv(OUT / "seed_56.csv", index=False)
+    print(f"wrote {OUT / 'seed_56.csv'} ({len(df)} rows)")
 
 
 if __name__ == "__main__":
