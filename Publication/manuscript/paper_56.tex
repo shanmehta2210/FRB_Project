@@ -316,26 +316,35 @@ monotonic function of $q$, and rank correlations with either are identical.
 We find no significant correlation between DM$_{\rm host}$ and $q$ (Spearman
 $r_S = -0.06$, $p = 0.64$; Kendall $\tau = -0.04$, $p = 0.63$;
 \citealt{Kendall1938}; Figure~\ref{fig:corr}a). To guard against outliers, we
-also compute bootstrap confidence intervals \citep{Efron1979}, leave-one-out
-jackknife values, and the Theil--Sen slope \citep{Sen1968}. The bootstrap
-95\% interval is $-0.32 < r_S < 0.20$, removing any single host keeps $r_S$
-between $-0.12$ and $-0.04$, and the Theil--Sen slope,
-$-38^{+197}_{-201}$~pc~cm$^{-3}$ per unit $q$, is consistent with zero. The
-result is unchanged for hosts with $m_r < 21$ or $n < 2$, or without the
-three hosts that \citet{marnoch2026} fit with a bulge component, and when we
-subtract the DM contributed by foreground galaxy halos along each sightline
-(Figure~\ref{fig:corr}b; Appendix~\ref{app:halo}). Our axis ratios agree
-closely with those of \citet{marnoch2026} for the 20 hosts in both samples
+also compute bootstrap confidence intervals \citep{Efron1979}, jackknife
+values with one to three hosts removed, and the Theil--Sen slope
+\citep{Sen1968}. The bootstrap 95\% interval is $-0.32 < r_S < 0.20$;
+removing any one host keeps $r_S$ between $-0.12$ and $-0.04$, and removing
+any two or three keeps it between $-0.21$ and $+0.02$, with $p > 0.13$ in
+every case; and the Theil--Sen slope, $-38^{+197}_{-201}$~pc~cm$^{-3}$ per
+unit $q$, is consistent with zero. Since a rank correlation tests only for a
+monotonic trend, we also compare the DM$_{\rm host}$ distributions of the
+more face-on and more edge-on halves of the sample with the AD test, which
+finds no difference ($p = 0.18$). The result is unchanged for hosts with
+$m_r < 21$ or $n < 2$, or without the three hosts that \citet{marnoch2026} fit
+with a bulge component, and when we subtract the DM contributed by foreground
+galaxy halos along each sightline (Figure~\ref{fig:corr}b;
+Appendix~\ref{app:halo}). Our axis ratios agree closely with those of
+\citet{marnoch2026} for the 20 hosts in both samples
 (Appendix~\ref{app:marnoch}), so the difference is unlikely to come from the
-inclination measurements; a possible reason is the variance of the smaller
-sample, together with differences in sample selection between the two
-studies. None of the other burst properties we compiled from the literature
+inclination measurements. Combining the two samples into 69 unique hosts
+gives a much weaker correlation, $r_S = -0.17$ ($p = 0.17$), and $r_S = -0.15$
+($p = 0.25$) for the hosts with $q > q_0$, which suggests that the trend in
+the smaller sample may reflect sample variance, together with differences in
+sample selection between the two studies. None of the other burst properties we compiled from the literature
 correlates significantly with inclination: $|{\rm RM}|$ ($r_S = -0.02$,
 $p = 0.91$, $N = 41$), scattering time ($r_S = -0.17$, $p = 0.39$, $N = 29$),
 and linear polarization fraction ($r_S = -0.33$, $p = 0.11$, $N = 24$),
 although the two smaller samples cannot exclude a moderate trend. The extinction of the older
-stellar population increases toward edge-on ($r_S = -0.46$, $p = 0.010$,
-$N = 30$), as expected for dust in inclined disks, although this is not
+stellar population increases toward edge-on ($r_S = -0.46$, $p = 0.010$;
+$p_{\rm AD} = 0.005$; $N = 30$), as expected for dust in inclined disks, and
+remains at $p < 0.05$ after removing any one host and in at least 97\% of
+cases with two or three removed. It is, however, not
 significant after correcting for the 41 host and burst properties tested
 \citep{BH1995}. The same compiled values recover the known correlations of
 DM$_{\rm host}$ with scattering time ($r_S = 0.45$, $p = 0.014$) and
@@ -368,8 +377,9 @@ values. The solid line and shaded band show the Theil--Sen fit to the filled
 points and the 95\% range of its slope. (b) Spearman $r_S$ with bootstrap 95\%
 confidence intervals for DM$_{\rm host}$ in the full sample, after removing the
 total or the excess foreground halo contribution, and in subsamples (red), and
-for other host and burst properties (blue), with the number of hosts and the
-Spearman $p$-value at right; filled symbols have $p < 0.05$.}
+for other host and burst properties (blue), with the number of hosts, the
+Spearman $p$-value, and the AD $p$-value comparing the hosts above and below
+the median $q$ at right; filled symbols have $p < 0.05$.}
 \label{fig:corr}
 \end{figure*}
 
@@ -895,9 +905,13 @@ reflects their subtraction of a Milky Way halo term and of the mean, rather
 than median, DM$_{\rm cosmic}$. Combining the two samples into 69 unique hosts,
 with our values for the shared hosts, gives a weak correlation between
 DM$_{\rm host}$ and $q$ that is not significant ($r_S = -0.17$, $p = 0.17$;
-$r_S = -0.19$, $p = 0.12$ with their values for the shared hosts).
+$r_S = -0.19$, $p = 0.12$ with their values for the shared hosts), compared
+with $r_S = -0.43$ ($p = 0.011$) for their sample alone
+(Appendix~\ref{app:stats}).
 
 \section{Foreground Halos and Robust Correlations} \label{app:halo}
+
+\subsection{Foreground Halo Contribution} \label{app:fg}
 
 Galaxy halos intersected by the sightline add to the observed DM, and any part
 of this contribution not included in $\widetilde{\rm DM}_{\rm cosmic}$ is
@@ -933,33 +947,72 @@ sightlines. The foreground
 contribution is uncorrelated with $q$ ($r_S = 0.14$, $p = 0.33$), as expected
 since it does not depend on the orientation of the host, and subtracting
 either version leaves the correlation of DM$_{\rm host}$ with $q$ unchanged
-(Table~\ref{tab:robustcorr}). Table~\ref{tab:robustcorr} also lists the
-outlier-robust statistics of Section~\ref{sec:results} for all properties.
+(Table~\ref{tab:robustcorr}).
 
-\begin{deluxetable*}{lccccc}
-\tabletypesize{\footnotesize}
-\tablecolumns{6}
+\subsection{Correlation Statistics} \label{app:stats}
+
+Table~\ref{tab:robustcorr} lists, for each property, the Spearman $r_S$ with
+its 95\% bootstrap interval \citep{Efron1979} and $p$-value, Kendall's $\tau$
+\citep{Kendall1938}, and two further checks. The Spearman $p$-value is the
+probability of a correlation at least as strong as observed if the two
+quantities are independent; it follows from
+$t = r_S\sqrt{(N-2)/(1-r_S^2)}$, which has a Student $t$ distribution with
+$N-2$ degrees of freedom, so that the $|r_S|$ needed for $p < 0.05$ falls from
+0.40 for $N = 24$ to 0.27 for $N = 55$. First, to test whether a few hosts
+drive or hide a correlation, we recompute $r_S$ for every subset with one,
+two, or three hosts removed (27{,}775 subsets for $N = 55$). Second, since
+rank correlations test only for a monotonic trend, we compare the
+distributions of each property in the more face-on half of the hosts ($q$
+above the median) and the more edge-on half with the two-sample AD test, using
+10{,}000 permutations to obtain $p_{\rm AD}$. No DM$_{\rm host}$ subsample
+reaches $p < 0.05$ in either test, for any subset with up to three hosts
+removed. The extinction of the older stellar population is the only property
+that differs between the two halves ($p_{\rm AD} = 0.005$).
+
+The table also lists DM$_{\rm host}$ for the sample of \citet{marnoch2026}
+and for its union with ours. Their correlation is robust within their sample:
+it remains at $p < 0.05$ after removing any one or two hosts and in 99\% of
+cases with three removed, and the AD test also finds a difference between the halves
+($p_{\rm AD} = 0.03$). In the combined sample of 69 hosts, however, the
+correlation weakens to $r_S = -0.15$ to $-0.19$ depending on which
+measurements are used for the shared hosts, with $p = 0.12$ to 0.25 and
+$p_{\rm AD} = 0.12$ to 0.16, and at most 3\% of the subsets with three hosts
+removed reach $p < 0.05$.
+
+\begin{deluxetable*}{lcccccccc}
+\tabletypesize{\scriptsize}
+\tablecolumns{9}
 \tablewidth{0pt}
 \tablecaption{Correlations with host axis ratio\label{tab:robustcorr}}
 \tablehead{
 \colhead{Property} & \colhead{$N$} & \colhead{$r_S$ (95\% bootstrap)} & \colhead{$p$} &
-\colhead{Kendall $\tau$ ($p$)} & \colhead{Jackknife $r_S$ range}}
+\colhead{Kendall $\tau$ ($p$)} & \colhead{$p_{\rm AD}$} &
+\colhead{Jackknife, 1 removed} & \colhead{Jackknife, 3 removed} & \colhead{$f_{p<0.05}$}}
 \startdata
-DM$_{\rm host}$ & 55 & $-0.06$ ($-0.32$, $+0.20$) & 0.64 & $-0.04$ (0.63) & $-0.12$ to $-0.04$ \\
-DM$_{\rm host}$, foreground removed & 49 & $-0.04$ ($-0.33$, $+0.25$) & 0.78 & $-0.03$ (0.76) & $-0.09$ to $+0.00$ \\
-DM$_{\rm host}$, foreground excess removed & 49 & $-0.07$ ($-0.35$, $+0.21$) & 0.62 & $-0.05$ (0.58) & $-0.13$ to $-0.03$ \\
-DM$_{\rm host}$, $m_r < 21$ & 45 & $-0.09$ ($-0.38$, $+0.19$) & 0.54 & $-0.07$ (0.52) & $-0.16$ to $-0.06$ \\
-DM$_{\rm host}$, $n < 2$ & 46 & $-0.04$ ($-0.32$, $+0.26$) & 0.81 & $-0.02$ (0.85) & $-0.10$ to $+0.00$ \\
-DM$_{\rm host}$, bulge fits removed & 52 & $-0.07$ ($-0.34$, $+0.20$) & 0.64 & $-0.04$ (0.64) & $-0.12$ to $-0.04$ \\
-$|{\rm RM}|$ & 41 & $-0.02$ ($-0.31$, $+0.30$) & 0.91 & $-0.00$ (0.99) & $-0.09$ to $+0.04$ \\
-Scattering time & 29 & $-0.17$ ($-0.55$, $+0.27$) & 0.39 & $-0.11$ (0.41) & $-0.28$ to $-0.07$ \\
-Linear polarization & 24 & $-0.33$ ($-0.69$, $+0.12$) & 0.11 & $-0.24$ (0.10) & $-0.45$ to $-0.25$ \\
-$A_V$, old stars & 30 & $-0.46$ ($-0.67$, $-0.15$) & 0.010 & $-0.28$ (0.03) & $-0.53$ to $-0.41$ \\
+DM$_{\rm host}$ & 55 & $-0.06$ ($-0.32$, $+0.20$) & 0.64 & $-0.04$ (0.63) & 0.18 & $-0.12$ to $-0.04$ & $-0.21$ to $+0.02$ & 0 \\
+DM$_{\rm host}$, foreground removed & 49 & $-0.04$ ($-0.33$, $+0.25$) & 0.78 & $-0.03$ (0.76) & 0.32 & $-0.09$ to $+0.00$ & $-0.20$ to $+0.09$ & 0 \\
+DM$_{\rm host}$, foreground excess removed & 49 & $-0.07$ ($-0.35$, $+0.21$) & 0.62 & $-0.05$ (0.58) & 0.31 & $-0.13$ to $-0.03$ & $-0.23$ to $+0.06$ & 0 \\
+DM$_{\rm host}$, $m_r < 21$ & 45 & $-0.09$ ($-0.38$, $+0.19$) & 0.54 & $-0.07$ (0.52) & 0.22 & $-0.16$ to $-0.06$ & $-0.29$ to $+0.00$ & 0 \\
+DM$_{\rm host}$, $n < 2$ & 46 & $-0.04$ ($-0.32$, $+0.26$) & 0.81 & $-0.02$ (0.85) & 0.58 & $-0.10$ to $+0.00$ & $-0.22$ to $+0.08$ & 0 \\
+DM$_{\rm host}$, bulge fits removed & 52 & $-0.07$ ($-0.34$, $+0.20$) & 0.64 & $-0.04$ (0.64) & 0.25 & $-0.12$ to $-0.04$ & $-0.22$ to $+0.02$ & 0 \\
+$|{\rm RM}|$ & 41 & $-0.02$ ($-0.31$, $+0.30$) & 0.91 & $-0.00$ (0.99) & 0.29 & $-0.09$ to $+0.04$ & $-0.20$ to $+0.15$ & 0 \\
+Scattering time & 29 & $-0.17$ ($-0.55$, $+0.27$) & 0.39 & $-0.11$ (0.41) & 0.83 & $-0.28$ to $-0.07$ & $-0.47$ to $+0.08$ & $<0.01$ \\
+Linear polarization & 24 & $-0.33$ ($-0.69$, $+0.12$) & 0.11 & $-0.24$ (0.10) & 0.50 & $-0.45$ to $-0.25$ & $-0.60$ to $-0.08$ & 0.11 \\
+$A_V$, old stars & 30 & $-0.46$ ($-0.67$, $-0.15$) & 0.010 & $-0.28$ (0.03) & 0.005 & $-0.53$ to $-0.41$ & $-0.61$ to $-0.31$ & 0.97 \\
+\cutinhead{DM$_{\rm host}$ in the sample of \citet{marnoch2026} and in the combined sample}
+\citet{marnoch2026} & 34 & $-0.43$ ($-0.65$, $-0.14$) & 0.011 & $-0.28$ (0.02) & 0.030 & $-0.52$ to $-0.39$ & $-0.60$ to $-0.32$ & 0.99 \\
+Combined, our values for shared hosts & 69 & $-0.17$ ($-0.39$, $+0.07$) & 0.17 & $-0.11$ (0.18) & 0.12 & $-0.21$ to $-0.14$ & $-0.29$ to $-0.09$ & $<0.01$ \\
+Combined, their values for shared hosts & 69 & $-0.19$ ($-0.41$, $+0.04$) & 0.12 & $-0.13$ (0.11) & 0.16 & $-0.24$ to $-0.17$ & $-0.32$ to $-0.13$ & 0.03 \\
+Combined, $q > q_0$ & 65 & $-0.15$ ($-0.38$, $+0.10$) & 0.25 & $-0.10$ (0.24) & 0.16 & $-0.19$ to $-0.12$ & $-0.27$ to $-0.07$ & $<0.01$ \\
 \enddata
-\tablecomments{Bootstrap intervals use 10{,}000 resamples. The jackknife range
-gives the smallest and largest $r_S$ obtained by removing one host at a time.
-``Bulge fits removed'' excludes the three hosts that \citet{marnoch2026} fit
-with a bulge component.}
+\tablecomments{Bootstrap intervals use 10{,}000 resamples. $p_{\rm AD}$ compares
+the property distributions of the hosts with $q$ above and below the median
+(10{,}000 permutations). The jackknife columns give the range of $r_S$ over
+all subsets with one or three hosts removed, and $f_{p<0.05}$ the fraction of
+subsets with three hosts removed that reach $p < 0.05$. ``Bulge fits
+removed'' excludes the three hosts that \citet{marnoch2026} fit with a bulge
+component. ``Combined, $q > q_0$'' excludes the four hosts of
+\citet{marnoch2026} with $q < q_0$.}
 \end{deluxetable*}
  
 
