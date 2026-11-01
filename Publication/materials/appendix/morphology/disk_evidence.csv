@@ -1,0 +1,33 @@
+frb,n_free,n_statmorph,re_over_fwhm,gm20,why,cls,label,literature,class
+20180924B,3.91,3.322160188166277,0.9284987318460122,late,Re/FWHM<1.0,lit,Disk (literature),HST: spiral arms and bar in residuals \citep{mannings2021}; $b/a = 0.62$ disk-like profile \citep{bannister2019},spiral (HST)
+20181112A,1.02,0.7987957374973796,0.5898052361914695,late,flag; Re/FWHM<1.0,lit,Disk (literature),$n = 1.9$ \citep{prochaska2019},disk-like (lit. n=1.9)
+20190102C,0.5,0.3482470871359225,0.6497956159728122,late,flag; Re/FWHM<1.0,profile,Disk-like profile,star-forming \citep{Gordon2023},profile
+20190523A,0.62,0.179329544978069,0.3263659263192048,late,flag; Re/FWHM<1.0,profile,Disk-like profile,"massive, low SFR \citep{20190523AHost}",profile
+20190608B,3.13,2.4267115373692363,1.588481530138473,early,,lit,Disk (literature),"barred spiral; rotating gas disk, $i_{\rm gas} = 37^\circ$ \citep{chittidi2021}",barred spiral
+20210410D,6.0,3.983978647604802,0.6419822843692985,late,Re/FWHM<1.0,ambig,Ambiguous,transitioning \citep{Gordon2023},ambiguous
+20211203C,0.56,0.5112275332036199,0.5164097471938095,late,Re/FWHM<1.0,lit,Disk (literature),$n = 0.6$ in deeper $R$-band imaging \citep{gordon2025},disk (lit. n=0.6)
+20220207C,0.5,0.3428559435316214,5.306144624132998,late,S/N<2.5,lit,Disk (literature),"disk-dominated, nearly edge-on \citep{law2024}",edge-on disk
+20220310F,1.5,1.1923417301488948,0.9015002643811508,late,flag; Re/FWHM<1.0,profile,Disk-like profile,star-forming \citep{sharma2024},profile
+20220319D,6.0,16.243234646394573,6.37736788199596,early,,lit,Disk (literature),"barred spiral (SBa), FRB on a spiral arm \citep{ravi2025}",barred spiral
+20220501C,1.31,1.4629316768910725,0.5224293918397518,late,flag; S/N<2.5; Re/FWHM<1.0,profile,Disk-like profile,star-forming \citep{glowacki2025},profile
+20220509G,0.5,5.238466645104021,2.809428949885937,merger,,early,Early-type,"early-type, quiescent \citep{sharma2023, connor2023}",early-type
+20220825A,0.68,0.4279950742722827,1.3477955505435697,late,S/N<2.5,profile,Disk-like profile,star-forming \citep{sharma2024},profile
+20220914A,2.55,1.7371519500216177,0.680560557938509,late,Re/FWHM<1.0,lit,Disk (literature),late-type spiral \citep{connor2023},spiral
+20221012A,2.01,1.644763877666921,0.94917662253794,late,Re/FWHM<1.0,ambig,Ambiguous,"massive, quiescent \citep{law2024, sharma2024}",ambiguous
+20221219A,0.5,0.01,0.6542147557547235,late,flag; Re/FWHM<1.0,lit,Disk (literature),Milky Way-like late type \citep{faber2024},late type
+20230124A,1.93,1.6643788676802669,0.6229071489923195,late,Re/FWHM<1.0,profile,Disk-like profile,star-forming \citep{sharma2024},profile
+20230526A,1.85,2.460813777127449,0.3056771955478466,late,Re/FWHM<1.0,lit,Disk (literature),"disk, $n = 0.3$ ($R$) and 1.4 ($K$) \citep{gordon2025}",disk (lit. n=0.3)
+20230613A,0.62,0.5939278171126484,0.9129759449042152,late,Re/FWHM<1.0,profile,Disk-like profile,\nodata,profile
+20230626A,6.0,6.1751923393486505,0.3228280716594665,late,Re/FWHM<1.0,ambig,Ambiguous,transition \citep{sharma2024},ambiguous
+20230628A,1.04,0.9209902147305682,0.7281691008812473,late,Re/FWHM<1.0,profile,Disk-like profile,star-forming \citep{sharma2024},profile
+20230902A,0.88,0.7991573915243905,0.3781119814120658,late,flag; Re/FWHM<1.0,lit,Disk (literature),"disk, $n = 1.0$ \citep{gordon2025}",disk (lit. n=1.0)
+20231020B,0.67,0.6398964829146406,0.6186973306093362,late,Re/FWHM<1.0,profile,Disk-like profile,\nodata,profile
+20231120A,1.91,1.839463240696367,5.863836508445028,early,,lit,Disk (literature),spiral arms \citep{sharma2024}; edge-on disk \citep{leung2025}; flat-galaxy catalog \citep{mitronova2004},edge-on spiral
+20231220A,0.57,0.5139060597077368,0.5751181485729123,late,Re/FWHM<1.0,profile,Disk-like profile,\nodata,profile
+20240119A,0.5,0.0348570200056977,0.7325442958190349,late,S/N<2.5; Re/FWHM<1.0,profile,Disk-like profile,\nodata,profile
+20240203D,4.28,2.4678024247482355,0.3433903903116726,late,Re/FWHM<1.0,ambig,Ambiguous,\nodata,ambiguous
+20240208A,1.15,1.0194543557834763,0.7181788821447479,late,Re/FWHM<1.0,profile,Disk-like profile,star-forming \citep{glowacki2025},profile
+20240215A,2.03,1.4575151539053055,0.4850866226111806,late,Re/FWHM<1.0,profile,Disk-like profile,\nodata,profile
+20240224A,2.36,1.729575284314944,0.8290698840888986,late,flag; Re/FWHM<1.0,profile,Disk-like profile,\nodata,profile
+20240229A,6.0,5.943645352688597,0.3134389549413952,late,Re/FWHM<1.0,ambig,Ambiguous,\nodata,ambiguous
+20240304A,1.24,0.9532771477874812,0.8521076577317326,late,Re/FWHM<1.0,lit,Disk (literature),"disk, $n = 1.2$ \citep{gordon2025}",disk (lit. n=1.2)

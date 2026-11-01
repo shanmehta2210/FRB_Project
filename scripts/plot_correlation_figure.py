@@ -71,10 +71,13 @@ def panel_b(ax, rob: pd.DataFrame) -> None:
         ax.errorbar(s.r_S, yy, xerr=[[s.r_S - s.rS_boot_lo], [s.rS_boot_hi - s.r_S]], fmt="o", ms=3.5, color=col,
                     mfc=col if filled else "white", lw=0.9, capsize=1.5, zorder=3)
         ax.text(1.03, yy, f"{int(s.N)}", transform=ax.get_yaxis_transform(), va="center", fontsize=6)
+        ax.text(1.14, yy, f"{s.p_S:.2f}" if s.p_S >= 0.01 else f"{s.p_S:.3f}", transform=ax.get_yaxis_transform(),
+                va="center", fontsize=6)
     ax.axvline(0, color="0.7", lw=0.5, zorder=1)
     ax.set_yticks(y)
     ax.set_yticklabels([row[0] for row in rows], fontsize=6.5)
     ax.text(1.03, y.max() + 0.9, "$N$", transform=ax.get_yaxis_transform(), va="bottom", fontsize=6)
+    ax.text(1.14, y.max() + 0.9, "$p$", transform=ax.get_yaxis_transform(), va="bottom", fontsize=6)
     ax.set_ylim(y.min() - 0.8, y.max() + 1.6)
     ax.set_xlim(-1, 1)
     ax.set_xlabel(r"Spearman $r_S$ with $q$ (or $\cos i$)")
@@ -87,7 +90,7 @@ def panel_b(ax, rob: pd.DataFrame) -> None:
 def main() -> None:
     h = R.load()
     rob = pd.read_csv(R.OUT / "robust_correlations.csv")
-    fig, axes = plt.subplots(1, 2, figsize=(7.1, 3.0), gridspec_kw={"width_ratios": [1.0, 1.0], "wspace": 0.75})
+    fig, axes = plt.subplots(1, 2, figsize=(7.1, 3.0), gridspec_kw={"width_ratios": [1.0, 1.0], "wspace": 0.85})
     panel_a(axes[0], h)
     panel_b(axes[1], rob)
     OUT.mkdir(parents=True, exist_ok=True)
