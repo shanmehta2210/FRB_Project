@@ -308,28 +308,42 @@ Following \citet{Bhardwaj2024}, we also divide the control sample into four bins
 
 \citet{marnoch2026} recently reported that the rest-frame DM$_{\rm host}$ of 34
 CRAFT FRBs anticorrelates with the axis ratio of their hosts (Spearman
-$r_S = -0.44$, $p = 0.01$), implying that edge-on hosts add more DM. We test this
-using DM$_{\rm host}$ computed as in Table~\ref{tab:sample57}, for the 55 hosts
-with spectroscopic redshifts. Since every host has $q > q_0$, $\cos i$ is a
-monotonic function of $q$, and rank correlations with either are identical. We
-find no correlation ($r_S = -0.06$, $p = 0.64$; Figure~\ref{fig:corr}a). The 95\%
-confidence interval, $-0.32 < r_S < 0.20$, excludes their value, and a
-correlation as strong as theirs would be detected at $p < 0.05$ in 91\% of
-samples of our size. Applying our $q > q_0$ cut to their sample, by removing the
-four hosts with $q < 0.2$ that they assign $i \approx \ang{90}$, raises their
-$p$ to 0.052. For the 20 hosts common to both samples, their own values give
-$r_S = -0.19$ ($p = 0.41$), even though our measurements of $q$ and
-DM$_{\rm host}$ agree closely with theirs ($r_S = 0.86$ and 0.99). We extend the
-test to 41 host and burst properties compiled from the literature
-(Figure~\ref{fig:corr}b). No burst property, including the rotation measure
-(RM), scattering time, and polarization fraction, correlates with inclination
-(all $p > 0.1$). The strongest correlation is with the extinction of the older
-stellar population, which increases toward edge-on ($r_S = -0.46$, $p = 0.010$,
-$N = 30$), as expected for dust in inclined disks. After correcting for multiple
-tests \citep{BH1995}, no correlation is significant. The same compiled values
-recover the known correlations of DM$_{\rm host}$ with scattering time
-($r_S = 0.45$, $p = 0.014$) and $|{\rm RM}|$ ($r_S = 0.49$, $p = 0.001$), so the
-absence of an inclination signal is not due to noise in the compiled properties.
+$r_S = -0.44$, $p = 0.01$), and that subtracting their fitted relation reduces
+the scatter about the Macquart relation by 40\%. We repeat their analysis on
+the 55 hosts with spectroscopic redshifts, using their definition of
+DM$_{\rm host}$, their Pearson and Spearman tests, and their \texttt{LTSFIT}
+\citep{Cappellari2013} linear fits with $2.6\sigma$ clipping. Since every host
+has $q > q_0$, $\cos i$ is a monotonic function of $q$, and rank correlations
+with either are identical. We find no correlation (Pearson $r_P = 0.02$,
+$p = 0.89$; Spearman $r_S = -0.04$, $p = 0.77$; Figure~\ref{fig:corr}a), and a
+fitted slope of $-1 \pm 65$~pc~cm$^{-3}$ per unit $q$, compared with their
+$-309 \pm 70$~pc~cm$^{-3}$. Their subsamples, restricted to $m_r < 21$ or
+$n < 2$ or with the three hosts fit by a bulge removed, give the same result
+(all $p > 0.7$; Figure~\ref{fig:corr}b). The 95\% confidence interval,
+$-0.30 < r_S < 0.23$, excludes their value, and a correlation as strong as
+theirs would be detected at $p < 0.05$ in more than 90\% of samples of our
+size. Their correlation rests largely on four hosts with $q < 0.2$ that they
+assign $i \approx \ang{90}$; without these, their $p$ rises to 0.052, and for
+the 20 hosts common to both samples, their own values give $r_S = -0.19$
+($p = 0.41$), even though our measurements of $q$ and DM$_{\rm host}$ agree
+closely with theirs ($r_S = 0.86$ and 0.99). The reduction in the Macquart
+scatter is also not an inclination effect. In their sample, subtracting a
+constant DM$_{\rm host}$ already lowers the root-mean-square deviation from
+181 to 115~pc~cm$^{-3}$, compared with 107~pc~cm$^{-3}$ for their
+$q$-dependent relation, and in ours, their relation (149~pc~cm$^{-3}$) does
+worse than a constant (138~pc~cm$^{-3}$; Figure~\ref{fig:corr}c). None of the
+other burst properties we compiled from the literature shows a significant
+correlation with inclination (all $p > 0.1$). For the rotation measure (RM;
+$N = 41$), the 95\% confidence interval also excludes a correlation as strong
+as that of \citet{marnoch2026}, but the smaller samples with scattering times
+($N = 29$) and polarization fractions ($N = 24$) cannot rule one out. The
+extinction of the older stellar population increases toward edge-on
+($r_S = -0.46$, $p = 0.010$, $N = 30$), as expected for dust in inclined disks,
+although this is not significant after correcting for the 41 host and burst
+properties tested \citep{BH1995}. The same compiled values recover the known
+correlations of DM$_{\rm host}$ with scattering time ($r_S = 0.45$,
+$p = 0.014$) and $|{\rm RM}|$ ($r_S = 0.49$, $p = 0.001$), so the absence of an
+inclination signal is not due to noise in the compiled properties.
 
 \begin{figure*}[t]
 \centering
@@ -349,12 +363,18 @@ galaxies.}
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{fig3_correlations.pdf}
-\caption{(a) Rest-frame DM$_{\rm host}$ versus axis ratio for the 55 FRB hosts
-with spectroscopic redshifts. Hosts shared with \citet{marnoch2026} are
-outlined, and the dashed line shows their best-fitting relation. (b) Spearman
-$r_S$ and 95\% confidence interval between $\cos i$ and selected burst (red) and
-host (blue) properties, with the number of hosts at right; filled symbols have
-$p < 0.05$. The dashed line marks the value reported by \citet{marnoch2026}.}
+\caption{The analysis of \citet{marnoch2026} repeated on our hosts. (a)
+Rest-frame DM$_{\rm host}$ versus axis ratio for the 55 FRB hosts with
+spectroscopic redshifts, with our \texttt{LTSFIT} relation (solid) and its
+$1\sigma$ and $2.6\sigma$ intrinsic scatter (shaded); open symbols are clipped.
+Hosts shared with \citet{marnoch2026} are outlined, and the dashed line shows
+their relation. (b) Spearman $r_S$ and 95\% confidence interval for the values
+of \citet{marnoch2026} (grey), for DM$_{\rm host}$ in our sample and their
+subsamples (red), and for other properties (blue), with the number of hosts at
+right; filled symbols have $p < 0.05$, and the dashed line marks $r_S = -0.44$.
+(c) Root-mean-square deviation of DM$_{\rm exgal}$ from the mean Macquart
+relation before correction, after subtracting a constant DM$_{\rm host}$, and
+after subtracting the $q$-dependent relation of \citet{marnoch2026}.}
 \label{fig:corr}
 \end{figure*}
 

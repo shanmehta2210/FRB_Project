@@ -1,0 +1,10 @@
+sample,correction,N,rmse
+Marnoch Table 1 (34),none,34,180.66551804858807
+Marnoch Table 1 (34),Marnoch model DM(q),34,107.00388761846051
+Marnoch Table 1 (34),"constant 155.9 (their intercept, no q)",34,115.96965603173221
+Marnoch Table 1 (34),"constant, best-fitting mean (no q)",34,115.22411740262403
+this work (55),none,55,185.78121896457088
+this work (55),Marnoch model DM(q),55,148.96594283434447
+this work (55),"constant 155.9 (their intercept, no q)",55,137.55152278646244
+this work (55),"constant, best-fitting mean (no q)",55,137.50952710693485
+this work (55),own LTS fit DM(q),55,146.61686159072428
