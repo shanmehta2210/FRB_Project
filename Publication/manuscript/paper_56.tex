@@ -615,6 +615,7 @@ by observed $g-i$ color (middle and right).}
 \label{fig:ctrl_color}
 \end{figure}
  
+\startlongtable
 \begin{deluxetable*}{lccccc}
 \tabletypesize{\footnotesize}
 \tablecolumns{6}
@@ -788,6 +789,7 @@ $p_{\rm m}$.}
 \label{fig:q0}
 \end{figure}
  
+\startlongtable
 \begin{deluxetable}{cccccc}
 \tabletypesize{\footnotesize}
 \tablewidth{0pt}
@@ -845,6 +847,7 @@ consequence of fitting without the PSF, which is natural for resolved galaxies
 but becomes important for the many FRB hosts that are only marginally resolved
 in ground-based imaging.
 
+\startlongtable
 \begin{deluxetable*}{lcccccc}
 \tabletypesize{\footnotesize}
 \tablecolumns{7}
@@ -995,42 +998,46 @@ $r_S = -0.36$ ($p = 0.05$; $p_{\rm AD} = 0.18$). A weak trend in the
 combined sample therefore cannot be excluded, but it is much weaker than in
 the sample of \citet{marnoch2026} alone and is not significant.
 
+\startlongtable
 \begin{deluxetable*}{lcccccccc}
 \tabletypesize{\scriptsize}
+\setlength{\tabcolsep}{3pt}
 \tablecolumns{9}
 \tablewidth{0pt}
 \tablecaption{Correlations with host axis ratio\label{tab:robustcorr}}
 \tablehead{
-\colhead{Property} & \colhead{$N$} & \colhead{$r_S$ (95\% bootstrap)} & \colhead{$p$} &
-\colhead{Kendall $\tau$ ($p$)} & \colhead{$p_{\rm AD}$} &
-\colhead{Jackknife, 1 removed} & \colhead{Jackknife, 3 removed} & \colhead{$f_{p<0.05}$}}
+\colhead{Property} & \colhead{$N$} & \colhead{$r_S$} & \colhead{95\% CI} & \colhead{$p$} &
+\colhead{$\tau$ ($p$)} & \colhead{$p_{\rm AD}$} &
+\colhead{JK$_1$} & \colhead{JK$_3$ ($f_{p<0.05}$)}}
 \startdata
-DM$_{\rm host}$ & 55 & $-0.06$ ($-0.32$, $+0.20$) & 0.64 & $-0.04$ (0.63) & 0.18 & $-0.12$ to $-0.04$ & $-0.21$ to $+0.02$ & 0 \\
-DM$_{\rm host}$, foreground removed & 49 & $-0.04$ ($-0.33$, $+0.25$) & 0.78 & $-0.03$ (0.76) & 0.32 & $-0.09$ to $+0.00$ & $-0.20$ to $+0.09$ & 0 \\
-DM$_{\rm host}$, foreground excess removed & 49 & $-0.07$ ($-0.35$, $+0.21$) & 0.62 & $-0.05$ (0.58) & 0.31 & $-0.13$ to $-0.03$ & $-0.23$ to $+0.06$ & 0 \\
-DM$_{\rm host}$, $m_r < 21$ & 45 & $-0.09$ ($-0.38$, $+0.19$) & 0.54 & $-0.07$ (0.52) & 0.22 & $-0.16$ to $-0.06$ & $-0.29$ to $+0.00$ & 0 \\
-DM$_{\rm host}$, $n < 2$ & 46 & $-0.04$ ($-0.32$, $+0.26$) & 0.81 & $-0.02$ (0.85) & 0.58 & $-0.10$ to $+0.00$ & $-0.22$ to $+0.08$ & 0 \\
-DM$_{\rm host}$, bulge fits removed & 52 & $-0.07$ ($-0.34$, $+0.20$) & 0.64 & $-0.04$ (0.64) & 0.25 & $-0.12$ to $-0.04$ & $-0.22$ to $+0.02$ & 0 \\
-$|{\rm RM}|$ & 41 & $-0.02$ ($-0.31$, $+0.30$) & 0.91 & $-0.00$ (0.99) & 0.29 & $-0.09$ to $+0.04$ & $-0.20$ to $+0.15$ & 0 \\
-Scattering time & 29 & $-0.17$ ($-0.55$, $+0.27$) & 0.39 & $-0.11$ (0.41) & 0.83 & $-0.28$ to $-0.07$ & $-0.47$ to $+0.08$ & $<0.01$ \\
-Linear polarization & 24 & $-0.33$ ($-0.69$, $+0.12$) & 0.11 & $-0.24$ (0.10) & 0.50 & $-0.45$ to $-0.25$ & $-0.60$ to $-0.08$ & 0.11 \\
-$A_V$, old stars & 30 & $-0.46$ ($-0.67$, $-0.15$) & 0.010 & $-0.28$ (0.03) & 0.005 & $-0.53$ to $-0.41$ & $-0.61$ to $-0.31$ & 0.97 \\
-\cutinhead{DM$_{\rm host}$ in the sample of \citet{marnoch2026} and in the combined sample}
-\citet{marnoch2026} & 34 & $-0.43$ ($-0.65$, $-0.14$) & 0.011 & $-0.28$ (0.02) & 0.030 & $-0.52$ to $-0.39$ & $-0.60$ to $-0.32$ & 0.99 \\
-Combined, our values for shared hosts & 69 & $-0.21$ ($-0.43$, $+0.02$) & 0.082 & $-0.14$ (0.09) & 0.037 & $-0.26$ to $-0.19$ & $-0.34$ to $-0.15$ & 0.12 \\
-Combined, their values for shared hosts & 69 & $-0.22$ ($-0.43$, $+0.01$) & 0.070 & $-0.15$ (0.07) & 0.12 & $-0.27$ to $-0.20$ & $-0.35$ to $-0.16$ & 0.17 \\
-Combined, ours for shared, $q > q_0$ & 65 & $-0.16$ ($-0.39$, $+0.08$) & 0.20 & $-0.11$ (0.20) & 0.094 & $-0.21$ to $-0.13$ & $-0.29$ to $-0.09$ & $<0.01$ \\
-Combined, theirs for shared, $q > q_0$ & 65 & $-0.17$ & 0.17 & $-0.12$ (0.17) & 0.076 & $-0.22$ to $-0.14$ & $-0.30$ to $-0.10$ & $<0.01$ \\
-\citet{marnoch2026}, $q > q_0$ & 30 & $-0.36$ & 0.052 & \nodata & 0.18 & \nodata & $-0.58$ to $-0.21$ & 0.29 \\
+DM$_{\rm host}$ & 55 & $-0.06$ & $[-0.32, +0.20]$ & 0.64 & $-0.04$ (0.63) & 0.18 & $[-0.12, -0.04]$ & $[-0.21, +0.02]$ (0) \\
+\quad foreground removed & 49 & $-0.04$ & $[-0.33, +0.25]$ & 0.78 & $-0.03$ (0.76) & 0.32 & $[-0.09, +0.00]$ & $[-0.20, +0.09]$ (0) \\
+\quad foreground excess removed & 49 & $-0.07$ & $[-0.35, +0.21]$ & 0.62 & $-0.05$ (0.58) & 0.31 & $[-0.13, -0.03]$ & $[-0.23, +0.06]$ (0) \\
+\quad $m_r < 21$ & 45 & $-0.09$ & $[-0.38, +0.19]$ & 0.54 & $-0.07$ (0.52) & 0.22 & $[-0.16, -0.06]$ & $[-0.29, +0.00]$ (0) \\
+\quad $n < 2$ & 46 & $-0.04$ & $[-0.32, +0.26]$ & 0.81 & $-0.02$ (0.85) & 0.58 & $[-0.10, +0.00]$ & $[-0.22, +0.08]$ (0) \\
+\quad bulge fits removed & 52 & $-0.07$ & $[-0.34, +0.20]$ & 0.64 & $-0.04$ (0.64) & 0.25 & $[-0.12, -0.04]$ & $[-0.22, +0.02]$ (0) \\
+$|{\rm RM}|$ & 41 & $-0.02$ & $[-0.31, +0.30]$ & 0.91 & $-0.00$ (0.99) & 0.29 & $[-0.09, +0.04]$ & $[-0.20, +0.15]$ (0) \\
+Scattering time & 29 & $-0.17$ & $[-0.55, +0.27]$ & 0.39 & $-0.11$ (0.41) & 0.83 & $[-0.28, -0.07]$ & $[-0.47, +0.08]$ ($<0.01$) \\
+Linear polarization & 24 & $-0.33$ & $[-0.69, +0.12]$ & 0.11 & $-0.24$ (0.10) & 0.50 & $[-0.45, -0.25]$ & $[-0.60, -0.08]$ (0.11) \\
+$A_V$, old stars & 30 & $-0.46$ & $[-0.67, -0.15]$ & 0.010 & $-0.28$ (0.03) & 0.005 & $[-0.53, -0.41]$ & $[-0.61, -0.31]$ (0.97) \\
+\cutinhead{DM$_{\rm host}$ in the sample of \citet{marnoch2026} (M26) and in the combined sample}
+M26 & 34 & $-0.43$ & $[-0.65, -0.14]$ & 0.011 & $-0.28$ (0.02) & 0.030 & $[-0.52, -0.39]$ & $[-0.60, -0.32]$ (0.99) \\
+\quad $q > q_0$ & 30 & $-0.36$ & $[-0.63, -0.02]$ & 0.052 & $-0.24$ (0.06) & 0.18 & $[-0.45, -0.29]$ & $[-0.58, -0.21]$ (0.29) \\
+Combined, ours for shared & 69 & $-0.21$ & $[-0.43, +0.02]$ & 0.082 & $-0.14$ (0.09) & 0.037 & $[-0.26, -0.19]$ & $[-0.34, -0.15]$ (0.12) \\
+\quad $q > q_0$ & 65 & $-0.16$ & $[-0.39, +0.08]$ & 0.20 & $-0.11$ (0.20) & 0.094 & $[-0.21, -0.13]$ & $[-0.29, -0.09]$ ($<0.01$) \\
+Combined, M26 for shared & 69 & $-0.22$ & $[-0.43, +0.01]$ & 0.070 & $-0.15$ (0.07) & 0.12 & $[-0.27, -0.20]$ & $[-0.35, -0.16]$ (0.17) \\
+\quad $q > q_0$ & 65 & $-0.17$ & $[-0.40, +0.07]$ & 0.17 & $-0.12$ (0.17) & 0.076 & $[-0.22, -0.14]$ & $[-0.30, -0.10]$ ($<0.01$) \\
 \enddata
-\tablecomments{Bootstrap intervals use 10{,}000 resamples. $p_{\rm AD}$ compares
-the property distributions of the hosts with $q$ above and below the median
-(10{,}000 permutations). The jackknife columns give the range of $r_S$ over
-all subsets with one or three hosts removed, and $f_{p<0.05}$ the fraction of
-subsets with three hosts removed that reach $p < 0.05$. ``Bulge fits
-removed'' excludes the three hosts that \citet{marnoch2026} fit with a bulge
-component. The $q > q_0$ rows exclude the four hosts of \citet{marnoch2026}
-with $q < q_0$.}
+\tablecomments{CI is the 95\% bootstrap interval of $r_S$ (10{,}000 resamples).
+$p_{\rm AD}$ compares the property distributions of the hosts with $q$ above
+and below the median (10{,}000 permutations). JK$_1$ and JK$_3$ give the range
+of $r_S$ over all subsets with one or three hosts removed, and $f_{p<0.05}$ the
+fraction of three-host subsets that reach $p < 0.05$. Indented rows are
+subsamples of the row above. ``Bulge fits removed'' excludes the three hosts
+that M26 fit with a bulge component, and the $q > q_0$ rows exclude the four
+hosts of M26 with $q < q_0$. ``Ours/M26 for shared'' gives the DM$_{\rm host}$
+used for the 20 shared hosts, with the M26 values shifted onto our definition
+(Appendix~\ref{app:marnoch}).}
 \end{deluxetable*}
  
 
