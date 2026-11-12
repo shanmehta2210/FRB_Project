@@ -147,7 +147,7 @@ def galaxy_dm_samples(g, r, g_err, r_err, theta, z_host, z_spec=np.nan, z_phot=n
         zs = stats.truncnorm.rvs(lo, hi, loc=z_phot, scale=z_phot_err, size=n, random_state=RNG)
         p_fg = float(stats.norm.cdf(hi) - stats.norm.cdf(lo))
     if mass_fn is logms_bell03_gr:
-        mass_err = np.hypot(1.097 * g_err, 0.659 * r_err)
+        mass_err = np.hypot(1.097 * g_err, 1.497 * r_err)
     else:
         mass_err = np.hypot(0.70 * g_err, 1.1 * r_err)
     sigma = np.hypot(mass_err, MASS_SYS_DEX)

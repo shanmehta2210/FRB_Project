@@ -5,8 +5,8 @@ Jackknife over all subsets with d hosts removed: range of $r_S$, range of its $p
 | sample | N | $r_S$ ($p$) | d = 1 | d = 2 | d = 3 | frac. $p<0.05$ (d = 1/2/3) | AD $p$ |
 |---|---|---|---|---|---|---|---|
 | DM$_{\rm host}$ (rest frame) | 55 | -0.06 (0.638) | -0.12 to -0.04 | -0.17 to -0.01 | -0.21 to +0.02 | 0.00 / 0.00 / 0.00 | 0.184 |
-| DM$_{\rm host}$, foreground halos removed | 49 | -0.04 (0.776) | -0.09 to +0.00 | -0.15 to +0.05 | -0.20 to +0.09 | 0.00 / 0.00 / 0.00 | 0.322 |
-| DM$_{\rm host}$, foreground excess over random sightlines removed | 49 | -0.07 (0.620) | -0.13 to -0.03 | -0.19 to +0.01 | -0.23 to +0.06 | 0.00 / 0.00 / 0.00 | 0.312 |
+| DM$_{\rm host}$, foreground halos removed | 49 | -0.04 (0.764) | -0.10 to +0.00 | -0.15 to +0.04 | -0.20 to +0.09 | 0.00 / 0.00 / 0.00 | 0.312 |
+| DM$_{\rm host}$, foreground excess over random sightlines removed | 49 | -0.08 (0.605) | -0.13 to -0.03 | -0.19 to +0.01 | -0.24 to +0.05 | 0.00 / 0.00 / 0.00 | 0.312 |
 | $\log|{\rm RM}|$ | 41 | -0.02 (0.912) | -0.09 to +0.04 | -0.15 to +0.10 | -0.20 to +0.15 | 0.00 / 0.00 / 0.00 | 0.288 |
 | $\log\tau_{\rm scatt}$ | 29 | -0.17 (0.385) | -0.28 to -0.07 | -0.37 to +0.01 | -0.47 to +0.08 | 0.00 / 0.00 / 0.00 | 0.835 |
 | Linear polarization | 24 | -0.33 (0.114) | -0.45 to -0.25 | -0.55 to -0.17 | -0.60 to -0.08 | 0.08 / 0.10 / 0.11 | 0.500 |
