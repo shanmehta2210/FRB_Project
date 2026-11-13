@@ -315,6 +315,7 @@ def build_inclination():
     marnoch_q()
     copy(bc / "grid_inclination.pdf", INC / "16_binned_properties_vs_inclination_grid")
     copy(bc / "heatmap_inclination.pdf", INC / "17_binned_properties_vs_inclination_heatmap")
+    copy(bc / "global_tests.pdf", INC / "18_global_tests_both_grids")
 
 
 # ---------------------------------------------------------------- 2: correlations
@@ -349,6 +350,8 @@ def build_correlations():
     copy(bc / "binned_by_z__dm_host_rest_vs_log_sfr.png", COR / "03_dm_host_vs_sfr_binned_by_z")
     correlation_tables()
     copy(APP / "dm_host_physics" / "dm_host_physics.pdf", COR / "05_dm_host_physics_panels")
+    copy(MAT / "foreground_halos" / "foreground_diagnostic.pdf", COR / "06_foreground_halo_dm_per_frb")
+    copy(bc / "global_tests.pdf", COR / "07_global_tests_both_grids")
 
 
 # ---------------------------------------------------------------- 3: morphology

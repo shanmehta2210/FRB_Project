@@ -72,6 +72,7 @@ The lowest values in any of these are $p_{\rm m} = 0.055$ (AD, $z < 0.1$ against
 | `15_table_correlations_with_q_in_redshift_bins` | Property vs $q$ within redshift bins, Spearman and AD | No consistent trend in any bin. The only AD $p < 0.05$ is old-star $A_V$ (all hosts and $z \ge 0.2$). |
 | `16_binned_properties_vs_inclination_grid` | **16 panels:** $z$, $M_*$, SFR and DM$_{\rm host}$ against inclination, within tertiles of each of the four (rows = binning quantity). Error bars on every point; Spearman and AD, also through the errors (MC). | Whole sample: DM$_{\rm host}$ $+0.06$ ($p = 0.64$; AD 0.19), SFR $-0.12$ (0.42; AD 0.46), $M_*$ $+0.11$ (0.43; AD 1.00), $z$ $-0.02$ (0.86; AD 0.53). Through the errors, $p < 0.05$ in at most 1% of draws for Spearman and 6% for AD (5% is chance). |
 | `17_binned_properties_vs_inclination_heatmap` | All 64 coefficients of the 16 panels in one colour-coded table, with AD $p$ in every tertile and whole-sample cell | Spearman: 2 of 48 tertiles reach $p < 0.05$. AD: also 2 of 48. Both are chance level, and the lowest BH $q$ is 0.62 (Spearman) and 0.96 (AD). |
+| `18_global_tests_both_grids` | Permutation test of each grid as a whole (bottom row: grid B). Inclination is shuffled across hosts 5,000 times, which keeps the dependence between the 48 tertile tests. | Hits 2 vs 2.5 expected under the null ($P = 0.67$ Spearman, 0.70 AD). Family-wise $p$ of the best tertile 0.48 (Spearman) and 0.74 (AD); Fisher combined $p$ 0.73 and 0.82. Grid B is noise. |
 
 The nominal hits in panel 16 are:
 
@@ -93,6 +94,8 @@ The nominal hits in panel 16 are:
 | `03_dm_host_vs_sfr_binned_by_z` | The one notable panel, full size | $z > 0.29$: $r_S = +0.82$ ($p < 0.001$; AD $p = 0.009$). Through the errors $+0.57$ [16–84%: $+0.37$, $+0.72$], $p < 0.05$ in 64% of draws (AD 42%). |
 | `04_table_dm_host_tests` | Whole-sample tests of what DM$_{\rm host}$ correlates with: Spearman and AD, each with BH $q$, plus bootstrap, delete-3 jackknife, partial $\tau$ given $z$ and the DM$_{\rm cosmic}$ MC | Only DM–$\lvert$RM$\rvert$ survives Spearman BH ($q = 0.04$; AD $p = 0.036$, $q = 0.19$). Nothing survives AD BH; the lowest is DM–scattering (AD $p = 0.002$, $q = 0.075$). DM–$M_*$: $-0.01$ (AD 0.91). DM–$z$: $+0.08$ (AD 0.92). |
 | `05_dm_host_physics_panels` | Six scatter plots: host-halo DM, SFR, $\Sigma_{\rm SFR}$, scattering, RM, and $M_*$ vs $z$ | Host-halo DM is only about 7% of DM$_{\rm host}$ |
+| `06_foreground_halo_dm_per_frb` | **Intervening-halo DM for every FRB**, ordered by redshift; grey columns are outside the Legacy Survey footprint. (a) Observed DM split into DM$_{\rm MW}$, $\langle$DM$_{\rm cosmic}\rangle$, foreground halos and the remaining host term. (b) Foreground DM with errors, against the spectroscopic-only lower bound and random sightlines. (c) DM$_{\rm host}$ before and after removing it, with the predicted DM of the host's own halo. (d) Probability that the sightline crosses at least one halo. | 49 FRBs in the footprint. Median foreground DM: 46 pc cm$^{-3}$ observer frame, 58 rest frame; 13 of 49 above 100 (15 in the rest frame); random sightlines give 38. The median foreground share of DM$_{\rm host}$ is 24%. Removing it makes DM$_{\rm host}$ negative for 6 of 49. Five are at $z \ge 0.48$, where $\langle$DM$_{\rm cosmic}\rangle$ already includes the average halo contribution, so subtracting the foreground counts it twice. The sixth is FRB 20220725A ($-11$). 35.9 of 49 sightlines are expected to cross a halo. |
+| `07_global_tests_both_grids` | Permutation test of each grid as a whole (top three rows: grid A). DM$_{\rm host}$ is shuffled across hosts for the DM panels; $y$ is shuffled within tertiles for the pairs among $z$, $M_*$ and SFR. | Spearman: 5 hits vs 1.9 expected ($P = 0.048$); the high-$z$ DM–SFR tertile has a family-wise $p$ of 0.008 and Fisher $p = 0.004$. AD: 3 hits ($P = 0.34$), family-wise $p$ 0.056. |
 
 **Reading the 12-panel grid**
 
@@ -105,6 +108,14 @@ The nominal hits in panel 16 are:
   - The middle-mass result ($+0.70$) drops to $+0.42$ (significant in 33% of draws).
   - Over the whole sample, AD finds a difference in the DM$_{\rm host}$ distribution between low- and high-SFR hosts ($p = 0.02$) that Spearman does not ($p = 0.10$). Through the errors it is significant in only 9% of draws.
 - **Caveat:** the heatmap shows that every other cell is consistent with chance.
+
+**Are the hits noise? (`07_global_tests_both_grids`)** BH treats the tertile tests as independent, but they share hosts and pairs. The permutation test keeps that dependence and asks whether a grid with no real dependence would look like ours.
+- **Grid A:** it would not. The high-$z$ DM–SFR tertile ($p = 0.0001$) appears in fewer than 1% of permutations; this family-wise $p$ is 0.008 over all 36 tertiles. Nothing else survives.
+  - DM–SFR at middle mass has a family-wise $p$ of 0.12.
+  - The three hits among $z$, $M_*$ and SFR within DM$_{\rm host}$ tertiles are the known flux-limit trends.
+  - AD supports this only weakly (family-wise $p$ 0.21 for the DM–SFR tertile).
+  - The permutation uses catalogue values, so it rules out a look-elsewhere fluke but not the weakening through the errors.
+- **Grid B:** it would. See `1_inclination_null/18_global_tests_both_grids` (the same figure).
 
 ---
 
@@ -134,6 +145,8 @@ The control sample also does not depend on the morphology cut: removing it entir
 | PSF fit variants | `scripts/run_nopsf_refits.py`, `scripts/appendix_fit_variants.py` | `appendix/fit_variants/` |
 | Correlations with $q$ | `scripts/robust_correlations.py` | `appendix/robust_correlations/` |
 | Binned correlations (12 + 16 panels) | `scripts/binned_correlations.py` | `appendix/binned_correlations/` (`RESULTS.md` has every number; `SUMMARY.md` is the walkthrough) |
+| Global permutation tests of both grids | `scripts/binned_global_tests.py` | `appendix/binned_correlations/GLOBAL_TESTS.md`, `global_tests*.csv` |
+| Per-FRB foreground diagnostic | `scripts/plot_foreground_diagnostic.py` | `foreground_halos/foreground_diagnostic.{pdf,png}` |
 | DM$_{\rm host}$ physics | `scripts/dm_host_physics.py` | `appendix/dm_host_physics/` |
 | Foreground halos | `scripts/foreground_halo_dm.py` | `foreground_halos/` (`WALKTHROUGH.md`, `CODE_CHECKS.md`) |
 | Morphology | `scripts/disk_evidence.py`, `scripts/disk_subsample_tests.py`, `scripts/host_gallery.py` | `appendix/morphology/`, `appendix/robustness/gini_m20_56.csv` |
