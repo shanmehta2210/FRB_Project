@@ -10,10 +10,12 @@ Union samples shift Marnoch DM_host onto our definition by +48.3 pc cm^-3 (obser
 
 ## DM_host vs q
 
-| sample | N | r_S | p | 95% bootstrap | Kendall tau (p) | jackknife r_S |
-|---|---|---|---|---|---|---|
-| Marnoch alone | 34 | -0.43 | 0.011 | (-0.65, -0.14) | -0.28 (0.021) | -0.52 to -0.39 |
-| This work alone | 55 | -0.06 | 0.638 | (-0.32, +0.20) | -0.04 (0.632) | -0.12 to -0.04 |
-| Union, shared hosts from this work | 69 | -0.21 | 0.082 | (-0.43, +0.02) | -0.14 (0.088) | -0.26 to -0.19 |
-| Union, shared hosts from Marnoch | 69 | -0.22 | 0.070 | (-0.43, +0.01) | -0.15 (0.072) | -0.27 to -0.20 |
-| Union, q > 0.2 only | 65 | -0.16 | 0.199 | (-0.39, +0.08) | -0.11 (0.203) | -0.21 to -0.13 |
+AD p: two-sample Anderson-Darling test of DM_host below vs above the median q (permutation p).
+
+| sample | N | r_S | p | AD p | 95% bootstrap | Kendall tau (p) | jackknife r_S |
+|---|---|---|---|---|---|---|---|
+| Marnoch alone | 34 | -0.43 | 0.011 | 0.032 | (-0.65, -0.14) | -0.28 (0.021) | -0.52 to -0.39 |
+| This work alone | 55 | -0.06 | 0.638 | 0.375 | (-0.32, +0.20) | -0.04 (0.632) | -0.12 to -0.04 |
+| Union, shared hosts from this work | 69 | -0.21 | 0.082 | 0.119 | (-0.43, +0.02) | -0.14 (0.088) | -0.26 to -0.19 |
+| Union, shared hosts from Marnoch | 69 | -0.22 | 0.070 | 0.150 | (-0.43, +0.01) | -0.15 (0.072) | -0.27 to -0.20 |
+| Union, q > 0.2 only | 65 | -0.16 | 0.199 | 0.087 | (-0.39, +0.08) | -0.11 (0.203) | -0.21 to -0.13 |

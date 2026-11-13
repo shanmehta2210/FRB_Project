@@ -7,6 +7,8 @@ Each panel uses every host with the values it needs. Per tertile of C: Spearman 
 delete-1 and delete-3 jackknife ranges, and Benjamini-Hochberg q over the tertile correlations of the grid.
 Per panel: the pooled within-tertile correlation (Fisher z, var = 1.06 / (n - 3)) with Cochran's Q test of
 whether the tertiles agree, and Kendall's partial tau of the pair given C (p from shuffling within strata of C).
+Alongside every Spearman test, a two-sample Anderson-Darling test of whether y has the same distribution in the
+lower and upper halves of x (permutation p for the measured values, asymptotic p inside the Monte Carlo).
 
 Measurement errors give the error bars and 2,000 Monte Carlo draws in which every value is redrawn and the
 tertiles are re-formed before the correlations are recomputed:
@@ -34,6 +36,7 @@ from scipy import stats
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import dm_host_physics as D  # noqa: E402
+import robust_correlations as RC  # noqa: E402
 import robust_extras as E  # noqa: E402
 
 OUT = D.ROOT / "Publication" / "materials" / "appendix" / "binned_correlations"
@@ -125,28 +128,33 @@ def fisher_pool(r, n):
 
 def bin_stats(x, y, rng):
     r, p = stats.spearmanr(x, y)
+    p_ad = RC.ad_split(x, y)
     boot = [stats.spearmanr(x[i], y[i])[0] for i in (rng.integers(0, len(x), len(x)) for _ in range(N_BOOT))]
     jack = [stats.spearmanr(np.delete(x, k), np.delete(y, k))[0] for k in range(len(x))]
     lo, hi = np.nanpercentile(boot, [2.5, 97.5])
     jk3_min, jk3_max, _, _, jk3_fsig = E.jackknife(x, y, 3)
-    return dict(N=len(x), r=r, p=p, lo=lo, hi=hi, jk_min=min(jack), jk_max=max(jack),
+    return dict(N=len(x), r=r, p=p, p_ad=p_ad, lo=lo, hi=hi, jk_min=min(jack), jk_max=max(jack),
                 jk3_min=jk3_min, jk3_max=jk3_max, jk3_fsig=jk3_fsig)
 
 
 def monte_carlo(X, Y, C, partial):
     r_bin, p_bin = np.full((N_MC, 3), np.nan), np.full((N_MC, 3), np.nan)
-    r_all, p_all, ptau = np.empty(N_MC), np.empty(N_MC), np.full(N_MC, np.nan)
+    ad_bin = np.full((N_MC, 3), np.nan)
+    r_all, p_all, ad_all, ptau = np.empty(N_MC), np.empty(N_MC), np.empty(N_MC), np.full(N_MC, np.nan)
     for d in range(N_MC):
         t = tertiles(C[d])
         for k in range(3):
             m = t == k
             r_bin[d, k], p_bin[d, k] = stats.spearmanr(X[d, m], Y[d, m])
+            ad_bin[d, k] = RC.ad_split(X[d, m], Y[d, m], exact=False)
         r_all[d], p_all[d] = stats.spearmanr(X[d], Y[d])
+        ad_all[d] = RC.ad_split(X[d], Y[d], exact=False)
         if partial:
             ptau[d] = D.partial_tau(X[d], Y[d], C[d])
     pct = lambda a: np.nanpercentile(a, [50, 16, 84], axis=0)
     return dict(r_bin=pct(r_bin), fsig_bin=np.mean(p_bin < 0.05, axis=0), r_all=pct(r_all),
-                fsig_all=float(np.mean(p_all < 0.05)), ptau=pct(ptau) if partial else np.full(3, np.nan))
+                fsig_all=float(np.mean(p_all < 0.05)), ad_fsig_bin=np.mean(ad_bin < 0.05, axis=0),
+                ad_fsig_all=float(np.mean(ad_all < 0.05)), ptau=pct(ptau) if partial else np.full(3, np.nan))
 
 
 def analyse(h, draws, c, xc, yc, rng) -> dict:
@@ -155,7 +163,8 @@ def analyse(h, draws, c, xc, yc, rng) -> dict:
     x, y, cv = (h.loc[idx, v].to_numpy(float) for v in (xc, yc, c))
     tert = tertiles(cv)
     r_all, p_all = stats.spearmanr(x, y)
-    row = dict(C=c, x=xc, y=yc, N=len(idx), r_all=r_all, p_all=p_all, idx=idx, tert=tert)
+    row = dict(C=c, x=xc, y=yc, N=len(idx), r_all=r_all, p_all=p_all, p_ad_all=RC.ad_split(x, y),
+               idx=idx, tert=tert)
     row["bins"] = []
     for k in range(3):
         m = tert == k
@@ -189,7 +198,9 @@ def draw(ax, h, err, row, small=False):
     for k, b in enumerate(row["bins"]):
         m = tert == k
         lab = (f"{SHORT[c]} {fmt_c(c, b['c_lo'])}–{fmt_c(c, b['c_hi'])}: $r_S$ = {b['r']:+.2f} ({fmt_p(b['p'])}); "
-               f"MC $r_S$ {fmt_mc(row['mc']['r_bin'][:, k])}, p < 0.05 in {row['mc']['fsig_bin'][k]:.0%}")
+               f"AD {fmt_p(b['p_ad'])}\n"
+               f"MC $r_S$ {fmt_mc(row['mc']['r_bin'][:, k])}; p < 0.05 in {row['mc']['fsig_bin'][k]:.0%} "
+               f"(AD {row['mc']['ad_fsig_bin'][k]:.0%})")
         ax.errorbar(x[m], y[m], xerr=ex[:, m], yerr=ey[:, m], fmt="none", ecolor=COLORS[k], elinewidth=0.6,
                     alpha=0.5, zorder=2)
         ax.scatter(x[m], y[m], s=13 if small else 22, color=COLORS[k], edgecolor="k", lw=0.3, label=lab, zorder=3)
@@ -202,17 +213,18 @@ def draw(ax, h, err, row, small=False):
     ax.set_ylabel(AXIS[yc], fontsize=fs + 1)
     partial = (f"partial $\\tau$ | {SHORT[c]} = {row['ptau']:+.2f} ({fmt_p(row['p_ptau'])})"
                if np.isfinite(row["ptau"]) else "partial $\\tau$: binned on the y quantity")
-    mc_partial = f"; partial $\\tau$ {fmt_mc(row['mc']['ptau'])}" if np.isfinite(row["ptau"]) else ""
+    mc_partial = f"\nMC partial $\\tau$ {fmt_mc(row['mc']['ptau'])}" if np.isfinite(row["ptau"]) else ""
     ax.text(0.5, -0.17 if small else -0.15,
-            f"all {row['N']}: $r_S$ = {row['r_all']:+.2f} ({fmt_p(row['p_all'])});  {partial}\n"
+            f"all {row['N']}: $r_S$ = {row['r_all']:+.2f} ({fmt_p(row['p_all'])}); AD {fmt_p(row['p_ad_all'])};  "
+            f"{partial}\n"
             f"pooled within tertiles: $r$ = {row['r_pool']:+.2f} ({fmt_p(row['p_pool'])});  "
             f"tertiles agree: {fmt_p(row['p_Q'])}\n"
             f"through the errors (MC median [16, 84]%): all $r_S$ {fmt_mc(row['mc']['r_all'])}, "
-            f"p < 0.05 in {row['mc']['fsig_all']:.0%}{mc_partial}",
+            f"p < 0.05 in {row['mc']['fsig_all']:.0%} (AD {row['mc']['ad_fsig_all']:.0%}){mc_partial}",
             transform=ax.transAxes, ha="center", va="top", fontsize=fs)
     ax.tick_params(labelsize=fs)
     lo, hi = np.nanmin(y - ey[0]), np.nanmax(y + ey[1])
-    ax.set_ylim(lo - 0.04 * (hi - lo), hi + 0.42 * (hi - lo))
+    ax.set_ylim(lo - 0.04 * (hi - lo), hi + 0.75 * (hi - lo))
     if xc == INC:
         ax.set_xlim(0, 90)
 
@@ -227,13 +239,15 @@ def grid(h, err, rows, shape, name, suptitle):
         draw(ax, h, err, row, small=True)
         ax.set_title(title(row), fontsize=8.5)
     fig.suptitle(suptitle, fontsize=11, y=1.0)
-    fig.tight_layout(h_pad=2.6)
+    fig.tight_layout(h_pad=3.4)
     fig.text(0.5, -0.01,
              "How to read each legend entry: tertile range of the binning quantity; Spearman rank correlation $r_S$ of "
              "the plotted pair in that tertile, with its two-sided p-value (null hypothesis: $r_S$ = 0).\n"
+             "AD: two-sample Anderson–Darling p-value that the y quantity has the same distribution for hosts below and "
+             "above the median of the x quantity (5,000 permutations); it also detects non-monotonic dependence.\n"
              "MC $r_S$: the same Spearman coefficient recomputed in 2,000 draws in which every value is resampled within "
              "its error bars and the tertiles are re-formed; median [16th, 84th percentile] of $r_S$ (not a p-value), "
-             "and the fraction of draws with p < 0.05.",
+             "and the fraction of draws with Spearman p < 0.05 (in brackets: with AD p < 0.05).",
              ha="center", va="top", fontsize=9)
     for ext in ("pdf", "png"):
         fig.savefig(OUT / f"{name}.{ext}", dpi=170, bbox_inches="tight")
@@ -242,19 +256,23 @@ def grid(h, err, rows, shape, name, suptitle):
 
 def heatmap(rows, name, suptitle):
     cols = ["low tertile", "mid tertile", "high tertile", "all", "pooled", "partial τ"]
-    fig, ax = plt.subplots(figsize=(10.5, 0.62 * len(rows) + 1.6))
+    row_h = 0.8
+    fig, ax = plt.subplots(figsize=(10.5, row_h * len(rows) + 1.6))
+    short = lambda p: fmt_p(p).replace("p = ", "").replace("p ", "")
     for j, row in enumerate(rows):
-        cells = [(b["r"], b["p"], row["mc"]["r_bin"][0, k], b["q"] < 0.05) for k, b in enumerate(row["bins"])]
-        cells += [(row["r_all"], row["p_all"], row["mc"]["r_all"][0], False),
-                  (row["r_pool"], row["p_pool"], np.nan, False),
-                  (row["ptau"], row["p_ptau"], row["mc"]["ptau"][0], False)]
-        for i, (r, p, mc, strong) in enumerate(cells):
+        cells = [(b["r"], b["p"], b["p_ad"], row["mc"]["r_bin"][0, k], b["q"] < 0.05)
+                 for k, b in enumerate(row["bins"])]
+        cells += [(row["r_all"], row["p_all"], row["p_ad_all"], row["mc"]["r_all"][0], False),
+                  (row["r_pool"], row["p_pool"], np.nan, np.nan, False),
+                  (row["ptau"], row["p_ptau"], np.nan, row["mc"]["ptau"][0], False)]
+        for i, (r, p, p_ad, mc, strong) in enumerate(cells):
             color = plt.cm.RdBu_r(0.5 + 0.5 * np.clip(r, -1, 1)) if np.isfinite(r) else "#eeeeee"
             ax.add_patch(Rectangle((i, j), 1, 1, color=color, ec="white"))
             if strong:
                 ax.add_patch(Rectangle((i + 0.03, j + 0.05), 0.94, 0.9, fill=False, ec="k", lw=2))
             if np.isfinite(r):
-                txt = f"{r:+.2f} ({fmt_p(p).replace('p = ', '').replace('p ', '')})"
+                txt = f"{r:+.2f} ({short(p)})"
+                txt += f"\nAD {short(p_ad)}" if np.isfinite(p_ad) else ""
                 txt += f"\nMC {mc:+.2f}" if np.isfinite(mc) else ""
                 ax.text(i + 0.5, j + 0.5, txt, ha="center", va="center", fontsize=7.5,
                         weight="bold" if p < 0.05 else "normal")
@@ -270,10 +288,12 @@ def heatmap(rows, name, suptitle):
         s.set_visible(False)
     ax.set_title(suptitle, fontsize=10, pad=24)
     fig.text(0.5, 0.01, "Cells: Spearman $r_S$ (p) for the tertiles, all hosts and the Fisher-pooled within-tertile "
-             "value; Kendall partial $\\tau$ given the binning quantity.\nMC: median over 2,000 draws through the "
-             "measurement errors with tertiles re-formed. Bold: p < 0.05. Black frame: Benjamini–Hochberg q < 0.05 "
-             "over the tertiles of the grid.", ha="center", va="bottom", fontsize=7.5)
-    fig.subplots_adjust(left=0.3, right=0.99, top=1 - 1.1 / (0.62 * len(rows) + 1.6), bottom=0.9 / (0.62 * len(rows) + 1.6))
+             "value; Kendall partial $\\tau$ given the binning quantity.\nAD: two-sample Anderson–Darling p that the y "
+             "quantity has the same distribution below and above the median of the x quantity.\nMC: median $r_S$ over "
+             "2,000 draws through the measurement errors with tertiles re-formed. Bold: Spearman p < 0.05. Black frame: "
+             "Benjamini–Hochberg q < 0.05 over the tertiles of the grid.", ha="center", va="bottom", fontsize=7.5)
+    height = row_h * len(rows) + 1.6
+    fig.subplots_adjust(left=0.3, right=0.99, top=1 - 1.1 / height, bottom=1.0 / height)
     for ext in ("pdf", "png"):
         fig.savefig(OUT / f"{name}.{ext}", dpi=170)
     plt.close(fig)
@@ -298,22 +318,26 @@ def table(rows, label) -> list[str]:
     md = []
     for c in VARS:
         md += ["", f"### {label}: binned by {NAMES[c]}", "",
-               "| pair | tertile | range of " + NAMES[c] + " | N | r_S (p) | BH q | bootstrap 95% | delete-1 range | "
-               "delete-3 range (frac. p < 0.05) | MC r_S [16, 84] (frac. p < 0.05) |",
-               "|---|---|---|---|---|---|---|---|---|---|"]
+               "| pair | tertile | range of " + NAMES[c] + " | N | r_S (p) | BH q | AD p (BH q) | bootstrap 95% | "
+               "delete-1 range | delete-3 range (frac. p < 0.05) | MC r_S [16, 84] (frac. p < 0.05; AD) |",
+               "|---|---|---|---|---|---|---|---|---|---|---|"]
         for row in (r for r in rows if r["C"] == c):
             pair = f"{NAMES[row['y']]} vs {NAMES[row['x']]}"
             for k, b in enumerate(row["bins"]):
                 md.append(f"| {pair if k == 0 else ''} | {['low', 'mid', 'high'][k]} | "
                           f"{fmt_c(c, b['c_lo'])} to {fmt_c(c, b['c_hi'])} | {b['N']} | {b['r']:+.2f} ({fmt_p(b['p'])}) | "
-                          f"{b['q']:.2f} | [{b['lo']:+.2f}, {b['hi']:+.2f}] | {b['jk_min']:+.2f} to {b['jk_max']:+.2f} | "
+                          f"{b['q']:.2f} | {fmt_p(b['p_ad'])} ({b['q_ad']:.2f}) | [{b['lo']:+.2f}, {b['hi']:+.2f}] | "
+                          f"{b['jk_min']:+.2f} to {b['jk_max']:+.2f} | "
                           f"{b['jk3_min']:+.2f} to {b['jk3_max']:+.2f} ({b['jk3_fsig']:.2f}) | "
-                          f"{fmt_mc(row['mc']['r_bin'][:, k])} ({row['mc']['fsig_bin'][k]:.2f}) |")
+                          f"{fmt_mc(row['mc']['r_bin'][:, k])} ({row['mc']['fsig_bin'][k]:.2f}; "
+                          f"{row['mc']['ad_fsig_bin'][k]:.2f}) |")
             partial = (f"partial tau given {NAMES[c]}: {row['ptau']:+.2f} [{row['ptau_lo']:+.2f}, {row['ptau_hi']:+.2f}] "
                        f"({fmt_p(row['p_ptau'])}); MC {fmt_mc(row['mc']['ptau'])}" if np.isfinite(row["ptau"]) else "")
             md.append(f"| | **summary** | | {row['N']} | all: {row['r_all']:+.2f} ({fmt_p(row['p_all'])}) | | "
+                      f"all: {fmt_p(row['p_ad_all'])} | "
                       f"pooled: {row['r_pool']:+.2f} ({fmt_p(row['p_pool'])}); tertiles agree: {fmt_p(row['p_Q'])} | "
-                      f"{partial} | | MC all: {fmt_mc(row['mc']['r_all'])} ({row['mc']['fsig_all']:.2f}) |")
+                      f"{partial} | | MC all: {fmt_mc(row['mc']['r_all'])} ({row['mc']['fsig_all']:.2f}; "
+                      f"{row['mc']['ad_fsig_all']:.2f}) |")
     return md
 
 
@@ -321,12 +345,14 @@ def report(h, rows_a, rows_b, pairs):
     md = ["# Correlations of z, M*, SFR, DM_host and inclination within tertiles of one quantity", "",
           "Generated by `scripts/binned_correlations.py`. Each panel uses every host with the values it needs. "
           "DM_host is rest frame. BH q: Benjamini-Hochberg over the tertile correlations of each grid (36 in grid A, "
-          "48 in grid B). MC: 2,000 draws through the measurement errors, tertiles re-formed in each draw; median "
-          "and 16-84% range of r_S, and the fraction of draws with p < 0.05.", "",
+          "48 in grid B), separately for Spearman and AD. AD: two-sample Anderson-Darling p that the y quantity has the "
+          "same distribution below and above the median of the x quantity (5,000 permutations). MC: 2,000 draws "
+          "through the measurement errors, tertiles re-formed in each draw; median and 16-84% range of r_S, and the "
+          "fractions of draws with Spearman p < 0.05 and with AD p < 0.05.", "",
           "## Whole-sample correlations", "",
-          "| pair | N | r_S (p) | MC r_S [16, 84] (frac. p < 0.05) |", "|---|---|---|---|"]
-    md += [f"| {NAMES[a]} - {NAMES[b]} | {n} | {r:+.2f} ({fmt_p(p)}) | {fmt_mc(mc)} ({f:.2f}) |"
-           for a, b, n, r, p, mc, f in pairs]
+          "| y vs x | N | r_S (p) | AD p | MC r_S [16, 84] (frac. p < 0.05; AD) |", "|---|---|---|---|---|"]
+    md += [f"| {NAMES[a]} vs {NAMES[b]} | {n} | {r:+.2f} ({fmt_p(p)}) | {fmt_p(p_ad)} | {fmt_mc(mc)} ({f:.2f}; {f_ad:.2f}) |"
+           for a, b, n, r, p, p_ad, mc, f, f_ad in pairs]
     md += ["", "## Grid A: pairs of z, M*, SFR and DM_host"] + table(rows_a, "A")
     md += ["", "## Grid B: each quantity against inclination"] + table(rows_b, "B")
     (OUT / "RESULTS.md").write_text("\n".join(md) + "\n", encoding="utf-8")
@@ -336,10 +362,14 @@ def whole_sample(h, draws):
     out = []
     for a, b in combinations(VARS + [INC], 2):
         idx = h.index[h[[a, b]].notna().all(axis=1)].to_numpy()
-        r, p = stats.spearmanr(h.loc[idx, a], h.loc[idx, b])
+        xc, yc = (b, a) if b == INC else (a, b)
+        x, y = h.loc[idx, xc].to_numpy(float), h.loc[idx, yc].to_numpy(float)
+        r, p = stats.spearmanr(x, y)
         mc = [stats.spearmanr(draws[a][d, idx], draws[b][d, idx]) for d in range(N_MC)]
+        ad = [RC.ad_split(draws[xc][d, idx], draws[yc][d, idx], exact=False) for d in range(N_MC)]
         rr = np.array([m[0] for m in mc])
-        out.append((a, b, len(idx), r, p, np.percentile(rr, [50, 16, 84]), np.mean([m[1] < 0.05 for m in mc])))
+        out.append((yc, xc, len(idx), r, p, RC.ad_split(x, y), np.percentile(rr, [50, 16, 84]),
+                    np.mean([m[1] < 0.05 for m in mc]), np.mean(np.array(ad) < 0.05)))
     return out
 
 
@@ -356,16 +386,19 @@ def main() -> None:
     print("grid B done", flush=True)
     for rows in (rows_a, rows_b):
         bins = [b for r in rows for b in r["bins"]]
-        for b, q in zip(bins, stats.false_discovery_control([b["p"] for b in bins])):
-            b["q"] = q
+        for b, q, q_ad in zip(bins, stats.false_discovery_control([b["p"] for b in bins]),
+                              stats.false_discovery_control([b["p_ad"] for b in bins])):
+            b["q"], b["q_ad"] = q, q_ad
     flat = []
     for grid_name, rows in (("A", rows_a), ("B", rows_b)):
         for r in rows:
             base = {k: v for k, v in r.items() if k not in ("bins", "idx", "tert", "mc")}
-            base.update(grid=grid_name, mc_r_all=r["mc"]["r_all"][0], mc_ptau=r["mc"]["ptau"][0])
+            base.update(grid=grid_name, mc_r_all=r["mc"]["r_all"][0], mc_ptau=r["mc"]["ptau"][0],
+                        mc_ad_fsig_all=r["mc"]["ad_fsig_all"])
             for k, b in enumerate(r["bins"]):
                 flat.append(dict(base, tertile=k, mc_r=r["mc"]["r_bin"][0, k], mc_r16=r["mc"]["r_bin"][1, k],
                                  mc_r84=r["mc"]["r_bin"][2, k], mc_fsig=r["mc"]["fsig_bin"][k],
+                                 mc_ad_fsig=r["mc"]["ad_fsig_bin"][k],
                                  **{f"bin_{kk}": vv for kk, vv in b.items()}))
     pd.DataFrame(flat).to_csv(OUT / "binned_correlations.csv", index=False)
     figures(h, err, rows_a, rows_b)

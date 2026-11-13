@@ -104,6 +104,8 @@ INC_WIDTHS = [3.6, 0.8, 1.0, 2.2, 1.0, 1.4, 1.4]
 PM_NOTE = (r"$p_{\rm m}$: fraction of 10,000 random control samples of the same size that differ from the control "
            "at least as much as the FRB hosts.\nThe one-sided MW test is run in the direction of an edge-on "
            r"deficit. With 10,000 draws the smallest possible $p_{\rm m}$ is $10^{-4}$.")
+AD_NOTE = ("AD p: two-sample Anderson–Darling test that y (in 'y vs x'; the property, against $q$) has the same "
+           "distribution for hosts below and above the median of x (permutation p, about 5,000 shuffles).")
 
 
 # ---------------------------------------------------------------- 1: inclination
@@ -262,35 +264,39 @@ def inclination_tables():
                  "redshift range. The z ≥ 0.4 bin (7 hosts) is too small to test.", widths=INC_WIDTHS)
 
     rc = pd.read_csv(APP / "robust_correlations" / "robust_correlations.csv")
-    rct = [[clean(r.label), str(int(r.N)), f"{r.r_S:+.2f} ({fmt_p(r.p_S)})", f"[{r.rS_boot_lo:+.2f}, {r.rS_boot_hi:+.2f}]",
+    rct = [[clean(r.label), str(int(r.N)), f"{r.r_S:+.2f} ({fmt_p(r.p_S)})", fmt_p(r.p_AD),
+            f"[{r.rS_boot_lo:+.2f}, {r.rS_boot_hi:+.2f}]",
             f"{r.tau:+.2f} ({fmt_p(r.p_tau)})", f"{r.rS_jack_min:+.2f} to {r.rS_jack_max:+.2f}",
             f"{r.theil_sen_slope:.3g} [{r.ts_lo:.3g}, {r.ts_hi:.3g}]"] for r in rc.itertuples()]
-    table_figure(rct, ["Property vs axis ratio $q$", "N", r"$r_S$ (p)", "bootstrap 95%", r"Kendall $\tau$ (p)",
+    table_figure(rct, ["Property vs axis ratio $q$", "N", r"$r_S$ (p)", "AD p", "bootstrap 95%", r"Kendall $\tau$ (p)",
                        "delete-1 range", "Theil–Sen slope [95%]"], INC / "12_table_correlations_with_axis_ratio",
                  "Host and burst properties vs axis ratio: outlier-robust statistics",
                  "Bootstrap: 10,000 resamples. Since every host has $q > q_0$, rank correlations with $q$ and with "
-                 r"$\cos i$ are identical (sign flipped for $i$)." "\nA$_V$ of the old stars is the only p < 0.05 "
-                 "case (dust in inclined disks); it is not significant after correcting for the 41 properties tested.",
-                 widths=[4.4, 0.5, 1.2, 1.3, 1.3, 1.3, 1.9], fontsize=7.5)
+                 r"$\cos i$ are identical (sign flipped for $i$)." "\n" + AD_NOTE + "\nA$_V$ of the old stars is the only "
+                 "Spearman p < 0.05 case (dust in inclined disks).",
+                 widths=[4.4, 0.5, 1.2, 0.7, 1.3, 1.3, 1.3, 1.9], fontsize=7.5)
     cc = pd.read_csv(MAT / "marnoch_recheck" / "combined_correlations.csv")
-    cct = [[clean(r.sample), str(int(r.N)), f"{r.r_S:+.2f} ({fmt_p(r.p_S)})", f"[{r.boot_lo:+.2f}, {r.boot_hi:+.2f}]",
+    cct = [[clean(r.sample), str(int(r.N)), f"{r.r_S:+.2f} ({fmt_p(r.p_S)})", fmt_p(r.p_AD),
+            f"[{r.boot_lo:+.2f}, {r.boot_hi:+.2f}]",
             f"{r.tau:+.2f} ({fmt_p(r.p_tau)})", f"{r.jack_min:+.2f} to {r.jack_max:+.2f}"] for r in cc.itertuples()]
-    table_figure(cct, ["Sample", "N", r"$r_S$ (p)", "bootstrap 95%", r"Kendall $\tau$ (p)", "delete-1 range"],
+    table_figure(cct, ["Sample", "N", r"$r_S$ (p)", "AD p", "bootstrap 95%", r"Kendall $\tau$ (p)", "delete-1 range"],
                  INC / "14_table_marnoch_combined", "DM$_{\\rm host}$ vs $q$: this work, Marnoch et al. (2026), and the union",
                  "Union: 69 unique hosts, Marnoch DM$_{\\rm host}$ shifted onto our definition; the 20 shared hosts take "
-                 "either our values or theirs.", widths=[3.6, 0.5, 1.3, 1.4, 1.4, 1.4])
+                 "either our values or theirs.\n" + AD_NOTE, widths=[3.6, 0.5, 1.3, 0.8, 1.4, 1.4, 1.4])
     zc = pd.read_csv(APP / "redshift_bins" / "correlations_zbins.csv")
     bins = list(dict.fromkeys(zc.bin))
     def cell(s):
         if not len(s) or not np.isfinite(s.r_S.iloc[0]):
             return "–" if not len(s) else f"– (N = {int(s.N.iloc[0])})"
-        return f"{s.r_S.iloc[0]:+.2f} ({fmt_p(s.p_S.iloc[0])}; {int(s.N.iloc[0])})"
+        return (f"{s.r_S.iloc[0]:+.2f} ({fmt_p(s.p_S.iloc[0])}; {int(s.N.iloc[0])})\n"
+                f"AD {fmt_p(s.p_AD.iloc[0])}")
 
     zct = [[clean(p)] + [cell(zc[(zc.property == p) & (zc.bin == b)]) for b in bins]
            for p in dict.fromkeys(zc.property)]
     table_figure(zct, ["Property vs $q$"] + [clean(b) for b in bins], INC / "15_table_correlations_with_q_in_redshift_bins",
-                 "Correlations with axis ratio within redshift bins", r"Cells: Spearman $r_S$ (p; N).",
-                 widths=[2.6] + [1.6] * len(bins), fontsize=7.5)
+                 "Correlations with axis ratio within redshift bins",
+                 "Cells: Spearman $r_S$ (p; N), and below it the AD p (–: fewer than 4 hosts in one half).\n" + AD_NOTE,
+                 widths=[2.6] + [1.6] * len(bins), fontsize=7.5, row_h=0.36)
 
 
 def build_inclination():
@@ -320,17 +326,19 @@ def correlation_tables():
             theme = r.theme
             rows.append([clean(theme)])
         partial = f"{r.ptau:+.2f} ({fmt_p(r.p_ptau)})" if np.isfinite(r.ptau) else "–"
-        mc = f"{r.mc_r50:+.2f} ({r.mc_fsig:.2f})" if np.isfinite(r.mc_r50) else "–"
+        mc = f"{r.mc_r50:+.2f} ({r.mc_fsig:.2f}; {r.mc_ad_fsig:.2f})" if np.isfinite(r.mc_r50) else "–"
         rows.append([f"{LABELS[r.y]} vs {LABELS[r.x]}", clean(r.sample), str(int(r.N)), f"{r.r_S:+.2f} ({fmt_p(r.p_S)})",
-                     f"[{r.rS_boot_lo:+.2f}, {r.rS_boot_hi:+.2f}]",
+                     fmt_p(r.p_AD), f"[{r.rS_boot_lo:+.2f}, {r.rS_boot_hi:+.2f}]",
                      f"{r.jk3_fsig:.2f}" if np.isfinite(r.jk3_fsig) else "–", partial, mc,
-                     f"{r.q_BH:.2f}" if np.isfinite(r.q_BH) else "–"])
-    table_figure(rows, ["Pair", "Sample", "N", r"$r_S$ (p)", "bootstrap 95%", "delete-3: frac. p<0.05",
-                        r"partial $\tau$ | z (p)", "DM$_{\\rm cosmic}$ MC $r_S$ (frac.)", "BH q"],
+                     f"{r.q_BH:.2f}" if np.isfinite(r.q_BH) else "–",
+                     f"{r.q_BH_AD:.2f}" if np.isfinite(r.q_BH_AD) else "–"])
+    table_figure(rows, ["Pair", "Sample", "N", r"$r_S$ (p)", "AD p", "bootstrap 95%", "delete-3: frac. p<0.05",
+                        r"partial $\tau$ | z (p)", "DM$_{\\rm cosmic}$ MC $r_S$ (frac.; AD)", "BH q", "BH q (AD)"],
                  COR / "04_table_dm_host_tests", "What DM$_{\\rm host}$ and the host properties correlate with (whole sample)",
-                 "BH q: Benjamini–Hochberg over the 34 hypothesis tests (sanity checks excluded). MC: median $r_S$ over 2,000 "
-                 "draws of DM$_{\\rm cosmic}$ and DM$_{\\rm MW}$, and the fraction with p < 0.05.",
-                 widths=[3.4, 1.7, 0.45, 1.25, 1.3, 1.6, 1.4, 1.8, 0.6], fontsize=7, row_h=0.22)
+                 "BH q: Benjamini–Hochberg over the 34 hypothesis tests (sanity checks excluded), for Spearman and for AD. "
+                 "MC: median $r_S$ over 2,000 draws of DM$_{\\rm cosmic}$ and DM$_{\\rm MW}$, and the fractions with "
+                 "Spearman p < 0.05 and AD p < 0.05.\n" + AD_NOTE,
+                 widths=[3.4, 1.7, 0.45, 1.25, 0.7, 1.3, 1.6, 1.4, 2.0, 0.6, 0.8], fontsize=7, row_h=0.22)
 
 
 def build_correlations():

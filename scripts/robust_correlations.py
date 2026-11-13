@@ -1,8 +1,9 @@
 """Outlier-robust correlations of host properties with axis ratio q (equivalently cos i).
 
 For each property: Spearman r_S (Fisher 95% interval), Kendall tau_b, bootstrap 95% intervals of both,
-leave-one-out jackknife range of r_S (and the most influential host), and the Theil-Sen slope with its
-95% interval. DM_host is also tested after removing the foreground-halo DM of intervening galaxies
+leave-one-out jackknife range of r_S (and the most influential host), the Theil-Sen slope with its
+95% interval, and a two-sample Anderson-Darling test of whether the property has the same distribution
+below and above the median of q (permutation p). DM_host is also tested after removing the foreground-halo DM of intervening galaxies
 (scripts/foreground_halo_dm.py; Bhardwaj, Snelders et al. 2025 method).
 
 Inputs:  plots/plots_null/v2/host_correlations/host_props.csv
@@ -11,6 +12,7 @@ Outputs: Publication/materials/appendix/robust_correlations/{robust_correlations
 """
 from __future__ import annotations
 
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -22,7 +24,9 @@ HOSTS = ROOT / "plots" / "plots_null" / "v2" / "host_correlations" / "host_props
 FG = ROOT / "Publication" / "materials" / "foreground_halos"
 OUT = ROOT / "Publication" / "materials" / "appendix" / "robust_correlations"
 N_BOOT = 10_000
+N_PERM_AD = 5_000
 SEED = 42
+AD_RNG = np.random.default_rng(11)
 BULGE_FITS = ["20190608B", "20220725A", "20231226A"]
 
 PROPS = [
@@ -61,11 +65,23 @@ def load() -> pd.DataFrame:
     return h
 
 
+def ad_split(x, y, exact=True) -> float:
+    """Two-sample Anderson-Darling p that y has the same distribution below and above the median of x.
+    exact: permutation p; otherwise asymptotic p, which scipy clips to [0.001, 0.25]."""
+    lower = np.zeros(len(x), bool)
+    lower[np.argsort(x, kind="stable")[:len(x) // 2]] = True
+    method = stats.PermutationMethod(n_resamples=N_PERM_AD, rng=AD_RNG) if exact else None
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        return float(stats.anderson_ksamp([y[lower], y[~lower]], method=method).pvalue)
+
+
 def robust_row(frb, x, y, rng) -> dict:
     ok = np.isfinite(x) & np.isfinite(y)
     frb, x, y = frb[ok], x[ok], y[ok]
     n = len(x)
     rs, ps = stats.spearmanr(x, y)
+    p_ad = ad_split(x, y)
     tau = stats.kendalltau(x, y)
     lo, hi = fisher_ci(rs, n)
     idx = rng.integers(0, n, size=(N_BOOT, n))
@@ -75,7 +91,7 @@ def robust_row(frb, x, y, rng) -> dict:
     jk_se = np.sqrt((n - 1) / n * np.sum((jk - jk.mean()) ** 2))
     k_inf = int(np.argmax(np.abs(jk - rs)))
     ts = stats.theilslopes(y, x, alpha=0.95)
-    return dict(N=n, r_S=rs, p_S=ps, rS_fisher_lo=lo, rS_fisher_hi=hi,
+    return dict(N=n, r_S=rs, p_S=ps, p_AD=p_ad, rS_fisher_lo=lo, rS_fisher_hi=hi,
                 rS_boot_lo=np.nanpercentile(bs, 2.5), rS_boot_hi=np.nanpercentile(bs, 97.5),
                 tau=tau.statistic, p_tau=tau.pvalue,
                 tau_boot_lo=np.nanpercentile(bt, 2.5), tau_boot_hi=np.nanpercentile(bt, 97.5),
@@ -124,17 +140,21 @@ def main() -> None:
                n_neg_after=int((h.loc[ls, "dm_host_fg"] < 0).sum()),
                r_fg_q=float(stats.spearmanr(h.loc[ls, "q"], h.loc[ls, "dm_fg"])[0]),
                p_fg_q=float(stats.spearmanr(h.loc[ls, "q"], h.loc[ls, "dm_fg"])[1]),
+               p_fg_q_ad=ad_split(h.loc[ls, "q"].to_numpy(float), h.loc[ls, "dm_fg"].to_numpy(float)),
                expected_median=float((h.loc[ls, "dm_fg_expected"] * (1 + h.loc[ls, "z"])).median()))
     pd.Series(imp).to_csv(OUT / "foreground_impact.csv", header=["value"])
     print(imp)
     md = ["# Outlier-robust correlations with axis ratio $q$", "",
           f"Bootstrap: {N_BOOT:,} resamples (seed {SEED}). Jackknife: leave one host out. "
           "Theil-Sen slope in property units per unit $q$, 95% interval. "
-          "$P(r_S \\le -0.44)$: bootstrap fraction at or below the Marnoch et al. value.", "",
-          "| property | $N$ | $r_S$ (Fisher 95%) | $r_S$ bootstrap 95% | Kendall $\\tau$ ($p$) | $\\tau$ bootstrap 95% | jackknife $r_S$ range | most influential host ($r_S$ without) | Theil-Sen slope (95%) | $P(r_S\\le-0.44)$ |",
-          "|---|---|---|---|---|---|---|---|---|---|"]
+          "$P(r_S \\le -0.44)$: bootstrap fraction at or below the Marnoch et al. value. "
+          "AD $p$: two-sample Anderson-Darling test of the property below vs above the median $q$ "
+          f"({N_PERM_AD:,} permutations).", "",
+          "| property | $N$ | $r_S$ (Fisher 95%) | $r_S$ $p$ | AD $p$ | $r_S$ bootstrap 95% | Kendall $\\tau$ ($p$) | $\\tau$ bootstrap 95% | jackknife $r_S$ range | most influential host ($r_S$ without) | Theil-Sen slope (95%) | $P(r_S\\le-0.44)$ |",
+          "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
         md.append(f"| {r['label']} | {r['N']} | {r['r_S']:+.2f} ({r['rS_fisher_lo']:+.2f}, {r['rS_fisher_hi']:+.2f}) | "
+                  f"{r['p_S']:.3f} | {r['p_AD']:.3f} | "
                   f"({r['rS_boot_lo']:+.2f}, {r['rS_boot_hi']:+.2f}) | {r['tau']:+.2f} ({r['p_tau']:.2f}) | "
                   f"({r['tau_boot_lo']:+.2f}, {r['tau_boot_hi']:+.2f}) | {r['rS_jack_min']:+.2f} to {r['rS_jack_max']:+.2f} | "
                   f"{r['most_influential']} ({r['rS_without_it']:+.2f}) | {r['theil_sen_slope']:.3g} ({r['ts_lo']:.3g}, {r['ts_hi']:.3g}) | "
@@ -143,7 +163,8 @@ def main() -> None:
            f"LS footprint: {imp['n_ls']} hosts; outside: {imp['n_out']}. Median {imp['median']:.0f}, 84th percentile {imp['p84']:.0f}, "
            f"maximum {imp['max']:.0f} pc cm$^{{-3}}$; {imp['n_gt50']} hosts above 50 and {imp['n_gt100']} above 100. "
            f"Median fraction of DM$_{{\\rm host}}$: {imp['frac_median']:.2f}. Hosts negative after correction: {imp['n_neg_after']}. "
-           f"Spearman of DM$_{{\\rm fg}}$ with $q$: $r_S = {imp['r_fg_q']:+.2f}$ ($p = {imp['p_fg_q']:.2f}$). "
+           f"Spearman of DM$_{{\\rm fg}}$ with $q$: $r_S = {imp['r_fg_q']:+.2f}$ ($p = {imp['p_fg_q']:.2f}$; "
+           f"AD $p = {imp['p_fg_q_ad']:.2f}$). "
            f"Median expected (random-sightline) term: {imp['expected_median']:.0f} pc cm$^{{-3}}$."]
     (OUT / "ROBUST.md").write_text("\n".join(md) + "\n", encoding="utf-8")
 

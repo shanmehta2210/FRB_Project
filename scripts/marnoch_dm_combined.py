@@ -26,8 +26,8 @@ def rstats(x, y, rng):
     idx = rng.integers(0, len(x), (10_000, len(x)))
     boot = np.array([stats.spearmanr(x[i], y[i])[0] for i in idx])
     jack = np.array([stats.spearmanr(np.delete(x, k), np.delete(y, k))[0] for k in range(len(x))])
-    return dict(N=len(x), r_S=rs, p_S=ps, boot_lo=np.nanpercentile(boot, 2.5), boot_hi=np.nanpercentile(boot, 97.5),
-                tau=tau, p_tau=pt, jack_min=jack.min(), jack_max=jack.max())
+    return dict(N=len(x), r_S=rs, p_S=ps, p_AD=RC.ad_split(x, y), boot_lo=np.nanpercentile(boot, 2.5),
+                boot_hi=np.nanpercentile(boot, 97.5), tau=tau, p_tau=pt, jack_min=jack.min(), jack_max=jack.max())
 
 
 def marnoch_on_our_scale(m: pd.DataFrame, ours: pd.DataFrame) -> tuple[pd.DataFrame, float]:
@@ -81,12 +81,15 @@ def main() -> None:
         r = rstats(x, y, rng)
         r["sample"] = lab
         rows.append(r)
-    t = pd.DataFrame(rows)[["sample", "N", "r_S", "p_S", "boot_lo", "boot_hi", "tau", "p_tau", "jack_min", "jack_max"]]
+    t = pd.DataFrame(rows)[["sample", "N", "r_S", "p_S", "p_AD", "boot_lo", "boot_hi", "tau", "p_tau", "jack_min",
+                            "jack_max"]]
     t.to_csv(MR / "combined_correlations.csv", index=False)
-    md += ["", "## DM_host vs q", "", "| sample | N | r_S | p | 95% bootstrap | Kendall tau (p) | jackknife r_S |",
-           "|---|---|---|---|---|---|---|"]
+    md += ["", "## DM_host vs q", "",
+           "AD p: two-sample Anderson-Darling test of DM_host below vs above the median q (permutation p).", "",
+           "| sample | N | r_S | p | AD p | 95% bootstrap | Kendall tau (p) | jackknife r_S |",
+           "|---|---|---|---|---|---|---|---|"]
     for r in t.itertuples():
-        md.append(f"| {r.sample} | {r.N} | {r.r_S:+.2f} | {r.p_S:.3f} | ({r.boot_lo:+.2f}, {r.boot_hi:+.2f}) | "
+        md.append(f"| {r.sample} | {r.N} | {r.r_S:+.2f} | {r.p_S:.3f} | {r.p_AD:.3f} | ({r.boot_lo:+.2f}, {r.boot_hi:+.2f}) | "
                   f"{r.tau:+.2f} ({r.p_tau:.3f}) | {r.jack_min:+.2f} to {r.jack_max:+.2f} |")
     (MR / "COMBINED.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print("\n".join(md))

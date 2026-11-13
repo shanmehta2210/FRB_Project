@@ -220,9 +220,12 @@ def run_test(h, draws, theme, xcol, ycol, sample, claim, rng) -> dict:
         row["ptau"], row["ptau_lo"], row["ptau_hi"], row["p_ptau"] = partial_tau_test(x, y, z, rng)
     if DM in (xcol, ycol):
         other = x if ycol == DM else y
-        r, p = spearman_rows(other, draws[:, sub.index.to_numpy()])
+        dm = draws[:, sub.index.to_numpy()]
+        r, p = spearman_rows(other, dm)
         row["mc_r16"], row["mc_r50"], row["mc_r84"] = np.percentile(r, [16, 50, 84])
         row["mc_fsig"] = float(np.mean(p < 0.05))
+        p_ad = [RC.ad_split(*((other, dd) if ycol == DM else (dd, other)), exact=False) for dd in dm]
+        row["mc_ad_fsig"] = float(np.mean(np.array(p_ad) < 0.05))
         fg = sub[np.isfinite(sub.dm_host_fg_excess)]
         row["rS_fg"], row["p_fg"] = stats.spearmanr(fg[xcol if xcol != DM else "dm_host_fg_excess"],
                                                     fg[ycol if ycol != DM else "dm_host_fg_excess"])
@@ -248,15 +251,19 @@ def p_text(p):
 
 
 def table(d: pd.DataFrame) -> list[str]:
-    lines = ["| x | y | sample | claim | N | r_S (p) | 95% CI | tau (p) | JK1 | JK3: p<0.05 (max p) | most influential "
-             "(r_S without) | partial tau given z (p) | DM_cosmic MC: r_S, p<0.05 | foreground-corrected | BH q |",
-             "|" + "---|" * 15]
+    lines = ["| x | y | sample | claim | N | r_S (p) | AD p (BH q) | 95% CI | tau (p) | JK1 | JK3: p<0.05 (max p) | "
+             "most influential (r_S without) | partial tau given z (p) | DM_cosmic MC: r_S, p<0.05 (AD) | "
+             "foreground-corrected | BH q |",
+             "|" + "---|" * 16]
     for r in d.itertuples():
         ptau = f"{r.ptau:+.2f} ({fmt_p(r.p_ptau)})" if np.isfinite(r.ptau) else ""
-        mc = f"{r.mc_r50:+.2f} [{r.mc_r16:+.2f}, {r.mc_r84:+.2f}], {r.mc_fsig:.2f}" if np.isfinite(r.mc_r50) else ""
+        mc = (f"{r.mc_r50:+.2f} [{r.mc_r16:+.2f}, {r.mc_r84:+.2f}], {r.mc_fsig:.2f} ({r.mc_ad_fsig:.2f})"
+              if np.isfinite(r.mc_r50) else "")
         fg = f"{r.rS_fg:+.2f} ({fmt_p(r.p_fg)})" if np.isfinite(r.rS_fg) else ""
         q = f"{r.q_BH:.2f}" if np.isfinite(r.q_BH) else ""
+        ad = f"{fmt_p(r.p_AD)} ({r.q_BH_AD:.2f})" if np.isfinite(r.q_BH_AD) else fmt_p(r.p_AD)
         lines.append(f"| {LABELS[r.x]} | {LABELS[r.y]} | {r.sample} | {r.claim} | {r.N} | {r.r_S:+.2f} ({fmt_p(r.p_S)}) | "
+                     f"{ad} | "
                      f"[{r.rS_boot_lo:+.2f}, {r.rS_boot_hi:+.2f}] | {r.tau:+.2f} ({fmt_p(r.p_tau)}) | "
                      f"{r.rS_jack_min:+.2f} to {r.rS_jack_max:+.2f} | {r.jk3_fsig:.2f} ({fmt_p(r.jk3_pmax)}) | "
                      f"{r.most_influential} ({r.rS_without_it:+.2f}) | {ptau} | {mc} | {fg} | {q} |")
@@ -276,7 +283,8 @@ def figure(h, d):
         sc = ax.scatter(s[xc], s[yc], c=s.z, cmap="viridis", vmin=0, vmax=0.8, s=18, edgecolor="k", lw=0.3)
         r = d[(d.x == xc) & (d.y == yc) & (d["sample"] == "All")].iloc[0]
         ax.text(0.03, 0.97, f"N = {r.N}\n$r_S$ = {r.r_S:+.2f} ({p_text(r.p_S)})\n"
-                f"$\\tau$ = {r.tau:+.2f} ({p_text(r.p_tau)})", transform=ax.transAxes, va="top", fontsize=7.5)
+                f"$\\tau$ = {r.tau:+.2f} ({p_text(r.p_tau)})\nAD {p_text(r.p_AD)}",
+                transform=ax.transAxes, va="top", fontsize=7.5)
         ax.text(0.97, 0.03, f"({letter})", transform=ax.transAxes, ha="right", fontsize=9)
         ax.set_xlabel(xl or ylab[xc], fontsize=8.5)
         ax.set_ylabel(ylab[yc], fontsize=8.5)
@@ -300,8 +308,9 @@ def main() -> None:
         print(f"{t[1]:>20} {t[2]:>14} {t[3]:>16} N={r['N']:2d} r_S={r['r_S']:+.2f} p={r['p_S']:.3f}", flush=True)
     d = pd.DataFrame(rows)
     family = d.theme != "Sanity checks"
-    d["q_BH"] = np.nan
+    d["q_BH"], d["q_BH_AD"] = np.nan, np.nan
     d.loc[family, "q_BH"] = stats.false_discovery_control(d.loc[family, "p_S"])
+    d.loc[family, "q_BH_AD"] = stats.false_discovery_control(d.loc[family, "p_AD"])
     d.to_csv(OUT / "tests.csv", index=False)
 
     budget = h.loc[np.isfinite(h.dm_halo_pred), ["frb", "z", "logmstar", "offset_kpc", DM, "dm_halo_p16",
@@ -314,7 +323,9 @@ def main() -> None:
           "Sigma = quantity / (2 pi R_e^2), with the literature R_e where published and our GALFIT R_e otherwise; "
           "offset / R_e uses the literature offset; "
           "Delta MS is log SFR minus the Speagle+14 main sequence at the host redshift. "
-          f"BH q over the {family.sum()} hypothesis tests (sanity checks excluded).", ""]
+          f"BH q over the {family.sum()} hypothesis tests (sanity checks excluded), separately for Spearman and AD. "
+          "AD: two-sample Anderson-Darling p that y has the same distribution below and above the median of x "
+          "(permutation p; inside the DM_cosmic MC, the fraction of draws with asymptotic AD p < 0.05).", ""]
     for theme in d.theme.unique():
         md += [f"## {theme}", ""] + table(d[d.theme == theme]) + [""]
     halo = budget.dropna(subset=[DM])

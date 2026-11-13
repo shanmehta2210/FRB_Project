@@ -8,11 +8,15 @@ Conventions used throughout:
 - $r_S$ is the Spearman rank correlation.
 - "BH q" is the Benjamini–Hochberg false-discovery-rate value. It accounts for running many tests at once: with 40 tests, about two will reach $p < 0.05$ by chance alone.
 - "MC" means 2,000 Monte Carlo draws through the measurement errors.
-- In the binned-correlation plots, a legend entry such as `z 0.01–0.14: r_S = +0.13 (p = 0.64); MC r_S +0.04 [-0.09, +0.15], p < 0.05 in 0%` reads as follows:
-  - The first part is the Spearman $r_S$ of the plotted pair in that tertile, with its two-sided $p$-value.
-  - The MC part is the same $r_S$ recomputed in each draw, with every value resampled within its error bars and the tertiles re-formed. It gives the median and [16th, 84th percentile] of $r_S$; these are correlation coefficients (so they can be negative), not $p$-values.
-  - The last figure is the fraction of draws in which $r_S$ is significant.
-  - The AD test is used only for the inclination-distribution tests ($p_{\rm m}$), never for these correlations.
+- Every Spearman test is paired with an AD test, reported as "AD p". Spearman asks whether $y$ rises or falls with $x$. The AD test splits the hosts at the median of $x$ and asks whether $y$ has the same distribution in the two halves (two-sample Anderson–Darling, permutation $p$). The AD test also catches dependences that are not monotonic, such as a change in spread, but it has less power for a simple trend.
+- This AD p is a different test from the AD used for the inclination distributions. There, the host $\cos i$ values are compared with the control sample, and the result is the $p_{\rm m}$ above.
+- In the binned-correlation plots, a legend entry such as
+  `z 0.01–0.14: r_S = +0.27 (p = 0.31); AD p = 0.52`
+  `MC r_S +0.29 [+0.20, +0.38]; p < 0.05 in 1% (AD 0%)`
+  reads as follows:
+  - The first line gives the Spearman $r_S$ of the plotted pair in that tertile with its two-sided $p$-value, then the AD $p$.
+  - The second line is the same $r_S$ recomputed in each Monte Carlo draw, with every value resampled within its error bars and the tertiles re-formed. It gives the median and [16th, 84th percentile] of $r_S$; these are correlation coefficients (so they can be negative), not $p$-values.
+  - The percentages are the fractions of draws in which Spearman, and in brackets AD, give $p < 0.05$.
 - DM$_{\rm host}$ is in the host rest frame.
 
 | Result | Folder | One-line verdict |
@@ -62,17 +66,19 @@ The lowest values in any of these are $p_{\rm m} = 0.055$ (AD, $z < 0.1$ against
 | File | What it shows | Key numbers |
 |---|---|---|
 | `12a_dm_host_vs_axis_ratio` | DM$_{\rm host}$ vs $q$, with and without foreground halos; forest plot of $r_S$ for every property | DM$_{\rm host}$: $r_S = -0.06$ ($p = 0.64$) |
-| `12_table_correlations_with_axis_ratio` | Outlier-robust statistics for every property vs $q$: bootstrap, Kendall $\tau$, jackknife, Theil–Sen; with foreground halos removed and in subsamples | All 10 DM$_{\rm host}$ variants (with and without foreground halos, three subsamples) have $\lvert r_S \rvert \le 0.09$ and $p \ge 0.54$. The only nominal hit is old-star $A_V$ ($-0.46$, $p = 0.01$, $N = 30$), the expected sense for dust: edge-on disks are more attenuated. |
+| `12_table_correlations_with_axis_ratio` | Outlier-robust statistics for every property vs $q$: AD, bootstrap, Kendall $\tau$, jackknife, Theil–Sen; with foreground halos removed and in subsamples | All 10 DM$_{\rm host}$ variants (with and without foreground halos, three subsamples) have $\lvert r_S \rvert \le 0.09$, $p \ge 0.54$ and AD $p \ge 0.08$. The only hit is old-star $A_V$ ($-0.46$, $p = 0.01$; AD $p = 0.003$; $N = 30$), the expected sense for dust: edge-on disks are more attenuated. |
 | `13_marnoch_shared_axis_ratios` | Our $q$ vs Marnoch et al. (2026) for the 20 shared hosts | $r_S = 0.86$, median $\lvert\Delta q\rvert = 0.031$, so the measurements agree |
-| `14_table_marnoch_combined` | DM$_{\rm host}$ vs $q$: Marnoch alone, ours alone, and the union of 69 hosts | $-0.43 \to -0.06$; union $-0.21$ ($p = 0.08$) |
-| `15_table_correlations_with_q_in_redshift_bins` | Property vs $q$ within redshift bins | No consistent trend in any bin |
-| `16_binned_properties_vs_inclination_grid` | **16 panels:** $z$, $M_*$, SFR and DM$_{\rm host}$ against inclination, within tertiles of each of the four (rows = binning quantity). Error bars on every point; statistics also through the errors (MC). | Whole sample: DM$_{\rm host}$ $+0.06$ ($p = 0.64$), SFR $-0.12$ (0.42), $M_*$ $+0.11$ (0.43), $z$ $-0.02$ (0.86); through the errors all $\lvert r_S \rvert \le 0.14$ with $p < 0.05$ in at most 1% of draws |
-| `17_binned_properties_vs_inclination_heatmap` | All 64 coefficients of the 16 panels in one colour-coded table | 2 of 48 tertiles reach $p < 0.05$, which is chance level; none has BH $q < 0.05$ |
+| `14_table_marnoch_combined` | DM$_{\rm host}$ vs $q$: Marnoch alone, ours alone, and the union of 69 hosts | Spearman $-0.43 \to -0.06$, union $-0.21$ ($p = 0.08$). AD $p$: Marnoch 0.032, ours 0.38, union 0.09–0.15. |
+| `15_table_correlations_with_q_in_redshift_bins` | Property vs $q$ within redshift bins, Spearman and AD | No consistent trend in any bin. The only AD $p < 0.05$ is old-star $A_V$ (all hosts and $z \ge 0.2$). |
+| `16_binned_properties_vs_inclination_grid` | **16 panels:** $z$, $M_*$, SFR and DM$_{\rm host}$ against inclination, within tertiles of each of the four (rows = binning quantity). Error bars on every point; Spearman and AD, also through the errors (MC). | Whole sample: DM$_{\rm host}$ $+0.06$ ($p = 0.64$; AD 0.19), SFR $-0.12$ (0.42; AD 0.46), $M_*$ $+0.11$ (0.43; AD 1.00), $z$ $-0.02$ (0.86; AD 0.53). Through the errors, $p < 0.05$ in at most 1% of draws for Spearman and 6% for AD (5% is chance). |
+| `17_binned_properties_vs_inclination_heatmap` | All 64 coefficients of the 16 panels in one colour-coded table, with AD $p$ in every tertile and whole-sample cell | Spearman: 2 of 48 tertiles reach $p < 0.05$. AD: also 2 of 48. Both are chance level, and the lowest BH $q$ is 0.62 (Spearman) and 0.96 (AD). |
 
-The two nominal tertile hits in panel 16 are:
+The nominal hits in panel 16 are:
 
-- SFR vs $i$ for the least massive third of the hosts: $r_S = -0.64$, MC $-0.58$, BH $q = 0.62$. If real, this is most simply the inclination dependence of dust attenuation leaking into the SED-derived SFRs of dwarfs.
-- $M_*$ vs $i$ for the middle DM third: $+0.53$, MC $+0.39$, $q = 0.66$.
+- **SFR vs $i$ for the least massive third:** Spearman $r_S = -0.64$, MC $-0.58$, BH $q = 0.62$; AD $p = 0.22$. If real, this is most simply the inclination dependence of dust attenuation leaking into the SED-derived SFRs of dwarfs.
+- **$M_*$ vs $i$ for the middle DM third:** $+0.53$, MC $+0.39$, $q = 0.66$; AD $p = 0.034$.
+- **SFR vs $i$ for the lowest-SFR third:** AD only, $p = 0.042$; Spearman $p = 0.087$.
+- **DM$_{\rm host}$ vs $i$ for the 51 hosts with $M_*$:** AD $p = 0.043$. For all 55 hosts it is AD $p = 0.19$, and through the errors it is significant in 6% of draws, so it does not survive.
 
 ---
 
@@ -83,20 +89,21 @@ The two nominal tertile hits in panel 16 are:
 | File | What it shows | Key numbers |
 |---|---|---|
 | `01_binned_pairs_grid` | **12 panels:** for each binning quantity (rows: $z$, $M_*$, SFR, DM$_{\rm host}$), the three pairs of the other three, by tertile. Error bars on every point; MC statistics through the errors, re-binning in every draw. | See below |
-| `02_binned_pairs_heatmap` | All coefficients of the 12 panels in one colour-coded table, with the tertiles that survive BH framed | 2 of 36 tertiles survive BH, both DM–SFR |
-| `03_dm_host_vs_sfr_binned_by_z` | The one notable panel, full size | $z > 0.29$: $r_S = +0.82$ ($p < 0.001$); through the errors $+0.57$ [16–84%: $+0.37$, $+0.72$], $p < 0.05$ in 64% of draws |
-| `04_table_dm_host_tests` | Whole-sample tests of what DM$_{\rm host}$ correlates with, with bootstrap, delete-3 jackknife, partial $\tau$ given $z$, DM$_{\rm cosmic}$ MC and BH $q$ | Only DM–$\lvert$RM$\rvert$ survives BH ($q = 0.04$); DM–$M_*$ $-0.01$; DM–$z$ $+0.08$ |
+| `02_binned_pairs_heatmap` | All coefficients of the 12 panels in one colour-coded table, with AD $p$ and the tertiles that survive BH framed | Spearman: 2 of 36 tertiles survive BH, both DM–SFR. AD: 3 of 36 have $p < 0.05$, none survives BH (lowest $q = 0.06$). |
+| `03_dm_host_vs_sfr_binned_by_z` | The one notable panel, full size | $z > 0.29$: $r_S = +0.82$ ($p < 0.001$; AD $p = 0.009$). Through the errors $+0.57$ [16–84%: $+0.37$, $+0.72$], $p < 0.05$ in 64% of draws (AD 42%). |
+| `04_table_dm_host_tests` | Whole-sample tests of what DM$_{\rm host}$ correlates with: Spearman and AD, each with BH $q$, plus bootstrap, delete-3 jackknife, partial $\tau$ given $z$ and the DM$_{\rm cosmic}$ MC | Only DM–$\lvert$RM$\rvert$ survives Spearman BH ($q = 0.04$; AD $p = 0.036$, $q = 0.19$). Nothing survives AD BH; the lowest is DM–scattering (AD $p = 0.002$, $q = 0.075$). DM–$M_*$: $-0.01$ (AD 0.91). DM–$z$: $+0.08$ (AD 0.92). |
 | `05_dm_host_physics_panels` | Six scatter plots: host-halo DM, SFR, $\Sigma_{\rm SFR}$, scattering, RM, and $M_*$ vs $z$ | Host-halo DM is only about 7% of DM$_{\rm host}$ |
 
 **Reading the 12-panel grid**
 
-- **DM$_{\rm host}$ vs $z$ and vs $M_*$:** no correlation overall or at fixed values of the other quantities. Partial $\lvert\tau\rvert \le 0.06$, and through the errors $\lvert r_S \rvert \le 0.05$.
+- **DM$_{\rm host}$ vs $z$ and vs $M_*$:** no correlation overall or at fixed values of the other quantities. Partial $\lvert\tau\rvert \le 0.06$; through the errors $\lvert r_S \rvert \le 0.05$; whole-sample AD $p \ge 0.90$.
 - **$z$ vs $M_*$ and vs SFR:** positive throughout ($r_S \approx +0.3$; 82–92% of error draws significant). This is the flux limit: distant hosts are only found if bright. It is the same for low- and high-DM bursts.
 - **$M_*$ vs SFR:** a weak main sequence ($+0.25$), identical in every bin (tertiles agree, $p \ge 0.85$).
 - **DM$_{\rm host}$ vs SFR:**
   - Absent at $z < 0.29$.
   - Strong at $z > 0.29$ in the catalogue values ($+0.82$), but it drops to $+0.57$ once the scatter in DM$_{\rm cosmic}$ and the SFR errors are propagated.
   - The middle-mass result ($+0.70$) drops to $+0.42$ (significant in 33% of draws).
+  - Over the whole sample, AD finds a difference in the DM$_{\rm host}$ distribution between low- and high-SFR hosts ($p = 0.02$) that Spearman does not ($p = 0.10$). Through the errors it is significant in only 9% of draws.
 - **Caveat:** the heatmap shows that every other cell is consistent with chance.
 
 ---
