@@ -188,6 +188,13 @@ The factor $(1+z_{\rm host})$ converts the observer-frame foreground DM to the h
 
 ## Summary of the checks
 
+**Audit (`audit/AUDIT.md`, `scripts/foreground_audit.py`).** Along random sightlines, this code returns 2.2 times the mean halo DM that the halo mass function allows for the same gas profile, so it overestimates the foreground. The audit traces this to three causes:
+- **Halo masses of massive galaxies.** The inverted Moster+13 relation assigns them up to $10^{15.5}\,M_\odot$. The halo mass of a galaxy of given stellar mass, $P(M_h \mid M_*)$, is 0.5–0.9 dex lower at $\log M_* \ge 11.5$.
+- **Group galaxies.** Every galaxy of a group gets its own halo.
+- **Host environment.** Host-environment galaxies are counted as foreground.
+
+Correcting the first two brings the random sightlines onto the halo-model value (ratio 1.01). The audit also shows that `dm_host_fg` (full subtraction) double counts the halo gas already in $\langle{\rm DM_{cosmic}}\rangle$. The consistent correction is the excess over random sightlines.
+
 Full numbers are in [CODE_CHECKS.md](CODE_CHECKS.md), produced by `scripts/check_foreground_halo_dm.py`.
 
 **Agreement with the original code.** The physics is the same as `Estimate_DM_halo.ipynb` cell 26: Moster+13 parameters, the Eq. B3 profile normalization, $f_{\rm gas}=0.75$, $\alpha=y_0=2$, $\mu_H=1.3$, $n_e/n_H=1.1667$, zero DM outside $r_{200}$ and the $1/(1+z)$ factor. The candidate selection is the same as `Galaxy_offset_code.ipynb` and the Appendix B text.
