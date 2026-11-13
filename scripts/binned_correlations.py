@@ -189,7 +189,7 @@ def draw(ax, h, err, row, small=False):
     for k, b in enumerate(row["bins"]):
         m = tert == k
         lab = (f"{SHORT[c]} {fmt_c(c, b['c_lo'])}–{fmt_c(c, b['c_hi'])}: $r_S$ = {b['r']:+.2f} ({fmt_p(b['p'])}); "
-               f"MC {fmt_mc(row['mc']['r_bin'][:, k])}")
+               f"MC $r_S$ {fmt_mc(row['mc']['r_bin'][:, k])}, p < 0.05 in {row['mc']['fsig_bin'][k]:.0%}")
         ax.errorbar(x[m], y[m], xerr=ex[:, m], yerr=ey[:, m], fmt="none", ecolor=COLORS[k], elinewidth=0.6,
                     alpha=0.5, zorder=2)
         ax.scatter(x[m], y[m], s=13 if small else 22, color=COLORS[k], edgecolor="k", lw=0.3, label=lab, zorder=3)
@@ -207,7 +207,8 @@ def draw(ax, h, err, row, small=False):
             f"all {row['N']}: $r_S$ = {row['r_all']:+.2f} ({fmt_p(row['p_all'])});  {partial}\n"
             f"pooled within tertiles: $r$ = {row['r_pool']:+.2f} ({fmt_p(row['p_pool'])});  "
             f"tertiles agree: {fmt_p(row['p_Q'])}\n"
-            f"through the errors (MC median [16, 84]%): all {fmt_mc(row['mc']['r_all'])}{mc_partial}",
+            f"through the errors (MC median [16, 84]%): all $r_S$ {fmt_mc(row['mc']['r_all'])}, "
+            f"p < 0.05 in {row['mc']['fsig_all']:.0%}{mc_partial}",
             transform=ax.transAxes, ha="center", va="top", fontsize=fs)
     ax.tick_params(labelsize=fs)
     lo, hi = np.nanmin(y - ey[0]), np.nanmax(y + ey[1])
@@ -227,6 +228,13 @@ def grid(h, err, rows, shape, name, suptitle):
         ax.set_title(title(row), fontsize=8.5)
     fig.suptitle(suptitle, fontsize=11, y=1.0)
     fig.tight_layout(h_pad=2.6)
+    fig.text(0.5, -0.01,
+             "How to read each legend entry: tertile range of the binning quantity; Spearman rank correlation $r_S$ of "
+             "the plotted pair in that tertile, with its two-sided p-value (null hypothesis: $r_S$ = 0).\n"
+             "MC $r_S$: the same Spearman coefficient recomputed in 2,000 draws in which every value is resampled within "
+             "its error bars and the tertiles are re-formed; median [16th, 84th percentile] of $r_S$ (not a p-value), "
+             "and the fraction of draws with p < 0.05.",
+             ha="center", va="top", fontsize=9)
     for ext in ("pdf", "png"):
         fig.savefig(OUT / f"{name}.{ext}", dpi=170, bbox_inches="tight")
     plt.close(fig)

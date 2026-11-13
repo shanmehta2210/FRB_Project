@@ -8,6 +8,11 @@ Conventions used throughout:
 - $r_S$ is the Spearman rank correlation.
 - "BH q" is the Benjamini–Hochberg false-discovery-rate value. It accounts for running many tests at once: with 40 tests, about two will reach $p < 0.05$ by chance alone.
 - "MC" means 2,000 Monte Carlo draws through the measurement errors.
+- In the binned-correlation plots, a legend entry such as `z 0.01–0.14: r_S = +0.13 (p = 0.64); MC r_S +0.04 [-0.09, +0.15], p < 0.05 in 0%` reads as follows:
+  - The first part is the Spearman $r_S$ of the plotted pair in that tertile, with its two-sided $p$-value.
+  - The MC part is the same $r_S$ recomputed in each draw, with every value resampled within its error bars and the tertiles re-formed. It gives the median and [16th, 84th percentile] of $r_S$; these are correlation coefficients (so they can be negative), not $p$-values.
+  - The last figure is the fraction of draws in which $r_S$ is significant.
+  - The AD test is used only for the inclination-distribution tests ($p_{\rm m}$), never for these correlations.
 - DM$_{\rm host}$ is in the host rest frame.
 
 | Result | Folder | One-line verdict |
