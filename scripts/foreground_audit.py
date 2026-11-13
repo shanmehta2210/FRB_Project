@@ -12,7 +12,8 @@
               0.4-1 dex high (M* ~ Mh^0.3 there, and massive halos are rare), up to 1e15.5 Msun
      central  one halo per group: a galaxy inside r200 of a more massive candidate at a consistent
               redshift is a satellite and its halo is not added again
-     cond_central  both; the corrected estimate
+     cond_central  both, with host-environment galaxies excluded; the corrected estimate, which
+              foreground_halo_dm.py now uses (the "pipeline" column is its published-method total)
      hostenv  galaxies at the host redshift inside the host's own r200 are host environment, not
               foreground (FRB sightlines only)
 3. DM budget. With the halo term of the sightline known, the consistent subtraction is
@@ -33,85 +34,21 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy import stats
-from scipy.integrate import quad
-
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_host_property_table as BT  # noqa: E402
 import foreground_halo_dm as F  # noqa: E402
 import robust_correlations as RC  # noqa: E402
-from colossus.cosmology import cosmology  # noqa: E402
-from colossus.lss import mass_function  # noqa: E402
+from foreground_halo_dm import (ZGRID, conditional_logmh, flag_groups, halo_electron_fraction,  # noqa: E402
+                                halo_model_mean)
 
 OUT = F.OUT / "audit"
 N_MC = 500
-DZ_SPEC = 0.005           # (1+z) * 1500 km/s: spectroscopic redshifts in the same group
 SIG_MW = 0.2              # fractional uncertainty of NE2001
-LOGM_MIN = 10.0
-ZGRID = np.linspace(0.01, 0.9, 30)
 rng = np.random.default_rng(5)
-cosmology.setCosmology("planck18")
 plt.rcParams.update({"font.family": "serif", "mathtext.fontset": "stix", "font.serif": ["STIXGeneral"]})
 
 
-# ---------------------------------------------------------------- 1. halo-model expectation
-def gas_fraction(c):
-    """Gas mass inside r200 of the coded mNFW profile, in units of f_gas f_b M200."""
-    norm = np.log(1 + c) - c / (1 + c)
-    return np.array([quad(lambda y: y ** 3 / (2 + y) ** 4, 0, cc)[0] for cc in np.atleast_1d(c)]) / norm
-
-
-def halo_electron_fraction(z, logm_min=LOGM_MIN, f_gas=0.75):
-    """Mean electron density in halo gas over the Macquart mean diffuse electron density."""
-    h = F.cosmo.h
-    ln_m = np.linspace(np.log(10 ** logm_min * h), np.log(10 ** 15.5 * h), 300)
-    m = np.exp(ln_m)
-    dn = mass_function.massFunction(m, z, mdef="200c", model="tinker08", q_out="dndlnM")
-    rho_gas = np.trapezoid(dn * f_gas * F.FB * m * gas_fraction(F.dutton14_c200c(m / h, z)), ln_m)
-    return rho_gas / (BT.FD * F.cosmo.Ob0 * 2.775e11) * (1.1667 / 1.3) / 0.875
-
-
-def halo_model_mean(z_src, frac):
-    w = (1 + ZGRID) / np.sqrt(BT.OM * (1 + ZGRID) ** 3 + 1 - BT.OM)
-    dmc = np.array([BT.mean_dm_cosmic(z) for z in ZGRID])
-    cum = np.concatenate([[0], np.cumsum(0.5 * (frac[1:] * w[1:] + frac[:-1] * w[:-1]) * np.diff(ZGRID))])
-    tot = np.concatenate([[0], np.cumsum(0.5 * (w[1:] + w[:-1]) * np.diff(ZGRID))])
-    ratio = np.interp(z_src, ZGRID, np.divide(cum, tot, out=np.zeros_like(cum), where=tot > 0))
-    return ratio * np.interp(z_src, ZGRID, dmc)
-
-
 # ---------------------------------------------------------------- 2. per-galaxy recomputation
-SHMR_SCATTER = 0.15
-_COND = {}
-
-
-def conditional_logmh_table():
-    """Mean and spread of log Mh at fixed log M*, P(Mh | M*) ~ dn/dlnMh * N(log M*; Moster13(Mh), 0.15)."""
-    if not _COND:
-        h = F.cosmo.h
-        lmh = np.linspace(9.5, 15.8, 700)
-        zg, mg = np.linspace(0.0, 1.0, 41), np.linspace(7.0, 12.8, 291)
-        mu, sd = np.empty((len(zg), len(mg))), np.empty((len(zg), len(mg)))
-        for i, z in enumerate(zg):
-            dn = mass_function.massFunction(10 ** lmh * h, max(z, 1e-3), mdef="200c", model="tinker08", q_out="dndlnM")
-            w = dn[None, :] * np.exp(-0.5 * ((mg[:, None] - F.moster13_logms(lmh, max(z, 1e-3))[None, :]) / SHMR_SCATTER) ** 2)
-            w /= w.sum(1, keepdims=True)
-            mu[i] = w @ lmh
-            sd[i] = np.sqrt(w @ lmh ** 2 - mu[i] ** 2)
-        _COND.update(zg=zg, mg=mg, mu=mu, sd=sd)
-    return _COND
-
-
-def conditional_logmh(logms, z, draw=True):
-    t = conditional_logmh_table()
-    iz = np.clip(np.rint(np.asarray(z) / (t["zg"][1] - t["zg"][0])).astype(int), 0, len(t["zg"]) - 1)
-    im = np.clip((np.asarray(logms) - t["mg"][0]) / (t["mg"][1] - t["mg"][0]), 0, len(t["mg"]) - 1.001)
-    lo = im.astype(int)
-    f = im - lo
-    mu = t["mu"][iz, lo] * (1 - f) + t["mu"][iz, lo + 1] * f
-    sd = t["sd"][iz, lo] * (1 - f) + t["sd"][iz, lo + 1] * f
-    return mu + rng.normal(0, 1, np.shape(mu)) * sd if draw else mu
-
-
 def draws(g, z_host, z_spec):
     if np.isfinite(z_spec):
         return np.full(N_MC, z_spec), 1.0
@@ -167,42 +104,16 @@ def recompute_sightline(name, ra, dec, z_host, seed_row=None, host_logms=np.nan)
                                F.dm_mnfw(conditional_logmh(ms, zs), zs, theta).mean()))
     gal = pd.DataFrame(rows)
     if len(gal):
-        flag_groups(gal, ra, dec, z_host, host_logms)
+        flag_groups(gal, z_host, host_logms)
     return dr, gal
 
 
 def galaxy_row(name, ls_id, ra, dec, theta, r, z_ref, z_spec, z_err, p_fg, logms, dm, dm_noscat, dm_cond):
     logmh = float(conditional_logmh(logms, z_ref, draw=False))
-    return dict(sightline=name, ls_id=str(ls_id), ra=ra, dec=dec, theta=theta, r=r, z_ref=z_ref, z_spec=z_spec,
+    return dict(sightline=name, ls_id=str(ls_id), ra=ra, dec=dec, theta_arcsec=theta, r=r, z_ref=z_ref, z_spec=z_spec,
                 z_err=z_err, p_fg=p_fg, logms=logms, logmh_inverse=float(F.logmh_from_logms(logms, z_ref)[0]),
-                logmh=logmh, r200=float(F.r200_kpc(10 ** logmh, z_ref)),
+                logmh=logmh, r200_kpc=float(F.r200_kpc(10 ** logmh, z_ref)),
                 dm=float(dm), dm_noscat=float(dm_noscat), dm_cond=float(dm_cond))
-
-
-def same_z(z1, e1, z2, e2):
-    return np.abs(z1 - z2) <= np.maximum(np.hypot(e1, e2), DZ_SPEC * (1 + np.minimum(z1, z2)))
-
-
-def flag_groups(gal, ra, dec, z_host, host_logms):
-    """Satellites (inside r200 of a more massive candidate at a consistent redshift) and host environment."""
-    gal["satellite"] = False
-    gal["hostenv"] = False
-    if np.isfinite(host_logms):
-        r200_host = F.r200_kpc(10 ** conditional_logmh(host_logms, z_host, draw=False), z_host)
-        b = gal.theta * F.kpc_per_arcsec(z_host)
-        gal["hostenv"] = (b < r200_host) & same_z(gal.z_ref, gal.z_err, z_host, 0.0) & (gal.z_ref > z_host - 0.1)
-    order = gal.sort_values("logmh", ascending=False).index
-    centrals = []
-    for i in order:
-        g = gal.loc[i]
-        for j in centrals:
-            c = gal.loc[j]
-            sep = F.separation_arcsec(g.ra, g.dec, c.ra, c.dec) * F.kpc_per_arcsec(c.z_ref)
-            if sep < c.r200 and same_z(g.z_ref, g.z_err, c.z_ref, c.z_err):
-                gal.loc[i, "satellite"] = True
-                break
-        else:
-            centrals.append(i)
 
 
 def control_positions(hosts, done):
@@ -242,12 +153,12 @@ def recompute_all():
         sr = seed.loc[row.frb] if row.frb in seed.index else None
         dr, gal = recompute_sightline(row.frb, row.ra_deg, row.dec_deg, row.z, sr, row.logmstar)
         if dr is not None:
-            add("frb", row.frb, row.frb, row.z, dr, gal, done.loc[row.frb, "dm_fg"])
+            add("frb", row.frb, row.frb, row.z, dr, gal, done.loc[row.frb, "dm_fg_published"])
     pos = control_positions(hosts, done)
     for _, c in ctrl.iterrows():
         dr, gal = recompute_sightline(c.frb, *pos[c.frb], c.z)
         if dr is not None:
-            add("control", c.frb, c.host, c.z, dr, gal, c.dm_fg)
+            add("control", c.frb, c.host, c.z, dr, gal, c.dm_fg_published)
     OUT.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(lines).to_csv(OUT / "sightlines.csv", index=False)
     pd.concat(gals, ignore_index=True).to_csv(OUT / "galaxies.csv", index=False)
@@ -343,7 +254,7 @@ def correlation_impact(b):
     b = b.assign(log_sfr=np.log10(b.sfr.where(b.sfr > 0)))
     for x, sample in tests:
         s = b if sample == "all" else b[b.z > 0.29]
-        for col, lab in (("dm_host_rest", "standard (paper)"), ("dm_host_fg", "full pipeline foreground removed"),
+        for col, lab in (("dm_host_rest", "standard (paper)"), ("dm_host_fg_published", "published foreground fully removed"),
                          ("dm_host_pipe", "pipeline, consistent subtraction"),
                          ("dm_host_corr_excess", "standard minus corrected excess"),
                          ("dm_host_corr", "corrected foreground, consistent subtraction")):

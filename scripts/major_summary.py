@@ -352,6 +352,7 @@ def build_correlations():
     copy(APP / "dm_host_physics" / "dm_host_physics.pdf", COR / "05_dm_host_physics_panels")
     copy(MAT / "foreground_halos" / "foreground_diagnostic.pdf", COR / "06_foreground_halo_dm_per_frb")
     copy(MAT / "foreground_halos" / "audit" / "audit.pdf", COR / "08_foreground_halo_audit")
+    copy(MAT / "foreground_halos" / "mass_inversion" / "mass_inversion.pdf", COR / "09_halo_mass_inversion_test")
     copy(bc / "global_tests.pdf", COR / "07_global_tests_both_grids")
 
 

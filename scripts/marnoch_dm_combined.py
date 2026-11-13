@@ -54,7 +54,7 @@ def main() -> None:
     sh = sh[["frb", "z", "q_m", "q", "dm_host_rest_m", "dm_host_rest", "dm_host_fg", "dm_host_fg_excess"]]
     sh.to_csv(MR / "dm_host_shared.csv", index=False)
     md = ["# DM_host: this work vs Marnoch et al. (2026)", "", f"Shared hosts with DM_host in both: {len(sh)}", ""]
-    for col, lab in (("dm_host_rest", "ours, no foreground correction"), ("dm_host_fg", "ours, foreground removed"),
+    for col, lab in (("dm_host_rest", "ours, no foreground correction"), ("dm_host_fg", "ours, foreground fully removed"),
                      ("dm_host_fg_excess", "ours, foreground excess removed")):
         d = sh.dropna(subset=[col])
         diff = d[col] - d.dm_host_rest_m

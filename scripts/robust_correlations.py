@@ -4,7 +4,8 @@ For each property: Spearman r_S (Fisher 95% interval), Kendall tau_b, bootstrap 
 leave-one-out jackknife range of r_S (and the most influential host), the Theil-Sen slope with its
 95% interval, and a two-sample Anderson-Darling test of whether the property has the same distribution
 below and above the median of q (permutation p). DM_host is also tested after removing the foreground-halo DM of intervening galaxies
-(scripts/foreground_halo_dm.py; Bhardwaj, Snelders et al. 2025 method).
+(scripts/foreground_halo_dm.py: corrected version of the Bhardwaj, Snelders et al. 2025 method, which is kept
+as the "published method" comparison).
 
 Inputs:  plots/plots_null/v2/host_correlations/host_props.csv
          Publication/materials/foreground_halos/foreground_dm_per_host.csv (+ foreground_dm_controls.csv)
@@ -35,6 +36,7 @@ PROPS = [
     ("dm_host_fg_excess", r"DM$_{\rm host}$, foreground excess over random sightlines removed"),
     ("dm_host_fg_cond", r"DM$_{\rm host}$, foreground removed (all photo-$z$ galaxies in front)"),
     ("dm_host_fg_spec", r"DM$_{\rm host}$, spectroscopic foreground only"),
+    ("dm_host_fg_excess_published", r"DM$_{\rm host}$, foreground excess removed (published method)"),
     ("log_abs_rm", r"$\log|{\rm RM}|$"),
     ("log_tau", r"$\log\tau_{\rm scatt}$"),
     ("lin_pol", "Linear polarization"),
@@ -48,20 +50,21 @@ def fisher_ci(r, n):
 
 
 def load() -> pd.DataFrame:
+    """Host table with the foreground-corrected DM_host columns. dm_host_fg_excess removes only the excess
+    of the sightline's halo DM over the random-sightline mean, which <DM_cosmic> already contains; the
+    full subtractions (dm_host_fg, _cond, _spec) count that mean twice and are bounds."""
     h = pd.read_csv(HOSTS)
-    f = pd.read_csv(FG / "foreground_dm_per_host.csv")[["frb", "in_ls", "dm_fg", "dm_fg_conditional", "dm_fg_specz_only"]]
+    f = pd.read_csv(FG / "foreground_dm_per_host.csv")[
+        ["frb", "in_ls", "dm_fg", "dm_fg_conditional", "dm_fg_specz_only", "dm_fg_expected",
+         "dm_fg_published", "dm_fg_expected_published"]]
     h = h.merge(f, on="frb", how="left")
     ls = h.in_ls.astype(str).isin(["dr9", "dr10"])
-    for col, src in (("dm_host_fg", "dm_fg"), ("dm_host_fg_cond", "dm_fg_conditional"), ("dm_host_fg_spec", "dm_fg_specz_only")):
+    for col, src in (("dm_host_fg", "dm_fg"), ("dm_host_fg_cond", "dm_fg_conditional"),
+                     ("dm_host_fg_spec", "dm_fg_specz_only"), ("dm_host_fg_published", "dm_fg_published")):
         h[col] = np.where(ls, h.dm_host_rest - h[src].fillna(0) * (1 + h.z), np.nan)
-    ctrl = FG / "foreground_dm_controls.csv"
-    h["dm_fg_expected"] = np.nan
-    if ctrl.exists():
-        c = pd.read_csv(ctrl)
-        c = c[c.in_ls.astype(str).isin(["dr9", "dr10"])]
-        h["dm_fg_expected"] = h.frb.map(c.groupby("host").dm_fg.mean())
-    h["dm_host_fg_excess"] = np.where(ls & h.dm_fg_expected.notna(),
-                                      h.dm_host_rest - (h.dm_fg - h.dm_fg_expected) * (1 + h.z), np.nan)
+    for col, fg, ex in (("dm_host_fg_excess", "dm_fg", "dm_fg_expected"),
+                        ("dm_host_fg_excess_published", "dm_fg_published", "dm_fg_expected_published")):
+        h[col] = np.where(ls, h.dm_host_rest - (h[fg] - h[ex]) * (1 + h.z), np.nan)
     return h
 
 
@@ -115,7 +118,7 @@ def main() -> None:
               f"tau={r['tau']:+.2f} (p={r['p_tau']:.2f}) jack [{r['rS_jack_min']:+.2f},{r['rS_jack_max']:+.2f}] "
               f"TS={r['theil_sen_slope']:.1f} [{r['ts_lo']:.1f},{r['ts_hi']:.1f}] P(rS<=-0.44)={r['frac_boot_le_m044']:.3f}")
     subs = [("m_r < 21", h.m_r < 21), ("n < 2", h.sersic_n < 2), ("bulge fits removed", ~h.frb.isin(BULGE_FITS))]
-    for col in ("dm_host_rest", "dm_host_fg"):
+    for col in ("dm_host_rest", "dm_host_fg_excess"):
         for lab, sel in subs:
             s = h[sel]
             r = robust_row(s.frb.to_numpy(), s.q.to_numpy(float), s[col].to_numpy(float), rng)
@@ -138,6 +141,8 @@ def main() -> None:
                n_gt100=int((fg > 100).sum()),
                frac_median=float((fg / h.loc[ls, "dm_host_rest"].where(h.loc[ls, "dm_host_rest"] > 0)).median()),
                n_neg_after=int((h.loc[ls, "dm_host_fg"] < 0).sum()),
+               n_neg_after_excess=int((h.loc[ls, "dm_host_fg_excess"] < 0).sum()),
+               median_published=float((h.loc[ls, "dm_fg_published"] * (1 + h.loc[ls, "z"])).median()),
                r_fg_q=float(stats.spearmanr(h.loc[ls, "q"], h.loc[ls, "dm_fg"])[0]),
                p_fg_q=float(stats.spearmanr(h.loc[ls, "q"], h.loc[ls, "dm_fg"])[1]),
                p_fg_q_ad=ad_split(h.loc[ls, "q"].to_numpy(float), h.loc[ls, "dm_fg"].to_numpy(float)),
@@ -160,9 +165,11 @@ def main() -> None:
                   f"{r['most_influential']} ({r['rS_without_it']:+.2f}) | {r['theil_sen_slope']:.3g} ({r['ts_lo']:.3g}, {r['ts_hi']:.3g}) | "
                   f"{r['frac_boot_le_m044']:.3f} |")
     md += ["", "## Foreground-halo DM over the sample (rest frame of the host)", "",
-           f"LS footprint: {imp['n_ls']} hosts; outside: {imp['n_out']}. Median {imp['median']:.0f}, 84th percentile {imp['p84']:.0f}, "
+           f"LS footprint: {imp['n_ls']} hosts; outside: {imp['n_out']}. Median {imp['median']:.0f} "
+           f"(published method: {imp['median_published']:.0f}), 84th percentile {imp['p84']:.0f}, "
            f"maximum {imp['max']:.0f} pc cm$^{{-3}}$; {imp['n_gt50']} hosts above 50 and {imp['n_gt100']} above 100. "
-           f"Median fraction of DM$_{{\\rm host}}$: {imp['frac_median']:.2f}. Hosts negative after correction: {imp['n_neg_after']}. "
+           f"Median fraction of DM$_{{\\rm host}}$: {imp['frac_median']:.2f}. Hosts negative after removing the excess: "
+           f"{imp['n_neg_after_excess']}; after the full subtraction: {imp['n_neg_after']}. "
            f"Spearman of DM$_{{\\rm fg}}$ with $q$: $r_S = {imp['r_fg_q']:+.2f}$ ($p = {imp['p_fg_q']:.2f}$; "
            f"AD $p = {imp['p_fg_q_ad']:.2f}$). "
            f"Median expected (random-sightline) term: {imp['expected_median']:.0f} pc cm$^{{-3}}$."]

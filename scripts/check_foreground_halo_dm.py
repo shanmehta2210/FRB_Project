@@ -103,7 +103,7 @@ def faint_cut_effect(gal, hosts):
     """Galaxies that Galaxy_offset_code.ipynb's optional cut M_r(z_host) < -17 would drop, and their share of the DM."""
     z_host = gal.frb.map(hosts.set_index("frb").z).to_numpy()
     faint = (gal.r - F.cosmo.distmod(z_host).value).to_numpy() > -17
-    w = (gal.dm_mean * gal.p_fg).to_numpy()
+    w = (gal.dm_mean * gal.p_fg * gal.counted).to_numpy()
     return faint.mean(), w[faint].sum() / w.sum()
 
 
@@ -228,11 +228,8 @@ def sga_radius_check():
 def renormalized_results(gal, hosts_fg):
     """Re-derive the foreground-corrected DM_host with gas-mass-normalized halos and re-test the key correlations."""
     g = gal.copy()
-    z = z_ref(g, hosts_fg)
-    logms = np.array([m if np.isfinite(m) else float(F.logms_bell03_gr(gg, rr, zz))
-                      for m, gg, rr, zz in zip(g.logms_at_zref, g.g, g.r, z)])
-    g["factor"] = [mass_norm_factor(10 ** F.logmh_from_logms(m, zz)[0], zz) for m, zz in zip(logms, z)]
-    g["dm_w"] = g.dm_mean * g.p_fg
+    g["factor"] = [mass_norm_factor(10 ** m, zz) for m, zz in zip(g.logmh, g.z_ref)]
+    g["dm_w"] = g.dm_mean * g.p_fg * g.counted
     per = g.groupby("frb").apply(lambda t: pd.Series(dict(dm_fg=t.dm_w.sum(), dm_fg_mass=(t.dm_w * t.factor).sum())),
                                  include_groups=False).reset_index()
     h = RC.load().merge(per, on="frb", how="left", suffixes=("", "_sum"))
@@ -325,7 +322,9 @@ def main():
         f"| Faint galaxies | optional cut M_r(z_host) < -17 in Galaxy_offset_code.ipynb (not in the paper text) | not applied | those galaxies are {faint_frac * 100:.0f}% of candidates but supply {faint_dm * 100:.1f}% of the DM |",
         "| Brick overlaps | Tractor bricks read directly; duplicates kept | `brick_primary = 1` | avoids counting a galaxy twice |",
         "| Local-volume check | HECATE within 30 deg | SGA-2020 within 30 deg | SGA is in the same Data Lab service |",
-        "| Halo mass | `fsolve` per draw | interpolation on a 0.005 dex grid | speed; identical to 0.0000 dex |", "",
+        "| Halo mass | `fsolve` per draw | interpolation on a 0.005 dex grid | speed; identical to 0.0000 dex |",
+        "| Halo mass at fixed M* | inverse of the mean Moster+13 M*(Mh) | drawn from P(Mh &#124; M*) (the inverse is kept as `dm_fg_published`) | the inverse is 0.4-1 dex high above log M* ~ 11 (`mass_inversion/`) |",
+        "| Groups | every candidate's halo summed | one halo per group; host-environment galaxies excluded | members of one group share one halo (`audit/AUDIT.md`) |", "",
         "## 2. Science consistency", "",
         "Correct as implemented:", "",
         "- Moster+13 parameters (N, M1, beta, gamma and their z/(1+z) evolution), Dutton & Maccio (2014) c200c with "

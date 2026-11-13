@@ -38,11 +38,13 @@ Differences from the notebooks:
 | Stellar mass | Taylor+11 g-i, SDSS photometry | Bell+03 g-r with the Chabrier zero-point (as in atel_analysis.ipynb), LS photometry | LS DR9 has no i band |
 | Colours | observed | K-corrected to rest frame | median shift -0.29 dex in log M* (16-84%: -0.84 to -0.02) |
 | Per-galaxy value | median of mass draws (cell 26, spec-z); mean of z draws (paper, photo-z) | mean throughout | means add; on the six galaxies above, sum of medians 137.3 vs sum of means 135.2 |
-| Photo-z galaxies | truncated Gaussian in z, always counted | same draws, kept as `dm_fg_conditional`; main column weights each galaxy by P(in front) | conditional / weighted total: median 1.76 |
-| Faint galaxies | optional cut M_r(z_host) < -17 in Galaxy_offset_code.ipynb (not in the paper text) | not applied | those galaxies are 11% of candidates but supply 1.0% of the DM |
+| Photo-z galaxies | truncated Gaussian in z, always counted | same draws, kept as `dm_fg_conditional`; main column weights each galaxy by P(in front) | conditional / weighted total: median 1.09 |
+| Faint galaxies | optional cut M_r(z_host) < -17 in Galaxy_offset_code.ipynb (not in the paper text) | not applied | those galaxies are 11% of candidates but supply 0.0% of the DM |
 | Brick overlaps | Tractor bricks read directly; duplicates kept | `brick_primary = 1` | avoids counting a galaxy twice |
 | Local-volume check | HECATE within 30 deg | SGA-2020 within 30 deg | SGA is in the same Data Lab service |
 | Halo mass | `fsolve` per draw | interpolation on a 0.005 dex grid | speed; identical to 0.0000 dex |
+| Halo mass at fixed M* | inverse of the mean Moster+13 M*(Mh) | drawn from P(Mh &#124; M*) (the inverse is kept as `dm_fg_published`) | the inverse is 0.4-1 dex high above log M* ~ 11 (`mass_inversion/`) |
+| Groups | every candidate's halo summed | one halo per group; host-environment galaxies excluded | members of one group share one halo (`audit/AUDIT.md`) |
 
 ## 2. Science consistency
 
@@ -57,29 +59,29 @@ Correct as implemented:
 Issues found:
 
 1. **Gas normalization.** Eq. B3 of Bhardwaj+2025 (and the notebook, and this code) normalizes the modified profile with the dark-matter NFW rho_0. The gas mass inside r200 is then f_gas f_b M200 x f_b(c)/f_dm(c), only 0.17, 0.22, 0.28, 0.35 of the intended value for c = 5, 7, 10, 15. The `frb` package (Prochaska & Zheng 2019's own code) normalizes by gas mass. Milky Way benchmark (1.5e12 Msun, c = 7.67, Sun to r200 = 242 kpc): 14 pc cm^-3 as coded vs 61 gas-mass-normalized; Prochaska & Zheng (2019) quote 50-80. The coded halo DMs are a factor 3.6-4.1 below the gas-mass-normalized profile (interquartile over the foreground galaxies, median 3.8); equivalently, the code behaves like f_hot = 0.75 x f_b(c)/f_dm(c), i.e. 0.13-0.26. (Check of the analytic f_b: 0.3018 vs numerical 0.3018.)
-   - **Cosmic budget test.** Along the 97 random control sightlines, the coded foreground halos supply a mean 17% (median 10%) of the Macquart mean DM_cosmic. Gas-mass normalization with f_hot = 0.75 would raise this to about 64%, from LS-detected galaxies alone, leaving too little for the intergalactic medium. f_hot = 0.75 for every halo is therefore an upper bound, and the coded convention is a reasonable, if low-side, choice.
-2. **r-band error coefficient (fixed).** sigma(log M*) used 0.659 for the r term; the derivative of the Bell relation is 1.097 + 0.4 = 1.497, now used. Median sigma(log M*) 0.126 -> 0.147 dex (90th percentile 0.268 -> 0.361). The Taylor+11 coefficients (0.70, 1.10) were already right.
+   - **Cosmic budget test.** Along the 97 random control sightlines, the coded foreground halos supply a mean 8% (median 4%) of the Macquart mean DM_cosmic. Gas-mass normalization with f_hot = 0.75 would raise this to about 32%, from LS-detected galaxies alone, leaving too little for the intergalactic medium. f_hot = 0.75 for every halo is therefore an upper bound, and the coded convention is a reasonable, if low-side, choice.
+2. **r-band error coefficient (fixed).** sigma(log M*) used 0.659 for the r term; the derivative of the Bell relation is 1.097 + 0.4 = 1.497, now used. Median sigma(log M*) 0.126 -> 0.146 dex (90th percentile 0.268 -> 0.361). The Taylor+11 coefficients (0.70, 1.10) were already right.
 3. **Local Group.** SGA `z_leda > 0.0005` excludes M31 and M33. FRBs inside their projected r200: M31 (radius 17 deg): 0 (closest 32 deg); M33 (radius 9 deg): 0 (closest 41 deg).
 4. **30 deg search radius.** Largest angular r200 among cached SGA galaxies: 5.5 deg, so 30 deg does not bind.
 
 ## 3. Effect of the gas normalization on our results
 
-Each galaxy's DM rescaled by f_dm(c)/f_b(c) at its median mass; random-sightline expectation scaled by the median factor (3.84). Per-host foreground DM (probability-weighted, observer frame): median 47.6 -> 247.6 pc cm^-3. Rows ending in `_mass` are the upper bound from the cosmic budget test; the coded rows are the baseline.
+Each galaxy's DM rescaled by f_dm(c)/f_b(c) at its median mass; random-sightline expectation scaled by the median factor (3.83). Per-host foreground DM (probability-weighted, observer frame): median 23.6 -> 99.7 pc cm^-3. Rows ending in `_mass` are the upper bound from the cosmic budget test; the coded rows are the baseline.
 
 | DM_host version | vs | N | r_S | p |
 |---|---|---|---|---|
 | dm_host_rest | q | 55 | -0.06 | 0.638 |
 | dm_host_rest | log \|RM\| | 41 | +0.49 | 0.001 |
 | dm_host_rest | log tau | 29 | +0.45 | 0.014 |
-| dm_host_fg | q | 49 | -0.04 | 0.764 |
-| dm_host_fg | log \|RM\| | 35 | +0.52 | 0.001 |
-| dm_host_fg | log tau | 28 | +0.32 | 0.102 |
-| dm_host_fg_mass | q | 49 | -0.17 | 0.239 |
-| dm_host_fg_mass | log \|RM\| | 35 | +0.34 | 0.045 |
-| dm_host_fg_mass | log tau | 28 | +0.23 | 0.249 |
-| dm_host_fg_excess | q | 49 | -0.08 | 0.605 |
+| dm_host_fg | q | 49 | -0.09 | 0.560 |
+| dm_host_fg | log \|RM\| | 35 | +0.55 | 0.001 |
+| dm_host_fg | log tau | 28 | +0.35 | 0.064 |
+| dm_host_fg_mass | q | 49 | -0.18 | 0.221 |
+| dm_host_fg_mass | log \|RM\| | 35 | +0.42 | 0.011 |
+| dm_host_fg_mass | log tau | 28 | +0.27 | 0.165 |
+| dm_host_fg_excess | q | 49 | -0.09 | 0.520 |
 | dm_host_fg_excess | log \|RM\| | 35 | +0.54 | 0.001 |
-| dm_host_fg_excess | log tau | 28 | +0.29 | 0.130 |
-| dm_host_fg_excess_mass | q | 49 | -0.21 | 0.150 |
-| dm_host_fg_excess_mass | log \|RM\| | 35 | +0.27 | 0.116 |
-| dm_host_fg_excess_mass | log tau | 28 | +0.08 | 0.668 |
+| dm_host_fg_excess | log tau | 28 | +0.38 | 0.045 |
+| dm_host_fg_excess_mass | q | 49 | -0.20 | 0.158 |
+| dm_host_fg_excess_mass | log \|RM\| | 35 | +0.41 | 0.014 |
+| dm_host_fg_excess_mass | log tau | 28 | +0.27 | 0.164 |

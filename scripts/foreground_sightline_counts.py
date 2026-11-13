@@ -8,7 +8,8 @@ Levels:
   likely  : DM > 0 in at least 84% of draws (dm_p16 > 0), ignoring p_fg
   in front: likely, with p_fg >= 0.84
   spec-z  : likely, with a spectroscopic redshift below the host's
-  > 10    : mean contribution above 10 pc cm^-3 (observer frame), weighted by p_fg
+  > 10    : mean contribution above 10 pc cm^-3 (observer frame), weighted by p_fg, counted in the total
+            (not a satellite of a more massive candidate, not host environment)
 The expected number of hosts with at least one intersection uses 1 - prod(1 - 0.84 p_fg) over likely
 galaxies (a lower bound), and is compared with random sightlines and with the halo mass function.
 
@@ -54,7 +55,7 @@ def main() -> None:
     g["likely"] = g.dm_p16 > 0
     g["front"] = g.likely & (g.p_fg >= 0.84)
     g["specz"] = g.likely & np.isfinite(g.z_spec)
-    g["big"] = g.dm_mean * g.p_fg > 10
+    g["big"] = g.counted & (g.dm_mean * g.p_fg > 10)
     g["p_int"] = np.where(g.likely, 0.84 * g.p_fg, 0.0)
     per = g.groupby("frb")[["any", "likely", "front", "specz", "big"]].sum().reindex(hosts.frb, fill_value=0)
     per["p_any"] = (1 - (1 - g.p_int).groupby(g.frb).prod()).reindex(hosts.frb, fill_value=0)

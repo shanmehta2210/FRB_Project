@@ -3,8 +3,8 @@
 Shared hosts with DM_host in both: 20
 
 - ours, no foreground correction: N=20, r_S=0.99, median diff=+62, median |diff|=62 pc cm^-3
-- ours, foreground removed: N=20, r_S=0.78, median diff=+32, median |diff|=51 pc cm^-3
-- ours, foreground excess removed: N=20, r_S=0.73, median diff=+48, median |diff|=55 pc cm^-3
+- ours, foreground fully removed: N=20, r_S=0.86, median diff=+46, median |diff|=48 pc cm^-3
+- ours, foreground excess removed: N=20, r_S=0.89, median diff=+55, median |diff|=55 pc cm^-3
 
 Union samples shift Marnoch DM_host onto our definition by +48.3 pc cm^-3 (observer frame) x (1+z).
 

@@ -1,7 +1,8 @@
 """Figure 3: correlations of DM_host and burst properties with host axis ratio.
 
-(a) Rest-frame DM_host versus axis ratio q, before (filled) and after (open) removing the foreground-halo
-    DM of intervening galaxies, with the Theil-Sen line and its 95% slope interval.
+(a) Rest-frame DM_host versus axis ratio q, before (filled) and after (open) removing the excess of the
+    foreground-halo DM of intervening galaxies over the random-sightline mean, with the Theil-Sen line and
+    its 95% slope interval.
 (b) Spearman r_S with bootstrap 95% intervals for DM_host (all hosts, foreground-corrected, subsamples)
     and for the propagation-related burst properties plus old-star extinction.
 
@@ -24,8 +25,8 @@ import robust_correlations as R  # noqa: E402
 
 OUT = P.REPO_ROOT / "Publication" / "materials" / "figures"
 
-DM_ROWS = [("dm_host_rest", "All hosts"), ("dm_host_fg", "Foreground removed"),
-           ("dm_host_fg_excess", "Foreground excess removed"), ("dm_host_rest [m_r < 21]", r"$m_r < 21$"),
+DM_ROWS = [("dm_host_rest", "All hosts"), ("dm_host_fg_excess", "Foreground excess removed"),
+           ("dm_host_fg", "Foreground fully removed"), ("dm_host_rest [m_r < 21]", r"$m_r < 21$"),
            ("dm_host_rest [n < 2]", r"$n < 2$"), ("dm_host_rest [bulge fits removed]", "Bulge fits removed")]
 PROP_ROWS = [("log_abs_rm", r"$|{\rm RM}|$"), ("log_tau", "Scattering time"),
              ("lin_pol", "Linear polarization"), ("av_old", r"$A_V$, old stars")]
@@ -34,12 +35,12 @@ PROP_ROWS = [("log_abs_rm", r"$|{\rm RM}|$"), ("log_tau", "Scattering time"),
 def panel_a(ax, h: pd.DataFrame) -> None:
     d = h[h.dm_host_rest.notna()]
     x, y = d.q.to_numpy(float), d.dm_host_rest.to_numpy(float)
-    yc = d.dm_host_fg.to_numpy(float)
+    yc = d.dm_host_fg_excess.to_numpy(float)
     has = np.isfinite(yc) & (np.abs(yc - y) > 1)
     ax.vlines(x[has], yc[has], y[has], color=P.FRB_C, lw=0.5, alpha=0.5, zorder=2)
     ax.scatter(x, y, s=14, color=P.FRB_C, lw=0, zorder=4, label=f"FRB hosts (N = {len(x)})")
     ax.scatter(x[has], yc[has], s=12, facecolor="white", edgecolor=P.FRB_C, lw=0.7, zorder=3,
-               label="Foreground halos removed")
+               label="Foreground halo excess removed")
     ts = stats.theilslopes(y, x, alpha=0.95)
     xx = np.linspace(0.2, 1.0, 50)
     xm, ym = np.median(x), np.median(y)
