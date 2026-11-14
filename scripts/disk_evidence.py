@@ -32,7 +32,7 @@ EVIDENCE = {
     "20220310F": ("profile", r"star-forming \citep{sharma2024}", "profile"),
     "20220319D": ("lit", r"barred spiral (SBa), FRB on a spiral arm \citep{ravi2025}", "barred spiral"),
     "20220501C": ("profile", r"star-forming \citep{glowacki2025}", "profile"),
-    "20220509G": ("early", r"early-type, quiescent \citep{sharma2023, connor2023}", "early-type"),
+    "20220509G": ("lit", r"bar and disk in deeper CFIS $r$ imaging \citep{bhardwaj2024local}; our CFIS bulge + disk fit gives $B/T = 0.16$; quiescent, called early-type by \citet{sharma2023, connor2023}", "barred disk (CFIS)"),
     "20220825A": ("profile", r"star-forming \citep{sharma2024}", "profile"),
     "20220914A": ("lit", r"late-type spiral \citep{connor2023}", "spiral"),
     "20221012A": ("ambig", r"massive, quiescent \citep{law2024, sharma2024}", "ambiguous"),

@@ -674,22 +674,35 @@ leaves them unchanged (Appendix~\ref{app:control}).
 
 For the 28 flagged hosts and the four outside the Sb--Irr region, we collect
 the morphological evidence host by host (Table~\ref{tab:disk_evidence} and
-Figures~\ref{fig:gallery1} and~\ref{fig:gallery2}). Twelve are disks or
+Figures~\ref{fig:gallery1} and~\ref{fig:gallery2}). Thirteen are disks or
 spirals in the literature, based on HST or deeper imaging, gas kinematics, or
-profile fits, including three of the four hosts outside the Sb--Irr region:
+profile fits, including all four hosts outside the Sb--Irr region:
 FRBs 20190608B and 20220319D are barred spirals
-\citep{chittidi2021, ravi2025}, and FRB 20231120A is an edge-on spiral
-\citep{sharma2024, leung2025}. Fourteen have disk-like profiles in our
+\citep{chittidi2021, ravi2025}, FRB 20231120A is an edge-on spiral
+\citep{sharma2024, leung2025}, and FRB 20220509G shows a bar and an extended
+disk in deeper CFIS imaging \citep{bhardwaj2024local}. The last was called
+early-type from shallower imaging \citep{sharma2023, connor2023}; a bulge plus
+exponential disk fit to the CFIS $r$ image, with a superposed Gaia star
+masked, gives a bulge-to-total ratio of 0.16, typical of a spiral, although
+the galaxy is quiescent. Fourteen have disk-like profiles in our
 PSF-convolved fits with the S\'ersic index left free ($n < 2.5$), with no
 contrary evidence in the literature. Five are ambiguous: four are marginally
 resolved hosts whose free fits give $n \geq 4$, which is poorly constrained at
-$R_e/{\rm FWHM} < 1$, and FRB 20221012A is quiescent with $n = 2.0$. Only FRB
-20220509G is an early-type galaxy \citep{sharma2023, connor2023}. Together with
-the 24 reliable hosts in the Sb--Irr region, 50 of the 56 hosts are therefore
-disks or have disk-like profiles. Removing the other six leaves our results
-unchanged (AD $p_{\rm m} = 0.51$, two-sided MW $p_{\rm m} = 0.45$, one-sided
-MW $p_{\rm m} = 0.22$), as does keeping only the 36 hosts that are reliable
-Sb--Irr galaxies or disks in the literature (0.55, 0.48, and 0.24).
+$R_e/{\rm FWHM} < 1$, and FRB 20221012A is quiescent with $n = 2.0$. Together
+with the 24 reliable hosts in the Sb--Irr region, 51 of the 56 hosts are
+therefore disks or have disk-like profiles, and none is a confirmed early-type
+galaxy. Removing the five ambiguous hosts leaves our results unchanged (AD
+$p_{\rm m} = 0.58$, two-sided MW $p_{\rm m} = 0.48$, one-sided MW
+$p_{\rm m} = 0.24$), as does also removing FRB 20220509G (0.51, 0.45, and
+0.22) or keeping only the 37 hosts that are reliable Sb--Irr galaxies or disks
+in the literature (0.63, 0.54, and 0.27).
+
+The WISE colours give an independent check \citep{bhardwaj2024local}. Of the
+28 hosts detected in W1, W2, and W3, 26 lie in the disk regions of the
+W1$-$W2 versus W2$-$W3 diagram \citep{Jarrett2017}, one is in the AGN region,
+and only FRB 20221012A, which we already count as ambiguous, has spheroid
+colours. All 16 detected hosts at $z < 0.15$, where these divisions are
+calibrated, have disk colours.
 
 \startlongtable
 \begin{deluxetable*}{lccclll}
@@ -709,6 +722,7 @@ Gini--$M_{20}$ classifications\label{tab:disk_evidence}}
 20211203C & 0.6 & 0.5 & 0.52 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright $n = 0.6$ in deeper $R$-band imaging \citep{gordon2025}} \\
 20220207C & 0.5 & 0.3 & 5.31 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright disk-dominated, nearly edge-on \citep{law2024}} \\
 20220319D & 6.0 & 16.2 & 6.38 & E/S0/Sa & Disk (literature) & \parbox[t]{2.6in}{\raggedright barred spiral (SBa), FRB on a spiral arm \citep{ravi2025}} \\
+20220509G & 0.5 & 5.2 & 2.81 & Merger & Disk (literature) & \parbox[t]{2.6in}{\raggedright bar and disk in deeper CFIS $r$ imaging \citep{bhardwaj2024local}; our CFIS bulge + disk fit gives $B/T = 0.16$; quiescent, called early-type by \citet{sharma2023, connor2023}} \\
 20220914A & 2.5 & 1.7 & 0.68 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright late-type spiral \citep{connor2023}} \\
 20221219A & 0.5 & 0.0 & 0.65 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright Milky Way-like late type \citep{faber2024}} \\
 20230526A & 1.9 & 2.5 & 0.31 & Sb--Irr & Disk (literature) & \parbox[t]{2.6in}{\raggedright disk, $n = 0.3$ ($R$) and 1.4 ($K$) \citep{gordon2025}} \\
@@ -734,7 +748,6 @@ Gini--$M_{20}$ classifications\label{tab:disk_evidence}}
 20230626A & 6.0 & 6.2 & 0.32 & Sb--Irr & Ambiguous & \parbox[t]{2.6in}{\raggedright transition \citep{sharma2024}} \\
 20240203D & 4.3 & 2.5 & 0.34 & Sb--Irr & Ambiguous & \parbox[t]{2.6in}{\raggedright \nodata} \\
 20240229A & 6.0 & 5.9 & 0.31 & Sb--Irr & Ambiguous & \parbox[t]{2.6in}{\raggedright \nodata} \\
-20220509G & 0.5 & 5.2 & 2.81 & Merger & Early-type & \parbox[t]{2.6in}{\raggedright early-type, quiescent \citep{sharma2023, connor2023}} \\
 \enddata
 \tablecomments{$n_{\rm free}$ is the S\'ersic index of our PSF-convolved
 \texttt{GALFIT} fit with $n$ left free (the adopted fit fixes $n = 1$ for some

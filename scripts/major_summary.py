@@ -441,6 +441,8 @@ def build_morphology():
     morphology_tables()
     for k in range(1, 5):
         copy(ROOT / "Publication" / "manuscript" / "galaxy" / f"gallery_{k}.pdf", MOR / f"04{'abcd'[k - 1]}_gallery_{k}")
+    copy(APP / "morphology" / "wise_colours.pdf", MOR / "07_wise_colours")
+    copy(APP / "morphology" / "frb20220509g" / "cfis_morphology.pdf", MOR / "08_frb20220509g_cfis")
 
 
 def main() -> None:

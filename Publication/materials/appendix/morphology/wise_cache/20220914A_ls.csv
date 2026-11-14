@@ -1,0 +1,2 @@
+ls_id,ra,dec,type,flux_w1,flux_w2,flux_w3,flux_ivar_w1,flux_ivar_w2,flux_ivar_w3,mw_transmission_w1,mw_transmission_w2,mw_transmission_w3,sep,dr
+9907741746987362,282.0585068252482,73.3362822052,SER,19.556774,13.203368,67.034325,5.166233,1.850226,0.002985,0.987031,0.992015,0.998292,0.0214852941666435,dr10

@@ -23,7 +23,7 @@ Conventions used throughout:
 |---|---|---|
 | 1. Inclination null hypothesis | `1_inclination_null/` | FRB hosts have the same inclination distribution as field disks ($p_{\rm m} = 0.54$); no burst or host property depends on inclination. |
 | 2. Property correlations | `2_correlations_null/` | Within bins of each other, DM$_{\rm host}$ does not track $z$ or $M_*$. The only notable link is with SFR, among $z \gtrsim 0.3$ hosts, and it weakens once errors are included. |
-| 3. Late-type hosts | `3_late_type_hosts/` | 50 of 56 hosts are disks or have disk-like profiles; one is early-type. |
+| 3. Late-type hosts | `3_late_type_hosts/` | 51 of 56 hosts are disks or have disk-like profiles; none is early-type, and WISE colours agree. |
 
 ---
 
@@ -127,12 +127,14 @@ The nominal hits in panel 16 are:
 
 | File | What it shows | Key numbers |
 |---|---|---|
-| `01_morphology_overview` | (a) Morphological class of all 56 hosts; (b) distribution of the free Sérsic index, split by whether the host is resolved | 24 reliable Sb–Irr, 12 literature disks, 14 disk-like profiles (together 50 of 56), 5 ambiguous, 1 early-type; 80% have $n < 2.5$, median $n = 1.03$ |
+| `01_morphology_overview` | (a) Morphological class of all 56 hosts; (b) distribution of the free Sérsic index, split by whether the host is resolved | 24 reliable Sb–Irr, 13 literature disks, 14 disk-like profiles (together 51 of 56), 5 ambiguous, none early-type; 80% have $n < 2.5$, median $n = 1.03$ |
 | `02_gini_m20` | Gini–$M_{20}$ diagram with the Lotz et al. (2008) boundaries | 52 of 56 in the Sb–Irr region (24 of the 28 reliable ones) |
-| `03_table_disk_evidence` | Host-by-host evidence for the 32 hosts with unreliable or non-Sb–Irr Gini–$M_{20}$: free and statmorph Sérsic indices, resolution, literature morphology | 3 of the 4 non-Sb–Irr hosts are spirals in the literature; FRB 20220509G is the only early-type host |
+| `03_table_disk_evidence` | Host-by-host evidence for the 32 hosts with unreliable or non-Sb–Irr Gini–$M_{20}$: free and statmorph Sérsic indices, resolution, literature morphology | All 4 non-Sb–Irr hosts are disks or spirals in the literature or in deeper imaging |
 | `04a–d_gallery_*` | Colour image, $r$-band image, GALFIT model and residual for each host in the table | Spiral arms and bars appear in the residuals of the resolved hosts |
-| `05_table_inclination_tests_disk_subsets` | The inclination tests rerun without the early-type host, without the ambiguous hosts, and with only the most secure disks | $p_{\rm m}$ 0.49–0.55 (AD) in every subset |
-| `06_table_morphology_by_redshift` | Morphology split by redshift | Disk fraction 0.83–1.00 in every bin |
+| `05_table_inclination_tests_disk_subsets` | The inclination tests rerun without the ambiguous hosts, also without FRB 20220509G, and with only the most secure disks | $p_{\rm m}$ 0.51–0.63 (AD) in every subset |
+| `07_wise_colours` | **WISE colour–colour test of Bhardwaj et al. (2024)**: W1−W2 vs W2−W3 with the Jarrett et al. (2017) divisions, coloured by our morphology class; (b) W2−W3 against redshift (`appendix/morphology/wise_colours.csv`) | Of the 28 hosts detected in W1–W3, 26 have disk colours (17 star-forming, 9 intermediate). The only spheroid is FRB 20221012A, already ambiguous; FRB 20230526A is AGN-like. All 16 detected at $z < 0.15$ are disks. 20 have only W3 upper limits, which do not constrain the type. |
+| `08_frb20220509g_cfis` | **FRB 20220509G in deeper CFIS $r$ imaging** (3 × 100 s, public at CADC), the host called early-type by Sharma+23 and Connor+23 and a barred spiral by Bhardwaj+24. Gaia star masked; unsharp mask, isophote residual, PSF-convolved fits | Single Sérsic $n = 1.7$; bulge + exponential disk preferred by ΔBIC ≈ 13,000, with $B/T = 0.16$ (typical of Sb–Sc). An elongated bar-like ridge crosses the nucleus. WISE (deblended): intermediate disk. Reclassified as a disk; it remains quiescent. |
+| `06_table_morphology_by_redshift` | Morphology split by redshift | Disk fraction 0.88–1.00 in every bin |
 
 The control sample also does not depend on the morphology cut: removing it entirely gives AD $p_{\rm m} = 0.74$ (`1_inclination_null/05_table_control_variants`).
 
@@ -155,4 +157,5 @@ The control sample also does not depend on the morphology cut: removing it entir
 | Halo-mass inversion test (notebook code) | `scripts/mass_inversion_test.py` | `foreground_halos/mass_inversion/` (`MASS_INVERSION.md`) |
 | Products of the published foreground method | (pre-correction runs) | `archive/foreground_published_method/` |
 | Morphology | `scripts/disk_evidence.py`, `scripts/disk_subsample_tests.py`, `scripts/host_gallery.py` | `appendix/morphology/`, `appendix/robustness/gini_m20_56.csv` |
+| WISE colours and FRB 20220509G in CFIS | `scripts/wise_colours.py`, `scripts/frb20220509g_morphology.py` | `appendix/morphology/wise_colours.*`, `appendix/morphology/frb20220509g/` |
 | Marnoch comparison | `scripts/marnoch_shared_q.py`, `scripts/marnoch_dm_combined.py` | `marnoch_recheck/` |

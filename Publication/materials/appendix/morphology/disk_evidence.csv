@@ -10,7 +10,7 @@ frb,n_free,n_statmorph,re_over_fwhm,gm20,why,cls,label,literature,class
 20220310F,1.5,1.1923417301488948,0.9015002643811508,late,flag; Re/FWHM<1.0,profile,Disk-like profile,star-forming \citep{sharma2024},profile
 20220319D,6.0,16.243234646394573,6.37736788199596,early,,lit,Disk (literature),"barred spiral (SBa), FRB on a spiral arm \citep{ravi2025}",barred spiral
 20220501C,1.31,1.4629316768910725,0.5224293918397518,late,flag; S/N<2.5; Re/FWHM<1.0,profile,Disk-like profile,star-forming \citep{glowacki2025},profile
-20220509G,0.5,5.238466645104021,2.809428949885937,merger,,early,Early-type,"early-type, quiescent \citep{sharma2023, connor2023}",early-type
+20220509G,0.5,5.238466645104021,2.809428949885937,merger,,lit,Disk (literature),"bar and disk in deeper CFIS $r$ imaging \citep{bhardwaj2024local}; our CFIS bulge + disk fit gives $B/T = 0.16$; quiescent, called early-type by \citet{sharma2023, connor2023}",barred disk (CFIS)
 20220825A,0.68,0.4279950742722827,1.3477955505435697,late,S/N<2.5,profile,Disk-like profile,star-forming \citep{sharma2024},profile
 20220914A,2.55,1.7371519500216177,0.680560557938509,late,Re/FWHM<1.0,lit,Disk (literature),late-type spiral \citep{connor2023},spiral
 20221012A,2.01,1.644763877666921,0.94917662253794,late,Re/FWHM<1.0,ambig,Ambiguous,"massive, quiescent \citep{law2024, sharma2024}",ambiguous

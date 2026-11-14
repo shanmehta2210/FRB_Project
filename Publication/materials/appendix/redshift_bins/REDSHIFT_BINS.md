@@ -8,14 +8,14 @@ Classes: reliable Sb--Irr (Gini--M20), literature disk, disk-like profile (n_fre
 
 | bin | N | reliable | lit. disk | profile | ambiguous | early | disk fraction | median n | n < 2.5 | median R_e/FWHM | resolved |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| All | 55 | 23 | 12 | 14 | 5 | 1 | 0.89 | 1.00 | 0.89 | 1.04 | 0.53 |
-| z < 0.1 | 12 | 6 | 3 | 1 | 1 | 1 | 0.83 | 1.00 | 0.92 | 5.58 | 0.83 |
-| z < 0.2 | 23 | 12 | 6 | 2 | 2 | 1 | 0.87 | 1.00 | 0.87 | 1.88 | 0.74 |
+| All | 55 | 23 | 13 | 14 | 5 | 0 | 0.91 | 1.00 | 0.89 | 1.04 | 0.53 |
+| z < 0.1 | 12 | 6 | 4 | 1 | 1 | 0 | 0.92 | 1.00 | 0.92 | 5.58 | 0.83 |
+| z < 0.2 | 23 | 12 | 7 | 2 | 2 | 0 | 0.91 | 1.00 | 0.87 | 1.88 | 0.74 |
 | z >= 0.2 | 32 | 11 | 6 | 12 | 3 | 0 | 0.91 | 1.00 | 0.91 | 0.88 | 0.38 |
 | 0.2 <= z < 0.4 | 25 | 9 | 4 | 9 | 3 | 0 | 0.88 | 1.00 | 0.88 | 0.91 | 0.40 |
 | z >= 0.4 | 7 | 2 | 2 | 3 | 0 | 0 | 1.00 | 1.00 | 1.00 | 0.65 | 0.29 |
 
-Trends with redshift (Spearman): Sersic n vs z: r_S = -0.09 (p = 0.492); R_e/FWHM vs z: r_S = -0.58 (p = 0.000); q vs z: r_S = +0.02 (p = 0.858); z of disks vs non-disks: MW p = 0.664
+Trends with redshift (Spearman): Sersic n vs z: r_S = -0.09 (p = 0.492); R_e/FWHM vs z: r_S = -0.58 (p = 0.000); q vs z: r_S = +0.02 (p = 0.858); z of disks vs non-disks: MW p = 1.000
 
 ## Inclination vs control
 

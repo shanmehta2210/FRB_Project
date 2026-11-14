@@ -23,8 +23,8 @@ def main() -> None:
     cls.loc[ev.index] = ev.cls
     pool = A.cosi_from_q(A.select(A.load_parent())["ba"].to_numpy(), A.Q0)
     variants = [("All hosts", cls.index),
-                ("Without the early-type host", cls.index[cls != "early"]),
-                ("Without early-type and ambiguous hosts", cls.index[~cls.isin(["early", "ambig"])]),
+                ("Without ambiguous hosts", cls.index[cls != "ambig"]),
+                ("Without ambiguous hosts and FRB 20220509G", cls.index[(cls != "ambig") & (cls.index != "20220509G")]),
                 ("Reliable Sb--Irr or literature disks only", cls.index[cls.isin(["reliable", "lit"])])]
     rows = []
     for lab, idx in variants:
