@@ -1,0 +1,17 @@
+---
+description: Every measured or derived quantity must carry an uncertainty in figures, tables, CSVs and text
+alwaysApply: true
+---
+
+# Uncertainties on every quantity
+
+No value is shown without its error. This applies to plots, tables, CSV outputs, slides, the manuscript and chat summaries.
+
+- **Plots**: error bars (or bands) on both axes for every point. Use 16th–84th percentiles of Monte Carlo draws when errors are asymmetric or propagated.
+- **Derived quantities**: propagate all inputs by Monte Carlo. Examples:
+  - inclination: $\sigma_q$ (formal + sky) through the Hubble relation plus the 5° floor;
+  - DM$_{\rm host}$: DM$_{\rm cosmic}$ from the Macquart et al. (2020) distribution, DM$_{\rm MW}$ (NE2001) with a 20% error, and the DM$_{\rm obs}$ error, all times $(1+z)$.
+- **Literature values**: carry `err_plus` / `err_minus` from the long table (`build_host_property_table.load_long`, `pick`). If the adopted row has none, use the error that another source quotes for the same burst. If no source quotes one, assign a stated, conservative error and mark those points with a distinct symbol and a legend note. Never drop the point silently or plot it without a bar.
+- **Positive quantities spanning decades** (|RM|, $\tau$, masses in linear units): draw errors in log space so the bars stay positive.
+- **Statistics**: quote correlation coefficients and test $p$-values with their spread over error draws, e.g. $r_S$ with its 16th–84th percentile range, or $p$ as the median over draws.
+- **New columns**: when a value is written to a CSV, write its error columns (`*_ep`, `*_em` or `*_err`) next to it.
